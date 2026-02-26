@@ -122,7 +122,7 @@
 
 #### [畫面 1] 登入頁面
 
-<iframe src="../assets/mockup_login.html" width="100%" height="800px" style="border: 1px solid #e5e7eb; border-radius: 8px;"></iframe>
+![登入頁面](../assets/mockup_login.png)
 
 #### [畫面 2] 實用的數據清單 (無圖表，但好用)
 
@@ -196,7 +196,7 @@
 
 #### [畫面 1] 安全的開洗分介面
 
-<iframe src="../assets/mockup_local_cash.html" width="100%" height="800px" style="border: 1px solid #e5e7eb; border-radius: 8px;"></iframe>
+![安全的開洗分介面](../assets/mockup_local_cash.png)
 
 #### [畫面 2] 本機設定介面
 

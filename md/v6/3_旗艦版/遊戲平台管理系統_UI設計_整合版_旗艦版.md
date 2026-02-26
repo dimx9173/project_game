@@ -130,7 +130,7 @@
 
 ### 5.1 集中式後台 - 登入頁面
 
-<iframe src="../assets/mockup_login.html" width="100%" height="800px" style="border: 1px solid #e5e7eb; border-radius: 8px;"></iframe>
+![登入頁面](../assets/mockup_login.png)
 
 ### 5.2 集中式後台 - OTA 版本管理
 
