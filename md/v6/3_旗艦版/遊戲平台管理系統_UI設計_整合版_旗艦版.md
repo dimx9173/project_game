@@ -81,7 +81,7 @@
 | **錢包交易**     | 交易紀錄、統計分析、對帳            |
 | **串接遊戲管理** | 遊戲商 API 管理、連線監控          |
 | **使用者權限**   | 帳號管理、角色權限設定（三層）      |
-| **代理商管理**   | 代理商列表、樹狀結構                |
+| **多帳號管理**   | 多帳號列表、樹狀結構                |
 | **版本更新**     | OTA 版本管理、更新任務下發          |
 | **監控中心**     | 硬體監控、告警設定                  |
 | **對帳專區**     | 錯帳爭議處理、沖銷憑證              |
@@ -290,7 +290,7 @@
 | `/players` | 玩家管理 | Admin/Agent/Operator |
 | `/transactions` | 交易紀錄 | Admin/Agent/Operator |
 | `/providers` | 串接遊戲管理 | Admin |
-| `/agents` | 代理商管理 | Admin |
+| `/agents` | 多帳號管理 | Admin |
 | `/users` | 使用者權限 | Admin |
 | `/versions` | 版本更新 OTA | Admin |
 | `/monitor` | 監控中心 | Admin |
