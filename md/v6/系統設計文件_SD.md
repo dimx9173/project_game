@@ -531,3 +531,539 @@ services:
 
 *文件維護：docs agent + code agent 審查*
 *審查狀態：✅ 第 1 輪審查完成*
+
+---
+
+## 5. 離線同步機制
+
+### 5.1 同步原則
+
+1. **最終一致性**: 允許短暫不一致，最終達成一致
+2. **中央優先**: 衝突時以中央資料為準
+3. **幂等性**: 支援重複同步不會造成問題
+4. **可恢復性**: 失敗可重試，不丟失資料
+
+### 5.2 重試策略 (指數退避)
+
+| 重試次數 | 延遲時間 |
+|----------|----------|
+| 1 | 30 秒 |
+| 2 | 1 分鐘 |
+| 3 | 2 分鐘 |
+| 4 | 5 分鐘 |
+| 5 | 10 分鐘 |
+| 6+ | 15 分鐘 (固定) |
+
+超過最大重試次數:
+- 標記為失敗
+- 產生告警
+- 進入待處理人工處理
+
+### 5.3 同步流程
+
+```
+本地後台                                      集中式後台
+   │                                              │
+   │──── POST /api/v1/sync/upload ──────────────▶│
+   │     { transactions: [...], version: x }     │
+   │                                              │
+   │◀──── 200 OK ────────────────────────────────│
+   │     { sync_version, server_time }           │
+   │                                              │
+   │──── GET /api/v1/sync/download ─────────────▶│
+   │     Query: since_version=x                   │
+   │                                              │
+   │◀──── 200 OK ────────────────────────────────│
+   │     { changes: [...], version: y }         │
+   │                                              │
+   │──── 處理下載資料 ──────────────────────────▶│
+   │     • 衝突檢測                               │
+   │     • 資料合併                               │
+   │                                              │
+   │◀──── 200 OK ────────────────────────────────│
+   │     { applied: true, conflicts: [] }        │
+   │                                              │
+   │──── 確認同步完成 ──────────────────────────▶│
+   │     Body: { last_sync: y }                  │
+   │                                              │
+   │◀──── 200 OK ────────────────────────────────│
+   │     Body: { success: true }                │
+```
+
+### 5.4 衝突解決策略
+
+| 衝突類型 | 解決方式 | 優先順序 |
+|----------|----------|----------|
+| 餘額衝突 | 以中央為準，本地重置 | 中央優先 |
+| 重複交易 | 中央檢查 UUID 去重 | 中央優先 |
+| 版本衝突 | 中央優先，覆蓋本地 | 中央優先 |
+| 設定衝突 | 中央覆蓋本地 | 中央優先 |
+
+---
+
+## 6. 安全性設計
+
+### 6.1 認證與授權
+
+#### JWT Token 設計
+- **Access Token**: 15 分鐘有效期
+- **Refresh Token**: 7 天有效期
+- **Token 輪換**: 自動刷新机制
+
+#### RBAC 角色權限
+| 角色 | 說明 |
+|------|------|
+| Super Admin | 系統最高權限 |
+| Admin | 管理所有業務 |
+| Agent | 代理商管理 |
+| Operator | 作業操作 |
+
+#### PIN 碼保護
+- 6 位數字
+- bcrypt 雜湊儲存
+- 錯誤 5 次後鎖定 30 分鐘
+
+### 6.2 角色權限矩陣
+
+| 功能 | Super Admin | Admin | Agent | Operator |
+|------|-------------|-------|-------|----------|
+| 系統設定 | ✅ | ❌ | ❌ | ❌ |
+| 新增機台 | ✅ | ✅ | ❌ | ❌ |
+| 刪除機台 | ✅ | ✅ | ❌ | ❌ |
+| 調整餘額 | ✅ | ✅ | ❌ | ❌ |
+| 新增遊戲商 | ✅ | ✅ | ❌ | ❌ |
+| 遊戲商設定 | ✅ | ✅ | ❌ | ❌ |
+| 查看交易 | ✅ | ✅ | ✅ | ✅ |
+| 開分/洗分 | ✅ | ✅ | ✅ | ✅ |
+| 查看報表 | ✅ | ✅ | ✅ | ✅ |
+| 管理代理商 | ✅ | ✅ | ❌ | ❌ |
+| 管理下級代理商 | ✅ | ❌ | ❌ | ❌ |
+| 系統維護 | ✅ | ❌ | ❌ | ❌ |
+
+### 6.3 資料加密
+
+| 項目 | 演算法 | 用途 |
+|------|--------|------|
+| 密碼儲存 | bcrypt (cost: 12) | 密碼雜湊 |
+| 敏感資料 | AES-256-GCM | 欄位加密 |
+| 傳輸加密 | TLS 1.3 | HTTPS |
+| 訊息驗證 | HMAC-SHA256 | 資料完整性 |
+| API 簽名 | RSA-2048 | 遊戲商 API |
+| PIN 儲存 | bcrypt + salt | 本地 PIN |
+
+### 6.4 安全 Headers
+
+```javascript
+const securityHeaders = {
+  'X-Content-Type-Options': 'nosniff',
+  'X-Frame-Options': 'DENY',
+  'X-XSS-Protection': '1; mode=block',
+  'Strict-Transport-Security': 'max-age=31536000; includeSubDomains',
+  'Content-Security-Policy': "default-src 'self'",
+};
+```
+
+---
+
+## 7. 第三方遊戲商串接 (v6/3)
+
+### 7.1 支援遊戲商
+
+| 遊戲商 | 代碼 | 遊戲類型 | API 版本 |
+|--------|------|----------|----------|
+| RG 電子 | rg | 老虎機、捕魚 | v2 |
+| JDB 電子 | jdb | 老虎機、棋牌 | v2 |
+| RT 電子 | rt | 老虎機 | v2 |
+
+### 7.2 串接流程
+
+```
+1. 新增遊戲商設定
+   ├── API Endpoint
+   ├── API Key
+   ├── API Secret
+   └── Webhook URL
+
+2. 測試連線
+   ├── API /health
+   └── 餘額查詢
+
+3. 正式上線
+   ├── 遊戲開通
+   ├── 錢包建立
+   └── 交易對接
+```
+
+### 7.3 錢包轉帳流程
+
+```
+玩家 ──▶ 中央錢包
+          │
+          ▼
+    ── 第三方 API ──
+    │   (轉入遊戲)
+    │
+    ▼
+遊戲商錢包 ──▶ 遊戲中
+              │
+              ▼
+         ── 第三方 API ──
+         │   (轉出中央)
+         │
+         ▼
+    中央錢包 ──▶ 玩家
+```
+
+---
+
+## 8. OTA 遠端更新 (v6/4)
+
+### 8.1 更新流程
+
+```
+1. 上傳新版本
+   ├── 檔案上傳 (最大 500MB)
+   ├── SHA-256 驗證
+   └── 版本資訊
+
+2. 測試派發
+   ├── 選擇 2-3 台機台
+   ├── 觀察 24 小時
+   └── 確認無問題
+
+3. 正式派發
+   ├── 全部派發 / 分批派發
+   ├── 即時 / 預約
+   └── 強制更新 / 選擇更新
+
+4. 監控進度
+   ├── 即時進度
+   ├── 失敗重試
+   └── 異常告警
+```
+
+### 8.2 版本相容性
+
+- 只支援從舊版本升級
+- 重大版本需強制更新
+- 支援差異更新 (Delta)
+- 版本號格式: x.y.z (major.minor.patch)
+
+---
+
+## 9. 硬體監控 (v6/4)
+
+### 9.1 監控項目
+
+| 項目 | 警告閾值 | 嚴重閾值 |
+|------|----------|----------|
+| CPU 負載 | > 80% | > 90% |
+| 記憶體使用 | > 80% | > 90% |
+| 硬碟空間 | < 15% | < 5% |
+| 網路延遲 | > 100ms | > 500ms |
+| 溫度 | > 60°C | > 75°C |
+
+### 9.2 心跳機制
+
+- 機台每分鐘發送心跳
+- 超過 3 分鐘無心跳 → 離線
+- 離線告警通知管理員
+
+### 9.3 告警動作
+
+| 嚴重度 | 通知方式 |
+|--------|----------|
+| 警告 | Telegram |
+| 嚴重 | Telegram + SMS + 電話 |
+
+---
+
+## 10. 錯帳對帳管理 (v6/4)
+
+### 10.1 錯帳類型
+
+| 類型 | 說明 |
+|------|------|
+| missing_deposit | 轉帳未到帳 |
+| missing_withdrawal | 轉出未確認 |
+| payout_error | 派彩錯誤 |
+| system_error | 系統錯誤 |
+
+### 10.2 處理流程
+
+```
+1. 偵測錯帳
+   ├── 自動偵測 (對帳發現)
+   └── 人工回報 (客戶投訴)
+
+2. 調查原因
+   ├── 檢查日誌
+   ├── 聯繫遊戲商
+   └── 調取交易紀錄
+
+3. 處理方式
+   ├── 補發點數
+   ├── 退款
+   └── 沖銷
+
+4. 產生憑證
+   ├── PDF 憑證
+   ├── 寄送財務
+   └── 歸檔
+```
+
+### 10.3 錢包對帳
+
+- 每日自動對帳 ( UTC 00:00 )
+- 發現差異立即告警
+- 支援人工對帳
+- 差異報告匯出
+
+---
+
+## 11. 部署架構
+
+### 11.1 生產環境架構
+
+```
+                         ┌─────────────┐
+                         │    CDN      │
+                         │ (靜態資源)  │
+                         └──────┬──────┘
+                                │
+                         ┌──────▼──────┐
+                         │   Nginx     │
+                         │  (Reverse   │
+                         │   Proxy)    │
+                         └──────┬──────┘
+                                │
+              ┌─────────────────┼─────────────────┐
+              ▼                 ▼                 ▼
+       ┌──────────┐     ┌──────────┐     ┌──────────┐
+       │  Node.js │     │  Node.js │     │  Node.js │
+       │ Backend 1│     │ Backend 2│     │ Backend N│
+       └────┬─────┘     └────┬─────┘     └────┬─────┘
+            │                 │                 │
+            └─────────────────┼─────────────────┘
+                              │
+             ┌────────────────┼────────────────┐
+             ▼                ▼                ▼
+      ┌────────────┐  ┌────────────┐  ┌────────────┐
+      │ PostgreSQL  │  │   Redis    │  │  Game APIs │
+      │  Primary   │  │   Cache    │  │ (RG/JDB)   │
+      └────────────┘  └────────────┘  └────────────┘
+             │
+             ▼
+      ┌────────────┐
+      │ PostgreSQL │
+      │  Read      │
+      │  Replica   │
+      └────────────┘
+```
+
+### 11.2 容器化部署
+
+```yaml
+version: '3.8'
+services:
+  backend:
+    build: ./backend
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=production
+      - DB_HOST=postgres
+      - REDIS_HOST=redis
+    depends_on:
+      - postgres
+      - redis
+    restart: unless-stopped
+
+  postgres:
+    image: postgres:15
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_DB=game_platform
+      - POSTGRES_USER=admin
+      - POSTGRES_PASSWORD=${DB_PASSWORD}
+    restart: unless-stopped
+
+  redis:
+    image: redis:7-alpine
+    volumes:
+      - redisdata:/data
+    command: redis-server --appendonly yes
+    restart: unless-stopped
+
+volumes:
+  pgdata:
+  redisdata:
+```
+
+---
+
+## 12. 效能設計
+
+### 12.1 效能目標
+
+| 項目 | 目標 |
+|------|------|
+| API 響應時間 (P95) | < 200ms |
+| 資料庫查詢 (P95) | < 500ms |
+| WebSocket 延遲 | < 100ms |
+| 系統可用性 | ≥ 99.5% |
+| 支援機台數 | 1000+ |
+| 支援同時在線玩家 | 500+ |
+
+### 12.2 優化策略
+
+| 策略 | 實作 |
+|------|------|
+| 資料庫索引 | 針對常用查詢建立複合索引 |
+| Redis 快取 | 熱門資料快取 5 分鐘 |
+| CDN | 靜態資源快取 |
+| 非同步處理 | 交易紀錄寫入隊列 |
+| 連線池 | 資料庫連線池管理 |
+| 查詢優化 | 避免 SELECT *，使用分頁 |
+
+---
+
+## 13. 監控設計
+
+### 13.1 監控項目
+
+| 類別 | 項目 |
+|------|------|
+| 機台監控 | 心跳、狀態、連線 |
+| API 監控 | 響應時間、錯誤率 |
+| 資料庫 | 連線池、查詢效能 |
+| 同步 | 成功率、延遲 |
+| 資源 | CPU、記憶體、磁碟 |
+
+### 13.2 告警規則
+
+| 條件 | 嚴重度 | 動作 |
+|------|--------|------|
+| 機台離線 > 15 分鐘 | 警告 | Telegram |
+| 機台離線 > 60 分鐘 | 嚴重 | Telegram + SMS |
+| API 錯誤率 > 5% | 警告 | Telegram |
+| API 錯誤率 > 20% | 嚴重 | Telegram + 電話 |
+| 同步失敗 > 3 次 | 警告 | Telegram |
+| 硬碟空間 < 10% | 警告 | Telegram |
+| 錯帳金額 > $1000 | 警告 | Telegram + Email |
+
+---
+
+## 14. 錯誤處理機制
+
+### 14.1 全域錯誤處理
+
+```javascript
+// 錯誤分類
+class AppError extends Error {
+  constructor(code, message, statusCode = 500) {
+    super(message);
+    this.code = code;
+    this.statusCode = statusCode;
+  }
+}
+
+// 錯誤處理中介軟體
+app.use((err, req, res, next) => {
+  logger.error({
+    error: err.message,
+    stack: err.stack,
+    requestId: req.id
+  });
+  
+  if (err instanceof AppError) {
+    return res.status(err.statusCode).json({
+      success: false,
+      error: {
+        code: err.code,
+        message: err.message
+      }
+    });
+  }
+  
+  // 未預期錯誤
+  return res.status(500).json({
+    success: false,
+    error: {
+      code: 'SYS_001',
+      message: '系統錯誤'
+    }
+  });
+});
+```
+
+### 14.2 交易錯誤處理流程
+
+```
+交易請求
+    │
+    ▼
+驗證參數 ──▶ 錯誤 ──▶ 返回 VAL_001
+    │
+    ▼
+檢查餘額 ──▶ 不足 ──▶ 返回 VAL_002
+    │
+    ▼
+開啟交易 ──▶ 失敗 ──▶ 重試 3 次
+    │
+    ▼
+記錄結果 ──▶ 錯誤 ──▶ 標記pending + 告警
+    │
+    ▼
+返回結果
+```
+
+---
+
+## 15. 資料遷移策略
+
+### 15.1 升級遷移
+
+```sql
+-- v6/2 → v6/3 遷移腳本
+
+-- 新增遊戲商欄位
+ALTER TABLE machines ADD COLUMN provider_id UUID;
+
+-- 新增代理商相關欄位
+ALTER TABLE system_users ADD COLUMN agent_id UUID;
+ALTER TABLE system_users ADD COLUMN permissions JSONB DEFAULT '[]';
+
+-- 建立新表
+CREATE TABLE providers (...);
+CREATE TABLE agents (...);
+
+-- 建立索引
+CREATE INDEX idx_machines_provider ON machines(provider_id);
+CREATE INDEX idx_agents_parent ON agents(parent_agent_id);
+```
+
+### 15.2 資料備份策略
+
+| 類型 | 頻率 | 保留期 |
+|------|------|--------|
+| 完整備份 | 每日 (UTC 02:00) | 30 天 |
+| 增量備份 | 每小時 | 7 天 |
+| 交易備份 | 即時 (WAL) | 1 年 |
+| 設定備份 | 每週 | 90 天 |
+
+---
+
+## 16. 版本歷史
+
+| 版本 | 日期 | 說明 | 作者 |
+|------|------|------|------|
+| v1.0 | 2026-02-25 | 初版系統設計 | docs |
+| v1.1 | 2026-02-26 | 新增版本差異、API 錯誤碼、第三方串接、OTA、硬體監控、錯帳管理章節 | docs |
+| v1.2 | 2026-02-26 | 技術審查修訂：API 版本化、錯誤碼擴充、資料庫優化 | code |
+
+---
+
+*文件維護：docs agent (PM/SA 文秘專員) + code agent (工程師)*
+*審查狀態：✅ 第 1 輪技術審查完成 (v1.2)*
