@@ -1,0 +1,22 @@
+{
+  "name": "game-platform",
+  "version": "1.0.0",
+  "private": true,
+  "workspaces": [
+    "src/frontend",
+    "src/backend",
+    "src/shared"
+  ],
+  "scripts": {
+    "dev": "concurrently \"npm run dev:backend\" \"npm run dev:frontend\"",
+    "dev:frontend": "npm run dev --workspace=src/frontend",
+    "dev:backend": "npm run dev --workspace=src/backend",
+    "build": "npm run build --workspaces",
+    "test": "npm run test --workspaces",
+    "lint": "npm run lint --workspaces"
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.0",
+    "typescript": "^5.3.0"
+  }
+}

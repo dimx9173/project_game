@@ -1,0 +1,364 @@
+openapi: 3.0.3
+info:
+  title: 遊戲平台管理系統 API
+  description: |
+    遊戲平台管理系統 V6 API 文檔
+    - 支援 MVP / 標準版 / 旗艦版
+    - Version: 1.0.0
+  version: 1.0.0
+
+servers:
+  - url: https://api.gameplatform.com/api/v1
+  - url: http://localhost:3000/api/v1
+
+security:
+  - BearerAuth: []
+  - PinAuth: []
+
+tags:
+  - name: 認證 (Auth)
+  - name: 機台管理 (Machines)
+  - name: 遊戲管理 (Games)
+  - name: 玩家管理 (Players)
+  - name: 交易管理 (Transactions)
+  - name: 遊戲商管理 (Providers)
+  - name: 代理商管理 (Agents)
+  - name: OTA 更新 (OTA)
+  - name: 監控中心 (Monitor)
+  - name: 錯帳管理 (Discrepancies)
+  - name: 同步管理 (Sync)
+
+components:
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+    PinAuth:
+      type: apiKey
+      in: header
+      name: X-PIN-Code
+
+paths:
+  # Auth
+  /auth/login:
+    post:
+      tags: [認證 (Auth)]
+      summary: 使用者登入
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [username, password]
+              properties:
+                username: {type: string}
+                password: {type: string}
+      responses:
+        '200': {description: 登入成功}
+        '401': {description: 登入失敗}
+
+  /auth/logout:
+    post:
+      tags: [認證 (Auth)]
+      summary: 登出
+      security: [{BearerAuth: []}]
+      responses:
+        '200': {description: 登出成功}
+
+  /auth/verify:
+    get:
+      tags: [認證 (Auth)]
+      summary: 驗證 Token
+      security: [{BearerAuth: []}]
+      responses:
+        '200': {description: Token 有效}
+
+  /auth/refresh:
+    post:
+      tags: [認證 (Auth)]
+      summary: 刷新 Token
+      responses:
+        '200': {description: 刷新成功}
+
+  # Machines
+  /machines:
+    get:
+      tags: [機台管理 (Machines)]
+      summary: 取得機台列表
+      security: [{BearerAuth: []}]
+      parameters:
+        - {name: page, in: query, schema: {type: integer, default: 1}}
+        - {name: pageSize, in: query, schema: {type: integer, default: 20}}
+        - {name: status, in: query, schema: {type: string, enum: [online, offline, maintenance]}}
+      responses:
+        '200': {description: 成功}
+    post:
+      tags: [機台管理 (Machines)]
+      summary: 新增機台
+      security: [{BearerAuth: []}]
+      responses:
+        '201': {description: 建立成功}
+
+  /machines/{id}:
+    get:
+      tags: [機台管理 (Machines)]
+      summary: 取得機台詳情
+      security: [{BearerAuth: []}]
+      parameters:
+        - {name: id, in: path, required: true, schema: {type: string, format: uuid}}
+      responses:
+        '200': {description: 成功}
+        '404': {description: 不存在}
+    put:
+      tags: [機台管理 (Machines)]
+      summary: 更新機台
+      security: [{BearerAuth: []}]
+      responses:
+        '200': {description: 更新成功}
+    delete:
+      tags: [機台管理 (Machines)]
+      summary: 刪除機台
+      security: [{BearerAuth: []}]
+      responses:
+        '204': {description: 刪除成功}
+
+  /machines/{id}/command:
+    post:
+      tags: [機台管理 (Machines)]
+      summary: 發送遠端指令
+      security: [{BearerAuth: []}]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                command: {type: string, enum: [restart, shutdown, cash_in, cash_out]}
+                params: {type: object}
+      responses:
+        '200': {description: 指令已發送}
+
+  # Games
+  /games:
+    get:
+      tags: [遊戲管理 (Games)]
+      summary: 取得遊戲列表
+      security: [{BearerAuth: []}]
+      responses:
+        '200': {description: 成功}
+    post:
+      tags: [遊戲管理 (Games)]
+      summary: 新增遊戲
+      security: [{BearerAuth: []}]
+      responses:
+        '201': {description: 建立成功}
+
+  /games/{id}:
+    get:
+      tags: [遊戲管理 (Games)]
+      summary: 取得遊戲詳情
+      security: [{BearerAuth: []}]
+      responses:
+        '200': {description: 成功}
+    put:
+      tags: [遊戲管理 (Games)]
+      summary: 更新遊戲
+      security: [{BearerAuth: []}]
+      responses:
+        '200': {description: 更新成功}
+    delete:
+      tags: [遊戲管理 (Games)]
+      summary: 刪除遊戲
+      security: [{BearerAuth: []}]
+      responses:
+        '204': {description: 刪除成功}
+
+  # Players
+  /players:
+    get:
+      tags: [玩家管理 (Players)]
+      summary: 取得玩家列表
+      security: [{BearerAuth: []}]
+      responses:
+        '200': {description: 成功}
+
+  /players/{id}:
+    get:
+      tags: [玩家管理 (Players)]
+      summary: 取得玩家詳情
+      security: [{BearerAuth: []}]
+      responses:
+        '200': {description: 成功}
+
+  /players/{id}/balance:
+    put:
+      tags: [玩家管理 (Players)]
+      summary: 調整玩家餘額
+      security: [{BearerAuth: []}]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                amount: {type: number}
+                type: {type: string, enum: [deposit, withdraw, adjust]}
+      responses:
+        '200': {description: 調整成功}
+        '400': {description: 餘額不足}
+
+  # Transactions
+  /transactions:
+    get:
+      tags: [交易管理 (Transactions)]
+      summary: 取得交易列表
+      security: [{BearerAuth: []}]
+      parameters:
+        - {name: page, in: query, schema: {type: integer}}
+        - {name: pageSize, in: query, schema: {type: integer}}
+        - {name: playerId, in: query, schema: {type: string}}
+        - {name: type, in: query, schema: {type: string}}
+      responses:
+        '200': {description: 成功}
+
+  /transactions/{id}/reverse:
+    post:
+      tags: [交易管理 (Transactions)]
+      summary: 沖銷交易
+      security: [{BearerAuth: []}]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                reason: {type: string}
+      responses:
+        '200': {description: 沖銷成功}
+
+  # Providers (標準版/旗艦版)
+  /providers:
+    get:
+      tags: [遊戲商管理 (Providers)]
+      summary: 取得遊戲商列表
+      security: [{BearerAuth: []}]
+      responses:
+        '200': {description: 成功}
+    post:
+      tags: [遊戲商管理 (Providers)]
+      summary: 新增遊戲商
+      security: [{BearerAuth: []}]
+      responses:
+        '201': {description: 建立成功}
+
+  /providers/{id}/balance:
+    get:
+      tags: [遊戲商管理 (Providers)]
+      summary: 取得遊戲商餘額
+      security: [{BearerAuth: []}]
+      responses:
+        '200': {description: 成功}
+
+  # Agents (標準版/旗艦版)
+  /agents:
+    get:
+      tags: [代理商管理 (Agents)]
+      summary: 取得代理商列表
+      security: [{BearerAuth: []}]
+      responses:
+        '200': {description: 成功}
+    post:
+      tags: [代理商管理 (Agents)]
+      summary: 新增代理商
+      security: [{BearerAuth: []}]
+      responses:
+        '201': {description: 建立成功}
+
+  # OTA (旗艦版)
+  /ota/versions:
+    get:
+      tags: [OTA 更新 (OTA)]
+      summary: 取得版本列表
+      security: [{BearerAuth: []}]
+      responses:
+        '200': {description: 成功}
+    post:
+      tags: [OTA 更新 (OTA)]
+      summary: 上傳新版本
+      security: [{BearerAuth: []}]
+      responses:
+        '201': {description: 上傳成功}
+
+  /ota/versions/{id}/publish:
+    post:
+      tags: [OTA 更新 (OTA)]
+      summary: 發布版本
+      security: [{BearerAuth: []}]
+      responses:
+        '200': {description: 發布成功}
+
+  # Monitor (旗艦版)
+  /monitor/system:
+    get:
+      tags: [監控中心 (Monitor)]
+      summary: 取得系統監控數據
+      security: [{BearerAuth: []}]
+      responses:
+        '200': {description: 成功}
+
+  # Discrepancies (旗艦版)
+  /discrepancies:
+    get:
+      tags: [錯帳管理 (Discrepancies)]
+      summary: 取得錯帳列表
+      security: [{BearerAuth: []}]
+      responses:
+        '200': {description: 成功}
+
+  /discrepancies/{id}/resolve:
+    post:
+      tags: [錯帳管理 (Discrepancies)]
+      summary: 處理錯帳
+      security: [{BearerAuth: []}]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                resolution: {type: string}
+                action: {type: string}
+      responses:
+        '200': {description: 處理成功}
+
+  # Sync
+  /sync/upload:
+    post:
+      tags: [同步管理 (Sync)]
+      summary: 上傳本地資料
+      security: [{BearerAuth: []}, {PinAuth: []}]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                transactions: {type: array}
+                version: {type: integer}
+      responses:
+        '200': {description: 上傳成功}
+
+  /sync/download:
+    get:
+      tags: [同步管理 (Sync)]
+      summary: 下載中央資料
+      security: [{BearerAuth: []}, {PinAuth: []}]
+      responses:
+        '200': {description: 成功}
