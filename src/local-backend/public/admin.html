@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>遊戲機台管理系統 - 本地後台</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #f5f5f5; }
+    #login-screen { display: flex; justify-content: center; align-items: center; min-height: 100vh; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); }
+    .login-box { background: white; padding: 40px; border-radius: 16px; box-shadow: 0 20px 60px rgba(0,0,0,0.3); text-align: center; width: 360px; }
+    .login-box h1 { color: #333; margin-bottom: 8px; font-size: 24px; }
+    .login-box p { color: #666; margin-bottom: 24px; }
+    .pin-input { display: flex; justify-content: center; gap: 8px; margin: 24px 0; }
+    .pin-input input { width: 48px; height: 56px; text-align: center; font-size: 24px; font-weight: bold; border: 2px solid #ddd; border-radius: 8px; outline: none; transition: border-color 0.2s; }
+    .pin-input input:focus { border-color: #667eea; }
+    .pin-input input.error { border-color: #e74c3c; animation: shake 0.5s; }
+    @keyframes shake { 0%, 100% { transform: translateX(0); } 25% { transform: translateX(-8px); } 75% { transform: translateX(8px); } }
+    .btn { padding: 12px 32px; border: none; border-radius: 8px; font-size: 16px; font-weight: 600; cursor: pointer; transition: all 0.2s; }
+    .btn-primary { background: #667eea; color: white; width: 100%; }
+    .btn-primary:hover { background: #5568d3; }
+    .btn-success { background: #2ecc71; color: white; }
+    .btn-danger { background: #e74c3c; color: white; }
+    .login-error { color: #e74c3c; margin-top: 12px; display: none; }
+    #dashboard { display: none; }
+    .header { background: white; padding: 16px 24px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); display: flex; justify-content: space-between; align-items: center; }
+    .header h1 { font-size: 20px; color: #333; }
+    .header-info { display: flex; align-items: center; gap: 16px; }
+    .status-badge { padding: 6px 12px; border-radius: 20px; font-size: 12px; font-weight: 600; }
+    .status-online { background: #d4edda; color: #155724; }
+    .status-offline { background: #f8d7da; color: #721c24; }
+    .logout-btn { background: #6c757d; color: white; padding: 8px 16px; border: none; border-radius: 6px; cursor: pointer; }
+    .container { max-width: 1400px; margin: 0 auto; padding: 24px; }
+    .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 16px; margin-bottom: 24px; }
+    .stat-card { background: white; padding: 20px; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); }
+    .stat-card h3 { color: #666; font-size: 14px; margin-bottom: 8px; }
+    .stat-card .value { font-size: 32px; font-weight: bold; color: #333; }
+    .stat-card .value.green { color: #2ecc71; }
+    .stat-card .value.red { color: #e74c3c; }
+    .tabs { display: flex; gap: 8px; margin-bottom: 24px; background: white; padding: 8px; border-radius: 12px; }
+    .tab { padding: 12px 24px; border: none; background: transparent; border-radius: 8px; cursor: pointer; font-size: 14px; font-weight: 500; color: #666; transition: all 0.2s; }
+    .tab:hover { background: #f5f5f5; }
+    .tab.active { background: #667eea; color: white; }
+    .section { display: none; }
+    .section.active { display: block; }
+    .table-container { background: white; border-radius: 12px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.08); }
+    .table-header { padding: 16px 20px; border-bottom: 1px solid #eee; display: flex; justify-content: space-between; align-items: center; }
+    .table-header h2 { font-size: 18px; }
+    table { width: 100%; border-collapse: collapse; }
+    th, td { padding: 14px 16px; text-align: left; }
+    th { background: #f8f9fa; font-weight: 600; color: #555; font-size: 13px; }
+    td { border-bottom: 1px solid #eee; }
+    tr:hover { background: #fafafa; }
+    .machine-code { font-weight: 600; color: #667eea; }
+    .cash-panel { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+    .cash-card { background: white; padding: 24px; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); }
+    .cash-card h3 { margin-bottom: 20px; display: flex; align-items: center; gap: 8px; }
+    .form-group { margin-bottom: 16px; }
+    .form-group label { display: block; margin-bottom: 6px; color: #555; font-size: 14px; font-weight: 500; }
+    .form-group select, .form-group input { width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 8px; font-size: 14px; }
+    .form-group select:focus, .form-group input:focus { outline: none; border-color: #667eea; }
+    .quick-buttons { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 16px; }
+    .quick-btn { padding: 8px 16px; border: 1px solid #ddd; background: white; border-radius: 6px; cursor: pointer; transition: all 0.2s; }
+    .quick-btn:hover { border-color: #667eea; background: #f8f9ff; }
+    .quick-btn.selected { background: #667eea; color: white; border-color: #667eea; }
+    .filter-bar { display: flex; gap: 12px; margin-bottom: 16px; }
+    .filter-bar select { padding: 10px 14px; border: 1px solid #ddd; border-radius: 8px; font-size: 14px; }
+    .transaction-list { max-height: 500px; overflow-y: auto; }
+    .transaction-item { display: flex; justify-content: space-between; align-items: center; padding: 14px 16px; border-bottom: 1px solid #eee; }
+    .txn-info { display: flex; flex-direction: column; gap: 4px; }
+    .txn-type { font-weight: 600; font-size: 14px; }
+    .txn-type.cash-in { color: #2ecc71; }
+    .txn-type.cash-out { color: #e74c3c; }
+    .txn-meta { font-size: 12px; color: #888; }
+    .txn-amount { font-size: 18px; font-weight: bold; }
+    .txn-amount.positive { color: #2ecc71; }
+    .txn-amount.negative { color: #e74c3c; }
+    .toast { position: fixed; bottom: 24px; right: 24px; padding: 16px 24px; border-radius: 8px; color: white; font-weight: 500; transform: translateY(100px); opacity: 0; transition: all 0.3s; z-index: 1000; }
+    .toast.show { transform: translateY(0); opacity: 1; }
+    .toast.success { background: #2ecc71; }
+    .toast.error { background: #e74c3c; }
+    @media (max-width: 768px) { .cash-panel { grid-template-columns: 1fr; } .header { flex-direction: column; gap: 12px; } }
+  </style>
+</head>
+<body>
+  <div id="login-screen">
+    <div class="login-box">
+      <h1>🎮 機台管理系統</h1>
+      <p>請輸入 6 位數 PIN 碼</p>
+      <div class="pin-input">
+        <input type="password" maxlength="1" pattern="[0-9]*" inputmode="numeric">
+        <input type="password" maxlength="1" pattern="[0-9]*" inputmode="numeric">
+        <input type="password" maxlength="1" pattern="[0-9]*" inputmode="numeric">
+        <input type="password" maxlength="1" pattern="[0-9]*" inputmode="numeric">
+        <input type="password" maxlength="1" pattern="[0-9]*" inputmode="numeric">
+        <input type="password" maxlength="1" pattern="[0-9]*" inputmode="numeric">
+      </div>
+      <button class="btn btn-primary" id="login-btn">登入</button>
+      <p class="login-error" id="login-error">PIN 碼錯誤，請重新輸入</p>
+    </div>
+  </div>
+  <div id="dashboard">
+    <header class="header">
+      <h1>🎮 機台管理系統 - 本地後台</h1>
+      <div class="header-info">
+        <span class="status-badge status-online" id="connection-status">🟢 已連線</span>
+        <span id="operator-display">操作員: Admin</span>
+        <button class="logout-btn" id="logout-btn">登出</button>
+      </div>
+    </header>
+    <div class="container">
+      <div class="stats-grid">
+        <div class="stat-card"><h3>機台總數</h3><div class="value" id="stat-machines">0</div></div>
+        <div class="stat-card"><h3>在線機台</h3><div class="value green" id="stat-online">0</div></div>
+        <div class="stat-card"><h3>離線機台</h3><div class="value red" id="stat-offline">0</div></div>
+        <div class="stat-card"><h3>總餘額</h3><div class="value" id="stat-balance">0</div></div>
+      </div>
+      <div class="tabs">
+        <button class="tab active" data-tab="machines">機台列表</button>
+        <button class="tab" data-tab="cash">開分/洗分</button>
+        <button class="tab" data-tab="transactions">交易紀錄</button>
+      </div>
+      <div class="section active" id="section-machines">
+        <div class="table-container">
+          <div class="table-header">
+            <h2>機台列表</h2>
+            <button class="btn btn-primary" id="add-machine-btn">+ 新增機台</button>
+          </div>
+          <table>
+            <thead><tr><th>機台代碼</th><th>名稱</th><th>狀態</th><th>餘額</th><th>最後更新</th><th>操作</th></tr></thead>
+            <tbody id="machines-tbody"></tbody>
+          </table>
+        </div>
+      </div>
+      <div class="section" id="section-cash">
+        <div class="cash-panel">
+          <div class="cash-card">
+            <h3><span>📥</span> 開分 (Cash In)</h3>
+            <div class="form-group"><label>選擇機台</label><select id="cashin-machine"><option value="">-- 請選擇機台 --</option></select></div>
+            <div class="form-group"><label>金額</label><input type="number" id="cashin-amount" placeholder="輸入金額" min="1"></div>
+            <div class="quick-buttons">
+              <button class="quick-btn" data-amount="100">100</button>
+              <button class="quick-btn" data-amount="500">500</button>
+              <button class="quick-btn" data-amount="1000">1000</button>
+              <button class="quick-btn" data-amount="2000">2000</button>
+              <button class="quick-btn" data-amount="5000">5000</button>
+            </div>
+            <button class="btn btn-success" id="cashin-btn" style="width:100%">確認開分</button>
+          </div>
+          <div class="cash-card">
+            <h3><span>📤</span> 洗分 (Cash Out)</h3>
+            <div class="form-group"><label>選擇機台</label><select id="cashout-machine"><option value="">-- 請選擇機台 --</option></select></div>
+            <div class="form-group"><label>金額</label><input type="number" id="cashout-amount" placeholder="輸入金額" min="1"></div>
+            <div class="quick-buttons">
+              <button class="quick-btn" data-amount="100">100</button>
+              <button class="quick-btn" data-amount="500">500</button>
+              <button class="quick-btn" data-amount="1000">1000</button>
+              <button class="quick-btn" data-amount="2000">2000</button>
+              <button class="quick-btn" data-amount="5000">5000</button>
+            </div>
+            <button class="btn btn-danger" id="cashout-btn" style="width:100%">確認洗分</button>
+          </div>
+        </div>
+      </div>
+      <div class="section" id="section-transactions">
+        <div class="table-container">
+          <div class="table-header">
+            <h2>交易紀錄</h2>
+            <div class="filter-bar">
+              <select id="txn-filter-machine"><option value="">全部機台</option></select>
+              <select id="txn-filter-type"><option value="">全部類型</option><option value="cash_in">開分</option><option value="cash_out">洗分</option></select>
+              <button class="btn btn-primary" id="refresh-txn-btn">重新整理</button>
+            </div>
+          </div>
+          <div class="transaction-list" id="transaction-list"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="toast" id="toast"></div>
+  <script>
+    const API_BASE = '';
+    let currentPIN = '';
+    let machines = [];
+    let transactions = [];
+
+    const pinInputs = document.querySelectorAll('.pin-input input');
+    pinInputs.forEach((input, index) => {
+      input.addEventListener('input', (e) => {
+        const value = e.target.value.replace(/\D/g, '');
+        e.target.value = value;
+        if (value && index < pinInputs.length - 1) pinInputs[index + 1].focus();
+        if (pinInputs.every(i => i.value)) currentPIN = Array.from(pinInputs).map(i => i.value).join('');
+      });
+      input.addEventListener('keydown', (e) => { if (e.key === 'Backspace' && !e.target.value && index > 0) pinInputs[index - 1].focus(); });
+      input.addEventListener('paste', (e) => {
+        e.preventDefault();
+        const paste = (e.clipboardData.getData('text') || '').replace(/\D/g, '').slice(0, 6);
+        paste.split('').forEach((char, i) => { if (pinInputs[i]) pinInputs[i].value = char; });
+        currentPIN = paste;
+        if (paste.length === 6) pinInputs[5].focus();
+      });
+    });
+
+    document.getElementById('login-btn').addEventListener('click', async () => {
+      if (currentPIN.length !== 6) { showError('請輸入完整的 6 位數 PIN 碼'); return; }
+      try {
+        const res = await fetch(API_BASE + '/api/verify-pin', { method: 'POST', headers: { 'x-pin-code': currentPIN } });
+        const data = await res.json();
+        if (data.success && data.valid) {
+          document.getElementById('login-screen').style.display = 'none';
+          document.getElementById('dashboard').style.display = 'block';
+          loadMachines(); loadTransactions();
+        } else {
+          showError('PIN 碼錯誤');
+          pinInputs.forEach(i => { i.classList.add('error'); i.value = ''; });
+          pinInputs[0].focus();
+          setTimeout(() => pinInputs.forEach(i => i.classList.remove('error')), 500);
+        }
+      } catch (err) { showError('連線失敗，請檢查網路'); }
+    });
+
+    document.getElementById('logout-btn').addEventListener('click', () => {
+      currentPIN = '';
+      pinInputs.forEach(i => i.value = '');
+      document.getElementById('dashboard').style.display = 'none';
+      document.getElementById('login-screen').style.display = 'flex';
+    });
+
+    document.querySelectorAll('.tab').forEach(tab => {
+      tab.addEventListener('click', () => {
+        document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+        document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+        tab.classList.add('active');
+        document.getElementById('section-' + tab.dataset.tab).classList.add('active');
+      });
+    });
+
+    document.querySelectorAll('.quick-buttons').forEach(container => {
+      container.querySelectorAll('.quick-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          container.querySelectorAll('.quick-btn').forEach(b => b.classList.remove('selected'));
+          btn.classList.add('selected');
+          container.parentElement.querySelector('input[type="number"]').value = btn.dataset.amount;
+        });
+      });
+    });
+
+    async function loadMachines() {
+      try {
+        const res = await fetch(API_BASE + '/api/machines', { headers: { 'x-pin-code': currentPIN } });
+        const data = await res.json();
+        if (data.success) { machines = data.data.items || []; renderMachines(); updateStats(); updateMachineSelects(); }
+      } catch (err) { showToast('載入機台失敗', 'error'); }
+    }
+
+    async function loadTransactions() {
+      try {
+        const res = await fetch(API_BASE + '/api/transactions?limit=100', { headers: { 'x-pin-code': currentPIN } });
+        const data = await res.json();
+        if (data.success) { transactions = data.data.items || []; renderTransactions(); }
+      } catch (err) { showToast('載入交易紀錄失敗', 'error'); }
+    }
+
+    async function cashIn() {
+      const machineId = document.getElementById('cashin-machine').value;
+      const amount = parseInt(document.getElementById('cashin-amount').value);
+      if (!machineId || !amount || amount <= 0) { showToast('請選擇機台並輸入金額', 'error'); return; }
+      try {
+        const res = await fetch(API_BASE + '/api/cash-in', { method: 'POST', headers: { 'x-pin-code': currentPIN, 'Content-Type': 'application/json' }, body: JSON.stringify({ machineId, amount, operatorId: 'admin' }) });
+        const data = await res.json();
+        if (data.success) { showToast('開分成功！餘額: ' + data.data.currentBalance, 'success'); document.getElementById('cashin-amount').value = ''; loadMachines(); loadTransactions(); }
+        else { showToast(data.error || '開分失敗', 'error'); }
+      } catch (err) { showToast('開分失敗', 'error'); }
+    }
+
+    async function cashOut() {
+      const machineId = document.getElementById('cashout-machine').value;
+      const amount = parseInt(document.getElementById('cashout-amount').value);
+      if (!machineId || !amount || amount <= 0) { showToast('請選擇機台並輸入金額', 'error'); return; }
+      try {
+        const res = await fetch(API_BASE + '/api/cash-out', { method: 'POST', headers: { 'x-pin-code': currentPIN, 'Content-Type': 'application/json' }, body: JSON.stringify({ machineId, amount, operatorId: 'admin' }) });
+        const data = await res.json();
+        if (data.success) { showToast('洗分成功！餘額: ' + data.data.currentBalance, 'success'); document.getElementById('cashout-amount').value = ''; loadMachines(); loadTransactions(); }
+        else { showToast(data.error || '洗分失敗', 'error'); }
+      } catch (err) { showToast('洗分失敗', 'error'); }
+    }
+
+    async function addMachine() {
+      const code = prompt('請輸入機台代碼:');
+      const name = prompt('請輸入機台名稱:');
+      if (!code || !name) return;
+      try {
+        const res = await fetch(API_BASE + '/api/machines', { method: 'POST', headers: { 'x-pin-code': currentPIN, 'Content-Type': 'application/json' }, body: JSON.stringify({ machineCode: code, name }) });
+        const data = await res.json();
+        if (data.success) { showToast('機台新增成功', 'success'); loadMachines(); }
+        else { showToast(data.error || '新增失敗', 'error'); }
+      } catch (err) { showToast('新增失敗', 'error'); }
+    }
+
+    function renderMachines() {
+      document.getElementById('machines-tbody').innerHTML = machines.map(m => 
+        '<tr><td class="machine-code">' + m.machineCode + '</td><td>' + m.name + '</td><td><span class="status-badge status-' + m.status + '">' + (m.status === 'online' ? '🟢 在線' : m.status === 'offline' ? '🔴 離線' : '🟡 維護') + '</span></td><td><strong>' + m.balance.toLocaleString() + '</strong></td><td>' + new Date(m.lastUpdate).toLocaleString() + '</td><td><button class="btn btn-primary" onclick="selectMachine(\'' + m.id + '\')">選擇</button></td></tr>'
+      ).join('');
+    }
+
+    function renderTransactions() {
+      const list = document.getElementById('transaction-list');
+      if (transactions.length === 0) { list.innerHTML = '<p style="padding:24px;text-align:center;color:#888;">尚無交易紀錄</p>'; return; }
+      list.innerHTML = transactions.map(t => 
+        '<div class="transaction-item"><div class="txn-info"><span class="txn-type ' + t.type + '">' + (t.type === 'cash_in' ? '📥 開分' : t.type === 'cash_out' ? '📤 洗分' : '⚙️ 調整') + '</span><span class="txn-meta">機台: ' + t.machineId + ' | ' + new Date(t.timestamp).toLocaleString() + '</span></div><span class="txn-amount ' + (t.type === 'cash_in' ? 'positive' : 'negative') + '">' + (t.type === 'cash_in' ? '+' : '-') + t.amount.toLocaleString() + '</span></div>'
+      ).join('');
+    }
+
+    function updateStats() {
+      document.getElementById('stat-machines').textContent = machines.length;
+      document.getElementById('stat-online').textContent = machines.filter(m => m.status === 'online').length;
+      document.getElementById('stat-offline').textContent = machines.filter(m => m.status === 'offline').length;
+      document.getElementById('stat-balance').textContent = machines.reduce((sum, m) => sum + m.balance, 0).toLocaleString();
+    }
+
+    function updateMachineSelects() {
+      const opts = '<option value="">-- 請選擇機台 --</option>' + machines.map(m => '<option value="' + m.id + '">' + m.machineCode + ' - ' + m.name + ' (餘額: ' + m.balance.toLocaleString() + ')</option>').join('');
+      document.getElementById('cashin-machine').innerHTML = opts;
+      document.getElementById('cashout-machine').innerHTML = opts;
+      document.getElementById('txn-filter-machine').innerHTML = '<option value="">全部機台</option>' + machines.map(m => '<option value="' + m.id + '">' + m.machineCode + '</option>').join('');
+    }
+
+    function selectMachine(machineId) {
+      document.querySelectorAll('.tab')[1].click();
+      document.getElementById('cashin-machine').value = machineId;
+      document.getElementById('cashout-machine').value = machineId;
+    }
+
+    document.getElementById('cashin-btn').addEventListener('click', cashIn);
+    document.getElementById('cashout-btn').addEventListener('click', cashOut);
+    document.getElementById('add-machine-btn').addEventListener('click', addMachine);
+    document.getElementById('refresh-txn-btn').addEventListener('click', loadTransactions);
+
+    function filterTransactions() {
+      const machineId = document.getElementById('txn-filter-machine').value;
+      const type = document.getElementById('txn-filter-type').value;
+      let filtered = [...transactions];
+      if (machineId) filtered = filtered.filter(t => t.machineId === machineId);
+      if (type) filtered = filtered.filter(t => t.type === type);
+      const list = document.getElementById('transaction-list');
+      if (filtered.length === 0) { list.innerHTML = '<p style="padding:24px;text-align:center;color:#888;">尚無交易紀錄</p>'; return; }
+      list.innerHTML = filtered.map(t => 
+        '<div class="transaction-item"><div class="txn-info"><span class="txn-type ' + t.type + '">' + (t.type === 'cash_in' ? '📥 開分' : t.type === 'cash_out' ? '📤 洗分' : '⚙️ 調整') + '</span><span class="txn-meta">機台: ' + t.machineId + ' | ' + new Date(t.timestamp).toLocaleString() + '</span></div><span class="txn-amount ' + (t.type === 'cash_in' ? 'positive' : 'negative') + '">' + (t.type === 'cash_in' ? '+' : '-') + t.amount.toLocaleString() + '</span></div>'
+      ).join('');
+    }
+
+    document.getElementById('txn-filter-machine').addEventListener('change', filterTransactions);
+    document.getElementById('txn-filter-type').addEventListener('change', filterTransactions);
+
+    function showToast(message, type) {
+      const toast = document.getElementById('toast');
+      toast.textContent = message;
+      toast.className = 'toast ' + (type || 'info') + ' show';
+      setTimeout(() => toast.classList.remove('show'), 3000);
+    }
+
+    function showError(message) {
+      document.getElementById('login-error').textContent = message;
+      document.getElementById('login-error').style.display = 'block';
+      setTimeout(() => document.getElementById('login-error').style.display = 'none', 3000);
+    }
+
+    pinInputs[pinInputs.length - 1].addEventListener('keydown', (e) => { if (e.key === 'Enter') document.getElementById('login-btn').click(); });
+  </script>
+</body>
+</html>
