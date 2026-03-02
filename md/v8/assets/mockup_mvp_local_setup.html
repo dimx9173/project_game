@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>本機設定介面</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+        href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@500;700&family=Noto+Sans+TC:wght@400;500;700&display=swap"
+        rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Noto Sans TC', sans-serif;
+            background-color: #F3F4F6;
+        }
+    </style>
+</head>
+
+<body class="bg-gray-100 flex items-center justify-center h-screen">
+    <div class="w-full max-w-2xl bg-white rounded-xl shadow-lg border border-gray-200 overflow-hidden">
+        <div class="bg-slate-800 text-white p-6 text-center border-b-4 border-indigo-500">
+            <h1 class="text-2xl font-bold tracking-widest">本機系統設定</h1>
+            <p class="text-slate-300 mt-1 text-sm">(需工程師權限)</p>
+        </div>
+
+        <div class="p-8 space-y-8">
+            <!-- Server Settings -->
+            <div>
+                <h2 class="text-lg font-bold text-gray-800 mb-4 pb-2 border-b border-gray-200 flex items-center">
+                    <span class="w-2 h-6 bg-indigo-500 rounded-sm mr-2"></span> 中央伺服器設定
+                </h2>
+                <div class="space-y-4">
+                    <div class="flex items-center">
+                        <label class="w-32 text-gray-700 font-medium">API 位址</label>
+                        <input type="text" value="https://api.gameplatform.com"
+                            class="flex-1 px-4 py-2 border border-gray-300 rounded-lg text-sm font-mono focus:ring-2 focus:ring-indigo-500 outline-none">
+                    </div>
+                    <div class="flex items-center">
+                        <label class="w-32 text-gray-700 font-medium">API 金鑰</label>
+                        <input type="password" value="********************************"
+                            class="flex-1 px-4 py-2 border border-gray-300 rounded-lg text-sm font-mono focus:ring-2 focus:ring-indigo-500 outline-none">
+                    </div>
+                    <div class="flex items-center">
+                        <label class="w-32 text-gray-700 font-medium">機台序號</label>
+                        <input type="text" value="A-001"
+                            class="w-48 px-4 py-2 border border-gray-300 rounded-lg text-sm font-bold text-indigo-700 focus:ring-2 focus:ring-indigo-500 outline-none">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Network Settings -->
+            <div>
+                <h2 class="text-lg font-bold text-gray-800 mb-4 pb-2 border-b border-gray-200 flex items-center">
+                    <span class="w-2 h-6 bg-indigo-500 rounded-sm mr-2"></span> 網路任務設定
+                </h2>
+                <div class="flex space-x-8">
+                    <div class="flex items-center">
+                        <label class="text-gray-700 font-medium mr-4">自動同步</label>
+                        <select class="px-4 py-2 border border-gray-300 rounded-lg text-sm outline-none">
+                            <option selected>啟用</option>
+                            <option>停用</option>
+                        </select>
+                    </div>
+                    <div class="flex items-center">
+                        <label class="text-gray-700 font-medium mr-4">同步間隔</label>
+                        <select class="px-4 py-2 border border-gray-300 rounded-lg text-sm outline-none">
+                            <option>1 分鐘</option>
+                            <option selected>3 分鐘</option>
+                            <option>5 分鐘</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Security -->
+            <div>
+                <h2 class="text-lg font-bold text-gray-800 mb-4 pb-2 border-b border-gray-200 flex items-center">
+                    <span class="w-2 h-6 bg-indigo-500 rounded-sm mr-2"></span> 現場安全設定
+                </h2>
+                <div class="flex items-center">
+                    <label class="w-32 text-gray-700 font-medium">開洗分 PIN 碼</label>
+                    <input type="password" value="1234"
+                        class="w-32 px-4 py-2 border border-gray-300 rounded-lg text-center font-mono tracking-widest text-lg focus:ring-2 focus:ring-indigo-500 outline-none">
+                </div>
+            </div>
+        </div>
+
+        <div class="bg-gray-50 px-8 py-4 border-t border-gray-200 flex justify-end space-x-4">
+            <button
+                class="px-6 py-2 bg-white border border-gray-300 text-gray-700 rounded-lg font-medium hover:bg-gray-100">取消</button>
+            <button
+                class="px-6 py-2 bg-indigo-600 text-white rounded-lg font-medium shadow-md hover:bg-indigo-700">儲存設定</button>
+        </div>
+    </div>
+</body>
+
+</html>
