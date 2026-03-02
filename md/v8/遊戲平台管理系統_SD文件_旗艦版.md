@@ -1,7 +1,7 @@
 # 遊戲平台管理系統 - 系統設計文件（SD）
 
-> **版本**：v1.0 - V6 旗艦版 + C# .NET 8  
-> **日期**：2026 年 3 月 2 日  
+> **版本**：v1.0 - V6 旗艦版 + C# .NET 8
+> **日期**：2026 年 3 月 2 日
 > **適用系統**：遊戲平台管理系統 V8 (= V6 旗艦版 + C#)
 
 ---
@@ -16,30 +16,61 @@
 - 雙向資料同步與對帳
 - 第三方遊戲 API 串接
 
-### 1.2 版本差異對照表
+### 1.2 系統邊界定義
 
-| 功能模組 | 基於 v6/2 MVP | 基於 v6/3 標準版 | 基於 v6/4 旗艦版 + C# .NET 8 |
-|----------|----------|-------------|-------------|
-| **中央後台** | ✅ | ✅ | ✅ |
-| - 機台管理 | ✅ | ✅ | ✅ |
-| - 玩家管理 | ✅ | ✅ | ✅ |
-| - 交易管理 | ✅ | ✅ | ✅ |
-| - 系統使用者 | ✅ | ✅ | ✅ |
-| - 儀表板 | - | ✅ | ✅ |
-| - 即時機台監控 | - | ✅ | ✅ |
-| - 第三方遊戲商管理 | - | ✅ | ✅ |
-| - 代理商管理 | - | ✅ | ✅ |
-| - 三層權限管理 | - | ✅ | ✅ |
-| - 第三方錢包轉帳 | - | ✅ | ✅ |
-| - OTA 遠端更新 | - | - | ✅ |
-| - 硬體監控 | - | - | ✅ |
-| - 錯帳對帳管理 | - | - | ✅ |
-| - 錢包自動對帳 | - | - | ✅ |
-| **單機本地後台** | ✅ | ✅ | ✅ |
-| - PIN 登入 | ✅ | ✅ | ✅ |
-| - 開分/洗分 | ✅ | ✅ | ✅ |
-| - 離線交易 | ✅ | ✅ | ✅ |
-| - 同步機制 | ✅ | ✅ | ✅ |
+#### 集中式後台邊界
+| 邊界元素 | 說明 |
+|----------|------|
+| **管理範圍** | 所有機台、全部玩家、全平台遊戲、全部交易 |
+| **資料擁有者** | 中央系統（唯一真實來源） |
+| **可用性要求** | 99.5% 正常運行時間 |
+| **網路依賴** | 需持續連線（可離線一段時間） |
+| **職責** | 全域決策、帳務最終核對、系統設定 |
+
+#### 單機本地後台邊界
+| 邊界元素 | 說明 |
+|----------|------|
+| **管理範圍** | 單一機台、本地玩家、本機遊戲、本地交易 |
+| **資料擁有者** | 本地系統（離線時為真實來源） |
+| **可用性要求** | 離線獨立運作能力 |
+| **網路依賴** | 可離線運作（網路恢復後同步） |
+| **職責** | 本地遊戲執行、當地交易紀錄、離線緩衝 |
+
+#### 邊界協定
+| 協定類型 | 內容 |
+|----------|------|
+| **通訊協定** | HTTPS + WebSocket |
+| **資料交換格式** | JSON |
+| **認證方式** | JWT Token（中央）、PIN Code（本地） |
+| **同步時機** | 連線建立時自動同步，手動同步 |
+| **衝突處理** | 中央優先（交易）、本地保留（日誌） |
+
+### 1.3 版本差異對照表
+
+> **說明**：本文件僅描述 **旗艦版 + C# .NET 8** 之完整功能。
+
+| 功能模組 | 旗艦版 + C# .NET 8 |
+|----------|---------------------|
+| **中央後台** | |
+| - 機台管理 | ✅ |
+| - 玩家管理 | ✅ |
+| - 交易管理 | ✅ |
+| - 系統使用者 | ✅ |
+| - 儀表板 | ✅ |
+| - 即時機台監控 | ✅ |
+| - 第三方遊戲商管理 | ✅ |
+| - 代理商管理 | ✅ |
+| - 三層權限管理 | ✅ |
+| - 第三方錢包轉帳 | ✅ |
+| - OTA 遠端更新 | ✅ |
+| - 硬體監控 | ✅ |
+| - 錯帳對帳管理 | ✅ |
+| - 錢包自動對帳 | ✅ |
+| **單機本地後台** | |
+| - PIN 登入 | ✅ |
+| - 開分/洗分 | ✅ |
+| - 離線交易 | ✅ |
+| - 同步機制 | ✅ |
 
 ### 1.3 系統架構
 
@@ -317,7 +348,7 @@ CREATE INDEX idx_audit_logs_created ON audit_logs(created_at DESC);
 - GET/PUT/DELETE /api/v1/machines/:id
 - POST /api/v1/machines/:id/command
 
-#### 遊戲商 (v6/3)
+#### 遊戲商
 - GET/POST /api/v1/providers
 - GET/PUT /api/v1/providers/:id
 - GET /api/v1/providers/:id/balance
@@ -331,11 +362,11 @@ CREATE INDEX idx_audit_logs_created ON audit_logs(created_at DESC);
 - GET /api/v1/transactions
 - POST /api/v1/transactions/:id/reverse
 
-#### OTA (v6/4)
+#### OTA
 - GET/POST /api/v1/ota/versions
 - POST /api/v1/ota/deploy
 
-#### 錯帳 (v6/4)
+#### 錯帳
 - GET /api/v1/discrepancies
 - POST /api/v1/discrepancies/:id/resolve
 
@@ -354,6 +385,112 @@ CREATE INDEX idx_audit_logs_created ON audit_logs(created_at DESC);
 | TXN_002 | 交易處理中 | 202 |
 | SYNC_001 | 同步失敗 | 500 |
 | EXT_001 | 第三方 API 錯誤 | 502 |
+
+### 4.4 API 結構總覽
+
+本系統 API 共 **35 個端點**，分為 **11 個群組**。
+
+```mermaid
+graph TB
+    subgraph API["遊戲平台管理系統 API v1"]
+        direction TB
+
+        subgraph Auth["認證 Auth<br/>(4 endpoints)"]
+            A1[POST /auth/login<br/>使用者登入]
+            A2[POST /auth/logout<br/>登出]
+            A3[GET /auth/verify<br/>驗證 Token]
+            A4[POST /auth/refresh<br/>刷新 Token]
+        end
+
+        subgraph Machines["機台管理 Machines<br/>(6 endpoints)"]
+            M1[GET /machines<br/>機台列表]
+            M2[POST /machines<br/>新增機台]
+            M3[GET /machines/{id}<br/>機台詳情]
+            M4[PUT /machines/{id}<br/>更新機台]
+            M5[DELETE /machines/{id}<br/>刪除機台]
+            M6[POST /machines/{id}/command<br/>遠端指令]
+        end
+
+        subgraph Games["遊戲管理 Games<br/>(5 endpoints)"]
+            G1[GET /games<br/>遊戲列表]
+            G2[POST /games<br/>新增遊戲]
+            G3[GET /games/{id}<br/>遊戲詳情]
+            G4[PUT /games/{id}<br/>更新遊戲]
+            G5[DELETE /games/{id}<br/>刪除遊戲]
+        end
+
+        subgraph Players["玩家管理 Players<br/>(3 endpoints)"]
+            P1[GET /players<br/>玩家列表]
+            P2[GET /players/{id}<br/>玩家詳情]
+            P3[PUT /players/{id}/balance<br/>調整餘額]
+        end
+
+        subgraph Transactions["交易管理 Transactions<br/>(2 endpoints)"]
+            T1[GET /transactions<br/>交易列表]
+            T2[POST /transactions/{id}/reverse<br/>沖銷交易]
+        end
+
+        subgraph Providers["遊戲商管理 Providers<br/>(3 endpoints)"]
+            PR1[GET /providers<br/>遊戲商列表]
+            PR2[POST /providers<br/>新增遊戲商]
+            PR3[GET /providers/{id}/balance<br/>查詢餘額]
+        end
+
+        subgraph Agents["代理商管理 Agents<br/>(2 endpoints)"]
+            AG1[GET /agents<br/>代理商列表]
+            AG2[POST /agents<br/>新增代理商]
+        end
+
+        subgraph OTA["OTA 更新 OTA<br/>(3 endpoints)"]
+            O1[GET /ota/versions<br/>版本列表]
+            O2[POST /ota/versions<br/>上傳版本]
+            O3[POST /ota/versions/{id}/publish<br/>發布版本]
+        end
+
+        subgraph Monitor["監控中心 Monitor<br/>(1 endpoint)"]
+            MO1[GET /monitor/system<br/>系統監控]
+        end
+
+        subgraph Discrepancies["錯帳管理 Discrepancies<br/>(2 endpoints)"]
+            D1[GET /discrepancies<br/>錯帳列表]
+            D2[POST /discrepancies/{id}/resolve<br/>處理錯帳]
+        end
+
+        subgraph Sync["同步管理 Sync<br/>(2 endpoints)"]
+            S1[POST /sync/upload<br/>上傳資料]
+            S2[GET /sync/download<br/>下載資料]
+        end
+    end
+
+    style Auth fill:#d3f9d8,stroke:#2f9e44
+    style Machines fill:#e7f5ff,stroke:#1971c2
+    style Games fill:#fff4e6,stroke:#e67700
+    style Players fill:#f3d9fa,stroke:#862e9c
+    style Transactions fill:#ffe3e3,stroke:#c92a2a
+    style Providers fill:#c5f6fa,stroke:#0c8599
+    style Agents fill:#e5dbff,stroke:#5f3dc4
+    style OTA fill:#ffe8cc,stroke:#d9480f
+    style Monitor fill:#f8f9fa,stroke:#868e96
+    style Discrepancies fill:#ffccc7,stroke:#cf1322
+    style Sync fill:#d9f7be,stroke:#389e0d
+```
+
+#### API 端點統計表
+
+| 群組 | 端點數 | HTTP 方法 |
+|------|--------|-----------|
+| 認證 (Auth) | 4 | POST, GET |
+| 機台管理 (Machines) | 6 | GET, POST, PUT, DELETE |
+| 遊戲管理 (Games) | 5 | GET, POST, PUT, DELETE |
+| 玩家管理 (Players) | 3 | GET, PUT |
+| 交易管理 (Transactions) | 2 | GET, POST |
+| 遊戲商管理 (Providers) | 3 | GET, POST |
+| 代理商管理 (Agents) | 2 | GET, POST |
+| OTA 更新 (OTA) | 3 | GET, POST |
+| 監控中心 (Monitor) | 1 | GET |
+| 錯帳管理 (Discrepancies) | 2 | GET, POST |
+| 同步管理 (Sync) | 2 | GET, POST |
+| **總計** | **35** | |
 
 ---
 
@@ -432,7 +569,7 @@ CREATE INDEX idx_audit_logs_created ON audit_logs(created_at DESC);
 
 ---
 
-## 7. 第三方遊戲商串接 (v6/3)
+## 7. 第三方遊戲商串接
 
 ### 7.1 支援遊戲商
 | 代碼 | 名稱 | 遊戲類型 |
@@ -454,7 +591,7 @@ CREATE INDEX idx_audit_logs_created ON audit_logs(created_at DESC);
 
 ---
 
-## 8. OTA 遠端更新 (v6/4)
+## 8. OTA 遠端更新
 
 ### 8.1 流程
 1. 上傳版本 (檔案, MD5, 版本資訊)
@@ -469,7 +606,7 @@ CREATE INDEX idx_audit_logs_created ON audit_logs(created_at DESC);
 
 ---
 
-## 9. 硬體監控 (v6/4)
+## 9. 硬體監控
 
 ### 9.1 監控項目
 | 項目 | 警告閾值 | 嚴重閾值 |
@@ -486,7 +623,7 @@ CREATE INDEX idx_audit_logs_created ON audit_logs(created_at DESC);
 
 ---
 
-## 10. 錯帳對帳管理 (v6/4)
+## 10. 錯帳對帳管理
 
 ### 10.1 錯帳類型
 - missing_deposit: 轉帳未到帳
@@ -708,7 +845,7 @@ const securityHeaders = {
 
 ---
 
-## 7. 第三方遊戲商串接 (v6/3)
+## 7. 第三方遊戲商串接
 
 ### 7.1 支援遊戲商
 
@@ -759,7 +896,7 @@ const securityHeaders = {
 
 ---
 
-## 8. OTA 遠端更新 (v6/4)
+## 8. OTA 遠端更新
 
 ### 8.1 更新流程
 
@@ -794,7 +931,7 @@ const securityHeaders = {
 
 ---
 
-## 9. 硬體監控 (v6/4)
+## 9. 硬體監控
 
 ### 9.1 監控項目
 
@@ -821,7 +958,7 @@ const securityHeaders = {
 
 ---
 
-## 10. 錯帳對帳管理 (v6/4)
+## 10. 錯帳對帳管理
 
 ### 10.1 錯帳類型
 
@@ -1069,7 +1206,7 @@ app.use((err, req, res, next) => {
 ### 15.1 升級遷移
 
 ```sql
--- v6/2 → v6/3 遷移腳本
+-- 遷移腳本
 
 -- 新增遊戲商欄位
 ALTER TABLE machines ADD COLUMN provider_id UUID;
