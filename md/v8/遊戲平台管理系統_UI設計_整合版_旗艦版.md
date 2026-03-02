@@ -130,19 +130,19 @@
 
 ### 5.1 集中式後台 - 登入頁面
 
-![登入頁面](../assets/mockup_login.png)
+![登入頁面](./assets/mockup_login.png)
 
 ### 5.2 集中式後台 - OTA 版本管理
 
-![OTA版本派送](../assets/mockup_flg_ota.png)
+![OTA版本派送](./assets/mockup_flg_ota.png)
 
 ### 5.3 集中式後台 - 硬體監控中心
 
-![硬體監控系統](../assets/mockup_flg_monitor.png)
+![硬體監控系統](./assets/mockup_flg_monitor.png)
 
 ### 5.4 集中式後台 - 對帳與爭議處理
 
-![對帳爭議處理](../assets/mockup_flg_reconciliation.png)
+![對帳爭議處理](./assets/mockup_flg_reconciliation.png)
 
 ---
 
