@@ -10,37 +10,34 @@
         href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@500;700&family=Noto+Sans+TC:wght@400;500;700&display=swap"
         rel="stylesheet">
     <style>
-        body {
-            font-family: 'Noto Sans TC', sans-serif;
-            background-color: #F3F4F6;
-        }
+        body { font-family: 'Roboto', 'Noto Sans TC', sans-serif; background-color: #F4F7F6; }
     </style>
 </head>
 
 <body class="bg-gray-100 flex items-center justify-center p-8 min-h-screen">
     <div class="w-full max-w-4xl bg-white rounded-xl shadow-lg border border-gray-200 overflow-hidden">
         <div
-            class="bg-indigo-900 text-white p-4 flex justify-between items-center text-sm font-medium border-b-4 border-indigo-500">
+            class="bg-[#283593] text-white p-4 flex justify-between items-center text-sm font-medium border-b-4 border-[#5C6BC0]">
             <div class="flex space-x-6 items-center">
-                <span class="bg-indigo-700 px-3 py-1 rounded">本機設定</span>
+                <span class="bg-[#3949AB] px-3 py-1 rounded">本機設定</span>
                 <span>機台名稱: A-01</span>
                 <span class="flex items-center text-emerald-400"><span
                         class="w-2 h-2 bg-emerald-400 rounded-full mr-2"></span> 🟢 連線中</span>
             </div>
-            <button class="hover:text-indigo-200">登出</button>
+            <button class="hover:text-[#C5CAE9]">登出</button>
         </div>
 
         <div class="p-8">
-            <h2 class="text-xl font-bold text-gray-800 mb-4 border-l-4 border-indigo-500 pl-3">████ 中心錢包 ████</h2>
+            <h2 class="text-xl font-bold text-gray-800 mb-4 border-l-4 border-[#5C6BC0] pl-3">████ 中心錢包 ████</h2>
 
             <div class="grid grid-cols-3 gap-6 mb-10">
-                <div class="bg-gray-50 border border-gray-200 p-6 rounded-lg text-center shadow-sm">
+                <div class="bg-[#F4F7F6] border border-gray-200 p-6 rounded-lg text-center shadow-sm">
                     <p class="text-gray-500 mb-2 font-medium">錢包餘額</p>
                     <h3 class="text-3xl font-bold text-gray-800">$5,000</h3>
                 </div>
                 <div class="bg-indigo-50 border border-indigo-100 p-6 rounded-lg text-center shadow-sm">
-                    <p class="text-indigo-600 mb-2 font-medium">可用點數</p>
-                    <h3 class="text-3xl font-bold text-indigo-700">$3,500</h3>
+                    <p class="text-[#3F51B5] mb-2 font-medium">可用點數</p>
+                    <h3 class="text-3xl font-bold text-[#3949AB]">$3,500</h3>
                 </div>
                 <div class="bg-orange-50 border border-orange-100 p-6 rounded-lg text-center shadow-sm">
                     <p class="text-orange-600 mb-2 font-medium">遊戲中點數</p>
@@ -48,26 +45,26 @@
                 </div>
             </div>
 
-            <h2 class="text-xl font-bold text-gray-800 mb-4 border-l-4 border-indigo-500 pl-3">████ 遊戲轉入/轉出 ████</h2>
+            <h2 class="text-xl font-bold text-gray-800 mb-4 border-l-4 border-[#5C6BC0] pl-3">████ 遊戲轉入/轉出 ████</h2>
 
             <div class="grid grid-cols-2 gap-8 mb-8">
-                <div class="border border-gray-200 p-6 rounded-xl bg-gray-50 flex flex-col items-center">
-                    <p class="text-indigo-600 font-bold mb-4">[選擇遊戲轉入]</p>
+                <div class="border border-gray-200 p-6 rounded-xl bg-[#F4F7F6] flex flex-col items-center">
+                    <p class="text-[#3F51B5] font-bold mb-4">[選擇遊戲轉入]</p>
                     <select
-                        class="w-full text-center p-3 border border-gray-300 rounded mb-4 focus:outline-none focus:border-indigo-500 font-medium">
+                        class="w-full text-center p-3 border border-gray-300 rounded mb-4 focus:outline-none focus:border-[#5C6BC0] font-medium">
                         <option>百家樂</option>
                         <option>拉霸機</option>
                     </select>
                     <div class="relative w-full mb-6">
                         <span class="absolute left-4 top-3 text-gray-500 text-lg font-bold">$</span>
                         <input type="text" placeholder="轉入金額"
-                            class="w-full text-center p-3 border border-gray-300 rounded focus:outline-none focus:border-indigo-500 text-lg font-bold">
+                            class="w-full text-center p-3 border border-gray-300 rounded focus:outline-none focus:border-[#5C6BC0] text-lg font-bold">
                     </div>
                     <button
-                        class="w-full py-3 bg-indigo-600 text-white rounded-lg font-bold text-lg hover:bg-indigo-700 shadow shadow-indigo-200 transition">轉入遊戲</button>
+                        class="w-full py-3 bg-[#3F51B5] text-white rounded-lg font-bold text-lg hover:bg-[#3949AB] shadow shadow-indigo-200 transition">轉入遊戲</button>
                 </div>
 
-                <div class="border border-gray-200 p-6 rounded-xl bg-gray-50 flex flex-col items-center">
+                <div class="border border-gray-200 p-6 rounded-xl bg-[#F4F7F6] flex flex-col items-center">
                     <p class="text-emerald-600 font-bold mb-4">[選擇遊戲轉出]</p>
                     <select
                         class="w-full text-center p-3 border border-gray-300 rounded mb-4 focus:outline-none focus:border-emerald-500 font-medium">
