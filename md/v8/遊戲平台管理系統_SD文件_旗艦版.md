@@ -526,12 +526,13 @@ graph TB
 | 玩家管理 (Players)       | 3            | GET, PUT               |
 | 交易管理 (Transactions)  | 2            | GET, POST              |
 | 遊戲商管理 (Providers)   | 3            | GET, POST              |
+| 多人遊戲 (Multiplayer)   | 4            | GET, POST, PUT         |
 | 代理商管理 (Agents)      | 2            | GET, POST              |
 | OTA 更新 (OTA)           | 3            | GET, POST              |
 | 監控中心 (Monitor)       | 1            | GET                    |
 | 錯帳管理 (Discrepancies) | 2            | GET, POST              |
 | 同步管理 (Sync)          | 2            | GET, POST              |
-| **總計**           | **35** |                        |
+| **總計**           | **39** |                        |
 
 ---
 
