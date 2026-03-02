@@ -2,7 +2,7 @@ openapi: 3.0.3
 info:
   title: 遊戲平台管理系統 API
   description: |
-    遊戲平台管理系統 V6 API 文檔
+    遊戲平台管理系統 V8 API 文檔
     - 支援 MVP / 標準版 / 旗艦版
     - Version: 1.0.0
   version: 1.0.0

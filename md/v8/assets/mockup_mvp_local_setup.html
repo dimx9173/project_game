@@ -1,67 +1,84 @@
 <!DOCTYPE html>
-<html lang="zh-Hant">
-
+<html lang="zh-TW">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>本機設定介面</title>
+    <title>本機設定介面 - 遊戲平台</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link
-        href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@500;700&family=Noto+Sans+TC:wght@400;500;700&display=swap"
-        rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        cyber: { 50: '#f5f3ff', 100: '#ede9fe', 200: '#ddd6fe', 300: '#c4b5fd', 400: '#a78bfa', 500: '#8b5cf6', 600: '#7c3aed', 700: '#6d28d9', 800: '#5b21b6', 900: '#4c1d95', 950: '#2e1065' },
+                        dark: { bg: '#0a0a0f', card: '#12121a', sidebar: '#0d0d14', border: '#1e1e2e', hover: '#1a1a28' }
+                    },
+                    fontFamily: { sans: ['"Noto Sans TC"', 'sans-serif'], mono: ['"JetBrains Mono"', 'monospace'] },
+                    boxShadow: { glow: '0 0 30px rgba(168, 85, 247, 0.3)', 'glow-sm': '0 0 15px rgba(168, 85, 247, 0.2)' }
+                }
+            }
+        }
+    </script>
     <style>
-        body { font-family: 'Roboto', 'Noto Sans TC', sans-serif; background-color: #F4F7F6; }
+        * { scrollbar-width: thin; scrollbar-color: #6d28d9 #0a0a0f; }
+        *::-webkit-scrollbar { width: 8px; height: 8px; }
+        *::-webkit-scrollbar-track { background: #0a0a0f; }
+        *::-webkit-scrollbar-thumb { background: linear-gradient(180deg, #7c3aed, #a855f7); border-radius: 4px; }
+        body { font-family: 'Noto Sans TC', sans-serif; background: #0a0a0f; }
+        .glass { background: rgba(18, 18, 26, 0.7); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border: 1px solid rgba(255, 255, 255, 0.08); }
+        .glass-card { background: linear-gradient(135deg, rgba(18, 18, 26, 0.9) 0%, rgba(30, 30, 46, 0.6) 100%); backdrop-filter: blur(20px); border: 1px solid rgba(168, 85, 247, 0.15); box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4); }
+        .glass-card:hover { border-color: rgba(168, 85, 247, 0.4); box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4), 0 0 30px rgba(168, 85, 247, 0.2); }
+        .gradient-bg { background: linear-gradient(135deg, #0a0a0f 0%, #1a0a2e 50%, #0a0a0f 100%); }
+        .gradient-purple { background: linear-gradient(135deg, #7c3aed 0%, #a855f7 50%, #c084fc 100%); }
+        .input-focus:focus { box-shadow: 0 0 0 3px rgba(168, 85, 247, 0.3), 0 0 20px rgba(168, 85, 247, 0.2); }
     </style>
 </head>
-
-<body class="bg-gray-100 flex items-center justify-center h-screen">
-    <div class="w-full max-w-2xl bg-white rounded-xl shadow-lg border border-slate-200 overflow-hidden">
-        <div class="bg-slate-800 text-white p-6 text-center border-b-4 border-[#5C6BC0]">
-            <h1 class="text-2xl font-bold tracking-widest">本機系統設定</h1>
-            <p class="text-slate-300 mt-1 text-sm">(需工程師權限)</p>
+<body class="gradient-bg flex items-center justify-center min-h-screen p-4">
+    <div class="w-full max-w-2xl glass-card rounded-xl overflow-hidden border border-dark-border">
+        <div class="glass px-6 py-5 text-center border-b border-dark-border">
+            <div class="w-16 h-16 rounded-2xl gradient-purple flex items-center justify-center mx-auto mb-3 shadow-glow">
+                <i data-lucide="settings" class="w-8 h-8 text-white"></i>
+            </div>
+            <h1 class="text-2xl font-bold text-white tracking-wider">本機系統設定</h1>
+            <p class="text-gray-500 mt-1 text-sm">(需工程師權限)</p>
         </div>
-
         <div class="p-8 space-y-8">
-            <!-- Server Settings -->
             <div>
-                <h2 class="text-lg font-bold text-slate-800 mb-4 pb-2 border-b border-slate-200 flex items-center">
-                    <span class="w-2 h-6 bg-[#5C6BC0] rounded-sm mr-2"></span> 中央伺服器設定
+                <h2 class="text-lg font-semibold text-white mb-4 pb-2 border-b border-dark-border flex items-center">
+                    <i data-lucide="server" class="w-5 h-5 mr-2 text-purple-400"></i>中央伺服器設定
                 </h2>
                 <div class="space-y-4">
                     <div class="flex items-center">
-                        <label class="w-32 text-gray-700 font-medium">API 位址</label>
-                        <input type="text" value="https://api.gameplatform.com"
-                            class="flex-1 px-4 py-2 border border-slate-300 rounded-lg text-sm font-mono focus:ring-2 focus:ring-indigo-500 outline-none">
+                        <label class="w-32 text-gray-400 font-medium">API 位址</label>
+                        <input type="text" value="https://api.gameplatform.com" class="flex-1 px-4 py-2 bg-dark-bg border border-dark-border rounded-lg text-sm font-mono text-white focus:outline-none input-focus">
                     </div>
                     <div class="flex items-center">
-                        <label class="w-32 text-gray-700 font-medium">API 金鑰</label>
-                        <input type="password" value="********************************"
-                            class="flex-1 px-4 py-2 border border-slate-300 rounded-lg text-sm font-mono focus:ring-2 focus:ring-indigo-500 outline-none">
+                        <label class="w-32 text-gray-400 font-medium">API 金鑰</label>
+                        <input type="password" value="********************************" class="flex-1 px-4 py-2 bg-dark-bg border border-dark-border rounded-lg text-sm font-mono text-gray-400 focus:outline-none input-focus">
                     </div>
                     <div class="flex items-center">
-                        <label class="w-32 text-gray-700 font-medium">機台序號</label>
-                        <input type="text" value="A-001"
-                            class="w-48 px-4 py-2 border border-slate-300 rounded-lg text-sm font-bold text-[#3949AB] focus:ring-2 focus:ring-indigo-500 outline-none">
+                        <label class="w-32 text-gray-400 font-medium">機台序號</label>
+                        <input type="text" value="A-001" class="w-48 px-4 py-2 bg-dark-bg border border-dark-border rounded-lg text-sm font-bold text-purple-400 focus:outline-none input-focus">
                     </div>
                 </div>
             </div>
-
-            <!-- Network Settings -->
             <div>
-                <h2 class="text-lg font-bold text-slate-800 mb-4 pb-2 border-b border-slate-200 flex items-center">
-                    <span class="w-2 h-6 bg-[#5C6BC0] rounded-sm mr-2"></span> 網路任務設定
+                <h2 class="text-lg font-semibold text-white mb-4 pb-2 border-b border-dark-border flex items-center">
+                    <i data-lucide="wifi" class="w-5 h-5 mr-2 text-purple-400"></i>網路任務設定
                 </h2>
                 <div class="flex space-x-8">
                     <div class="flex items-center">
-                        <label class="text-gray-700 font-medium mr-4">自動同步</label>
-                        <select class="px-4 py-2 border border-slate-300 rounded-lg text-sm outline-none">
+                        <label class="text-gray-400 font-medium mr-4">自動同步</label>
+                        <select class="px-4 py-2 bg-dark-bg border border-dark-border rounded-lg text-sm text-white focus:outline-none input-focus">
                             <option selected>啟用</option>
                             <option>停用</option>
                         </select>
                     </div>
                     <div class="flex items-center">
-                        <label class="text-gray-700 font-medium mr-4">同步間隔</label>
-                        <select class="px-4 py-2 border border-slate-300 rounded-lg text-sm outline-none">
+                        <label class="text-gray-400 font-medium mr-4">同步間隔</label>
+                        <select class="px-4 py-2 bg-dark-bg border border-dark-border rounded-lg text-sm text-white focus:outline-none input-focus">
                             <option>1 分鐘</option>
                             <option selected>3 分鐘</option>
                             <option>5 分鐘</option>
@@ -69,27 +86,21 @@
                     </div>
                 </div>
             </div>
-
-            <!-- Security -->
             <div>
-                <h2 class="text-lg font-bold text-slate-800 mb-4 pb-2 border-b border-slate-200 flex items-center">
-                    <span class="w-2 h-6 bg-[#5C6BC0] rounded-sm mr-2"></span> 現場安全設定
+                <h2 class="text-lg font-semibold text-white mb-4 pb-2 border-b border-dark-border flex items-center">
+                    <i data-lucide="shield" class="w-5 h-5 mr-2 text-purple-400"></i>現場安全設定
                 </h2>
                 <div class="flex items-center">
-                    <label class="w-32 text-gray-700 font-medium">開洗分 PIN 碼</label>
-                    <input type="password" value="1234"
-                        class="w-32 px-4 py-2 border border-slate-300 rounded-lg text-center font-mono tracking-widest text-lg focus:ring-2 focus:ring-indigo-500 outline-none">
+                    <label class="w-32 text-gray-400 font-medium">開洗分 PIN 碼</label>
+                    <input type="password" value="1234" class="w-32 px-4 py-2 bg-dark-bg border border-dark-border rounded-lg text-center font-mono tracking-widest text-lg text-white focus:outline-none input-focus">
                 </div>
             </div>
         </div>
-
-        <div class="bg-slate-50 px-8 py-4 border-t border-slate-200 flex justify-end space-x-4">
-            <button
-                class="px-6 py-2 bg-white border border-slate-300 text-gray-700 rounded-lg font-medium hover:bg-gray-100">取消</button>
-            <button
-                class="px-6 py-2 bg-[#3F51B5] text-white rounded-lg font-medium shadow-md hover:bg-[#3949AB]">儲存設定</button>
+        <div class="glass px-8 py-4 border-t border-dark-border flex justify-end space-x-4">
+            <a href="mockup_local_cash.html" class="px-6 py-2 glass border border-dark-border text-gray-400 rounded-lg font-medium hover:text-white transition-colors">取消</a>
+            <button class="px-6 py-2 gradient-purple text-white rounded-lg font-medium shadow-glow-sm hover:opacity-90">儲存設定</button>
         </div>
     </div>
+    <script> lucide.createIcons(); </script>
 </body>
-
 </html>

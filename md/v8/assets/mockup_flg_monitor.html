@@ -1,134 +1,161 @@
 <!DOCTYPE html>
-<html lang="zh-Hant">
-
+<html lang="zh-TW">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>硬體設備監控中心</title>
+    <title>監控中心 - 遊戲平台管理中心</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link
-        href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@500;700&family=Noto+Sans+TC:wght@400;500;700&display=swap"
-        rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        cyber: { 50: '#f5f3ff', 100: '#ede9fe', 200: '#ddd6fe', 300: '#c4b5fd', 400: '#a78bfa', 500: '#8b5cf6', 600: '#7c3aed', 700: '#6d28d9', 800: '#5b21b6', 900: '#4c1d95', 950: '#2e1065' },
+                        dark: { bg: '#0a0a0f', card: '#12121a', sidebar: '#0d0d14', border: '#1e1e2e', hover: '#1a1a28' }
+                    },
+                    fontFamily: { sans: ['"Noto Sans TC"', 'sans-serif'], mono: ['"JetBrains Mono"', 'monospace'] },
+                    boxShadow: { glow: '0 0 30px rgba(168, 85, 247, 0.3)', 'glow-sm': '0 0 15px rgba(168, 85, 247, 0.2)' }
+                }
+            }
+        }
+    </script>
     <style>
-        body { font-family: 'Roboto', 'Noto Sans TC', sans-serif; background-color: #F4F7F6; }
+        * { scrollbar-width: thin; scrollbar-color: #6d28d9 #0a0a0f; }
+        *::-webkit-scrollbar { width: 8px; height: 8px; }
+        *::-webkit-scrollbar-track { background: #0a0a0f; }
+        *::-webkit-scrollbar-thumb { background: linear-gradient(180deg, #7c3aed, #a855f7); border-radius: 4px; }
+        body { font-family: 'Noto Sans TC', sans-serif; background: #0a0a0f; }
+        .glass { background: rgba(18, 18, 26, 0.7); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border: 1px solid rgba(255, 255, 255, 0.08); }
+        .glass-card { background: linear-gradient(135deg, rgba(18, 18, 26, 0.9) 0%, rgba(30, 30, 46, 0.6) 100%); backdrop-filter: blur(20px); border: 1px solid rgba(168, 85, 247, 0.15); box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4); }
+        .glass-card:hover { border-color: rgba(168, 85, 247, 0.4); box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4), 0 0 30px rgba(168, 85, 247, 0.2); }
+        .gradient-bg { background: linear-gradient(135deg, #0a0a0f 0%, #1a0a2e 50%, #0a0a0f 100%); }
+        .gradient-purple { background: linear-gradient(135deg, #7c3aed 0%, #a855f7 50%, #c084fc 100%); }
+        .sidebar-link { position: relative; transition: all 0.3s ease; }
+        .sidebar-link::before { content: ''; position: absolute; left: 0; top: 50%; transform: translateY(-50%); width: 3px; height: 0; background: linear-gradient(180deg, #7c3aed, #c084fc); border-radius: 0 2px 2px 0; transition: height 0.3s ease; }
+        .sidebar-link:hover::before, .sidebar-link.active::before { height: 60%; }
+        .sidebar-link.active { background: linear-gradient(90deg, rgba(124, 58, 237, 0.2), transparent); }
+        .table-row-hover:hover { background: linear-gradient(90deg, rgba(124, 58, 237, 0.1), transparent); }
+        .input-focus:focus { box-shadow: 0 0 0 3px rgba(168, 85, 247, 0.3), 0 0 20px rgba(168, 85, 247, 0.2); }
     </style>
 </head>
-
-<body class="bg-slate-50 flex h-screen overflow-hidden">
-    <!-- Sidebar -->
-    <aside class="w-64 bg-gradient-to-b from-slate-900 to-indigo-950 text-white flex flex-col border-r border-slate-800 shadow-2xl relative h-full">
-        <div class="h-16 flex items-center justify-center border-b border-[#303F9F]">
-            <h1 class="text-xl font-bold tracking-wider">GAME PLATFORM</h1>
-            <span class="ml-2 text-xs bg-yellow-500 text-yellow-900 px-1 py-0.5 rounded font-bold">PRO</span>
+<body class="gradient-bg min-h-screen flex">
+    <aside class="w-64 bg-dark-sidebar border-r border-dark-border flex flex-col">
+        <div class="h-16 flex items-center px-4 border-b border-dark-border">
+            <div class="w-10 h-10 rounded-xl gradient-purple flex items-center justify-center shadow-glow-sm mr-3">
+                <i data-lucide="gamepad-2" class="w-5 h-5 text-white"></i>
+            </div>
+            <div><span class="font-bold text-white">遊戲平台</span><span class="text-xs text-gray-500 block">管理中心</span></div>
         </div>
-        <nav class="flex-1 py-4 space-y-1">
-            <a href="#"
-                class="block px-6 py-3 text-indigo-200 hover:bg-white/10 hover:text-white transition-all duration-300">儀表板</a>
-            <a href="#"
-                class="block px-6 py-3 text-indigo-200 hover:bg-white/10 hover:text-white transition-all duration-300">OTA
-                版本更新</a>
-            <a href="#" class="block px-6 py-3 bg-white/10 backdrop-blur-md text-white border-l-4 border-cyan-400 font-bold shadow-inner relative overflow-hidden">硬體監控中心</a>
+        <nav class="flex-1 py-4 px-3 space-y-1 overflow-y-auto">
+            <a href="mockup_dashboard.html" class="sidebar-link flex items-center px-3 py-2.5 text-gray-300 hover:text-white rounded-lg"><i data-lucide="layout-dashboard" class="w-5 h-5 mr-3"></i><span>儀表板</span></a>
+            <a href="mockup_mvp_machine_list.html" class="sidebar-link flex items-center px-3 py-2.5 text-gray-300 hover:text-white rounded-lg"><i data-lucide="monitor" class="w-5 h-5 mr-3"></i><span>機台管理</span></a>
+            <a href="mockup_mvp_data_list.html" class="sidebar-link flex items-center px-3 py-2.5 text-gray-300 hover:text-white rounded-lg"><i data-lucide="gamepad-2" class="w-5 h-5 mr-3"></i><span>遊戲管理</span></a>
+            <a href="mockup_mvp_player_list.html" class="sidebar-link flex items-center px-3 py-2.5 text-gray-300 hover:text-white rounded-lg"><i data-lucide="users" class="w-5 h-5 mr-3"></i><span>玩家管理</span></a>
+            <a href="mockup_std_wallet.html" class="sidebar-link flex items-center px-3 py-2.5 text-gray-300 hover:text-white rounded-lg"><i data-lucide="wallet" class="w-5 h-5 mr-3"></i><span>錢包交易</span></a>
+            <a href="mockup_std_provider_list.html" class="sidebar-link flex items-center px-3 py-2.5 text-gray-300 hover:text-white rounded-lg"><i data-lucide="plug" class="w-5 h-5 mr-3"></i><span>串接遊戲商</span></a>
+            <a href="mockup_std_agent_list.html" class="sidebar-link flex items-center px-3 py-2.5 text-gray-300 hover:text-white rounded-lg"><i data-lucide="shield-user" class="w-5 h-5 mr-3"></i><span>使用者權限</span></a>
+            <a href="mockup_flg_ota.html" class="sidebar-link flex items-center px-3 py-2.5 text-gray-300 hover:text-white rounded-lg"><i data-lucide="download" class="w-5 h-5 mr-3"></i><span>版本更新 OTA</span></a>
+            <a href="mockup_flg_monitor.html" class="sidebar-link active flex items-center px-3 py-2.5 text-gray-300 hover:text-white rounded-lg"><i data-lucide="activity" class="w-5 h-5 mr-3"></i><span>監控中心</span></a>
+            <a href="mockup_flg_reconciliation.html" class="sidebar-link flex items-center px-3 py-2.5 text-gray-300 hover:text-white rounded-lg"><i data-lucide="file-check" class="w-5 h-5 mr-3"></i><span>對帳專區</span></a>
         </nav>
+        <div class="p-4 border-t border-dark-border">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center">
+                    <div class="w-8 h-8 rounded-full gradient-purple flex items-center justify-center"><span class="text-sm font-bold text-white">A</span></div>
+                    <div class="ml-3"><p class="text-sm font-medium text-white">admin</p><p class="text-xs text-gray-500">系統管理員</p></div>
+                </div>
+                <a href="mockup_login.html" class="text-gray-400 hover:text-white"><i data-lucide="log-out" class="w-5 h-5"></i></a>
+            </div>
+        </div>
     </aside>
-
-    <!-- Main Content -->
-    <main class="flex-1 flex flex-col h-full overflow-hidden">
-        <header class="h-16 bg-white/80 backdrop-blur-xl border-b border-white/20 sticky top-0 z-50 shadow-sm flex items-center justify-between px-8">
-            <h2 class="text-xl font-bold text-slate-800">設備健康度監控中心</h2>
-            <div class="flex items-center space-x-2 text-sm text-slate-500">
-                <span class="flex items-center"><span class="w-2 h-2 rounded-full bg-emerald-500 mr-2"></span> 正常:
-                    47</span>
-                <span class="flex items-center ml-4"><span class="w-2 h-2 rounded-full bg-yellow-500 mr-2"></span> 警告:
-                    2</span>
-                <span class="flex items-center ml-4"><span class="w-2 h-2 rounded-full bg-red-500 mr-2"></span> 異常:
-                    1</span>
+    <main class="flex-1 flex flex-col overflow-hidden">
+        <header class="h-16 glass border-b border-dark-border flex items-center justify-between px-6">
+            <h2 class="text-lg font-semibold text-white">設備健康度監控中心</h2>
+            <div class="flex items-center space-x-4 text-sm">
+                <span class="flex items-center"><span class="w-2 h-2 rounded-full bg-emerald-500 mr-2"></span><span class="text-gray-400">正常:</span><span class="text-emerald-400 font-medium ml-1">47</span></span>
+                <span class="flex items-center"><span class="w-2 h-2 rounded-full bg-amber-500 mr-2"></span><span class="text-gray-400">警告:</span><span class="text-amber-400 font-medium ml-1">2</span></span>
+                <span class="flex items-center"><span class="w-2 h-2 rounded-full bg-red-500 mr-2"></span><span class="text-gray-400">異常:</span><span class="text-red-400 font-medium ml-1">1</span></span>
             </div>
         </header>
-
-        <div class="flex-1 p-8 overflow-hidden flex flex-col">
-            <!-- Rules -->
-            <div class="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-6 flex justify-between items-center">
-                <div class="flex items-center space-x-4">
-                    <span class="font-bold text-blue-800">目前告警規則:</span>
-                    <span
-                        class="bg-white px-3 py-1 rounded border border-blue-200 text-sm font-medium text-blue-800 shadow-sm">CPU
-                        > 80%</span>
-                    <span
-                        class="bg-white px-3 py-1 rounded border border-blue-200 text-sm font-medium text-blue-800 shadow-sm">RAM
-                        > 6GB</span>
-                    <span
-                        class="bg-white px-3 py-1 rounded border border-blue-200 text-sm font-medium text-blue-800 shadow-sm">網路延遲
-                        > 100ms</span>
+        <div class="flex-1 overflow-y-auto p-6">
+            <div class="glass rounded-xl p-4 mb-6 border border-dark-border">
+                <div class="flex items-center justify-between">
+                    <div class="flex items-center space-x-4">
+                        <span class="text-gray-400 text-sm">目前告警規則:</span>
+                        <span class="px-3 py-1 rounded-lg text-xs bg-purple-500/20 text-purple-400 border border-purple-500/30">CPU > 80%</span>
+                        <span class="px-3 py-1 rounded-lg text-xs bg-purple-500/20 text-purple-400 border border-purple-500/30">RAM > 6GB</span>
+                        <span class="px-3 py-1 rounded-lg text-xs bg-purple-500/20 text-purple-400 border border-purple-500/30">網路延遲 > 100ms</span>
+                    </div>
+                    <button class="px-4 py-2 glass rounded-lg text-sm text-purple-400 hover:text-white transition-colors">
+                        <i data-lucide="settings" class="w-4 h-4 inline mr-2"></i>設定告警參數
+                    </button>
                 </div>
-                <button
-                    class="text-sm bg-white border border-blue-300 text-blue-700 px-4 py-2 rounded hover:bg-blue-100 font-bold">設定告警參數</button>
             </div>
-
-            <!-- Table -->
-            <div class="bg-white rounded-2xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-slate-100/60 transition-all duration-300 hover:shadow-[0_8px_30px_rgb(0,0,0,0.08)] flex-1 flex flex-col overflow-hidden">
-                <div class="flex-1 overflow-auto">
-                    <table class="w-full text-left border-collapse">
-                        <thead class="bg-slate-50 sticky top-0 z-10 border-b border-slate-200">
-                            <tr>
-                                <th class="py-3 px-6 text-sm font-semibold text-slate-600 tracking-wider">機台編號</th>
-                                <th class="py-3 px-6 text-sm font-semibold text-slate-600 tracking-wider">CPU 負載</th>
-                                <th class="py-3 px-6 text-sm font-semibold text-slate-600 tracking-wider">記憶體</th>
-                                <th class="py-3 px-6 text-sm font-semibold text-slate-600 tracking-wider">網路延遲</th>
-                                <th class="py-3 px-6 text-sm font-semibold text-slate-600 tracking-wider text-center">
-                                    綜合狀態</th>
-                                <th class="py-3 px-6 text-sm font-semibold text-slate-600 tracking-wider text-right">
-                                    最後回報時間</th>
-                            </tr>
-                        </thead>
-                        <tbody class="divide-y divide-gray-100 bg-white">
-                            <tr class="hover:bg-slate-50 border-l-4 border-l-transparent">
-                                <td class="py-4 px-6 text-sm font-bold text-slate-800">A-01</td>
-                                <td class="py-4 px-6 text-sm font-medium text-gray-700">
-                                    <div class="flex items-center">
-                                        <div class="w-16 bg-gray-200 rounded-full h-2 mr-2">
-                                            <div class="bg-emerald-500 h-2 rounded-full" style="width: 45%"></div>
-                                        </div> 45%
+            <div class="glass-card rounded-2xl overflow-hidden">
+                <table class="min-w-full">
+                    <thead class="bg-dark-bg">
+                        <tr>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">機台編號</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">CPU 負載</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">記憶體</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">網路延遲</th>
+                            <th class="px-6 py-3 text-center text-xs font-medium text-gray-400 uppercase">綜合狀態</th>
+                            <th class="px-6 py-3 text-right text-xs font-medium text-gray-400 uppercase">最後回報時間</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-dark-border">
+                        <tr class="table-row-hover border-l-2 border-l-emerald-500">
+                            <td class="px-6 py-4 whitespace-nowrap text-white font-mono font-bold">A-01</td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <div class="flex items-center">
+                                    <div class="w-16 bg-dark-bg rounded-full h-2 mr-2">
+                                        <div class="bg-emerald-500 h-2 rounded-full" style="width: 45%"></div>
                                     </div>
-                                </td>
-                                <td class="py-4 px-6 text-sm font-medium text-gray-700">2.1 GB</td>
-                                <td class="py-4 px-6 text-sm text-emerald-600 font-bold">12 ms</td>
-                                <td class="py-4 px-6 text-2xl text-center">🟢</td>
-                                <td class="py-4 px-6 text-sm text-slate-500 text-right">14:30:12</td>
-                            </tr>
-                            <tr class="hover:bg-yellow-50 bg-yellow-50/30 border-l-4 border-l-yellow-400">
-                                <td class="py-4 px-6 text-sm font-bold text-slate-800">A-02</td>
-                                <td class="py-4 px-6 text-sm font-medium text-gray-700">
-                                    <div class="flex items-center">
-                                        <div class="w-16 bg-gray-200 rounded-full h-2 mr-2">
-                                            <div class="bg-yellow-500 h-2 rounded-full" style="width: 78%"></div>
-                                        </div> 78%
+                                    <span class="text-emerald-400 font-mono">45%</span>
+                                </div>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap text-gray-400 font-mono">2.1 GB</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-emerald-400 font-mono font-bold">12 ms</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-center"><i data-lucide="check-circle" class="w-6 h-6 text-emerald-400 inline"></i></td>
+                            <td class="px-6 py-4 whitespace-nowrap text-gray-500 text-right font-mono">14:30:12</td>
+                        </tr>
+                        <tr class="table-row-hover border-l-2 border-l-amber-500 bg-amber-500/5">
+                            <td class="px-6 py-4 whitespace-nowrap text-white font-mono font-bold">A-02</td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <div class="flex items-center">
+                                    <div class="w-16 bg-dark-bg rounded-full h-2 mr-2">
+                                        <div class="bg-amber-500 h-2 rounded-full" style="width: 78%"></div>
                                     </div>
-                                </td>
-                                <td class="py-4 px-6 text-sm font-medium text-gray-700">3.8 GB</td>
-                                <td class="py-4 px-6 text-sm text-emerald-600 font-bold">45 ms</td>
-                                <td class="py-4 px-6 text-2xl text-center">🟡</td>
-                                <td class="py-4 px-6 text-sm text-slate-500 text-right">14:30:05</td>
-                            </tr>
-                            <tr class="hover:bg-red-50 bg-red-50/50 border-l-4 border-l-red-500">
-                                <td class="py-4 px-6 text-sm font-bold text-slate-800">A-03</td>
-                                <td class="py-4 px-6 text-sm font-medium text-red-600">
-                                    <div class="flex items-center">
-                                        <div class="w-16 bg-red-200 rounded-full h-2 mr-2">
-                                            <div class="bg-red-600 h-2 rounded-full" style="width: 92%"></div>
-                                        </div> 92%
+                                    <span class="text-amber-400 font-mono">78%</span>
+                                </div>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap text-gray-400 font-mono">3.8 GB</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-emerald-400 font-mono font-bold">45 ms</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-center"><i data-lucide="alert-triangle" class="w-6 h-6 text-amber-400 inline"></i></td>
+                            <td class="px-6 py-4 whitespace-nowrap text-gray-500 text-right font-mono">14:30:05</td>
+                        </tr>
+                        <tr class="table-row-hover border-l-2 border-l-red-500 bg-red-500/5">
+                            <td class="px-6 py-4 whitespace-nowrap text-white font-mono font-bold">A-03</td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <div class="flex items-center">
+                                    <div class="w-16 bg-red-900/50 rounded-full h-2 mr-2">
+                                        <div class="bg-red-500 h-2 rounded-full" style="width: 92%"></div>
                                     </div>
-                                </td>
-                                <td class="py-4 px-6 text-sm font-medium text-red-600">7.2 GB !</td>
-                                <td class="py-4 px-6 text-sm text-red-600 font-bold">120 ms !</td>
-                                <td class="py-4 px-6 text-2xl text-center">🔴</td>
-                                <td class="py-4 px-6 text-sm text-slate-500 text-right">14:29:45</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
+                                    <span class="text-red-400 font-mono">92%</span>
+                                </div>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap text-red-400 font-mono">7.2 GB !</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-red-400 font-mono font-bold">120 ms !</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-center"><i data-lucide="x-circle" class="w-6 h-6 text-red-400 inline"></i></td>
+                            <td class="px-6 py-4 whitespace-nowrap text-gray-500 text-right font-mono">14:29:45</td>
+                        </tr>
+                    </tbody>
+                </table>
             </div>
         </div>
     </main>
+    <script> lucide.createIcons(); </script>
 </body>
-
 </html>

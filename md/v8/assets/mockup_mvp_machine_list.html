@@ -1,150 +1,133 @@
 <!DOCTYPE html>
-<html lang="zh-Hant">
-
+<html lang="zh-TW">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>機台管理列表</title>
+    <title>機台管理 - 遊戲平台管理中心</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link
-        href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@500;700&family=Noto+Sans+TC:wght@400;500;700&display=swap"
-        rel="stylesheet">
-    <style>
-        body { font-family: 'Roboto', 'Noto Sans TC', sans-serif; background-color: #F4F7F6; }
-
-        h1,
-        h2,
-        h3,
-        h4,
-        h5,
-        h6 {
-            font-family: 'DM Sans', 'Noto Sans TC', sans-serif;
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        cyber: { 50: '#f5f3ff', 100: '#ede9fe', 200: '#ddd6fe', 300: '#c4b5fd', 400: '#a78bfa', 500: '#8b5cf6', 600: '#7c3aed', 700: '#6d28d9', 800: '#5b21b6', 900: '#4c1d95', 950: '#2e1065' },
+                        dark: { bg: '#0a0a0f', card: '#12121a', sidebar: '#0d0d14', border: '#1e1e2e', hover: '#1a1a28' }
+                    },
+                    fontFamily: { sans: ['"Noto Sans TC"', 'sans-serif'], mono: ['"JetBrains Mono"', 'monospace'] },
+                    boxShadow: { glow: '0 0 30px rgba(168, 85, 247, 0.3)', 'glow-sm': '0 0 15px rgba(168, 85, 247, 0.2)' }
+                }
+            }
         }
+    </script>
+    <style>
+        * { scrollbar-width: thin; scrollbar-color: #6d28d9 #0a0a0f; }
+        *::-webkit-scrollbar { width: 8px; height: 8px; }
+        *::-webkit-scrollbar-track { background: #0a0a0f; }
+        *::-webkit-scrollbar-thumb { background: linear-gradient(180deg, #7c3aed, #a855f7); border-radius: 4px; }
+        body { font-family: 'Noto Sans TC', sans-serif; background: #0a0a0f; }
+        .glass { background: rgba(18, 18, 26, 0.7); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border: 1px solid rgba(255, 255, 255, 0.08); }
+        .glass-card { background: linear-gradient(135deg, rgba(18, 18, 26, 0.9) 0%, rgba(30, 30, 46, 0.6) 100%); backdrop-filter: blur(20px); border: 1px solid rgba(168, 85, 247, 0.15); box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4); }
+        .glass-card:hover { border-color: rgba(168, 85, 247, 0.4); box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4), 0 0 30px rgba(168, 85, 247, 0.2); }
+        .gradient-bg { background: linear-gradient(135deg, #0a0a0f 0%, #1a0a2e 50%, #0a0a0f 100%); }
+        .gradient-purple { background: linear-gradient(135deg, #7c3aed 0%, #a855f7 50%, #c084fc 100%); }
+        .sidebar-link { position: relative; transition: all 0.3s ease; }
+        .sidebar-link::before { content: ''; position: absolute; left: 0; top: 50%; transform: translateY(-50%); width: 3px; height: 0; background: linear-gradient(180deg, #7c3aed, #c084fc); border-radius: 0 2px 2px 0; transition: height 0.3s ease; }
+        .sidebar-link:hover::before, .sidebar-link.active::before { height: 60%; }
+        .sidebar-link.active { background: linear-gradient(90deg, rgba(124, 58, 237, 0.2), transparent); }
+        .table-row-hover:hover { background: linear-gradient(90deg, rgba(124, 58, 237, 0.1), transparent); }
+        .input-focus:focus { box-shadow: 0 0 0 3px rgba(168, 85, 247, 0.3), 0 0 20px rgba(168, 85, 247, 0.2); }
     </style>
 </head>
-
-<body class="bg-slate-50 flex h-screen overflow-hidden">
-    <!-- Sidebar -->
-    <aside class="w-64 bg-gradient-to-b from-slate-900 to-indigo-950 text-white flex flex-col border-r border-slate-800 shadow-2xl relative h-full">
-        <div class="h-16 flex items-center justify-center border-b border-[#303F9F]">
-            <h1 class="text-xl font-bold tracking-wider">GAME PLATFORM</h1>
+<body class="gradient-bg min-h-screen flex">
+    <aside class="w-64 bg-dark-sidebar border-r border-dark-border flex flex-col">
+        <div class="h-16 flex items-center px-4 border-b border-dark-border">
+            <div class="w-10 h-10 rounded-xl gradient-purple flex items-center justify-center shadow-glow-sm mr-3">
+                <i data-lucide="gamepad-2" class="w-5 h-5 text-white"></i>
+            </div>
+            <div><span class="font-bold text-white">遊戲平台</span><span class="text-xs text-gray-500 block">管理中心</span></div>
         </div>
-        <nav class="flex-1 py-4 space-y-1">
-            <a href="#"
-                class="block px-6 py-3 text-indigo-200 hover:bg-white/10 hover:text-white transition-all duration-300">儀表板</a>
-            <a href="#" class="block px-6 py-3 bg-white/10 backdrop-blur-md text-white border-l-4 border-cyan-400 font-bold shadow-inner relative overflow-hidden">機台管理</a>
-            <a href="#"
-                class="block px-6 py-3 text-indigo-200 hover:bg-white/10 hover:text-white transition-all duration-300">遊戲管理</a>
-            <a href="#"
-                class="block px-6 py-3 text-indigo-200 hover:bg-white/10 hover:text-white transition-all duration-300">玩家管理</a>
+        <nav class="flex-1 py-4 px-3 space-y-1 overflow-y-auto">
+            <a href="mockup_dashboard.html" class="sidebar-link flex items-center px-3 py-2.5 text-gray-300 hover:text-white rounded-lg"><i data-lucide="layout-dashboard" class="w-5 h-5 mr-3"></i><span>儀表板</span></a>
+            <a href="mockup_mvp_machine_list.html" class="sidebar-link active flex items-center px-3 py-2.5 text-gray-300 hover:text-white rounded-lg"><i data-lucide="monitor" class="w-5 h-5 mr-3"></i><span>機台管理</span><span class="ml-auto bg-green-500/20 text-green-400 text-xs px-2 py-0.5 rounded-full">45</span></a>
+            <a href="mockup_mvp_data_list.html" class="sidebar-link flex items-center px-3 py-2.5 text-gray-300 hover:text-white rounded-lg"><i data-lucide="gamepad-2" class="w-5 h-5 mr-3"></i><span>遊戲管理</span></a>
+            <a href="mockup_mvp_player_list.html" class="sidebar-link flex items-center px-3 py-2.5 text-gray-300 hover:text-white rounded-lg"><i data-lucide="users" class="w-5 h-5 mr-3"></i><span>玩家管理</span></a>
+            <a href="mockup_std_wallet.html" class="sidebar-link flex items-center px-3 py-2.5 text-gray-300 hover:text-white rounded-lg"><i data-lucide="wallet" class="w-5 h-5 mr-3"></i><span>錢包交易</span></a>
+            <a href="mockup_std_provider_list.html" class="sidebar-link flex items-center px-3 py-2.5 text-gray-300 hover:text-white rounded-lg"><i data-lucide="plug" class="w-5 h-5 mr-3"></i><span>串接遊戲商</span></a>
+            <a href="mockup_std_agent_list.html" class="sidebar-link flex items-center px-3 py-2.5 text-gray-300 hover:text-white rounded-lg"><i data-lucide="shield-user" class="w-5 h-5 mr-3"></i><span>使用者權限</span></a>
+            <a href="mockup_flg_ota.html" class="sidebar-link flex items-center px-3 py-2.5 text-gray-300 hover:text-white rounded-lg"><i data-lucide="download" class="w-5 h-5 mr-3"></i><span>版本更新 OTA</span></a>
+            <a href="mockup_flg_monitor.html" class="sidebar-link flex items-center px-3 py-2.5 text-gray-300 hover:text-white rounded-lg"><i data-lucide="activity" class="w-5 h-5 mr-3"></i><span>監控中心</span></a>
+            <a href="mockup_flg_reconciliation.html" class="sidebar-link flex items-center px-3 py-2.5 text-gray-300 hover:text-white rounded-lg"><i data-lucide="file-check" class="w-5 h-5 mr-3"></i><span>對帳專區</span></a>
         </nav>
+        <div class="p-4 border-t border-dark-border">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center">
+                    <div class="w-8 h-8 rounded-full gradient-purple flex items-center justify-center"><span class="text-sm font-bold text-white">A</span></div>
+                    <div class="ml-3"><p class="text-sm font-medium text-white">admin</p><p class="text-xs text-gray-500">系統管理員</p></div>
+                </div>
+                <a href="mockup_login.html" class="text-gray-400 hover:text-white"><i data-lucide="log-out" class="w-5 h-5"></i></a>
+            </div>
+        </div>
     </aside>
-
-    <!-- Main Content -->
-    <main class="flex-1 flex flex-col h-full overflow-hidden">
-        <!-- Header -->
-        <header class="h-16 bg-white/80 backdrop-blur-xl border-b border-white/20 sticky top-0 z-50 shadow-sm flex items-center justify-between px-8">
-            <h2 class="text-xl font-bold text-slate-800">機台管理</h2>
+    <main class="flex-1 flex flex-col overflow-hidden">
+        <header class="h-16 glass border-b border-dark-border flex items-center justify-between px-6">
+            <h2 class="text-lg font-semibold text-white">機台管理</h2>
             <div class="flex items-center space-x-4">
-                <button
-                    class="px-4 py-2 bg-gradient-to-r from-indigo-600 to-cyan-500 text-white rounded-xl text-sm font-medium shadow-lg shadow-indigo-500/30 hover:shadow-cyan-500/40 hover:-translate-y-0.5 transition-all duration-300 flex items-center">
-                    <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
-                    </svg>
-                    新增機台
+                <div class="relative">
+                    <input type="text" placeholder="搜尋機台..." class="bg-dark-bg border border-dark-border rounded-lg py-2 px-4 pl-10 text-sm text-white placeholder-gray-500 focus:outline-none input-focus">
+                    <i data-lucide="search" class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500"></i>
+                </div>
+                <button class="px-4 py-2 gradient-purple rounded-lg text-white font-medium shadow-glow-sm flex items-center">
+                    <i data-lucide="plus" class="w-4 h-4 mr-2"></i>新增機台
                 </button>
             </div>
         </header>
-
-        <!-- Data Table Section -->
-        <div class="flex-1 p-8 overflow-hidden flex flex-col">
-            <div class="bg-white rounded-2xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-slate-100/60 transition-all duration-300 hover:shadow-[0_8px_30px_rgb(0,0,0,0.08)] flex-1 flex flex-col overflow-hidden">
-                <!-- Toolbar -->
-                <div class="p-4 border-b border-slate-100 flex justify-between items-center bg-slate-50">
-                    <div class="flex space-x-3">
-                        <input type="text" placeholder="🔍 搜尋機台編號/名稱..."
-                            class="px-3 py-2 border border-slate-300 rounded-lg text-sm w-64 focus:outline-none focus:ring-2 focus:ring-indigo-500">
-                        <select class="px-3 py-2 border border-slate-300 rounded-lg text-sm bg-white focus:outline-none">
-                            <option>所有狀態</option>
-                            <option>🟢 連線中</option>
-                            <option>🔴 離線</option>
-                        </select>
-                    </div>
-                    <button
-                        class="px-4 py-2 bg-white border border-slate-300 text-gray-700 rounded-lg text-sm font-medium hover:bg-slate-50">匯出清單</button>
+        <div class="flex-1 overflow-y-auto p-6">
+            <div class="glass-card rounded-2xl p-6 mb-6">
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+                    <div class="glass bg-dark-bg/50 rounded-xl p-4"><p class="text-sm text-gray-400">全部機台</p><p class="text-2xl font-bold text-white mt-1">50</p></div>
+                    <div class="glass bg-dark-bg/50 rounded-xl p-4"><p class="text-sm text-emerald-400">線上運行</p><p class="text-2xl font-bold text-emerald-400 mt-1">45</p></div>
+                    <div class="glass bg-dark-bg/50 rounded-xl p-4"><p class="text-sm text-gray-400">離線待機</p><p class="text-2xl font-bold text-gray-400 mt-1">3</p></div>
+                    <div class="glass bg-dark-bg/50 rounded-xl p-4"><p class="text-sm text-red-400">異常</p><p class="text-2xl font-bold text-red-400 mt-1">2</p></div>
                 </div>
-
-                <!-- Table -->
-                <div class="flex-1 overflow-auto">
-                    <table class="w-full text-left border-collapse">
-                        <thead class="bg-slate-50 sticky top-0 z-10 border-b border-slate-200">
-                            <tr>
-                                <th class="py-3 px-4 text-xs font-semibold text-slate-500 uppercase tracking-wider">#
-                                </th>
-                                <th class="py-3 px-4 text-xs font-semibold text-slate-500 uppercase tracking-wider">機台編號
-                                </th>
-                                <th class="py-3 px-4 text-xs font-semibold text-slate-500 uppercase tracking-wider">機台名稱
-                                </th>
-                                <th class="py-3 px-4 text-xs font-semibold text-slate-500 uppercase tracking-wider">位置
-                                </th>
-                                <th class="py-3 px-4 text-xs font-semibold text-slate-500 uppercase tracking-wider">狀態
-                                </th>
-                                <th class="py-3 px-4 text-xs font-semibold text-slate-500 uppercase tracking-wider">最後同步
-                                </th>
-                                <th
-                                    class="py-3 px-4 text-xs font-semibold text-slate-500 uppercase tracking-wider text-right">
-                                    操作</th>
-                            </tr>
-                        </thead>
-                        <tbody class="divide-y divide-gray-100 bg-white">
-                            <tr class="hover:bg-slate-50">
-                                <td class="py-3 px-4 text-sm text-slate-500">1</td>
-                                <td class="py-3 px-4 text-sm font-bold text-indigo-600">A-001</td>
-                                <td class="py-3 px-4 text-sm font-medium text-slate-800">旗艦1號</td>
-                                <td class="py-3 px-4 text-sm text-slate-600">門市A (1F)</td>
-                                <td class="py-3 px-4 text-sm"><span
-                                        class="flex items-center text-emerald-600 font-medium"><span
-                                            class="w-2 h-2 rounded-full bg-emerald-500 mr-2"></span>連線中</span></td>
-                                <td class="py-3 px-4 text-sm text-slate-500">14:30:12</td>
-                                <td class="py-3 px-4 text-right">
-                                    <button
-                                        class="text-indigo-600 hover:text-[#283593] font-medium text-sm">詳情</button>
-                                </td>
-                            </tr>
-                            <tr class="hover:bg-slate-50">
-                                <td class="py-3 px-4 text-sm text-slate-500">2</td>
-                                <td class="py-3 px-4 text-sm font-bold text-indigo-600">A-002</td>
-                                <td class="py-3 px-4 text-sm font-medium text-slate-800">旗艦2號</td>
-                                <td class="py-3 px-4 text-sm text-slate-600">門市B (VIP室)</td>
-                                <td class="py-3 px-4 text-sm"><span
-                                        class="flex items-center text-red-600 font-medium"><span
-                                            class="w-2 h-2 rounded-full bg-red-500 mr-2"></span>離線</span></td>
-                                <td class="py-3 px-4 text-sm text-slate-500">10:15:00</td>
-                                <td class="py-3 px-4 text-right">
-                                    <button
-                                        class="text-indigo-600 hover:text-[#283593] font-medium text-sm">詳情</button>
-                                </td>
-                            </tr>
-                            <tr class="hover:bg-slate-50">
-                                <td class="py-3 px-4 text-sm text-slate-500">3</td>
-                                <td class="py-3 px-4 text-sm font-bold text-indigo-600">A-003</td>
-                                <td class="py-3 px-4 text-sm font-medium text-slate-800">標準1號</td>
-                                <td class="py-3 px-4 text-sm text-slate-600">門市C</td>
-                                <td class="py-3 px-4 text-sm"><span
-                                        class="flex items-center text-emerald-600 font-medium"><span
-                                            class="w-2 h-2 rounded-full bg-emerald-500 mr-2"></span>連線中</span></td>
-                                <td class="py-3 px-4 text-sm text-slate-500">14:28:44</td>
-                                <td class="py-3 px-4 text-right">
-                                    <button
-                                        class="text-indigo-600 hover:text-[#283593] font-medium text-sm">詳情</button>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
+            </div>
+            <div class="glass-card rounded-2xl overflow-hidden">
+                <table class="min-w-full">
+                    <thead class="bg-dark-bg">
+                        <tr>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">機台ID</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">版本</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">狀態</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">地點</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">遊戲</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">營收</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">CPU</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">記憶體</th>
+                            <th class="px-6 py-3 text-right text-xs font-medium text-gray-400 uppercase">操作</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-dark-border">
+                        <tr class="table-row-hover">
+                            <td class="px-6 py-4 whitespace-nowrap text-white font-mono">A-001</td>
+                            <td class="px-6 py-4 whitespace-nowrap"><span class="px-2 py-1 rounded text-xs bg-purple-500/20 text-purple-400">v2.5.1</span></td>
+                            <td class="px-6 py-4 whitespace-nowrap"><span class="px-2 py-1 rounded-full text-xs bg-emerald-500/20 text-emerald-400">線上</span></td>
+                            <td class="px-6 py-4 whitespace-nowrap text-gray-400">台北門市A</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-white">經典拉霸王</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-white font-mono">$12,500</td>
+                            <td class="px-6 py-4 whitespace-nowrap"><div class="w-16 bg-dark-bg rounded-full h-2"><div class="bg-gradient-to-r from-green-400 to-emerald-500 h-2 rounded-full" style="width: 45%"></div></div><span class="text-xs text-gray-400 mt-1 block">45%</span></td>
+                            <td class="px-6 py-4 whitespace-nowrap"><div class="w-16 bg-dark-bg rounded-full h-2"><div class="bg-gradient-to-r from-blue-400 to-cyan-500 h-2 rounded-full" style="width: 62%"></div></div><span class="text-xs text-gray-400 mt-1 block">62%</span></td>
+                            <td class="px-6 py-4 whitespace-nowrap text-right">
+                                <button class="text-purple-400 hover:text-purple-300 mx-1"><i data-lucide="eye" class="w-4 h-4"></i></button>
+                                <button class="text-cyan-400 hover:text-cyan-300 mx-1"><i data-lucide="settings" class="w-4 h-4"></i></button>
+                                <button class="text-red-400 hover:text-red-300 mx-1"><i data-lucide="power" class="w-4 h-4"></i></button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
             </div>
         </div>
     </main>
+    <script> lucide.createIcons(); </script>
 </body>
-
 </html>
