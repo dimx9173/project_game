@@ -115,7 +115,14 @@
             </div>
             <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
                 <div class="glass-card rounded-2xl p-5 lg:col-span-2">
-                    <h3 class="font-semibold text-white mb-4">本週營收趨勢圖</h3>
+                    <div class="flex justify-between items-center mb-4">
+                        <h3 class="font-semibold text-white">營收趨勢圖</h3>
+                        <div class="flex space-x-1 bg-dark-bg rounded-lg p-1">
+                            <button onclick="switchRevenuePeriod('week')" class="period-btn active px-3 py-1.5 text-xs font-medium rounded-md transition-all" data-period="week">本週</button>
+                            <button onclick="switchRevenuePeriod('month')" class="period-btn px-3 py-1.5 text-xs font-medium rounded-md text-gray-400 hover:text-white transition-all" data-period="month">本月</button>
+                            <button onclick="switchRevenuePeriod('year')" class="period-btn px-3 py-1.5 text-xs font-medium rounded-md text-gray-400 hover:text-white transition-all" data-period="year">本年</button>
+                        </div>
+                    </div>
                     <div class="h-64"><canvas id="revenueChart"></canvas></div>
                 </div>
                 <div class="glass-card rounded-2xl p-5">
@@ -165,10 +172,50 @@
             </div>
         </div>
     </main>
+    <style>
+        .period-btn.active { background: linear-gradient(135deg, #7c3aed, #a855f7); color: white; }
+    </style>
     <script>
         lucide.createIcons();
+        const revenueData = {
+            week: { labels: ['週一', '週二', '週三', '週四', '週五', '昨日', '今日'], data: [85000, 92000, 78000, 105000, 110000, 120000, 145000] },
+            month: { labels: ['第1週', '第2週', '第3週', '第4週'], data: [620000, 785000, 698000, 912000] },
+            year: { labels: ['1月', '2月', '3月', '4月', '5月', '6月'], data: [2850000, 3120000, 2980000, 3450000, 3680000, 3920000] }
+        };
         const ctxRev = document.getElementById('revenueChart').getContext('2d');
-        new Chart(ctxRev, { type: 'bar', data: { labels: ['週一', '週二', '週三', '週四', '週五', '昨日', '今日'], datasets: [{ label: '營收', data: [85000, 92000, 78000, 105000, 110000, 120000, 145000], backgroundColor: (c) => { const g = c.chart.ctx.createLinearGradient(0, c.chart.chartArea?.bottom||200, 0, c.chart.chartArea?.top||0); g.addColorStop(0, 'rgba(124,58,237,0.5)'); g.addColorStop(1, 'rgba(168,85,247,1)'); return g; }, borderRadius: 6 }] }, options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true, grid: { color: 'rgba(255,255,255,0.05)' }, ticks: { color: '#6b7280' } }, x: { grid: { display: false }, ticks: { color: '#6b7280' } } } } } });
+        let revenueChart = new Chart(ctxRev, {
+            type: 'bar',
+            data: {
+                labels: revenueData.week.labels,
+                datasets: [{
+                    label: '營收',
+                    data: revenueData.week.data,
+                    backgroundColor: revenueData.week.data.map((_, i, arr) => i === arr.length - 1 ? 'rgba(168,85,247,1)' : 'rgba(124,58,237,0.7)'),
+                    borderRadius: 6
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: { legend: { display: false } },
+                scales: {
+                    y: { beginAtZero: true, grid: { color: 'rgba(255,255,255,0.05)' }, ticks: { color: '#6b7280', callback: (v) => (v >= 1000 ? (v/1000) + 'K' : v) } },
+                    x: { grid: { display: false }, ticks: { color: '#6b7280' } }
+                }
+            }
+        });
+        function switchRevenuePeriod(period) {
+            document.querySelectorAll('.period-btn').forEach(btn => {
+                btn.classList.remove('active');
+                btn.classList.add('text-gray-400');
+            });
+            document.querySelector('[data-period="' + period + '"]').classList.add('active');
+            document.querySelector('[data-period="' + period + '"]').classList.remove('text-gray-400');
+            revenueChart.data.labels = revenueData[period].labels;
+            revenueChart.data.datasets[0].data = revenueData[period].data;
+            revenueChart.data.datasets[0].backgroundColor = revenueData[period].data.map((_, i, arr) => i === arr.length - 1 ? 'rgba(168,85,247,1)' : 'rgba(124,58,237,0.7)');
+            revenueChart.update();
+        }
         new Chart(document.getElementById('machineStatusChart').getContext('2d'), { type: 'doughnut', data: { labels: ['連線正常', '已斷線'], datasets: [{ data: [45, 5], backgroundColor: ['#10b981', '#ef4444'], borderWidth: 0, cutout: '80%' }] }, options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } } } });
     </script>
 </body>
