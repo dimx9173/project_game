@@ -30,7 +30,7 @@
     </script>
     <style>
         .keypad-btn {
-            @apply flex items-center justify-center h-16 bg-gray-100 hover:bg-gray-200 active:bg-gray-300 rounded-xl text-2xl font-mono font-bold text-gray-800 transition-colors shadow-sm cursor-pointer;
+            @apply flex items-center justify-center h-16 bg-gray-100 hover:bg-gray-200 active:bg-gray-300 rounded-xl text-2xl font-mono font-bold text-slate-800 transition-colors shadow-sm cursor-pointer;
         }
     </style>
 </head>
@@ -39,14 +39,14 @@
 <body class="bg-dark flex items-center justify-center min-h-screen p-4">
 
     <!-- Actual App Screen -->
-    <div class="bg-[#F4F7F6] w-full max-w-5xl h-[800px] rounded-2xl overflow-hidden shadow-2xl flex flex-col relative">
+    <div class="bg-slate-50 w-full max-w-5xl h-[800px] rounded-2xl overflow-hidden shadow-2xl flex flex-col relative">
 
         <!-- Header -->
         <header class="bg-white px-6 py-4 flex justify-between items-center shadow-sm z-10">
             <div class="flex items-center space-x-6">
                 <div class="flex items-center">
-                    <span class="text-sm text-gray-500 mr-2">機台名稱:</span>
-                    <span class="font-mono font-bold text-lg text-gray-900">A-01</span>
+                    <span class="text-sm text-slate-500 mr-2">機台名稱:</span>
+                    <span class="font-mono font-bold text-lg text-slate-900">A-01</span>
                 </div>
                 <div class="flex items-center px-3 py-1 bg-green-50 text-success rounded-full border border-green-100">
                     <div class="w-2.5 h-2.5 rounded-full bg-success mr-2 animate-pulse"></div>
@@ -55,9 +55,9 @@
             </div>
 
             <div class="flex items-center space-x-4">
-                <div class="text-sm font-mono text-gray-500 hidden sm:block">14:35:22</div>
+                <div class="text-sm font-mono text-slate-500 hidden sm:block">14:35:22</div>
                 <button
-                    class="px-4 py-2 border border-gray-300 rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-100 flex items-center">
+                    class="px-4 py-2 border border-slate-300 rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-100 flex items-center">
                     <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                             d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z">
@@ -74,18 +74,18 @@
         <main class="flex-1 p-8 overflow-y-auto">
 
             <!-- Revenue Summary (Large numbers for kiosk) -->
-            <div class="bg-white rounded-2xl p-6 shadow-sm border border-gray-100 mb-8 flex justify-between">
+            <div class="bg-white rounded-2xl p-6 shadow-sm border border-slate-100 mb-8 flex justify-between">
                 <div>
-                    <div class="text-sm font-medium text-gray-500 mb-1">今日總淨收</div>
-                    <div class="text-4xl font-mono font-bold text-gray-900">$12,500</div>
+                    <div class="text-sm font-medium text-slate-500 mb-1">今日總淨收</div>
+                    <div class="text-4xl font-mono font-bold text-slate-900">$12,500</div>
                 </div>
                 <div class="text-right">
-                    <div class="text-sm font-medium text-gray-500 mb-1">今日下注總額</div>
-                    <div class="text-2xl font-mono font-bold text-gray-500">$45,000</div>
+                    <div class="text-sm font-medium text-slate-500 mb-1">今日下注總額</div>
+                    <div class="text-2xl font-mono font-bold text-slate-500">$45,000</div>
                 </div>
                 <div class="text-right">
-                    <div class="text-sm font-medium text-gray-500 mb-1">今日派彩總額</div>
-                    <div class="text-2xl font-mono font-bold text-gray-500">$32,500</div>
+                    <div class="text-sm font-medium text-slate-500 mb-1">今日派彩總額</div>
+                    <div class="text-2xl font-mono font-bold text-slate-500">$32,500</div>
                 </div>
             </div>
 
@@ -95,7 +95,7 @@
                 <!-- Deposit (Cash In) Panel -->
                 <div class="bg-white rounded-2xl shadow-lg border border-primary/20 p-8 relative overflow-hidden">
                     <div class="absolute top-0 left-0 w-full h-2 bg-primary"></div>
-                    <h3 class="text-2xl font-heading font-bold text-gray-900 mb-6 flex items-center">
+                    <h3 class="text-2xl font-heading font-bold text-slate-900 mb-6 flex items-center">
                         <svg class="w-8 h-8 mr-3 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                 d="M18 12H6m6-6l-6 6 6 6"></path>
@@ -117,7 +117,7 @@
                                 <input type="password" maxlength="1" value="•" readonly
                                     class="w-16 h-16 text-center text-3xl rounded-xl border-2 border-primary bg-indigo-50 focus:outline-none focus:ring-0">
                                 <input type="password" maxlength="1" placeholder=""
-                                    class="w-16 h-16 text-center text-3xl border-2 border-gray-300 rounded-xl focus:border-primary focus:outline-none">
+                                    class="w-16 h-16 text-center text-3xl border-2 border-slate-300 rounded-xl focus:border-primary focus:outline-none">
                             </div>
                         </div>
 
@@ -126,9 +126,9 @@
                             <label class="block text-sm font-medium text-gray-700 mb-2">開分金額</label>
                             <div class="relative">
                                 <span
-                                    class="absolute left-4 top-1/2 -translate-y-1/2 text-2xl text-gray-400 font-mono">$</span>
+                                    class="absolute left-4 top-1/2 -translate-y-1/2 text-2xl text-slate-400 font-mono">$</span>
                                 <input type="text" value="1000" readonly
-                                    class="w-full h-20 pl-10 pr-6 text-right text-4xl font-mono font-bold rounded-xl border-2 border-gray-300 bg-[#F4F7F6] focus:outline-none text-gray-800">
+                                    class="w-full h-20 pl-10 pr-6 text-right text-4xl font-mono font-bold rounded-xl border-2 border-slate-300 bg-slate-50 focus:outline-none text-slate-800">
                             </div>
                         </div>
 
@@ -143,9 +143,9 @@
                             <div class="keypad-btn">7</div>
                             <div class="keypad-btn">8</div>
                             <div class="keypad-btn">9</div>
-                            <div class="keypad-btn text-lg bg-[#F4F7F6]">清除</div>
+                            <div class="keypad-btn text-lg bg-slate-50">清除</div>
                             <div class="keypad-btn">0</div>
-                            <div class="keypad-btn text-lg bg-[#F4F7F6]">←</div>
+                            <div class="keypad-btn text-lg bg-slate-50">←</div>
                         </div>
 
                         <!-- Action Button -->
@@ -158,19 +158,19 @@
 
                 <!-- Withdrawal (Cash Out) Panel -->
                 <div
-                    class="bg-white rounded-2xl shadow-sm border border-gray-200 p-8 relative overflow-hidden opacity-80 pointer-events-none filter grayscale">
+                    class="bg-white rounded-2xl shadow-sm border border-slate-200 p-8 relative overflow-hidden opacity-80 pointer-events-none filter grayscale">
                     <div class="absolute top-0 left-0 w-full h-2 bg-gray-400"></div>
                     <div class="absolute inset-0 bg-white/50 z-10 flex flex-col items-center justify-center">
-                        <svg class="w-12 h-12 text-gray-400 mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <svg class="w-12 h-12 text-slate-400 mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                 d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z">
                             </path>
                         </svg>
-                        <span class="text-lg font-bold text-gray-600">目前為開分模式，洗分已鎖定</span>
+                        <span class="text-lg font-bold text-slate-600">目前為開分模式，洗分已鎖定</span>
                     </div>
 
-                    <h3 class="text-2xl font-heading font-bold text-gray-900 mb-6 flex items-center">
-                        <svg class="w-8 h-8 mr-3 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <h3 class="text-2xl font-heading font-bold text-slate-900 mb-6 flex items-center">
+                        <svg class="w-8 h-8 mr-3 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                 d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z">
                             </path>
@@ -183,9 +183,9 @@
                             <label class="block text-sm font-medium text-gray-700 mb-2">機台目前點數</label>
                             <div class="relative">
                                 <span
-                                    class="absolute left-4 top-1/2 -translate-y-1/2 text-2xl text-gray-400 font-mono">$</span>
+                                    class="absolute left-4 top-1/2 -translate-y-1/2 text-2xl text-slate-400 font-mono">$</span>
                                 <input type="text" value="3,500" readonly
-                                    class="w-full h-20 pl-10 pr-6 text-right text-4xl font-mono font-bold rounded-xl border border-gray-300 bg-[#F4F7F6] focus:outline-none text-gray-800">
+                                    class="w-full h-20 pl-10 pr-6 text-right text-4xl font-mono font-bold rounded-xl border border-slate-300 bg-slate-50 focus:outline-none text-slate-800">
                             </div>
                         </div>
 
@@ -212,7 +212,7 @@
                 <span class="ml-2 bg-primary text-white px-2 py-0.5 rounded text-xs font-bold">0 筆待傳</span>
                 <button class="ml-4 text-xs underline hover:text-[#303F9F]">手動觸發同步</button>
             </div>
-            <div class="text-gray-400">
+            <div class="text-slate-400">
                 操作員: 現場經理 #002
             </div>
         </footer>

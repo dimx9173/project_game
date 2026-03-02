@@ -34,7 +34,7 @@
     </script>
 </head>
 
-<body class="bg-[#F4F7F6] flex h-screen overflow-hidden">
+<body class="bg-slate-50 flex h-screen overflow-hidden">
 
     <!-- Sidebar -->
     <aside class="w-64 bg-slate-900 text-white flex flex-col hidden md:flex">
@@ -110,10 +110,10 @@
     <!-- Main Content -->
     <main class="flex-1 flex flex-col h-screen overflow-y-auto">
         <!-- Header -->
-        <header class="h-16 bg-white border-b border-gray-200 flex items-center justify-between px-6 sticky top-0 z-10">
-            <h2 class="text-xl font-heading font-bold text-gray-800">戰情室 Dashboard</h2>
+        <header class="h-16 bg-white/80 backdrop-blur-xl border-b border-white/20 sticky top-0 z-50 shadow-sm flex items-center justify-between px-6">
+            <h2 class="text-xl font-heading font-bold text-slate-800">戰情室 Dashboard</h2>
             <div class="flex items-center space-x-4">
-                <button class="text-gray-400 hover:text-gray-600">
+                <button class="text-slate-400 hover:text-slate-600">
                     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                             d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9">
@@ -131,9 +131,9 @@
             <!-- KPI Cards -->
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                 <!-- Card 1 -->
-                <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-5">
-                    <div class="flex justify-between items-center text-gray-400 mb-2">
-                        <span class="text-sm font-medium text-gray-500">今日總營收</span>
+                <div class="bg-white rounded-2xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-slate-100/60 transition-all duration-300 hover:shadow-[0_8px_30px_rgb(0,0,0,0.08)] p-5">
+                    <div class="flex justify-between items-center text-slate-400 mb-2">
+                        <span class="text-sm font-medium text-slate-500">今日總營收</span>
                         <div class="p-2 bg-indigo-50 text-primary rounded-lg">
                             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path
@@ -143,7 +143,7 @@
                         </div>
                     </div>
                     <div class="flex items-baseline mb-1">
-                        <span class="text-3xl font-bold text-gray-900 font-mono">$145,000</span>
+                        <span class="text-3xl font-bold text-slate-900 font-mono">$145,000</span>
                     </div>
                     <div class="flex items-center text-sm">
                         <span class="text-success flex items-center font-medium"><svg class="w-4 h-4 mr-1" fill="none"
@@ -151,14 +151,14 @@
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                     d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path>
                             </svg> +20.8%</span>
-                        <span class="text-gray-400 ml-2">較昨日 ($120,000)</span>
+                        <span class="text-slate-400 ml-2">較昨日 ($120,000)</span>
                     </div>
                 </div>
 
                 <!-- Card 2 -->
-                <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-5">
-                    <div class="flex justify-between items-center text-gray-400 mb-2">
-                        <span class="text-sm font-medium text-gray-500">今日總下注額</span>
+                <div class="bg-white rounded-2xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-slate-100/60 transition-all duration-300 hover:shadow-[0_8px_30px_rgb(0,0,0,0.08)] p-5">
+                    <div class="flex justify-between items-center text-slate-400 mb-2">
+                        <span class="text-sm font-medium text-slate-500">今日總下注額</span>
                         <div class="p-2 bg-blue-50 text-blue-500 rounded-lg">
                             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -167,7 +167,7 @@
                         </div>
                     </div>
                     <div class="flex items-baseline mb-1">
-                        <span class="text-3xl font-bold text-gray-900 font-mono">$523,400</span>
+                        <span class="text-3xl font-bold text-slate-900 font-mono">$523,400</span>
                     </div>
                     <div class="flex items-center text-sm">
                         <span class="text-success flex items-center font-medium"><svg class="w-4 h-4 mr-1" fill="none"
@@ -175,14 +175,14 @@
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                     d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path>
                             </svg> +12.5%</span>
-                        <span class="text-gray-400 ml-2">較昨日</span>
+                        <span class="text-slate-400 ml-2">較昨日</span>
                     </div>
                 </div>
 
                 <!-- Card 3 -->
-                <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-5">
-                    <div class="flex justify-between items-center text-gray-400 mb-2">
-                        <span class="text-sm font-medium text-gray-500">今日總派彩額</span>
+                <div class="bg-white rounded-2xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-slate-100/60 transition-all duration-300 hover:shadow-[0_8px_30px_rgb(0,0,0,0.08)] p-5">
+                    <div class="flex justify-between items-center text-slate-400 mb-2">
+                        <span class="text-sm font-medium text-slate-500">今日總派彩額</span>
                         <div class="p-2 bg-amber-50 text-amber-500 rounded-lg">
                             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -191,7 +191,7 @@
                         </div>
                     </div>
                     <div class="flex items-baseline mb-1">
-                        <span class="text-3xl font-bold text-gray-900 font-mono">$378,400</span>
+                        <span class="text-3xl font-bold text-slate-900 font-mono">$378,400</span>
                     </div>
                     <div class="flex items-center text-sm">
                         <span class="text-danger flex items-center font-medium"><svg class="w-4 h-4 mr-1" fill="none"
@@ -199,14 +199,14 @@
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                     d="M13 17h8m0 0V9m0 8l-8-8-4 4-6 6"></path>
                             </svg> +15.2%</span>
-                        <span class="text-gray-400 ml-2">RTP 72.3%</span>
+                        <span class="text-slate-400 ml-2">RTP 72.3%</span>
                     </div>
                 </div>
 
                 <!-- Card 4 -->
-                <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-5">
-                    <div class="flex justify-between items-center text-gray-400 mb-2">
-                        <span class="text-sm font-medium text-gray-500">線上機台數</span>
+                <div class="bg-white rounded-2xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-slate-100/60 transition-all duration-300 hover:shadow-[0_8px_30px_rgb(0,0,0,0.08)] p-5">
+                    <div class="flex justify-between items-center text-slate-400 mb-2">
+                        <span class="text-sm font-medium text-slate-500">線上機台數</span>
                         <div class="p-2 bg-green-50 text-green-500 rounded-lg">
                             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -216,12 +216,12 @@
                         </div>
                     </div>
                     <div class="flex items-baseline mb-1">
-                        <span class="text-3xl font-bold text-gray-900 font-mono">45</span>
-                        <span class="text-xl text-gray-500 font-mono ml-1">/ 50</span>
+                        <span class="text-3xl font-bold text-slate-900 font-mono">45</span>
+                        <span class="text-xl text-slate-500 font-mono ml-1">/ 50</span>
                     </div>
                     <div class="flex items-center text-sm">
                         <span
-                            class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-green-100 text-green-800">
+                            class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-emerald-100/80 text-emerald-700 rounded-full">
                             90% 在線率
                         </span>
                         <span class="text-danger text-xs font-medium ml-2">🔴 5 斷線</span>
@@ -232,9 +232,9 @@
             <!-- Charts Row -->
             <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
                 <!-- Bar Chart -->
-                <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-5 lg:col-span-2">
+                <div class="bg-white rounded-2xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-slate-100/60 transition-all duration-300 hover:shadow-[0_8px_30px_rgb(0,0,0,0.08)] p-5 lg:col-span-2">
                     <div class="flex justify-between items-center mb-4">
-                        <h3 class="font-bold text-gray-800 font-heading">本週營收趨勢圖</h3>
+                        <h3 class="font-bold text-slate-800 font-heading">本週營收趨勢圖</h3>
                     </div>
                     <div class="h-64 relative">
                         <canvas id="revenueChart"></canvas>
@@ -242,16 +242,16 @@
                 </div>
 
                 <!-- Donut Chart -->
-                <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-5">
+                <div class="bg-white rounded-2xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-slate-100/60 transition-all duration-300 hover:shadow-[0_8px_30px_rgb(0,0,0,0.08)] p-5">
                     <div class="flex justify-between items-center mb-4">
-                        <h3 class="font-bold text-gray-800 font-heading">機台連線狀態</h3>
+                        <h3 class="font-bold text-slate-800 font-heading">機台連線狀態</h3>
                     </div>
                     <div class="h-48 relative flex justify-center mt-6">
                         <canvas id="machineStatusChart"></canvas>
                         <div class="absolute inset-0 flex items-center justify-center pointer-events-none mt-2">
                             <div class="text-center">
-                                <span class="block text-2xl font-bold text-gray-800 font-mono">90%</span>
-                                <span class="block text-xs text-gray-500">在線上</span>
+                                <span class="block text-2xl font-bold text-slate-800 font-mono">90%</span>
+                                <span class="block text-xs text-slate-500">在線上</span>
                             </div>
                         </div>
                     </div>
@@ -265,60 +265,60 @@
             </div>
 
             <!-- Heartbeat Grid -->
-            <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
-                <div class="px-6 py-5 border-b border-gray-100 flex justify-between items-center bg-[#F4F7F6]">
-                    <h3 class="font-bold text-gray-800 font-heading">即時機台狀態 (Heartbeat)</h3>
+            <div class="bg-white rounded-2xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-slate-100/60 transition-all duration-300 hover:shadow-[0_8px_30px_rgb(0,0,0,0.08)] overflow-hidden">
+                <div class="px-6 py-5 border-b border-slate-100 flex justify-between items-center bg-slate-50">
+                    <h3 class="font-bold text-slate-800 font-heading">即時機台狀態 (Heartbeat)</h3>
                     <div class="flex items-center space-x-2">
                         <div class="relative">
                             <input type="text" placeholder="搜尋機台..."
-                                class="pl-8 pr-4 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent">
-                            <svg class="w-4 h-4 text-gray-400 absolute left-3 top-2.5" fill="none" stroke="currentColor"
+                                class="pl-8 pr-4 py-2 border border-slate-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent">
+                            <svg class="w-4 h-4 text-slate-400 absolute left-3 top-2.5" fill="none" stroke="currentColor"
                                 viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                     d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
                             </svg>
                         </div>
                         <button
-                            class="px-4 py-2 bg-white border border-gray-300 rounded-lg text-sm font-medium text-gray-700 hover:bg-[#F4F7F6]">篩選</button>
+                            class="px-4 py-2 bg-white border border-slate-300 rounded-lg text-sm font-medium text-gray-700 hover:bg-slate-50">篩選</button>
                     </div>
                 </div>
                 <div class="overflow-x-auto">
                     <table class="min-w-full divide-y divide-gray-200">
-                        <thead class="bg-[#F4F7F6]">
+                        <thead class="bg-slate-50">
                             <tr>
                                 <th scope="col"
-                                    class="px-6 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">
+                                    class="px-6 py-3 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider">
                                     機台編號</th>
                                 <th scope="col"
-                                    class="px-6 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">
+                                    class="px-6 py-3 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider">
                                     狀態</th>
                                 <th scope="col"
-                                    class="px-6 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">
+                                    class="px-6 py-3 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider">
                                     位置</th>
                                 <th scope="col"
-                                    class="px-6 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">
+                                    class="px-6 py-3 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider">
                                     目前遊戲</th>
                                 <th scope="col"
-                                    class="px-6 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">
+                                    class="px-6 py-3 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider">
                                     今日營收</th>
                                 <th scope="col"
-                                    class="px-6 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">
+                                    class="px-6 py-3 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider">
                                     最後心跳</th>
                                 <th scope="col"
-                                    class="px-6 py-3 text-right text-xs font-semibold text-gray-500 uppercase tracking-wider">
+                                    class="px-6 py-3 text-right text-xs font-semibold text-slate-500 uppercase tracking-wider">
                                     操作</th>
                             </tr>
                         </thead>
                         <tbody class="bg-white divide-y divide-gray-200">
                             <!-- Row 1 -->
-                            <tr class="hover:bg-[#F4F7F6]">
-                                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 font-mono">
+                            <tr class="hover:bg-slate-50">
+                                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-slate-900 font-mono">
                                     A-001 <span
                                         class="ml-2 inline-block px-2 py-0.5 rounded text-xs bg-[#E8EAF6] text-[#303F9F]">旗艦版</span>
                                 </td>
                                 <td class="px-6 py-4 whitespace-nowrap">
                                     <span
-                                        class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                                        class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-emerald-100/80 text-emerald-700 rounded-full">
                                         <svg class="-ml-0.5 mr-1.5 h-2 w-2 text-green-400" fill="currentColor"
                                             viewBox="0 0 8 8">
                                             <circle cx="4" cy="4" r="3" />
@@ -326,29 +326,29 @@
                                         連線中
                                     </span>
                                 </td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">台北門市A區</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-500">台北門市A區</td>
                                 <td class="px-6 py-4 whitespace-nowrap">
                                     <div class="flex items-center">
                                         <img class="h-8 w-8 rounded object-cover mr-3 shadow-sm" src="game_icon.jpg" alt="">
-                                        <span class="text-sm font-medium text-gray-900">經典拉霸王</span>
+                                        <span class="text-sm font-medium text-slate-900">經典拉霸王</span>
                                     </div>
                                 </td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 font-mono font-medium">
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-900 font-mono font-medium">
                                     $12,500</td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">幾秒前</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-500">幾秒前</td>
                                 <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                                     <a href="#" class="text-primary hover:text-[#283593]">檢視</a>
                                 </td>
                             </tr>
                             <!-- Row 2 -->
-                            <tr class="hover:bg-[#F4F7F6]">
-                                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 font-mono">
+                            <tr class="hover:bg-slate-50">
+                                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-slate-900 font-mono">
                                     A-002 <span
-                                        class="ml-2 inline-block px-2 py-0.5 rounded text-xs bg-gray-100 text-gray-800">標準版</span>
+                                        class="ml-2 inline-block px-2 py-0.5 rounded text-xs bg-gray-100 text-slate-800">標準版</span>
                                 </td>
                                 <td class="px-6 py-4 whitespace-nowrap">
                                     <span
-                                        class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800">
+                                        class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-rose-100/80 text-rose-700 rounded-full">
                                         <svg class="-ml-0.5 mr-1.5 h-2 w-2 text-red-400" fill="currentColor"
                                             viewBox="0 0 8 8">
                                             <circle cx="4" cy="4" r="3" />
@@ -356,9 +356,9 @@
                                         已斷線
                                     </span>
                                 </td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">台北門市B區</td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">-</td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 font-mono font-medium">
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-500">台北門市B區</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-500">-</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-900 font-mono font-medium">
                                     $8,200</td>
                                 <td class="px-6 py-4 whitespace-nowrap text-sm text-danger font-medium">15 分鐘前</td>
                                 <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
@@ -366,14 +366,14 @@
                                 </td>
                             </tr>
                             <!-- Row 3 -->
-                            <tr class="hover:bg-[#F4F7F6]">
-                                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 font-mono">
+                            <tr class="hover:bg-slate-50">
+                                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-slate-900 font-mono">
                                     A-003 <span
                                         class="ml-2 inline-block px-2 py-0.5 rounded text-xs bg-[#E8EAF6] text-[#303F9F]">旗艦版</span>
                                 </td>
                                 <td class="px-6 py-4 whitespace-nowrap">
                                     <span
-                                        class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                                        class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-emerald-100/80 text-emerald-700 rounded-full">
                                         <svg class="-ml-0.5 mr-1.5 h-2 w-2 text-green-400" fill="currentColor"
                                             viewBox="0 0 8 8">
                                             <circle cx="4" cy="4" r="3" />
@@ -381,16 +381,16 @@
                                         連線中
                                     </span>
                                 </td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">台中門市A區</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-500">台中門市A區</td>
                                 <td class="px-6 py-4 whitespace-nowrap">
                                     <div class="flex items-center">
                                         <img class="h-8 w-8 rounded object-cover mr-3 shadow-sm" src="game_icon.jpg" alt="">
-                                        <span class="text-sm font-medium text-gray-900">決戰百家樂</span>
+                                        <span class="text-sm font-medium text-slate-900">決戰百家樂</span>
                                     </div>
                                 </td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 font-mono font-medium">
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-900 font-mono font-medium">
                                     $15,000</td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">30 秒前</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-500">30 秒前</td>
                                 <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                                     <a href="#" class="text-primary hover:text-[#283593]">檢視</a>
                                 </td>

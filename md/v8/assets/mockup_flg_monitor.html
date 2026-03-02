@@ -14,28 +14,28 @@
     </style>
 </head>
 
-<body class="bg-[#F4F7F6] flex h-screen overflow-hidden">
+<body class="bg-slate-50 flex h-screen overflow-hidden">
     <!-- Sidebar -->
-    <aside class="w-64 bg-[#283593] text-white flex flex-col h-full">
+    <aside class="w-64 bg-gradient-to-b from-slate-900 to-indigo-950 text-white flex flex-col border-r border-slate-800 shadow-2xl relative h-full">
         <div class="h-16 flex items-center justify-center border-b border-[#303F9F]">
             <h1 class="text-xl font-bold tracking-wider">GAME PLATFORM</h1>
             <span class="ml-2 text-xs bg-yellow-500 text-yellow-900 px-1 py-0.5 rounded font-bold">PRO</span>
         </div>
         <nav class="flex-1 py-4 space-y-1">
             <a href="#"
-                class="block px-6 py-3 text-[#C5CAE9] hover:bg-[#303F9F] hover:text-white transition-colors">儀表板</a>
+                class="block px-6 py-3 text-indigo-200 hover:bg-white/10 hover:text-white transition-all duration-300">儀表板</a>
             <a href="#"
-                class="block px-6 py-3 text-[#C5CAE9] hover:bg-[#303F9F] hover:text-white transition-colors">OTA
+                class="block px-6 py-3 text-indigo-200 hover:bg-white/10 hover:text-white transition-all duration-300">OTA
                 版本更新</a>
-            <a href="#" class="block px-6 py-3 bg-[#303F9F] text-white border-l-4 border-white font-medium">硬體監控中心</a>
+            <a href="#" class="block px-6 py-3 bg-white/10 backdrop-blur-md text-white border-l-4 border-cyan-400 font-bold shadow-inner relative overflow-hidden">硬體監控中心</a>
         </nav>
     </aside>
 
     <!-- Main Content -->
     <main class="flex-1 flex flex-col h-full overflow-hidden">
-        <header class="h-16 bg-white border-b border-gray-200 flex items-center justify-between px-8">
-            <h2 class="text-xl font-bold text-gray-800">設備健康度監控中心</h2>
-            <div class="flex items-center space-x-2 text-sm text-gray-500">
+        <header class="h-16 bg-white/80 backdrop-blur-xl border-b border-white/20 sticky top-0 z-50 shadow-sm flex items-center justify-between px-8">
+            <h2 class="text-xl font-bold text-slate-800">設備健康度監控中心</h2>
+            <div class="flex items-center space-x-2 text-sm text-slate-500">
                 <span class="flex items-center"><span class="w-2 h-2 rounded-full bg-emerald-500 mr-2"></span> 正常:
                     47</span>
                 <span class="flex items-center ml-4"><span class="w-2 h-2 rounded-full bg-yellow-500 mr-2"></span> 警告:
@@ -65,24 +65,24 @@
             </div>
 
             <!-- Table -->
-            <div class="bg-white rounded-xl shadow-sm border border-gray-100 flex-1 flex flex-col overflow-hidden">
+            <div class="bg-white rounded-2xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-slate-100/60 transition-all duration-300 hover:shadow-[0_8px_30px_rgb(0,0,0,0.08)] flex-1 flex flex-col overflow-hidden">
                 <div class="flex-1 overflow-auto">
                     <table class="w-full text-left border-collapse">
-                        <thead class="bg-[#F4F7F6] sticky top-0 z-10 border-b border-gray-200">
+                        <thead class="bg-slate-50 sticky top-0 z-10 border-b border-slate-200">
                             <tr>
-                                <th class="py-3 px-6 text-sm font-semibold text-gray-600 tracking-wider">機台編號</th>
-                                <th class="py-3 px-6 text-sm font-semibold text-gray-600 tracking-wider">CPU 負載</th>
-                                <th class="py-3 px-6 text-sm font-semibold text-gray-600 tracking-wider">記憶體</th>
-                                <th class="py-3 px-6 text-sm font-semibold text-gray-600 tracking-wider">網路延遲</th>
-                                <th class="py-3 px-6 text-sm font-semibold text-gray-600 tracking-wider text-center">
+                                <th class="py-3 px-6 text-sm font-semibold text-slate-600 tracking-wider">機台編號</th>
+                                <th class="py-3 px-6 text-sm font-semibold text-slate-600 tracking-wider">CPU 負載</th>
+                                <th class="py-3 px-6 text-sm font-semibold text-slate-600 tracking-wider">記憶體</th>
+                                <th class="py-3 px-6 text-sm font-semibold text-slate-600 tracking-wider">網路延遲</th>
+                                <th class="py-3 px-6 text-sm font-semibold text-slate-600 tracking-wider text-center">
                                     綜合狀態</th>
-                                <th class="py-3 px-6 text-sm font-semibold text-gray-600 tracking-wider text-right">
+                                <th class="py-3 px-6 text-sm font-semibold text-slate-600 tracking-wider text-right">
                                     最後回報時間</th>
                             </tr>
                         </thead>
                         <tbody class="divide-y divide-gray-100 bg-white">
-                            <tr class="hover:bg-[#F4F7F6] border-l-4 border-l-transparent">
-                                <td class="py-4 px-6 text-sm font-bold text-gray-800">A-01</td>
+                            <tr class="hover:bg-slate-50 border-l-4 border-l-transparent">
+                                <td class="py-4 px-6 text-sm font-bold text-slate-800">A-01</td>
                                 <td class="py-4 px-6 text-sm font-medium text-gray-700">
                                     <div class="flex items-center">
                                         <div class="w-16 bg-gray-200 rounded-full h-2 mr-2">
@@ -93,10 +93,10 @@
                                 <td class="py-4 px-6 text-sm font-medium text-gray-700">2.1 GB</td>
                                 <td class="py-4 px-6 text-sm text-emerald-600 font-bold">12 ms</td>
                                 <td class="py-4 px-6 text-2xl text-center">🟢</td>
-                                <td class="py-4 px-6 text-sm text-gray-500 text-right">14:30:12</td>
+                                <td class="py-4 px-6 text-sm text-slate-500 text-right">14:30:12</td>
                             </tr>
                             <tr class="hover:bg-yellow-50 bg-yellow-50/30 border-l-4 border-l-yellow-400">
-                                <td class="py-4 px-6 text-sm font-bold text-gray-800">A-02</td>
+                                <td class="py-4 px-6 text-sm font-bold text-slate-800">A-02</td>
                                 <td class="py-4 px-6 text-sm font-medium text-gray-700">
                                     <div class="flex items-center">
                                         <div class="w-16 bg-gray-200 rounded-full h-2 mr-2">
@@ -107,10 +107,10 @@
                                 <td class="py-4 px-6 text-sm font-medium text-gray-700">3.8 GB</td>
                                 <td class="py-4 px-6 text-sm text-emerald-600 font-bold">45 ms</td>
                                 <td class="py-4 px-6 text-2xl text-center">🟡</td>
-                                <td class="py-4 px-6 text-sm text-gray-500 text-right">14:30:05</td>
+                                <td class="py-4 px-6 text-sm text-slate-500 text-right">14:30:05</td>
                             </tr>
                             <tr class="hover:bg-red-50 bg-red-50/50 border-l-4 border-l-red-500">
-                                <td class="py-4 px-6 text-sm font-bold text-gray-800">A-03</td>
+                                <td class="py-4 px-6 text-sm font-bold text-slate-800">A-03</td>
                                 <td class="py-4 px-6 text-sm font-medium text-red-600">
                                     <div class="flex items-center">
                                         <div class="w-16 bg-red-200 rounded-full h-2 mr-2">
@@ -121,7 +121,7 @@
                                 <td class="py-4 px-6 text-sm font-medium text-red-600">7.2 GB !</td>
                                 <td class="py-4 px-6 text-sm text-red-600 font-bold">120 ms !</td>
                                 <td class="py-4 px-6 text-2xl text-center">🔴</td>
-                                <td class="py-4 px-6 text-sm text-gray-500 text-right">14:29:45</td>
+                                <td class="py-4 px-6 text-sm text-slate-500 text-right">14:29:45</td>
                             </tr>
                         </tbody>
                     </table>
