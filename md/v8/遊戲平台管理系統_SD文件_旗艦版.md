@@ -76,7 +76,7 @@
 | - 離線交易             | ✅                 |
 | - 同步機制             | ✅                 |
 
-### 1.3 系統架構
+### 1.4 系統架構
 
 ```
 ┌─────────────────────────────────────────────────────────────────┐
@@ -108,7 +108,37 @@
        └─────────────┘ └─────────────┘ └─────────────┘
 ```
 
+### 1.5 閱讀指南
+
+| 讀者       | 建議章節        |
+| ---------- | --------------- |
+| 專案經理   | 1, 7, 8, 9, 10  |
+| 系統架構師 | 2, 3, 4, 11, 12 |
+| 開發工程師 | 3, 4, 5, 6, 16  |
+| 維運工程師 | 11, 12, 13      |
+
+### 1.6 快速開始
+
+```bash
+# 1. 複製專案
+git clone game-platform.git
+
+# 2. 安裝依賴
+cd backend && npm install
+cd ../frontend && npm install
+
+# 3. 啟動開發環境
+docker-compose up -d
+
+# 4. 執行遷移
+npm run migrate
+
+# 5. 執行測試
+npm test
+```
+
 ---
+
 
 ## 2. 技術架構
 
@@ -507,233 +537,6 @@ graph TB
 
 ## 5. 離線同步機制
 
-### 5.1 重試策略 (指數退避)
-
-- 重試 1: 30 秒
-- 重試 2: 1 分鐘
-- 重試 3: 2 分鐘
-- 重試 4: 5 分鐘
-- 重試 5: 10 分鐘
-- 超過 5 次: 標記失敗 + 告警
-
-### 5.2 衝突解決
-
-本系統採用**分層衝突解決策略**，確保「絕不憑空銷毀任何記帳斷層」。
-
-#### 自動解決（系統層面）
-
-| 衝突類型 | 解決策略  | 處理方式           |
-| -------- | --------- | ------------------ |
-| 設定衝突 | 中央優先  | 中央覆蓋本地       |
-| 版本衝突 | 中央優先  | 中央版本覆蓋本地   |
-| 重複交易 | UUID 去重 | 中央檢查，忽略重複 |
-
-#### 人工介入（爭議專區）
-
-| 衝突類型           | 解決策略     | 處理方式                                   |
-| ------------------ | ------------ | ------------------------------------------ |
-| **餘額衝突** | 保留本地記錄 | 本地交易紀錄不上覆，進入爭議專區由人工審核 |
-| **帳務異常** | 保留本地記錄 | 進入「爭議對帳處理專區」，由管理員人工裁決 |
-
-> ⚠️ **核心原則**：所有帳務相關衝突（餘額、交易）絕不自動刪除本地記錄，必須進入爭議專區由人工處理。
-
----
-
-## 6. 安全性設計
-
-### 6.1 認證
-
-- JWT (Access 15分鐘, Refresh 7天)
-- **動態 RBAC (Dynamic RBAC)**：完全自定義的細粒度權限系統
-- PIN: 6位數, bcrypt, 錯誤5次鎖定30分
-
-### 6.2 權限模型 - 動態自定義 RBAC
-
-本系統採用**動態角色自定義引擎**，支援業主手動勾選高達上百個細部 API 權限，指派給自定義角色（如：審計員、查帳會計、維修外包等）。
-
-#### 預設角色範本
-
-| 角色名稱 | 說明                             | 適用對象 |
-| -------- | -------------------------------- | -------- |
-| 審計員   | 可查看所有交易、報表，無操作權限 | 財務稽核 |
-| 查帳會計 | 可查看交易歷史與帳務報表         | 会计人员 |
-| 維修外包 | 僅有機台操作權限，無帳務權限     | 設備維護 |
-| 站點管理 | 單一站點的所有權限               | 店长     |
-
-#### 權限範疇
-
-| 權限類別 | 細項權限                                                          |
-| -------- | ----------------------------------------------------------------- |
-| 機台管理 | 機台列表檢視、機台狀態監控、遠端開分/洗分、遠端重啟、機台配置下發 |
-| 玩家管理 | 玩家列表檢視、玩家詳情檢視、玩家狀態管理、餘額調整                |
-| 交易管理 | 交易列表檢視、交易詳情檢視、交易統計、異常交易處理                |
-| 系統管理 | 系統設定、使用者管理、角色管理、權限管理                          |
-
-#### 權限繼承
-
-- 角色可設定繼承關係，子角色自動擁有父角色權限
-- 支援權限排除（Override）：子角色可排除特定父角色權限
-
-### 6.3 加密
-
-- 密碼: bcrypt (cost 12)
-- 敏感資料: AES-256-GCM
-- 傳輸: TLS 1.3
-- API 簽名: RSA-2048
-
----
-
-## 7. 第三方遊戲商串接
-
-### 7.1 支援遊戲商
-
-| 代碼 | 名稱     | 遊戲類型     |
-| ---- | -------- | ------------ |
-| rg   | RG 電子  | 老虎機、捕魚 |
-| jdb  | JDB 電子 | 老虎機、棋牌 |
-| rt   | RT 電子  | 老虎機       |
-
-### 7.2 串接流程
-
-1. 新增遊戲商設定 (API Endpoint, Key, Secret)
-2. 測試連線 (health check, 餘額查詢)
-3. 正式上線 (遊戲開通, 錢包建立)
-
-### 7.3 錢包轉帳流程
-
-```
-玩家 → 中央錢包 → 第三方 API(轉入) → 遊戲商錢包 → 遊戲
-遊戲 → 遊戲商錢包 → 第三方 API(轉出) → 中央錢包 → 玩家
-```
-
----
-
-## 8. OTA 遠端更新
-
-### 8.1 流程
-
-1. 上傳版本 (檔案, MD5, 版本資訊)
-2. 測試派發 (2-3台, 24小時)
-3. 正式派發 (全部/分批, 即時/預約)
-4. 監控進度
-
-### 8.2 安全
-
-- SHA-256 檔案驗證
-- 差異更新支援
-- 版本相容性檢查
-
----
-
-## 9. 硬體監控
-
-### 9.1 監控項目
-
-| 項目     | 警告閾值 | 嚴重閾值 |
-| -------- | -------- | -------- |
-| CPU      | > 80%    | > 90%    |
-| 記憶體   | > 80%    | > 90%    |
-| 硬碟     | < 15%    | < 5%     |
-| 網路延遲 | > 100ms  | > 500ms  |
-| 溫度     | > 60°C  | > 75°C  |
-
-### 9.2 心跳
-
-- 間隔: 1 分鐘
-- 超過 3 分鐘無心跳 → 離線
-
----
-
-## 10. 錯帳對帳管理
-
-### 10.1 錯帳類型
-
-- missing_deposit: 轉帳未到帳
-- missing_withdrawal: 轉出未確認
-- payout_error: 派彩錯誤
-
-### 10.2 處理流程
-
-1. 偵測錯帳 (自動/人工)
-2. 調查原因 (日誌, 遊戲商)
-3. 處理 (補發/退款/沖銷)
-4. 產生憑證 (PDF)
-
----
-
-## 11. 部署架構
-
-### 11.1 集中式後台
-
-```
-CDN → Nginx → .NET 8 Backend → PostgreSQL + Redis
-                                      ↓
-                               Game APIs (RG/JDB)
-```
-
-### 11.2 容器化
-
-```yaml
-services:
-  backend:
-    image: node:20
-    ports:
-      - "3000:3000"
-  postgres:
-    image: postgres:15
-  redis:
-    image: redis:7-alpine
-```
-
----
-
-## 12. 效能設計
-
-### 12.1 目標
-
-- API P95 < 200ms
-- DB 查詢 P95 < 500ms
-- 可用性 ≥ 99.5%
-- 支援 1000+ 機台
-
-### 12.2 優化
-
-- 資料庫索引
-- Redis 快取 (5分鐘)
-- 非同步處理
-- 連線池管理
-
----
-
-## 13. 監控設計
-
-### 13.1 告警
-
-| 條件            | 動作     |
-| --------------- | -------- |
-| 機台離線 > 15分 | Telegram |
-| API 錯誤率 > 5% | Telegram |
-| 同步失敗 > 3次  | Telegram |
-
----
-
-## 14. 版本歷史
-
-| 版本 | 日期       | 說明              |
-| ---- | ---------- | ----------------- |
-| v1.0 | 2026-02-25 | 初版              |
-| v1.1 | 2026-02-26 | docs 新增章節     |
-| v1.2 | 2026-02-26 | code 技術審查修訂 |
-
----
-
-*文件維護：docs agent + code agent 審查*
-*審查狀態：✅ 第 1 輪審查完成*
-
----
-
-## 5. 離線同步機制
-
 ### 5.1 同步原則
 
 1. **最終一致性**: 允許短暫不一致，最終達成一致
@@ -810,7 +613,48 @@ services:
 
 > ⚠️ **核心原則**：所有帳務相關衝突（餘額、交易）絕不自動刪除本地記錄，必須進入「爭議對帳處理專區」由人工處理。
 
+### 5.5 離線同步邊界處理
+
+```javascript
+// 離線期間交易處理
+const offlineHandler = {
+  // 1. 本地交易隊列
+  queue: [],
+  
+  // 2. 離線期間餘額計算
+  calculateBalance: (localTxs, serverBalance) => {
+    const localDelta = localTxs
+      .filter(tx => tx.status === 'pending')
+      .reduce((sum, tx) => {
+        return tx.type === 'deposit' 
+          ? sum + tx.amount 
+          : sum - tx.amount;
+      }, 0);
+  
+    return {
+      available: serverBalance - localDelta,
+      pending: localDelta
+    };
+  },
+  
+  // 3. 衝突解決
+  resolveConflict: (localTx, serverTx) => {
+    if (localTx.status === 'synced') {
+      return serverTx; // 中央版本優先
+    }
+  
+    // 本地有待同步交易
+    if (serverTx.status === 'failed') {
+      return { ...localTx, status: 'retry' };
+    }
+  
+    return serverTx;
+  }
+};
+```
+
 ---
+
 
 ## 6. 安全性設計
 
@@ -875,7 +719,116 @@ const securityHeaders = {
 };
 ```
 
+### 6.4 API 安全
+
+```javascript
+// API 請求驗證中間件
+const apiSecurity = {
+  // 1. 請求 ID 追蹤 (防止重放攻擊)
+  requestId: {
+    generate: () => crypto.randomUUID(),
+    validate: (req, res, next) => {
+      const requestId = req.headers['x-request-id'];
+      // 檢查請求 ID 是否已使用 (Redis 記錄)
+      // 過期時間: 5 分鐘
+    }
+  },
+  
+  // 2. API 簽名驗證
+  signature: {
+    algorithm: 'HMAC-SHA256',
+    validate: (req, body, secret) => {
+      const signature = req.headers['x-api-signature'];
+      const expected = crypto
+        .createHmac('sha256', secret)
+        .update(JSON.stringify(body))
+        .digest('hex');
+      return signature === expected;
+    }
+  },
+  
+  // 3. Rate Limiting
+  rateLimit: {
+    // 分散式 Rate Limit 使用 Redis
+    store: new RedisStore({
+      prefix: 'rl:',
+      sendCommand: (...args) => redis.call(...args)
+    })
+  }
+};
+```
+
+### 6.5 交易安全
+
+```javascript
+// 交易處理最佳實踐
+class TransactionService {
+  async createTransaction(playerId, amount, type) {
+    // 1. 樂觀鎖定
+    const player = await db.players.findById(playerId);
+    if (player.version !== req.headers['if-match']) {
+      throw new AppError('VAL_005', '資料已更新，請重新整理');
+    }
+  
+    // 2. 使用資料庫交易
+    return await db.transaction(async (trx) => {
+      // 扣款
+      const updated = await trx('players')
+        .where('id', playerId)
+        .where('balance', '>=', amount)
+        .decrement('balance', amount);
+    
+      if (updated === 0) {
+        throw new AppError('VAL_002', '餘額不足');
+      }
+    
+      // 記錄交易
+      const tx = await trx('transactions').insert({...});
+    
+      return tx;
+    });
+  }
+}
+```
+
+### 6.6 程式碼安全防護
+
+#### SQL 注入防護
+
+```sql
+-- 使用參數化查詢
+-- ❌ 錯誤範例
+SELECT * FROM players WHERE username = '${username}'
+
+-- ✅ 正確範例
+SELECT * FROM players WHERE username = $1
+```
+
+#### 並發處理 (樂觀鎖定)
+
+```javascript
+// 樂觀鎖定範例
+const optimisticLock = {
+  // 使用 version 欄位
+  updatePlayer: async (playerId, updates) => {
+    const player = await db.players.findById(playerId);
+  
+    const result = await db.players
+      .where('id', playerId)
+      .where('version', player.version)
+      .update({ ...updates, version: player.version + 1 });
+  
+    if (result === 0) {
+      throw new AppError('VAL_005', '並發衝突，請重試');
+    }
+  
+    return true;
+  }
+};
+```
+
 ---
+
 
 ## 7. 第三方遊戲商串接
 
@@ -926,7 +879,33 @@ const securityHeaders = {
     中央錢包 ──▶ 玩家
 ```
 
+### 7.4 第三方 API 超時處理
+
+```javascript
+// 第三方 API 調用超時處理
+const externalApiHandler = {
+  timeout: 10000, // 10 秒
+  
+  callWithRetry: async (fn, maxRetries = 3) => {
+    for (let i = 0; i < maxRetries; i++) {
+      try {
+        return await Promise.race([
+          fn(),
+          new Promise((_, reject) => 
+            setTimeout(() => reject(new Error('TIMEOUT')), this.timeout)
+          )
+        ]);
+      } catch (err) {
+        if (i === maxRetries - 1) throw err;
+        await sleep(Math.pow(2, i) * 1000); // 指數退避
+      }
+    }
+  }
+};
+```
+
 ---
+
 
 ## 8. OTA 遠端更新
 
@@ -1139,9 +1118,81 @@ volumes:
 | 連線池     | 資料庫連線池管理         |
 | 查詢優化   | 避免 SELECT *，使用分頁  |
 
+### 12.3 效能優化實踐
+
+#### 資料庫連線池
+
+```javascript
+// PostgreSQL 連線池優化
+const pool = new Pool({
+  max: 30,              // 最大連線數 (根據 CPU 核心數調整)
+  min: 10,              // 最小連線數
+  idleTimeoutMillis: 30000,
+  connectionTimeoutMillis: 5000,
+  // 洪水保護
+  maxUses: 10000,       // 連線最大使用次數
+  allowExitOnIdle: false
+});
+
+// 監控連線池健康
+pool.on('error', (err) => {
+  logger.error('Pool error:', err);
+});
+```
+
+#### Redis 快取策略
+
+```javascript
+// 快取策略
+const cacheStrategy = {
+  // 1. 熱門資料 (短期快取)
+  hotData: {
+    ttl: 300,           // 5 分鐘
+    prefix: 'hot:',
+    keys: ['dashboard:*', 'machines:online:*']
+  },
+  
+  // 2. 配置資料 (中期快取)
+  configData: {
+    ttl: 3600,          // 1 小時
+    prefix: 'cfg:',
+    keys: ['config:*', 'providers:*']
+  },
+  
+  // 3. 使用者會話 (短期)
+  sessionData: {
+    ttl: 900,           // 15 分鐘
+    prefix: 'sess:',
+    keys: ['session:*']
+  }
+};
+```
+
+#### N+1 查詢優化
+
+```javascript
+// ❌ N+1 查詢
+const machines = await db.machines.findAll();
+for (const machine of machines) {
+  const provider = await db.providers.findById(machine.provider_id);
+  machine.provider = provider;
+}
+
+// ✅ 使用 JOIN 或 eager loading
+const machines = await db.machines.findAll({
+  include: ['provider']
+});
+
+// ✅ 或使用 GraphQL-style selection
+const machines = await db.machines
+  .select('machines.*', 'providers.name as provider_name')
+  .join('providers', 'machines.provider_id', 'providers.id');
+```
+
 ---
 
-## 13. 監控設計
+
+## 13. 監控與日誌設計
 
 ### 13.1 監控項目
 
@@ -1165,7 +1216,71 @@ volumes:
 | 硬碟空間 < 10%     | 警告   | Telegram         |
 | 錯帳金額 > $1000   | 警告   | Telegram + Email |
 
+### 13.3 日誌與系統追蹤
+
+#### 結構化日誌
+
+```javascript
+// JSON 結構化日誌
+const logger = {
+  info: (message, meta) => {
+    console.log(JSON.stringify({
+      timestamp: new Date().toISOString(),
+      level: 'info',
+      message,
+      ...meta,
+      service: 'game-platform',
+      version: '1.0.0'
+    }));
+  },
+  
+  error: (message, meta) => {
+    console.error(JSON.stringify({
+      timestamp: new Date().toISOString(),
+      level: 'error',
+      message,
+      ...meta,
+      stack: new Error().stack,
+      service: 'game-platform',
+      version: '1.0.0'
+    }));
+  }
+};
+```
+
+#### 請求追蹤
+
+```javascript
+// 請求 ID 傳遞
+const requestTracking = {
+  // 產生追蹤 ID
+  generate: (req, res, next) => {
+    req.id = req.headers['x-request-id'] || crypto.randomUUID();
+    res.setHeader('x-request-id', req.id);
+    next();
+  },
+  
+  // 記錄請求日誌
+  log: (req, res, next) => {
+    const start = Date.now();
+  
+    res.on('finish', () => {
+      logger.info('HTTP Request', {
+        method: req.method,
+        path: req.path,
+        status: res.statusCode,
+        duration: Date.now() - start,
+        requestId: req.id
+      });
+    });
+  
+    next();
+  }
+};
+```
+
 ---
+
 
 ## 14. 錯誤處理機制
 
@@ -1267,343 +1382,11 @@ CREATE INDEX idx_agents_parent ON agents(parent_agent_id);
 
 ---
 
-## 16. 版本歷史
+## 16. 開發與測試規範
 
-| 版本 | 日期       | 說明                                                              | 作者 |
-| ---- | ---------- | ----------------------------------------------------------------- | ---- |
-| v1.0 | 2026-02-25 | 初版系統設計                                                      | docs |
-| v1.1 | 2026-02-26 | 新增版本差異、API 錯誤碼、第三方串接、OTA、硬體監控、錯帳管理章節 | docs |
-| v1.2 | 2026-02-26 | 技術審查修訂：API 版本化、錯誤碼擴充、資料庫優化                  | code |
+### 16.1 測試策略
 
----
-
-*文件維護：docs agent (PM/SA 文秘專員) + code agent (工程師)*
-*審查狀態：✅ 第 1 輪技術審查完成 (v1.2)*
-
----
-
-# 附錄 A：Round 4 - 深度技術審查 (code)
-
-## A.1 安全性強化建議
-
-### A.1.1 API 安全
-
-```javascript
-// API 請求驗證中間件
-const apiSecurity = {
-  // 1. 請求 ID 追蹤 (防止重放攻擊)
-  requestId: {
-    generate: () => crypto.randomUUID(),
-    validate: (req, res, next) => {
-      const requestId = req.headers['x-request-id'];
-      // 檢查請求 ID 是否已使用 (Redis 記錄)
-      // 過期時間: 5 分鐘
-    }
-  },
-  
-  // 2. API 簽名驗證
-  signature: {
-    algorithm: 'HMAC-SHA256',
-    validate: (req, body, secret) => {
-      const signature = req.headers['x-api-signature'];
-      const expected = crypto
-        .createHmac('sha256', secret)
-        .update(JSON.stringify(body))
-        .digest('hex');
-      return signature === expected;
-    }
-  },
-  
-  // 3. Rate Limiting
-  rateLimit: {
-    // 分散式 Rate Limit 使用 Redis
-    store: new RedisStore({
-      prefix: 'rl:',
-      sendCommand: (...args) => redis.call(...args)
-    })
-  }
-};
-```
-
-### A.1.2 交易安全
-
-```javascript
-// 交易處理最佳實踐
-class TransactionService {
-  async createTransaction(playerId, amount, type) {
-    // 1. 樂觀鎖定
-    const player = await db.players.findById(playerId);
-    if (player.version !== req.headers['if-match']) {
-      throw new AppError('VAL_005', '資料已更新，請重新整理');
-    }
-  
-    // 2. 使用資料庫交易
-    return await db.transaction(async (trx) => {
-      // 扣款
-      const updated = await trx('players')
-        .where('id', playerId)
-        .where('balance', '>=', amount)
-        .decrement('balance', amount);
-    
-      if (updated === 0) {
-        throw new AppError('VAL_002', '餘額不足');
-      }
-    
-      // 記錄交易
-      const tx = await trx('transactions').insert({...});
-    
-      return tx;
-    });
-  }
-}
-```
-
-### A.1.3 SQL 注入防護
-
-```sql
--- 使用參數化查詢
--- ❌ 錯誤範例
-SELECT * FROM players WHERE username = '${username}'
-
--- ✅ 正確範例
-SELECT * FROM players WHERE username = $1
-```
-
----
-
-## A.2 效能優化實踐
-
-### A.2.1 資料庫連線池
-
-```javascript
-// PostgreSQL 連線池優化
-const pool = new Pool({
-  max: 30,              // 最大連線數 (根據 CPU 核心數調整)
-  min: 10,              // 最小連線數
-  idleTimeoutMillis: 30000,
-  connectionTimeoutMillis: 5000,
-  // 洪水保護
-  maxUses: 10000,       // 連線最大使用次數
-  allowExitOnIdle: false
-});
-
-// 監控連線池健康
-pool.on('error', (err) => {
-  logger.error('Pool error:', err);
-});
-```
-
-### A.2.2 Redis 快取策略
-
-```javascript
-// 快取策略
-const cacheStrategy = {
-  // 1. 熱門資料 (短期快取)
-  hotData: {
-    ttl: 300,           // 5 分鐘
-    prefix: 'hot:',
-    keys: ['dashboard:*', 'machines:online:*']
-  },
-  
-  // 2. 配置資料 (中期快取)
-  configData: {
-    ttl: 3600,          // 1 小時
-    prefix: 'cfg:',
-    keys: ['config:*', 'providers:*']
-  },
-  
-  // 3. 使用者會話 (短期)
-  sessionData: {
-    ttl: 900,           // 15 分鐘
-    prefix: 'sess:',
-    keys: ['session:*']
-  }
-};
-```
-
-### A.2.3 N+1 查詢優化
-
-```javascript
-// ❌ N+1 查詢
-const machines = await db.machines.findAll();
-for (const machine of machines) {
-  const provider = await db.providers.findById(machine.provider_id);
-  machine.provider = provider;
-}
-
-// ✅ 使用 JOIN 或 eager loading
-const machines = await db.machines.findAll({
-  include: ['provider']
-});
-
-// ✅ 或使用 GraphQL-style selection
-const machines = await db.machines
-  .select('machines.*', 'providers.name as provider_name')
-  .join('providers', 'machines.provider_id', 'providers.id');
-```
-
----
-
-## A.3 邊界情況處理
-
-### A.3.1 離線同步邊界
-
-```javascript
-// 離線期間交易處理
-const offlineHandler = {
-  // 1. 本地交易隊列
-  queue: [],
-  
-  // 2. 離線期間餘額計算
-  calculateBalance: (localTxs, serverBalance) => {
-    const localDelta = localTxs
-      .filter(tx => tx.status === 'pending')
-      .reduce((sum, tx) => {
-        return tx.type === 'deposit' 
-          ? sum + tx.amount 
-          : sum - tx.amount;
-      }, 0);
-  
-    return {
-      available: serverBalance - localDelta,
-      pending: localDelta
-    };
-  },
-  
-  // 3. 衝突解決
-  resolveConflict: (localTx, serverTx) => {
-    if (localTx.status === 'synced') {
-      return serverTx; // 中央版本優先
-    }
-  
-    // 本地有待同步交易
-    if (serverTx.status === 'failed') {
-      return { ...localTx, status: 'retry' };
-    }
-  
-    return serverTx;
-  }
-};
-```
-
-### A.3.2 並發處理
-
-```javascript
-// 樂觀鎖定範例
-const optimisticLock = {
-  // 使用 version 欄位
-  updatePlayer: async (playerId, updates) => {
-    const player = await db.players.findById(playerId);
-  
-    const result = await db.players
-      .where('id', playerId)
-      .where('version', player.version)
-      .update({ ...updates, version: player.version + 1 });
-  
-    if (result === 0) {
-      throw new AppError('VAL_005', '並發衝突，請重試');
-    }
-  
-    return true;
-  }
-};
-```
-
-### A.3.3 第三方 API 超時
-
-```javascript
-// 第三方 API 調用超時處理
-const externalApiHandler = {
-  timeout: 10000, // 10 秒
-  
-  callWithRetry: async (fn, maxRetries = 3) => {
-    for (let i = 0; i < maxRetries; i++) {
-      try {
-        return await Promise.race([
-          fn(),
-          new Promise((_, reject) => 
-            setTimeout(() => reject(new Error('TIMEOUT')), this.timeout)
-          )
-        ]);
-      } catch (err) {
-        if (i === maxRetries - 1) throw err;
-        await sleep(Math.pow(2, i) * 1000); // 指數退避
-      }
-    }
-  }
-};
-```
-
----
-
-## A.4 日誌與追蹤
-
-### A.4.1 結構化日誌
-
-```javascript
-// JSON 結構化日誌
-const logger = {
-  info: (message, meta) => {
-    console.log(JSON.stringify({
-      timestamp: new Date().toISOString(),
-      level: 'info',
-      message,
-      ...meta,
-      service: 'game-platform',
-      version: '1.0.0'
-    }));
-  },
-  
-  error: (message, meta) => {
-    console.error(JSON.stringify({
-      timestamp: new Date().toISOString(),
-      level: 'error',
-      message,
-      ...meta,
-      stack: new Error().stack,
-      service: 'game-platform',
-      version: '1.0.0'
-    }));
-  }
-};
-```
-
-### A.4.2 請求追蹤
-
-```javascript
-// 請求 ID 傳遞
-const requestTracking = {
-  // 產生追蹤 ID
-  generate: (req, res, next) => {
-    req.id = req.headers['x-request-id'] || crypto.randomUUID();
-    res.setHeader('x-request-id', req.id);
-    next();
-  },
-  
-  // 記錄請求日誌
-  log: (req, res, next) => {
-    const start = Date.now();
-  
-    res.on('finish', () => {
-      logger.info('HTTP Request', {
-        method: req.method,
-        path: req.path,
-        status: res.statusCode,
-        duration: Date.now() - start,
-        requestId: req.id
-      });
-    });
-  
-    next();
-  }
-};
-```
-
----
-
-## A.5 測試策略
-
-### A.5.1 單元測試
+#### 單元測試
 
 ```javascript
 // 交易服務單元測試
@@ -1635,7 +1418,7 @@ describe('TransactionService', () => {
 });
 ```
 
-### A.5.2 整合測試
+#### 整合測試
 
 ```javascript
 // API 整合測試
@@ -1656,39 +1439,9 @@ describe('POST /api/v1/transactions', () => {
 });
 ```
 
----
+### 16.2 格式與編碼標準化
 
-# 附錄 B：Round 5 - 最終審查與格式優化 (docs)
-
-## B.1 文件完整性檢查清單
-
-### B.1.1 必要章節
-
-| 章節       | 狀態 | 備註                 |
-| ---------- | ---- | -------------------- |
-| 系統概述   | ✅   | 目標、版本差異、架構 |
-| 技術架構   | ✅   | 前端、後端、資料庫   |
-| API 設計   | ✅   | 端點、錯誤碼         |
-| 資料庫設計 | ✅   | 表結構、索引         |
-| 安全性設計 | ✅   | 認證、授權、加密     |
-| 部署架構   | ✅   | 容器化、拓撲         |
-| 監控設計   | ✅   | 告警、效能           |
-| 離線同步   | ✅   | 重試、衝突解決       |
-
-### B.1.2 交叉引用
-
-| 項目       | 引用章節   |
-| ---------- | ---------- |
-| JWT 認證   | 6.1, A.1.1 |
-| 資料庫交易 | 3, A.2.1   |
-| 快取策略   | 12, A.2.2  |
-| 錯誤碼     | 4.4, 14    |
-
----
-
-## B.2 格式標準化
-
-### B.2.1 程式碼區塊
+#### 程式碼區塊
 
 ```typescript
 // 統一使用 TypeScript 類型標註
@@ -1702,7 +1455,7 @@ interface Transaction {
 }
 ```
 
-### B.2.2 SQL 命名規範
+#### SQL 命名規範
 
 ```sql
 -- 表名: 蛇形命名 (snake_case)
@@ -1715,7 +1468,7 @@ machine_id, created_at, is_active
 idx_machines_status
 ```
 
-### B.2.3 API 命名規範
+#### API 命名規範
 
 ```yaml
 # RESTful 規範
@@ -1737,9 +1490,11 @@ DELETE # 刪除
 
 ---
 
-## B.3 版本發布流程
+## 17. 版本發布與支援
 
-### B.3.1 發布檢查
+### 17.1 版本發布流程
+
+#### 發布檢查
 
 ```
 1. 文件審查
@@ -1763,7 +1518,7 @@ DELETE # 刪除
    └── ✅ 版本號更新
 ```
 
-### B.3.2 版本號規範
+#### 版本號規範
 
 ```
 v{major}.{minor}.{patch}
@@ -1779,48 +1534,11 @@ v1.1.1 - 修復 API 錯誤
 v2.0.0 - 架構重構
 ```
 
----
+### 17.2 聯絡與支援
 
-## B.4 閱讀指南
-
-### B.4.1 適合讀者
-
-| 讀者       | 建議章節        |
-| ---------- | --------------- |
-| 專案經理   | 1, 7, 8, 9, 10  |
-| 系統架構師 | 2, 3, 4, 11, 12 |
-| 開發工程師 | 3, 4, 5, 6, A   |
-| 維運工程師 | 11, 12, 13      |
-
-### B.4.2 快速開始
-
-```bash
-# 1. 複製專案
-git clone game-platform.git
-
-# 2. 安裝依賴
-cd backend && npm install
-cd ../frontend && npm install
-
-# 3. 啟動開發環境
-docker-compose up -d
-
-# 4. 執行遷移
-npm run migrate
-
-# 5. 執行測試
-npm test
-```
-
----
-
-## B.5 聯絡與支援
-
-### B.5.1 問題回報
+#### 問題回報格式
 
 ```markdown
-## 問題回報格式
-
 **環境**
 - 版本: 
 - 部署方式: 
@@ -1843,8 +1561,7 @@ npm test
 ```
 
 ---
-
-## 版本歷史 (完整版)
+## 18. 版本歷史
 
 | 版本 | 日期       | 說明                                                              | 作者      |
 | ---- | ---------- | ----------------------------------------------------------------- | --------- |
@@ -1858,3 +1575,6 @@ npm test
 
 *文件維護：docs agent (PM/SA 文秘專員) + code agent (工程師)*
 *審查狀態：✅ Round 4-5 完成 (v1.4)*
+
+---
+
