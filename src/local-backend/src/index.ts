@@ -3,6 +3,7 @@ import cors from 'cors';
 import dotenv from 'dotenv';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import Database from 'better-sqlite3';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const PROJECT_ROOT = path.join(__dirname, '..');
@@ -16,38 +17,45 @@ const PORT = process.env.PORT || 3001;
 app.use(cors());
 app.use(express.json());
 
-// Serve static files (admin dashboard) - fixed path
+// Serve static files
 const publicPath = path.join(PROJECT_ROOT, 'public');
-console.log('Serving static files from:', publicPath);
 app.use(express.static(publicPath));
 
-// PIN Authentication (6-digit)
+// PIN Authentication
 const PIN_SECRET = process.env.PIN_SECRET || '123456';
 
-// In-memory data stores
-interface Machine {
-  id: string;
-  machineCode: string;
-  name: string;
-  status: 'online' | 'offline' | 'maintenance';
-  balance: number;
-  lastCashIn?: number;
-  lastCashOut?: number;
-  lastUpdate: Date;
-}
+// SQLite Database
+const db = new Database(path.join(PROJECT_ROOT, 'local.db'));
 
-interface Transaction {
-  id: string;
-  type: 'cash_in' | 'cash_out' | 'adjust';
-  machineId: string;
-  amount: number;
-  operatorId: string;
-  pin: string;
-  timestamp: Date;
-}
+// Initialize tables
+db.exec(`
+  CREATE TABLE IF NOT EXISTS machines (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    machine_code TEXT UNIQUE NOT NULL,
+    name TEXT NOT NULL,
+    status TEXT DEFAULT 'offline',
+    balance INTEGER DEFAULT 0,
+    last_cash_in INTEGER DEFAULT 0,
+    last_cash_out INTEGER DEFAULT 0,
+    last_update DATETIME DEFAULT CURRENT_TIMESTAMP
+  );
 
-const machines = new Map<string, Machine>();
-const transactions: Transaction[] = [];
+  CREATE TABLE IF NOT EXISTS transactions (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    type TEXT NOT NULL,
+    machine_id INTEGER NOT NULL,
+    amount INTEGER NOT NULL,
+    operator_id TEXT NOT NULL,
+    pin TEXT NOT NULL,
+    timestamp DATETIME DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (machine_id) REFERENCES machines(id)
+  );
+
+  CREATE TABLE IF NOT EXISTS settings (
+    key TEXT PRIMARY KEY,
+    value TEXT
+  );
+`);
 
 // PIN Middleware
 const authenticatePIN = (req: express.Request, res: express.Response, next: express.NextFunction) => {
@@ -61,7 +69,7 @@ const authenticatePIN = (req: express.Request, res: express.Response, next: expr
 
 // Routes
 app.get('/health', (req, res) => {
-  res.json({ status: 'ok', mode: 'local', timestamp: new Date().toISOString() });
+  res.json({ status: 'ok', mode: 'local', database: 'sqlite', timestamp: new Date().toISOString() });
 });
 
 app.post('/api/verify-pin', authenticatePIN, (req, res) => {
@@ -69,30 +77,32 @@ app.post('/api/verify-pin', authenticatePIN, (req, res) => {
   res.json({ success: true, valid: pin === PIN_SECRET });
 });
 
+// Machines CRUD
 app.get('/api/machines', authenticatePIN, (req, res) => {
-  const items = Array.from(machines.values());
+  const stmt = db.prepare('SELECT * FROM machines ORDER BY id DESC');
+  const items = stmt.all();
   res.json({ success: true, data: { items, total: items.length } });
 });
 
 app.get('/api/machines/:id', authenticatePIN, (req, res) => {
-  const machine = machines.get(req.params.id);
+  const stmt = db.prepare('SELECT * FROM machines WHERE id = ?');
+  const machine = stmt.get(req.params.id);
   machine ? res.json({ success: true, data: machine }) : res.status(404).json({ success: false, error: 'Machine not found' });
 });
 
 app.post('/api/machines', authenticatePIN, (req, res) => {
   const { machineCode, name } = req.body;
-  const machine: Machine = {
-    id: 'm_' + Date.now(),
-    machineCode,
-    name,
-    status: 'offline',
-    balance: 0,
-    lastUpdate: new Date()
-  };
-  machines.set(machine.id, machine);
-  res.status(201).json({ success: true, data: machine });
+  try {
+    const stmt = db.prepare('INSERT INTO machines (machine_code, name, balance) VALUES (?, ?, 0)');
+    const result = stmt.run(machineCode, name);
+    const newMachine = db.prepare('SELECT * FROM machines WHERE id = ?').get(result.lastInsertRowid);
+    res.status(201).json({ success: true, data: newMachine });
+  } catch (e: any) {
+    res.status(400).json({ success: false, error: e.message });
+  }
 });
 
+// Cash In (開分)
 app.post('/api/cash-in', authenticatePIN, (req, res) => {
   const { machineId, amount, operatorId } = req.body;
   const pin = req.headers['x-pin-code'] as string;
@@ -102,39 +112,25 @@ app.post('/api/cash-in', authenticatePIN, (req, res) => {
     return;
   }
 
-  const machine = machines.get(machineId);
+  const machine = db.prepare('SELECT * FROM machines WHERE id = ?').get(machineId) as any;
   if (!machine) {
     res.status(404).json({ success: false, error: 'Machine not found' });
     return;
   }
 
-  machine.balance += amount;
-  machine.lastCashIn = amount;
-  machine.lastUpdate = new Date();
-  machines.set(machineId, machine);
+  const previousBalance = machine.balance;
+  const newBalance = previousBalance + amount;
+  
+  db.prepare('UPDATE machines SET balance = ?, last_cash_in = ?, last_update = CURRENT_TIMESTAMP WHERE id = ?')
+    .run(newBalance, amount, machineId);
+  
+  db.prepare('INSERT INTO transactions (type, machine_id, amount, operator_id, pin) VALUES (?, ?, ?, ?, ?)')
+    .run('cash_in', machineId, amount, operatorId, pin);
 
-  const txn: Transaction = {
-    id: 'txn_' + Date.now(),
-    type: 'cash_in',
-    machineId,
-    amount,
-    operatorId,
-    pin,
-    timestamp: new Date()
-  };
-  transactions.push(txn);
-
-  res.json({ 
-    success: true, 
-    data: { 
-      machineId, 
-      previousBalance: machine.balance - amount,
-      currentBalance: machine.balance,
-      cashInAmount: amount 
-    } 
-  });
+  res.json({ success: true, data: { machineId, previousBalance, currentBalance: newBalance, cashInAmount: amount } });
 });
 
+// Cash Out (洗分)
 app.post('/api/cash-out', authenticatePIN, (req, res) => {
   const { machineId, amount, operatorId } = req.body;
   const pin = req.headers['x-pin-code'] as string;
@@ -144,7 +140,7 @@ app.post('/api/cash-out', authenticatePIN, (req, res) => {
     return;
   }
 
-  const machine = machines.get(machineId);
+  const machine = db.prepare('SELECT * FROM machines WHERE id = ?').get(machineId) as any;
   if (!machine) {
     res.status(404).json({ success: false, error: 'Machine not found' });
     return;
@@ -155,68 +151,62 @@ app.post('/api/cash-out', authenticatePIN, (req, res) => {
     return;
   }
 
-  machine.balance -= amount;
-  machine.lastCashOut = amount;
-  machine.lastUpdate = new Date();
-  machines.set(machineId, machine);
+  const previousBalance = machine.balance;
+  const newBalance = previousBalance - amount;
+  
+  db.prepare('UPDATE machines SET balance = ?, last_cash_out = ?, last_update = CURRENT_TIMESTAMP WHERE id = ?')
+    .run(newBalance, amount, machineId);
+  
+  db.prepare('INSERT INTO transactions (type, machine_id, amount, operator_id, pin) VALUES (?, ?, ?, ?, ?)')
+    .run('cash_out', machineId, amount, operatorId, pin);
 
-  const txn: Transaction = {
-    id: 'txn_' + Date.now(),
-    type: 'cash_out',
-    machineId,
-    amount,
-    operatorId,
-    pin,
-    timestamp: new Date()
-  };
-  transactions.push(txn);
-
-  res.json({ 
-    success: true, 
-    data: { 
-      machineId, 
-      previousBalance: machine.balance + amount,
-      currentBalance: machine.balance,
-      cashOutAmount: amount 
-    } 
-  });
+  res.json({ success: true, data: { machineId, previousBalance, currentBalance: newBalance, cashOutAmount: amount } });
 });
 
+// Get Transactions
 app.get('/api/transactions', authenticatePIN, (req, res) => {
   const { machineId, type, limit = 50 } = req.query;
-  let items = [...transactions].reverse();
+  let sql = 'SELECT * FROM transactions';
+  const params: any[] = [];
   
-  if (machineId) items = items.filter(t => t.machineId === machineId);
-  if (type) items = items.filter(t => t.type === type);
+  if (machineId || type) {
+    sql += ' WHERE';
+    if (machineId) { sql += ' machine_id = ?'; params.push(machineId); }
+    if (type) { sql += params.length ? ' AND' : ''; sql += ' type = ?'; params.push(type); }
+  }
   
-  res.json({ success: true, data: { items: items.slice(0, Number(limit)), total: items.length } });
+  sql += ' ORDER BY timestamp DESC LIMIT ?';
+  params.push(Number(limit));
+  
+  const items = db.prepare(sql).all(...params);
+  res.json({ success: true, data: { items, total: items.length } });
 });
 
+// Get Machine Balance
 app.get('/api/balance/:machineId', (req, res) => {
-  const machine = machines.get(req.params.machineId);
+  const machine = db.prepare('SELECT machine_code, balance FROM machines WHERE id = ?').get(req.params.machineId) as any;
   if (!machine) {
     res.status(404).json({ success: false, error: 'Machine not found' });
     return;
   }
-  res.json({ success: true, data: { machineId: machine.machineCode, balance: machine.balance } });
+  res.json({ success: true, data: { machineId: machine.machine_code, balance: machine.balance } });
 });
 
+// Offline mode
 app.post('/api/offline-mode', authenticatePIN, (req, res) => {
   const { enabled } = req.body;
-  res.json({ success: true, data: { offlineMode: enabled, message: enabled ? 'System is now in offline mode' : 'System is now online' } });
+  db.prepare('INSERT OR REPLACE INTO settings (key, value) VALUES (?, ?)').run('offline_mode', enabled ? '1' : '0');
+  res.json({ success: true, data: { offlineMode: enabled } });
 });
 
-// SPA fallback
-app.get('/admin', (req, res) => {
-  res.sendFile(path.join(publicPath, 'admin.html'));
-});
-
-app.get('/dashboard', (req, res) => {
-  res.sendFile(path.join(publicPath, 'admin.html'));
+// Check offline mode
+app.get('/api/offline-mode', (req, res) => {
+  const setting = db.prepare('SELECT value FROM settings WHERE key = ?').get('offline_mode') as any;
+  res.json({ success: true, data: { enabled: setting?.value === '1' } });
 });
 
 app.listen(PORT, () => {
-  console.log('🏠 Local Backend running on http://localhost:' + PORT);
-  console.log('🔐 Default PIN: ' + PIN_SECRET);
-  console.log('📊 Admin Dashboard: http://localhost:' + PORT + '/admin');
+  console.log(`🏠 Local Backend running on http://localhost:${PORT}`);
+  console.log(`🔐 Default PIN: ${PIN_SECRET}`);
+  console.log(`💾 Database: SQLite (local.db)`);
 });

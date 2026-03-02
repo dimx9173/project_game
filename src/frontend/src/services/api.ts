@@ -1,4 +1,5 @@
-const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:4000/api/v1';
+// Use relative URL to go through vite proxy in dev, or configured URL in prod
+const API_BASE = import.meta.env.VITE_API_URL || '/api/v1';
 
 class ApiService {
   private token: string | null = null;

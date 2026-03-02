@@ -1,5 +1,15 @@
 #!/bin/bash
-export TEAM_TASKS_DIR=~/.openclaw/workspace/team-tasks/data
-export PATH=$PATH:/home/brian/.nvm/versions/node/v24.13.0/bin
-cd ~/project/game
-python3 ~/.openclaw/skills/team-tasks/scripts/task_manager.py status game-v6-std > ~/.openclaw/workspace/main/last_progress.txt 2>&1
+# OpenClaw Team-Tasks Progress Reporter
+OPENCLAW="/home/brian/.nvm/versions/node/v24.13.0/bin/openclaw"
+TM_SCRIPT="/home/brian/.openclaw/skills/team-tasks/scripts/task_manager.py"
+TARGET_ID="1005486276"
+
+# Get status of all active projects
+STATUS=$(python3 "$TM_SCRIPT" status game-v6-std)
+
+# Add a header and send to Telegram
+MESSAGE="📊 **Team-Tasks 定時進度回報**
+
+$STATUS"
+
+"$OPENCLAW" message send --channel telegram --target "$TARGET_ID" --message "$MESSAGE"

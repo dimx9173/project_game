@@ -12,6 +12,7 @@ import gameRoutes from './routes/games.js';
 import providerRoutes from './routes/providers.js';
 import agentRoutes from './routes/agents.js';
 import walletRoutes from './routes/wallet.js';
+import monitorRoutes from './routes/monitor.js';
 
 dotenv.config();
 
@@ -35,6 +36,7 @@ app.use('/api/v1/games', gameRoutes);
 app.use('/api/v1/providers', providerRoutes);
 app.use('/api/v1/agents', agentRoutes);
 app.use('/api/v1/wallet', walletRoutes);
+app.use('/api/v1/monitor', monitorRoutes);
 
 app.use((err: Error, req: express.Request, res: express.Response, next: express.NextFunction) => {
   console.error(err.stack);

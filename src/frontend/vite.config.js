@@ -10,6 +10,9 @@ export default defineConfig({
                 changeOrigin: true
             }
         }
+    },
+    build: {
+        sourcemap: true
     }
 });
 //# sourceMappingURL=vite.config.js.map
