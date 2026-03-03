@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>新增代理商 - 遊戲平台管理中心</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        cyber: { 50: '#f5f3ff', 100: '#ede9fe', 200: '#ddd6fe', 300: '#c4b5fd', 400: '#a78bfa', 500: '#8b5cf6', 600: '#7c3aed', 700: '#6d28d9', 800: '#5b21b6', 900: '#4c1d95', 950: '#2e1065' },
+                        dark: { bg: '#0a0a0f', card: '#12121a', sidebar: '#0d0d14', border: '#1e1e2e', hover: '#1a1a28' }
+                    },
+                    fontFamily: { sans: ['"Noto Sans TC"', 'sans-serif'], mono: ['"JetBrains Mono"', 'monospace'] },
+                    boxShadow: { glow: '0 0 30px rgba(168, 85, 247, 0.3)', 'glow-sm': '0 0 15px rgba(168, 85, 247, 0.2)' }
+                }
+            }
+        }
+    </script>
+    <style>
+        * { scrollbar-width: thin; scrollbar-color: #6d28d9 #0a0a0f; }
+        *::-webkit-scrollbar { width: 8px; height: 8px; }
+        *::-webkit-scrollbar-track { background: #0a0a0f; }
+        *::-webkit-scrollbar-thumb { background: linear-gradient(180deg, #7c3aed, #a855f7); border-radius: 4px; }
+        body { font-family: 'Noto Sans TC', sans-serif; background: #0a0a0f; }
+        .glass { background: rgba(18, 18, 26, 0.7); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border: 1px solid rgba(255, 255, 255, 0.08); }
+        .glass-card { background: linear-gradient(135deg, rgba(18, 18, 26, 0.9) 0%, rgba(30, 30, 46, 0.6) 100%); backdrop-filter: blur(20px); border: 1px solid rgba(168, 85, 247, 0.15); box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4); }
+        .gradient-bg { background: linear-gradient(135deg, #0a0a0f 0%, #1a0a2e 50%, #0a0a0f 100%); }
+        .gradient-purple { background: linear-gradient(135deg, #7c3aed 0%, #a855f7 50%, #c084fc 100%); }
+        .input-focus:focus { box-shadow: 0 0 0 3px rgba(168, 85, 247, 0.3), 0 0 20px rgba(168, 85, 247, 0.2); }
+    </style>
+</head>
+<body class="gradient-bg flex items-center justify-center min-h-screen p-4">
+    <div class="w-full max-w-2xl glass-card rounded-xl overflow-hidden border border-dark-border">
+        <div class="glass px-6 py-5 text-center border-b border-dark-border">
+            <div class="w-16 h-16 rounded-2xl gradient-purple flex items-center justify-center mx-auto mb-3 shadow-glow">
+                <i data-lucide="users-plus" class="w-8 h-8 text-white"></i>
+            </div>
+            <h1 class="text-2xl font-bold text-white tracking-wider">新增代理商</h1>
+            <p class="text-gray-500 mt-1 text-sm">建立新的代理商帳戶</p>
+        </div>
+        <div class="p-8 space-y-5">
+            <div class="grid grid-cols-2 gap-4">
+                <div>
+                    <label class="block text-sm font-medium text-gray-400 mb-2">代理商代碼 *</label>
+                    <input type="text" placeholder="AG-001" class="w-full px-4 py-2.5 bg-dark-bg border border-dark-border rounded-lg text-white font-mono focus:outline-none input-focus">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-400 mb-2">代理商名稱 *</label>
+                    <input type="text" placeholder="XX 娛樂" class="w-full px-4 py-2.5 bg-dark-bg border border-dark-border rounded-lg text-white focus:outline-none input-focus">
+                </div>
+            </div>
+            <div>
+                <label class="block text-sm font-medium text-gray-400 mb-2">上級代理商</label>
+                <select class="w-full px-4 py-2.5 bg-dark-bg border border-dark-border rounded-lg text-white focus:outline-none input-focus">
+                    <option value="">無（總代理商）</option>
+                    <option>總代理商 A</option>
+                    <option>代理商 B</option>
+                </select>
+            </div>
+            <div class="grid grid-cols-2 gap-4">
+                <div>
+                    <label class="block text-sm font-medium text-gray-400 mb-2">聯絡人 *</label>
+                    <input type="text" placeholder="王小明" class="w-full px-4 py-2.5 bg-dark-bg border border-dark-border rounded-lg text-white focus:outline-none input-focus">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-400 mb-2">聯絡電話 *</label>
+                    <input type="text" placeholder="+886 912 345 678" class="w-full px-4 py-2.5 bg-dark-bg border border-dark-border rounded-lg text-white font-mono focus:outline-none input-focus">
+                </div>
+            </div>
+            <div>
+                <label class="block text-sm font-medium text-gray-400 mb-2">電子郵件 *</label>
+                <input type="email" placeholder="agent@example.com" class="w-full px-4 py-2.5 bg-dark-bg border border-dark-border rounded-lg text-white focus:outline-none input-focus">
+            </div>
+            <div>
+                <label class="block text-sm font-medium text-gray-400 mb-2">抽成比例 *</label>
+                <div class="flex items-center space-x-4">
+                    <input type="range" min="0" max="100" value="30" class="flex-1 h-2 bg-dark-bg rounded-lg appearance-none cursor-pointer">
+                    <span class="text-xl font-bold text-purple-400 font-mono w-16 text-right">30%</span>
+                </div>
+            </div>
+            <div>
+                <label class="block text-sm font-medium text-gray-400 mb-2">帳號狀態</label>
+                <div class="flex items-center">
+                    <label class="relative inline-flex items-center cursor-pointer">
+                        <input type="checkbox" checked class="sr-only peer">
+                        <div class="w-11 h-6 bg-dark-bg peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-purple-600"></div>
+                        <span class="ml-3 text-sm text-gray-300">啟用帳號</span>
+                    </label>
+                </div>
+            </div>
+        </div>
+        <div class="glass px-8 py-4 border-t border-dark-border flex justify-end space-x-4">
+            <a href="mockup_std_agent_list.html" class="px-6 py-2 glass border border-dark-border text-gray-400 rounded-lg font-medium hover:text-white">取消</a>
+            <button class="px-6 py-2 gradient-purple text-white rounded-lg font-medium shadow-glow-sm hover:opacity-90 flex items-center">
+                <i data-lucide="plus" class="w-4 h-4 mr-2"></i>建立代理商
+            </button>
+        </div>
+    </div>
+    <script> lucide.createIcons(); </script>
+</body>
+</html>
