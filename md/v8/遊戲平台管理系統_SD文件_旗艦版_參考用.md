@@ -1401,6 +1401,101 @@ describe('POST /api/v1/transactions', () => {
 });
 ```
 
+### 16.1.1 遊戲測試功能技術設計
+
+本系統提供遊戲測試功能，允許管理員在正式環境中進行虛擬下注以驗證遊戲邏輯。
+
+#### 功能描述
+
+| 項目 | 說明 |
+| ---- | ---- |
+| **功能名稱** | 遊戲測試 - 虛擬下注 (Game Test) |
+| **適用對象** | 系統管理員、維修人員 |
+| **使用情境** | 現場機台驗證、遊戲邏輯測試 |
+| **API 設計** | 根據遊戲供應商 API 動態設計 |
+
+#### 虛擬下注流程
+
+```
+1. 啟動測試模式
+   ├── 驗證管理員權限
+   ├── 建立測試會話 (Session)
+   └── 記錄測試開始時間
+
+2. 執行虛擬下注
+   ├── 模擬下注請求 (不扣除真實餘額)
+   ├── 記錄虛擬交易紀錄
+   └── 顯示遊戲結果
+
+3. 測試結果記錄
+   ├── 記錄測試日誌
+   ├── 產生測試報告
+   └── 結束測試會話
+```
+
+#### API 端點設計
+
+| API | 方法 | 說明 |
+| ---- | ---- | ---- |
+| `/api/v1/games/:id/test/start` | POST | 啟動遊戲測試模式 |
+| `/api/v1/games/:id/test/bet` | POST | 執行虛擬下注 |
+| `/api/v1/games/:id/test/end` | POST | 結束測試模式 |
+| `/api/v1/games/:id/test/report` | GET | 取得測試報告 |
+
+#### 資料表設計
+
+```sql
+-- 遊戲測試記錄表
+CREATE TABLE game_test_records (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    game_id UUID REFERENCES games(id),
+    machine_id UUID REFERENCES machines(id),
+    tester_id UUID REFERENCES system_users(id),
+    test_session_id VARCHAR(100) NOT NULL,
+    bet_amount DECIMAL(15,2),
+    win_amount DECIMAL(15,2),
+    game_result JSONB,
+    test_status VARCHAR(20) DEFAULT 'in_progress',
+    started_at TIMESTAMP DEFAULT NOW(),
+    ended_at TIMESTAMP,
+    created_at TIMESTAMP DEFAULT NOW()
+);
+```
+
+#### 權限控制
+
+- 僅有 `系統管理員` 和 `維修外包` 角色可以使用遊戲測試功能
+- 測試模式需要在啟動時記錄操作者 ID
+- 測試期間的所有操作都會記錄到稽核日誌
+
+#### 虛擬交易格式
+
+```javascript
+// 虛擬交易請求格式
+const virtualBetRequest = {
+  playerId: "test-player-id",
+  gameId: "game-uuid",
+  amount: 100,
+  isVirtual: true,  // 虛擬下注標記
+  testSessionId: "session-uuid"
+};
+
+// 虛擬交易響應
+const virtualBetResponse = {
+  success: true,
+  data: {
+    betId: "virtual-bet-uuid",
+    isVirtual: true,
+    result: {
+      win: true,
+      winAmount: 150,
+      multiplier: 1.5
+    },
+    testSessionId: "session-uuid"
+  }
+};
+```
+
 ### 16.2 格式與編碼標準化
 
 #### 程式碼區塊

@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>新增遊戲商 - 遊戲平台管理中心</title>
+    <title>新增牌桌 - 遊戲平台管理中心</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
     <script src="https://unpkg.com/lucide@latest"></script>
@@ -29,6 +29,7 @@
         body { font-family: 'Noto Sans TC', sans-serif; background: #0a0a0f; }
         .glass { background: rgba(18, 18, 26, 0.7); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border: 1px solid rgba(255, 255, 255, 0.08); }
         .glass-card { background: linear-gradient(135deg, rgba(18, 18, 26, 0.9) 0%, rgba(30, 30, 46, 0.6) 100%); backdrop-filter: blur(20px); border: 1px solid rgba(168, 85, 247, 0.15); box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4); }
+        .glass-card:hover { border-color: rgba(168, 85, 247, 0.4); box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4), 0 0 30px rgba(168, 85, 247, 0.2); }
         .gradient-bg { background: linear-gradient(135deg, #0a0a0f 0%, #1a0a2e 50%, #0a0a0f 100%); }
         .gradient-purple { background: linear-gradient(135deg, #7c3aed 0%, #a855f7 50%, #c084fc 100%); }
         .sidebar-link { position: relative; transition: all 0.3s ease; }
@@ -36,7 +37,6 @@
         .sidebar-link:hover::before, .sidebar-link.active::before { height: 60%; }
         .sidebar-link.active { background: linear-gradient(90deg, rgba(124, 58, 237, 0.2), transparent); }
         .input-focus:focus { box-shadow: 0 0 0 3px rgba(168, 85, 247, 0.3), 0 0 20px rgba(168, 85, 247, 0.2); }
-        .badge-local { background: #10b981; color: white; font-size: 10px; padding: 2px 6px; border-radius: 4px; }
     </style>
 </head>
 <body class="gradient-bg min-h-screen flex">
@@ -53,8 +53,8 @@
             <a href="mockup_mvp_data_list.html" class="sidebar-link flex items-center px-3 py-2.5 text-gray-300 hover:text-white rounded-lg"><i data-lucide="gamepad-2" class="w-5 h-5 mr-3"></i><span>遊戲管理</span></a>
             <a href="mockup_mvp_player_list.html" class="sidebar-link flex items-center px-3 py-2.5 text-gray-300 hover:text-white rounded-lg"><i data-lucide="users" class="w-5 h-5 mr-3"></i><span>玩家管理</span></a>
             <a href="mockup_std_wallet.html" class="sidebar-link flex items-center px-3 py-2.5 text-gray-300 hover:text-white rounded-lg"><i data-lucide="wallet" class="w-5 h-5 mr-3"></i><span>錢包交易</span></a>
-            <a href="mockup_std_provider_list.html" class="sidebar-link active flex items-center px-3 py-2.5 text-gray-300 hover:text-white rounded-lg"><i data-lucide="plug" class="w-5 h-5 mr-3"></i><span>串接遊戲商</span></a>
-            <a href="mockup_std_multiplayer.html" class="sidebar-link flex items-center px-3 py-2.5 text-gray-300 hover:text-white rounded-lg"><i data-lucide="users" class="w-5 h-5 mr-3"></i><span>多人遊戲</span></a>
+            <a href="mockup_std_provider_list.html" class="sidebar-link flex items-center px-3 py-2.5 text-gray-300 hover:text-white rounded-lg"><i data-lucide="plug" class="w-5 h-5 mr-3"></i><span>串接遊戲商</span></a>
+            <a href="mockup_std_multiplayer.html" class="sidebar-link active flex items-center px-3 py-2.5 text-gray-300 hover:text-white rounded-lg"><i data-lucide="users" class="w-5 h-5 mr-3"></i><span>多人遊戲</span></a>
             <a href="mockup_user_permission.html" class="sidebar-link flex items-center px-3 py-2.5 text-gray-300 hover:text-white rounded-lg"><i data-lucide="shield-user" class="w-5 h-5 mr-3"></i><span>使用者權限</span></a>
             <a href="mockup_flg_ota.html" class="sidebar-link flex items-center px-3 py-2.5 text-gray-300 hover:text-white rounded-lg"><i data-lucide="download" class="w-5 h-5 mr-3"></i><span>版本更新 OTA</span></a>
             <a href="mockup_flg_monitor.html" class="sidebar-link flex items-center px-3 py-2.5 text-gray-300 hover:text-white rounded-lg"><i data-lucide="activity" class="w-5 h-5 mr-3"></i><span>監控中心</span></a>
@@ -73,67 +73,86 @@
                 <div class="glass-card rounded-2xl p-8">
                     <div class="text-center mb-8">
                         <div class="w-16 h-16 mx-auto rounded-2xl gradient-purple flex items-center justify-center mb-4">
-                            <i data-lucide="plug" class="w-8 h-8 text-white"></i>
+                            <i data-lucide="layout-grid" class="w-8 h-8 text-white"></i>
                         </div>
-                        <h1 class="text-2xl font-bold text-white">新增遊戲商</h1>
-                        <p class="text-gray-400 mt-2">串接新的遊戲供應商</p>
+                        <h1 class="text-2xl font-bold text-white">新增牌桌</h1>
+                        <p class="text-gray-400 mt-2">建立新的多人遊戲牌桌</p>
                     </div>
                     <form class="space-y-6">
                         <div class="grid grid-cols-2 gap-4">
                             <div>
-                                <label class="block text-sm font-medium text-gray-300 mb-2">遊戲商代碼 *</label>
-                                <input type="text" placeholder="PG_SOFT" class="w-full bg-dark-bg border border-dark-border rounded-lg px-4 py-3 text-white font-mono placeholder-gray-500 focus:outline-none input-focus">
+                                <label class="block text-sm font-medium text-gray-300 mb-2">牌桌編號 *</label>
+                                <input type="text" placeholder="例如: TABLE-001" class="w-full bg-dark-bg border border-dark-border rounded-lg px-4 py-3 text-white placeholder-gray-500 focus:outline-none input-focus">
                             </div>
                             <div>
-                                <label class="block text-sm font-medium text-gray-300 mb-2">遊戲商名稱 *</label>
-                                <input type="text" placeholder="PG 電子" class="w-full bg-dark-bg border border-dark-border rounded-lg px-4 py-3 text-white placeholder-gray-500 focus:outline-none input-focus">
+                                <label class="block text-sm font-medium text-gray-300 mb-2">遊戲類型 *</label>
+                                <select class="w-full bg-dark-bg border border-dark-border rounded-lg px-4 py-3 text-white focus:outline-none input-focus">
+                                    <option>選擇遊戲類型...</option>
+                                    <option>百家樂</option>
+                                    <option>21點</option>
+                                    <option>德州撲克</option>
+                                    <option>龍虎鬥</option>
+                                    <option>骰寶</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="grid grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-300 mb-2">遊戲商 *</label>
+                                <select class="w-full bg-dark-bg border border-dark-border rounded-lg px-4 py-3 text-white focus:outline-none input-focus">
+                                    <option>選擇遊戲商...</option>
+                                    <option>ProSlot Inc.</option>
+                                    <option>LiveCasino Co.</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-300 mb-2">牌桌名稱</label>
+                                <input type="text" placeholder="例如: VIP 百家樂 1" class="w-full bg-dark-bg border border-dark-border rounded-lg px-4 py-3 text-white placeholder-gray-500 focus:outline-none input-focus">
+                            </div>
+                        </div>
+                        <div class="grid grid-cols-3 gap-4">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-300 mb-2">最低限注</label>
+                                <input type="number" placeholder="100" class="w-full bg-dark-bg border border-dark-border rounded-lg px-4 py-3 text-white placeholder-gray-500 focus:outline-none input-focus">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-300 mb-2">最高限注</label>
+                                <input type="number" placeholder="10000" class="w-full bg-dark-bg border border-dark-border rounded-lg px-4 py-3 text-white placeholder-gray-500 focus:outline-none input-focus">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-300 mb-2">單局上限</label>
+                                <input type="number" placeholder="50000" class="w-full bg-dark-bg border border-dark-border rounded-lg px-4 py-3 text-white placeholder-gray-500 focus:outline-none input-focus">
+                            </div>
+                        </div>
+                        <div class="grid grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-300 mb-2">莊家抽水 (%)</label>
+                                <input type="number" placeholder="2.5" step="0.1" class="w-full bg-dark-bg border border-dark-border rounded-lg px-4 py-3 text-white placeholder-gray-500 focus:outline-none input-focus">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-300 mb-2">最大玩家數</label>
+                                <select class="w-full bg-dark-bg border border-dark-border rounded-lg px-4 py-3 text-white focus:outline-none input-focus">
+                                    <option>6 人</option>
+                                    <option>8 人</option>
+                                    <option>9 人</option>
+                                </select>
                             </div>
                         </div>
                         <div>
-                            <label class="block text-sm font-medium text-gray-300 mb-2">遊戲類型 *</label>
-                            <div class="flex flex-wrap gap-4">
-                                <label class="flex items-center space-x-2 cursor-pointer">
-                                    <input type="checkbox" checked class="w-4 h-4 rounded bg-dark-bg border-dark-border text-purple-600">
-                                    <span class="text-gray-300">老虎機</span>
-                                </label>
-                                <label class="flex items-center space-x-2 cursor-pointer">
-                                    <input type="checkbox" class="w-4 h-4 rounded bg-dark-bg border-dark-border text-purple-600">
-                                    <span class="text-gray-300">捕魚機</span>
-                                </label>
-                                <label class="flex items-center space-x-2 cursor-pointer">
-                                    <input type="checkbox" class="w-4 h-4 rounded bg-dark-bg border-dark-border text-purple-600">
-                                    <span class="text-gray-300">棋牌</span>
-                                </label>
-                                <label class="flex items-center space-x-2 cursor-pointer">
-                                    <input type="checkbox" class="w-4 h-4 rounded bg-dark-bg border-dark-border text-purple-600">
-                                    <span class="text-gray-300">彩票</span>
-                                </label>
-                                <label class="flex items-center space-x-2 cursor-pointer">
-                                    <input type="checkbox" class="w-4 h-4 rounded bg-dark-bg border-dark-border text-purple-600">
-                                    <span class="text-gray-300">真人</span>
-                                </label>
-                            </div>
+                            <label class="block text-sm font-medium text-gray-300 mb-2">牌桌備註</label>
+                            <textarea rows="3" placeholder="選填備註說明..." class="w-full bg-dark-bg border border-dark-border rounded-lg px-4 py-3 text-white placeholder-gray-500 focus:outline-none input-focus"></textarea>
                         </div>
                         <div>
-                            <label class="block text-sm font-medium text-gray-300 mb-2">API 網址 *</label>
-                            <input type="url" placeholder="https://api.pgsoft.com/v1" class="w-full bg-dark-bg border border-dark-border rounded-lg px-4 py-3 text-white font-mono placeholder-gray-500 focus:outline-none input-focus">
-                        </div>
-                        <div>
-                            <label class="block text-sm font-medium text-gray-300 mb-2">API 金鑰 *</label>
-                            <input type="password" placeholder="••••••••••••••••" class="w-full bg-dark-bg border border-dark-border rounded-lg px-4 py-3 text-white font-mono placeholder-gray-500 focus:outline-none input-focus">
-                        </div>
-                        <div>
-                            <label class="block text-sm font-medium text-gray-300 mb-2">清算帳戶</label>
-                            <input type="text" placeholder="ACC-20240201" class="w-full bg-dark-bg border border-dark-border rounded-lg px-4 py-3 text-white font-mono placeholder-gray-500 focus:outline-none input-focus">
-                        </div>
-                        <div>
-                            <label class="block text-sm font-medium text-gray-300 mb-2">備註</label>
-                            <textarea rows="2" placeholder="選填備註說明..." class="w-full bg-dark-bg border border-dark-border rounded-lg px-4 py-3 text-white placeholder-gray-500 focus:outline-none input-focus"></textarea>
+                            <label class="block text-sm font-medium text-gray-300 mb-2">牌桌狀態</label>
+                            <label class="flex items-center space-x-3 cursor-pointer">
+                                <input type="checkbox" checked class="w-5 h-5 rounded bg-dark-bg border-dark-border text-purple-600 focus:ring-purple-500">
+                                <span class="text-gray-300">立即啟用</span>
+                            </label>
                         </div>
                         <div class="flex justify-end space-x-4 pt-4 border-t border-dark-border">
-                            <a href="mockup_std_provider_list.html" class="px-6 py-3 glass border border-dark-border text-gray-400 rounded-lg font-medium hover:text-white">取消</a>
+                            <a href="mockup_std_multiplayer.html" class="px-6 py-3 glass border border-dark-border text-gray-400 rounded-lg font-medium hover:text-white">取消</a>
                             <button type="button" class="px-6 py-3 gradient-purple text-white rounded-lg font-medium shadow-glow-sm hover:opacity-90 flex items-center">
-                                <i data-lucide="plus" class="w-4 h-4 mr-2"></i>新增遊戲商
+                                <i data-lucide="plus" class="w-4 h-4 mr-2"></i>建立牌桌
                             </button>
                         </div>
                     </form>

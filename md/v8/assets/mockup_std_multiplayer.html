@@ -36,6 +36,9 @@
         .sidebar-link.active { background: linear-gradient(90deg, rgba(124, 58, 237, 0.2), transparent); }
         .table-row-hover:hover { background: linear-gradient(90deg, rgba(124, 58, 237, 0.1), transparent); }
         .input-focus:focus { box-shadow: 0 0 0 3px rgba(168, 85, 247, 0.3), 0 0 20px rgba(168, 85, 247, 0.2); }
+        .gradient-bg { background: linear-gradient(135deg, #0a0a0f 0%, #1a0a2e 50%, #0a0a0f 100%); }
+        .gradient-purple { background: linear-gradient(135deg, #7c3aed 0%, #a855f7 50%, #c084fc 100%); }
+        .badge-local { background: #10b981; color: white; font-size: 10px; padding: 2px 6px; border-radius: 4px; }
     </style>
 </head>
 <body class="gradient-bg min-h-screen flex">
@@ -69,9 +72,9 @@
     <main class="flex-1 flex flex-col overflow-hidden">
         <header class="h-16 glass border-b border-dark-border flex items-center justify-between px-6">
             <h2 class="text-lg font-semibold text-white">多人遊戲管理</h2>
-            <button class="px-4 py-2 gradient-purple rounded-lg text-sm text-white font-medium shadow-glow-sm">
-                <i data-lucide="plus" class="w-4 h-4 inline mr-2"></i>新增牌桌
-            </button>
+            <a href="mockup_std_multiplayer_add.html" class="px-4 py-2 gradient-purple rounded-lg text-sm text-white font-medium shadow-glow-sm">
+                <i data-lucide="plus" class="w-4 h-4 mr-2"></i>新增牌桌
+            </a>
         </header>
         <div class="flex-1 overflow-y-auto p-6">
             <div class="grid grid-cols-4 gap-4 mb-6">
