@@ -55,7 +55,6 @@
             <a href="mockup_mvp_player_list.html" class="sidebar-link flex items-center px-3 py-2.5 text-gray-300 hover:text-white rounded-lg"><i data-lucide="users" class="w-5 h-5 mr-3"></i><span>玩家管理</span></a>
             <a href="mockup_mvp_data_list.html" class="sidebar-link flex items-center px-3 py-2.5 text-gray-300 hover:text-white rounded-lg"><i data-lucide="receipt" class="w-5 h-5 mr-3"></i><span>交易紀錄</span></a>
             <a href="mockup_std_provider_list.html" class="sidebar-link flex items-center px-3 py-2.5 text-gray-300 hover:text-white rounded-lg"><i data-lucide="building-2" class="w-5 h-5 mr-3"></i><span>遊戲商管理</span></a>
-            <a href="mockup_std_agent_list.html" class="sidebar-link flex items-center px-3 py-2.5 text-gray-300 hover:text-white rounded-lg"><i data-lucide="user-check" class="w-5 h-5 mr-3"></i><span>代理商管理</span></a>
             <a href="mockup_std_wallet.html" class="sidebar-link flex items-center px-3 py-2.5 text-gray-300 hover:text-white rounded-lg"><i data-lucide="wallet" class="w-5 h-5 mr-3"></i><span>錢包管理</span></a>
             <a href="mockup_std_multiplayer.html" class="sidebar-link flex items-center px-3 py-2.5 text-gray-300 hover:text-white rounded-lg"><i data-lucide="users" class="w-5 h-5 mr-3"></i><span>多人遊戲</span></a>
             <a href="mockup_user_permission.html" class="sidebar-link active flex items-center px-3 py-2.5 text-gray-300 hover:text-white rounded-lg"><i data-lucide="shield-user" class="w-5 h-5 mr-3"></i><span>使用者權限</span></a>
@@ -108,7 +107,6 @@
                 </div>
                 <div class="glass-card rounded-2xl p-5">
                     <div class="flex items-center justify-between">
-                        <div><p class="text-sm text-gray-400">代理商</p><p class="text-2xl font-bold text-white mt-1">8</p></div>
                         <div class="p-2.5 rounded-xl bg-cyan-500/20"><i data-lucide="user-check" class="w-5 h-5 text-cyan-400"></i></div>
                     </div>
                 </div>
@@ -124,7 +122,6 @@
                     <select id="roleFilter" class="bg-dark-bg border border-dark-border rounded-lg py-2 px-4 text-sm text-white focus:outline-none input-focus">
                         <option value="">所有角色</option>
                         <option value="admin">管理員</option>
-                        <option value="agent">代理商</option>
                         <option value="viewer">檢視者</option>
                     </select>
                     <select id="statusFilter" class="bg-dark-bg border border-dark-border rounded-lg py-2 px-4 text-sm text-white focus:outline-none input-focus">
@@ -147,7 +144,6 @@
                             <th class="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase cursor-pointer hover:text-white" onclick="sortTable('role')">
                                 <span class="flex items-center">角色 <i data-lucide="chevrons-up-down" class="w-4 h-4 ml-1"></i></span>
                             </th>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">所屬代理商</th>
                             <th class="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase cursor-pointer hover:text-white" onclick="sortTable('status')">
                                 <span class="flex items-center">狀態 <i data-lucide="chevrons-up-down" class="w-4 h-4 ml-1"></i></span>
                             </th>
@@ -196,17 +192,12 @@
                     <label class="block text-sm text-gray-400 mb-2">角色</label>
                     <select name="role" required class="w-full bg-dark-bg border border-dark-border rounded-lg py-2 px-4 text-white focus:outline-none input-focus">
                         <option value="viewer">檢視者</option>
-                        <option value="agent">代理商</option>
                         <option value="admin">管理員</option>
                     </select>
                 </div>
                 <div>
-                    <label class="block text-sm text-gray-400 mb-2">所屬代理商</label>
                     <select name="agentId" class="w-full bg-dark-bg border border-dark-border rounded-lg py-2 px-4 text-white focus:outline-none input-focus">
                         <option value="">無</option>
-                        <option value="1">代理商 A</option>
-                        <option value="2">代理商 B</option>
-                        <option value="3">代理商 C</option>
                     </select>
                 </div>
                 <div class="flex items-center">
@@ -239,12 +230,6 @@
         const users = [
             { id: 1, username: 'admin001', name: '系統管理員', role: 'admin', agent: '-', status: 'active', lastLogin: '2024-01-15 09:30' },
             { id: 2, username: 'admin002', name: '營運主管', role: 'admin', agent: '-', status: 'active', lastLogin: '2024-01-15 08:45' },
-            { id: 3, username: 'agent001', name: '張大同', role: 'agent', agent: '代理商 A', status: 'active', lastLogin: '2024-01-14 16:20' },
-            { id: 4, username: 'agent002', name: '王小明', role: 'agent', agent: '代理商 B', status: 'active', lastLogin: '2024-01-14 14:10' },
-            { id: 5, username: 'viewer001', name: '李統計', role: 'viewer', agent: '代理商 A', status: 'active', lastLogin: '2024-01-13 11:00' },
-            { id: 6, username: 'viewer002', name: '陳報表', role: 'viewer', agent: '代理商 B', status: 'inactive', lastLogin: '2024-01-10 09:00' },
-            { id: 7, username: 'agent003', name: '林老闆', role: 'agent', agent: '代理商 C', status: 'active', lastLogin: '2024-01-15 10:00' },
-            { id: 8, username: 'viewer003', name: '黃專員', role: 'viewer', agent: '代理商 C', status: 'active', lastLogin: '2024-01-12 15:30' },
         ];
 
         const permissions = [
@@ -254,7 +239,6 @@
             { id: 'player', name: '玩家管理', category: '系統' },
             { id: 'transaction', name: '交易紀錄', category: '系統' },
             { id: 'provider', name: '遊戲商管理', category: '系統' },
-            { id: 'agent', name: '代理商管理', category: '系統' },
             { id: 'wallet', name: '錢包管理', category: '系統' },
             { id: 'reports', name: '報表', category: '系統' },
             { id: 'backup', name: '備份', category: '系統' },
@@ -301,7 +285,6 @@
                     </td>
                     <td class="px-6 py-4 whitespace-nowrap text-gray-300">${user.name}</td>
                     <td class="px-6 py-4 whitespace-nowrap">
-                        <span class="px-2 py-1 rounded-full text-xs font-medium ${user.role === 'admin' ? 'bg-red-500/20 text-red-400' : user.role === 'agent' ? 'bg-cyan-500/20 text-cyan-400' : 'bg-gray-500/20 text-gray-400'}">${user.role === 'admin' ? '管理員' : user.role === 'agent' ? '代理商' : '檢視者'}</span>
                     </td>
                     <td class="px-6 py-4 whitespace-nowrap text-gray-300">${user.agent}</td>
                     <td class="px-6 py-4 whitespace-nowrap">
