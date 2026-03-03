@@ -2,10 +2,9 @@
 <html lang="zh-TW">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>本地後台 - 遊戲平台管理中心</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
     <script src="https://unpkg.com/lucide@latest"></script>
     <script>
@@ -15,7 +14,7 @@
                     colors: {
                         cyber: { 50: '#f5f3ff', 100: '#ede9fe', 200: '#ddd6fe', 300: '#c4b5fd', 400: '#a78bfa', 500: '#8b5cf6', 600: '#7c3aed', 700: '#6d28d9', 800: '#5b21b6', 900: '#4c1d95', 950: '#2e1065' },
                         dark: { bg: '#0a0a0f', card: '#12121a', sidebar: '#0d0d14', border: '#1e1e2e', hover: '#1a1a28' },
-                        local: { 500: '#10b981', 600: '#059669' }
+                        local: { 50: '#ecfdf5', 100: '#d1fae5', 200: '#a7f3d0', 300: '#6ee7b7', 400: '#34d399', 500: '#10b981', 600: '#059669', 700: '#047857', 800: '#065f46', 900: '#064e3b' }
                     },
                     fontFamily: { sans: ['"Noto Sans TC"', 'sans-serif'], mono: ['"JetBrains Mono"', 'monospace'] },
                     boxShadow: { glow: '0 0 30px rgba(16, 185, 129, 0.3)', 'glow-sm': '0 0 15px rgba(16, 185, 129, 0.2)' }
@@ -24,290 +23,316 @@
         }
     </script>
     <style>
-        * { scrollbar-width: thin; scrollbar-color: #059669 #0a0a0f; }
-        *::-webkit-scrollbar { width: 8px; height: 8px; }
+        * { scrollbar-width: thin; scrollbar-color: #059669 #0a0a0f; -webkit-tap-highlight-color: transparent; }
+        *::-webkit-scrollbar { width: 4px; height: 4px; }
         *::-webkit-scrollbar-track { background: #0a0a0f; }
         *::-webkit-scrollbar-thumb { background: linear-gradient(180deg, #10b981, #34d399); border-radius: 4px; }
-        body { font-family: 'Noto Sans TC', sans-serif; background: #0a0a0f; }
-        .glass { background: rgba(18, 18, 26, 0.7); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border: 1px solid rgba(255, 255, 255, 0.08); }
-        .glass-card { background: linear-gradient(135deg, rgba(18, 18, 26, 0.9) 0%, rgba(30, 30, 46, 0.6) 100%); backdrop-filter: blur(20px); border: 1px solid rgba(16, 185, 129, 0.15); box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4); }
-        .glass-card:hover { border-color: rgba(16, 185, 129, 0.4); box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4), 0 0 30px rgba(16, 185, 129, 0.2); }
-        .gradient-bg { background: linear-gradient(135deg, #0a0a0f 0%, #0a1a14 50%, #0a0a0f 100%); }
+        body { font-family: 'Noto Sans TC', sans-serif; background: #0a0a0f; touch-action: manipulation; }
+        .glass { background: rgba(18, 18, 26, 0.9); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border: 1px solid rgba(255, 255, 255, 0.08); }
+        .glass-card { background: linear-gradient(135deg, rgba(18, 18, 26, 0.95) 0%, rgba(30, 30, 46, 0.7) 100%); backdrop-filter: blur(20px); border: 1px solid rgba(16, 185, 129, 0.2); box-shadow: 0 4px 24px rgba(0, 0, 0, 0.5); }
+        .glass-card:active { transform: scale(0.98); border-color: rgba(16, 185, 129, 0.5); }
+        .gradient-bg { background: linear-gradient(180deg, #0a0a0f 0%, #0a1a14 50%, #0a0a0f 100%); }
         .gradient-local { background: linear-gradient(135deg, #10b981 0%, #34d399 50%, #6ee7b7 100%); }
-        .sidebar-link { position: relative; transition: all 0.3s ease; }
-        .sidebar-link::before { content: ''; position: absolute; left: 0; top: 50%; transform: translateY(-50%); width: 3px; height: 0; background: linear-gradient(180deg, #10b981, #34d399); border-radius: 0 2px 2px 0; transition: height 0.3s ease; }
-        .sidebar-link:hover::before, .sidebar-link.active::before { height: 60%; }
-        .sidebar-link.active { background: linear-gradient(90deg, rgba(16, 185, 129, 0.2), transparent); }
-        .table-row-hover:hover { background: linear-gradient(90deg, rgba(16, 185, 129, 0.1), transparent); }
+        .btn-touch { min-height: 56px; min-width: 56px; touch-action: manipulation; }
+        .btn-touch:active { transform: scale(0.95); opacity: 0.9; }
+        .badge-local { background: #10b981; color: white; font-size: 10px; padding: 2px 8px; border-radius: 4px; font-weight: 500; }
+        .badge-central { background: #8b5cf6; color: white; font-size: 10px; padding: 2px 8px; border-radius: 4px; font-weight: 500; }
         .input-focus:focus { box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.3), 0 0 20px rgba(16, 185, 129, 0.2); }
-        .badge-local { background: #10b981; color: white; font-size: 10px; padding: 2px 6px; border-radius: 4px; }
-        .badge-central { background: #8b5cf6; color: white; font-size: 10px; padding: 2px 6px; border-radius: 4px; }
+        .menu-slide { transform: translateX(-100%); transition: transform 0.3s ease; }
+        .menu-slide.active { transform: translateX(0); }
+        .overlay { opacity: 0; visibility: hidden; transition: opacity 0.3s ease; }
+        .overlay.active { opacity: 1; visibility: visible; }
+        @keyframes pulse-glow { 0%, 100% { box-shadow: 0 0 15px rgba(16, 185, 129, 0.3); } 50% { box-shadow: 0 0 25px rgba(16, 185, 129, 0.5); } }
+        .status-online { animation: pulse-glow 2s infinite; }
     </style>
 </head>
-<body class="gradient-bg min-h-screen flex">
-    <aside class="w-64 bg-dark-sidebar border-r border-dark-border flex flex-col">
+<body class="gradient-bg min-h-screen pb-24">
+    <!-- 漢堡選單遮罩 -->
+    <div id="overlay" class="overlay fixed inset-0 bg-black/60 z-40" onclick="toggleMenu()"></div>
+
+    <!-- 側邊選單 -->
+    <aside id="sidebar" class="menu-slide fixed left-0 top-0 bottom-0 w-72 bg-dark-sidebar border-r border-dark-border z-50 flex flex-col">
         <div class="h-16 flex items-center px-4 border-b border-dark-border">
-            <div class="w-10 h-10 rounded-xl gradient-local flex items-center justify-center shadow-glow-sm mr-3">
+            <div class="w-10 h-10 rounded-xl gradient-local flex items-center justify-center shadow-glow-sm mr-3 flex-shrink-0">
                 <i data-lucide="laptop" class="w-5 h-5 text-white"></i>
             </div>
-            <div><span class="font-bold text-white">本地後台</span><span class="text-xs text-gray-500 block">本地模式</span></div>
+            <div>
+                <span class="font-bold text-white">本地後台</span>
+                <span class="text-xs text-gray-500 block">本地模式</span>
+            </div>
         </div>
         <nav class="flex-1 py-4 px-3 space-y-1 overflow-y-auto">
-            <a href="mockup_local_dashboard.html" class="sidebar-link active flex items-center px-3 py-2.5 text-gray-300 hover:text-white rounded-lg"><i data-lucide="layout-dashboard" class="w-5 h-5 mr-3"></i><span>本地儀表板</span></a>
-            <a href="#" class="sidebar-link flex items-center px-3 py-2.5 text-gray-300 hover:text-white rounded-lg"><i data-lucide="monitor" class="w-5 h-5 mr-3"></i><span>機台狀態</span><span class="badge-local ml-auto">本地</span></a>
-            <a href="#" class="sidebar-link flex items-center px-3 py-2.5 text-gray-300 hover:text-white rounded-lg"><i data-lucide="plus-circle" class="w-5 h-5 mr-3"></i><span>開分/洗分</span><span class="badge-local ml-auto">本地</span></a>
-            <a href="#" class="sidebar-link flex items-center px-3 py-2.5 text-gray-300 hover:text-white rounded-lg"><i data-lucide="refresh-cw" class="w-5 h-5 mr-3"></i><span>同步狀態</span><span class="badge-local ml-auto">本地</span></a>
-            <a href="#" class="sidebar-link flex items-center px-3 py-2.5 text-gray-300 hover:text-white rounded-lg"><i data-lucide="settings" class="w-5 h-5 mr-3"></i><span>本機設定</span><span class="badge-local ml-auto">本地</span></a>
-            <div class="my-3 border-t border-dark-border"></div>
-            <a href="mockup_dashboard.html" class="sidebar-link flex items-center px-3 py-2.5 text-gray-300 hover:text-white rounded-lg"><i data-lucide="cloud" class="w-5 h-5 mr-3"></i><span>返回集中式後台</span><span class="badge-central ml-auto">集中</span></a>
+            <a href="mockup_local_dashboard.html" class="sidebar-link active flex items-center px-4 py-3.5 text-gray-300 hover:text-white rounded-xl touch-manipulation">
+                <i data-lucide="layout-dashboard" class="w-6 h-6 mr-3"></i>
+                <span class="text-base">本地儀表板</span>
+            </a>
+            <a href="#" class="sidebar-link flex items-center px-4 py-3.5 text-gray-300 hover:text-white rounded-xl touch-manipulation">
+                <i data-lucide="monitor" class="w-6 h-6 mr-3"></i>
+                <span class="text-base">機台狀態</span>
+                <span class="badge-local ml-auto">本地</span>
+            </a>
+            <a href="#" class="sidebar-link flex items-center px-4 py-3.5 text-gray-300 hover:text-white rounded-xl touch-manipulation">
+                <i data-lucide="plus-circle" class="w-6 h-6 mr-3"></i>
+                <span class="text-base">開分/洗分</span>
+                <span class="badge-local ml-auto">本地</span>
+            </a>
+            <a href="#" class="sidebar-link flex items-center px-4 py-3.5 text-gray-300 hover:text-white rounded-xl touch-manipulation">
+                <i data-lucide="refresh-cw" class="w-6 h-6 mr-3"></i>
+                <span class="text-base">同步狀態</span>
+                <span class="badge-local ml-auto">本地</span>
+            </a>
+            <a href="#" class="sidebar-link flex items-center px-4 py-3.5 text-gray-300 hover:text-white rounded-xl touch-manipulation">
+                <i data-lucide="settings" class="w-6 h-6 mr-3"></i>
+                <span class="text-base">本機設定</span>
+                <span class="badge-local ml-auto">本地</span>
+            </a>
+            <div class="my-4 border-t border-dark-border"></div>
+            <a href="mockup_dashboard.html" class="sidebar-link flex items-center px-4 py-3.5 text-gray-300 hover:text-white rounded-xl touch-manipulation">
+                <i data-lucide="cloud" class="w-6 h-6 mr-3"></i>
+                <span class="text-base">返回集中式</span>
+                <span class="badge-central ml-auto">集中</span>
+            </a>
         </nav>
         <div class="p-4 border-t border-dark-border">
             <div class="flex items-center justify-between">
                 <div class="flex items-center">
-                    <div class="w-8 h-8 rounded-full gradient-local flex items-center justify-center"><span class="text-sm font-bold text-white">L</span></div>
-                    <div class="ml-3"><p class="text-sm font-medium text-white">單機本地後台</p><p class="text-xs text-gray-500">本地模式</p></div>
+                    <div class="w-10 h-10 rounded-full gradient-local flex items-center justify-center flex-shrink-0">
+                        <span class="text-sm font-bold text-white">L</span>
+                    </div>
+                    <div class="ml-3">
+                        <p class="text-sm font-medium text-white">單機本地後台</p>
+                        <p class="text-xs text-gray-500">本地模式</p>
+                    </div>
                 </div>
-                <a href="mockup_login.html" class="text-gray-400 hover:text-white"><i data-lucide="log-out" class="w-5 h-5"></i></a>
+                <a href="mockup_login.html" class="text-gray-400 hover:text-white p-2 touch-manipulation">
+                    <i data-lucide="log-out" class="w-6 h-6"></i>
+                </a>
             </div>
         </div>
     </aside>
-    <main class="flex-1 flex flex-col overflow-hidden">
-        <header class="h-16 glass border-b border-dark-border flex items-center justify-between px-6">
-            <div class="flex items-center">
-                <h2 class="text-lg font-semibold text-white">本地後台儀表板</h2>
-                <span class="badge-local ml-2">本地</span>
-            </div>
-            <div class="flex items-center space-x-4">
-                <div class="flex items-center text-sm text-emerald-400">
-                    <span class="w-2 h-2 rounded-full bg-emerald-400 mr-2 animate-pulse"></span>
-                    已連線至中央伺服器
+
+    <!-- 主內容區 -->
+    <main class="flex flex-col min-h-screen" id="main-content">
+        <!-- 頂部 Header -->
+        <header class="glass sticky top-0 z-30 border-b border-dark-border">
+            <div class="flex items-center justify-between px-4 py-3">
+                <div class="flex items-center">
+                    <button onclick="toggleMenu()" class="btn-touch p-3 rounded-xl bg-dark-bg/50 text-white mr-3">
+                        <i data-lucide="menu" class="w-7 h-7"></i>
+                    </button>
+                    <div>
+                        <h1 class="text-lg font-bold text-white">本地後台</h1>
+                        <div class="flex items-center text-xs text-emerald-400">
+                            <span class="w-2 h-2 rounded-full bg-emerald-400 mr-1.5 animate-pulse"></span>
+                            已連線
+                        </div>
+                    </div>
                 </div>
-                <button class="relative text-gray-400 hover:text-white"><i data-lucide="bell" class="w-5 h-5"></i><span class="absolute -top-1 -right-1 w-2 h-2 bg-emerald-500 rounded-full"></span></button>
+                <button class="btn-touch p-3 rounded-xl bg-dark-bg/50 text-white relative">
+                    <i data-lucide="bell" class="w-6 h-6"></i>
+                    <span class="absolute top-1 right-1 w-2.5 h-2.5 bg-emerald-500 rounded-full border-2 border-dark-bg"></span>
+                </button>
             </div>
         </header>
-        <div class="flex-1 overflow-y-auto p-6">
-            <!-- 本地特有狀態卡片 -->
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-6">
-                <div class="glass-card stat-card rounded-2xl p-5 cursor-pointer transition-all hover:scale-[1.02]">
-                    <div class="flex justify-between items-start mb-4">
-                        <div><p class="text-sm text-gray-400">本地機台狀態</p><p class="text-2xl font-bold text-white font-mono mt-1">45/50</p></div>
-                        <div class="p-2.5 rounded-xl bg-emerald-500/20"><i data-lucide="monitor" class="w-5 h-5 text-emerald-400"></i></div>
+
+        <!-- 內容區 -->
+        <div class="flex-1 p-4 space-y-4">
+            <!-- 狀態卡片網格 -->
+            <div class="grid grid-cols-2 gap-3">
+                <div class="glass-card rounded-2xl p-4 cursor-pointer btn-touch active:scale-95">
+                    <div class="flex justify-between items-start mb-3">
+                        <div class="p-2 rounded-xl bg-emerald-500/20">
+                            <i data-lucide="monitor" class="w-5 h-5 text-emerald-400"></i>
+                        </div>
+                        <span class="badge-local">本地</span>
                     </div>
-                    <div class="flex items-center text-sm"><span class="text-emerald-400 flex items-center"><i data-lucide="check-circle" class="w-4 h-4 mr-1"></i>90% 在線</span><span class="text-gray-500 ml-2">已同步</span></div>
+                    <p class="text-xs text-gray-400">機台狀態</p>
+                    <p class="text-xl font-bold text-white font-mono mt-1">45/50</p>
+                    <p class="text-xs text-emerald-400 mt-1">90% 在線</p>
                 </div>
-                <div class="glass-card stat-card rounded-2xl p-5 cursor-pointer transition-all hover:scale-[1.02]">
-                    <div class="flex justify-between items-start mb-4">
-                        <div><p class="text-sm text-gray-400">今日本地營收</p><p class="text-2xl font-bold text-white font-mono mt-1">$45,000</p></div>
-                        <div class="p-2.5 rounded-xl bg-emerald-500/20"><i data-lucide="dollar-sign" class="w-5 h-5 text-emerald-400"></i></div>
+                <div class="glass-card rounded-2xl p-4 cursor-pointer btn-touch active:scale-95">
+                    <div class="flex justify-between items-start mb-3">
+                        <div class="p-2 rounded-xl bg-emerald-500/20">
+                            <i data-lucide="dollar-sign" class="w-5 h-5 text-emerald-400"></i>
+                        </div>
                     </div>
-                    <div class="flex items-center text-sm"><span class="text-green-400 flex items-center"><i data-lucide="trending-up" class="w-4 h-4 mr-1"></i>+8.5%</span><span class="text-gray-500 ml-2">較昨日</span></div>
+                    <p class="text-xs text-gray-400">今日營收</p>
+                    <p class="text-xl font-bold text-white font-mono mt-1">$45K</p>
+                    <p class="text-xs text-green-400 mt-1">+8.5%</p>
                 </div>
-                <div class="glass-card stat-card rounded-2xl p-5 cursor-pointer transition-all hover:scale-[1.02]">
-                    <div class="flex justify-between items-start mb-4">
-                        <div><p class="text-sm text-gray-400">本地錢包餘額</p><p class="text-2xl font-bold text-white font-mono mt-1">$128,500</p></div>
-                        <div class="p-2.5 rounded-xl bg-emerald-500/20"><i data-lucide="wallet" class="w-5 h-5 text-emerald-400"></i></div>
+                <div class="glass-card rounded-2xl p-4 cursor-pointer btn-touch active:scale-95">
+                    <div class="flex justify-between items-start mb-3">
+                        <div class="p-2 rounded-xl bg-emerald-500/20">
+                            <i data-lucide="wallet" class="w-5 h-5 text-emerald-400"></i>
+                        </div>
                     </div>
-                    <div class="flex items-center text-sm"><span class="text-emerald-400 flex items-center"><i data-lucide="refresh-cw" class="w-4 h-4 mr-1"></i>即時同步</span><span class="text-gray-500 ml-2">本地快取</span></div>
+                    <p class="text-xs text-gray-400">錢包餘額</p>
+                    <p class="text-xl font-bold text-white font-mono mt-1">$128K</p>
+                    <p class="text-xs text-emerald-400 mt-1">即時同步</p>
                 </div>
-                <div class="glass-card stat-card rounded-2xl p-5 cursor-pointer transition-all hover:scale-[1.02]">
-                    <div class="flex justify-between items-start mb-4">
-                        <div><p class="text-sm text-gray-400">同步狀態</p><p class="text-2xl font-bold text-emerald-400 font-mono mt-1">正常</p></div>
-                        <div class="p-2.5 rounded-xl bg-emerald-500/20"><i data-lucide="cloud" class="w-5 h-5 text-emerald-400"></i></div>
+                <div class="glass-card rounded-2xl p-4 cursor-pointer btn-touch active:scale-95 status-online">
+                    <div class="flex justify-between items-start mb-3">
+                        <div class="p-2 rounded-xl bg-emerald-500/20">
+                            <i data-lucide="cloud" class="w-5 h-5 text-emerald-400"></i>
+                        </div>
                     </div>
-                    <div class="flex items-center text-sm"><span class="text-gray-400">最後同步:</span><span class="text-emerald-400 ml-1">30秒前</span></div>
+                    <p class="text-xs text-gray-400">同步狀態</p>
+                    <p class="text-xl font-bold text-emerald-400 font-mono mt-1">正常</p>
+                    <p class="text-xs text-gray-400 mt-1">30秒前</p>
                 </div>
             </div>
 
-            <!-- 本地操作區域 -->
-            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
-                <!-- 開分/洗分 -->
-                <div class="glass-card rounded-2xl p-5">
-                    <div class="flex justify-between items-center mb-4">
-                        <h3 class="font-semibold text-white flex items-center">
-                            <i data-lucide="plus-circle" class="w-5 h-5 mr-2 text-emerald-400"></i>
-                            開分/洗分 <span class="badge-local ml-2">本地</span>
-                        </h3>
+            <!-- 開分/洗分 - 大按鈕區域 -->
+            <div class="glass-card rounded-2xl p-5">
+                <h3 class="font-semibold text-white flex items-center mb-4">
+                    <i data-lucide="plus-circle" class="w-5 h-5 mr-2 text-emerald-400"></i>
+                    開分/洗分
+                    <span class="badge-local ml-2">本地</span>
+                </h3>
+                <div class="space-y-4">
+                    <select class="w-full px-4 py-4 bg-dark-bg border border-dark-border rounded-xl text-white text-lg input-focus touch-manipulation">
+                        <option>A-001 - 經典拉霸王</option>
+                        <option>A-002 - 幸運水果</option>
+                        <option>A-003 - 黃金礦工</option>
+                    </select>
+                    <div class="grid grid-cols-2 gap-3">
+                        <button class="btn-touch py-5 bg-emerald-500/20 text-emerald-400 rounded-xl font-semibold text-lg flex items-center justify-center active:scale-95">
+                            <i data-lucide="plus" class="w-6 h-6 mr-2"></i>
+                            開分
+                        </button>
+                        <button class="btn-touch py-5 bg-red-500/20 text-red-400 rounded-xl font-semibold text-lg flex items-center justify-center active:scale-95">
+                            <i data-lucide="minus" class="w-6 h-6 mr-2"></i>
+                            洗分
+                        </button>
                     </div>
-                    <div class="space-y-4">
-                        <div>
-                            <label class="block text-sm text-gray-400 mb-2">選擇機台</label>
-                            <select class="w-full px-4 py-2.5 bg-dark-bg border border-dark-border rounded-lg text-white input-focus">
-                                <option>A-001 - 經典拉霸王</option>
-                                <option>A-002 - 幸運水果</option>
-                                <option>A-003 - 黃金礦工</option>
-                            </select>
-                        </div>
-                        <div>
-                            <label class="block text-sm text-gray-400 mb-2">操作類型</label>
-                            <div class="flex space-x-2">
-                                <button class="flex-1 py-2.5 bg-emerald-500/20 text-emerald-400 rounded-lg font-medium hover:bg-emerald-500/30">
-                                    <i data-lucide="plus" class="w-4 h-4 inline mr-1"></i>開分
-                                </button>
-                                <button class="flex-1 py-2.5 bg-red-500/20 text-red-400 rounded-lg font-medium hover:bg-red-500/30">
-                                    <i data-lucide="minus" class="w-4 h-4 inline mr-1"></i>洗分
-                                </button>
+                    <input type="number" placeholder="輸入金額" class="w-full px-4 py-4 bg-dark-bg border border-dark-border rounded-xl text-white text-lg font-mono input-focus touch-manipulation">
+                    <button class="btn-touch w-full py-5 gradient-local text-white rounded-xl font-semibold text-lg flex items-center justify-center active:scale-95">
+                        <i data-lucide="check-circle" class="w-6 h-6 mr-2"></i>
+                        執行操作
+                    </button>
+                </div>
+            </div>
+
+            <!-- 機台狀態列表 -->
+            <div class="glass-card rounded-2xl overflow-hidden">
+                <div class="px-4 py-4 border-b border-dark-border flex justify-between items-center">
+                    <h3 class="font-semibold text-white flex items-center">
+                        <i data-lucide="monitor" class="w-5 h-5 mr-2 text-emerald-400"></i>
+                        機台狀態
+                        <span class="badge-local ml-2">50</span>
+                    </h3>
+                </div>
+                <div class="divide-y divide-dark-border">
+                    <!-- 機台項目 -->
+                    <div class="p-4 flex items-center justify-between active:bg-emerald-500/10">
+                        <div class="flex items-center">
+                            <div class="w-12 h-12 rounded-xl bg-emerald-500/20 flex items-center justify-center mr-3">
+                                <span class="text-emerald-400 font-mono font-bold">A-001</span>
+                            </div>
+                            <div>
+                                <p class="text-white font-medium">經典拉霸王</p>
+                                <p class="text-xs text-gray-400">餘額: $15,000</p>
                             </div>
                         </div>
-                        <div>
-                            <label class="block text-sm text-gray-400 mb-2">金額</label>
-                            <input type="number" placeholder="請輸入金額" class="w-full px-4 py-2.5 bg-dark-bg border border-dark-border rounded-lg text-white input-focus font-mono">
+                        <div class="flex items-center space-x-2">
+                            <span class="px-2 py-1 rounded-full text-xs bg-emerald-500/20 text-emerald-400">營運中</span>
+                            <button class="btn-touch p-2 rounded-lg bg-emerald-500/20 text-emerald-400">
+                                <i data-lucide="plus-circle" class="w-5 h-5"></i>
+                            </button>
                         </div>
-                        <button class="w-full py-2.5 gradient-local text-white rounded-lg font-medium hover:opacity-90">
-                            <i data-lucide="check" class="w-4 h-4 inline mr-2"></i>執行操作
-                        </button>
+                    </div>
+                    <div class="p-4 flex items-center justify-between active:bg-emerald-500/10">
+                        <div class="flex items-center">
+                            <div class="w-12 h-12 rounded-xl bg-emerald-500/20 flex items-center justify-center mr-3">
+                                <span class="text-emerald-400 font-mono font-bold">A-002</span>
+                            </div>
+                            <div>
+                                <p class="text-white font-medium">幸運水果</p>
+                                <p class="text-xs text-gray-400">餘額: $8,500</p>
+                            </div>
+                        </div>
+                        <div class="flex items-center space-x-2">
+                            <span class="px-2 py-1 rounded-full text-xs bg-emerald-500/20 text-emerald-400">營運中</span>
+                            <button class="btn-touch p-2 rounded-lg bg-emerald-500/20 text-emerald-400">
+                                <i data-lucide="plus-circle" class="w-5 h-5"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="p-4 flex items-center justify-between active:bg-emerald-500/10">
+                        <div class="flex items-center">
+                            <div class="w-12 h-12 rounded-xl bg-gray-500/20 flex items-center justify-center mr-3">
+                                <span class="text-gray-400 font-mono font-bold">A-003</span>
+                            </div>
+                            <div>
+                                <p class="text-gray-400 font-medium">離線</p>
+                                <p class="text-xs text-gray-500">維護中</p>
+                            </div>
+                        </div>
+                        <div class="flex items-center space-x-2">
+                            <span class="px-2 py-1 rounded-full text-xs bg-red-500/20 text-red-400">離線</span>
+                            <button class="btn-touch p-2 rounded-lg bg-gray-500/20 text-gray-500" disabled>
+                                <i data-lucide="plus-circle" class="w-5 h-5"></i>
+                            </button>
+                        </div>
                     </div>
                 </div>
-
-                <!-- 同步狀態 -->
-                <div class="glass-card rounded-2xl p-5">
-                    <div class="flex justify-between items-center mb-4">
-                        <h3 class="font-semibold text-white flex items-center">
-                            <i data-lucide="refresh-cw" class="w-5 h-5 mr-2 text-emerald-400"></i>
-                            同步狀態 <span class="badge-local ml-2">本地</span>
-                        </h3>
-                        <button class="text-emerald-400 hover:text-emerald-300"><i data-lucide="rotate-cw" class="w-4 h-4"></i></button>
-                    </div>
-                    <div class="space-y-3">
-                        <div class="flex justify-between items-center p-3 bg-dark-bg/50 rounded-lg">
-                            <span class="text-gray-400 text-sm">中央伺服器</span>
-                            <span class="flex items-center text-emerald-400 text-sm"><span class="w-2 h-2 rounded-full bg-emerald-400 mr-2"></span>已連線</span>
-                        </div>
-                        <div class="flex justify-between items-center p-3 bg-dark-bg/50 rounded-lg">
-                            <span class="text-gray-400 text-sm">錢包餘額</span>
-                            <span class="text-white text-sm font-mono">$128,500</span>
-                        </div>
-                        <div class="flex justify-between items-center p-3 bg-dark-bg/50 rounded-lg">
-                            <span class="text-gray-400 text-sm">機台資料</span>
-                            <span class="text-white text-sm">50/50 同步</span>
-                        </div>
-                        <div class="flex justify-between items-center p-3 bg-dark-bg/50 rounded-lg">
-                            <span class="text-gray-400 text-sm">最後同步時間</span>
-                            <span class="text-emerald-400 text-sm">30秒前</span>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- 本機設定 -->
-                <div class="glass-card rounded-2xl p-5">
-                    <div class="flex justify-between items-center mb-4">
-                        <h3 class="font-semibold text-white flex items-center">
-                            <i data-lucide="settings" class="w-5 h-5 mr-2 text-emerald-400"></i>
-                            本機設定 <span class="badge-local ml-2">本地</span>
-                        </h3>
-                    </div>
-                    <div class="space-y-3">
-                        <div class="flex justify-between items-center">
-                            <span class="text-gray-400 text-sm">本地模式</span>
-                            <span class="px-2 py-1 rounded text-xs bg-emerald-500/20 text-emerald-400">啟用中</span>
-                        </div>
-                        <div class="flex justify-between items-center">
-                            <span class="text-gray-400 text-sm">離線模式</span>
-                            <span class="px-2 py-1 rounded text-xs bg-gray-500/20 text-gray-400">已停用</span>
-                        </div>
-                        <div class="flex justify-between items-center">
-                            <span class="text-gray-400 text-sm">自動同步間隔</span>
-                            <span class="text-white text-sm">30秒</span>
-                        </div>
-                        <div class="flex justify-between items-center">
-                            <span class="text-gray-400 text-sm">本地快取大小</span>
-                            <span class="text-white text-sm">2.4 GB</span>
-                        </div>
-                        <button class="w-full mt-4 py-2.5 border border-emerald-500/30 text-emerald-400 rounded-lg font-medium hover:bg-emerald-500/10">
-                            <i data-lucide="sliders" class="w-4 h-4 inline mr-2"></i>進階設定
-                        </button>
-                    </div>
-                </div>
-            </div>
-
-            <!-- 本地機台列表 -->
-            <div class="glass-card rounded-2xl overflow-hidden">
-                <div class="px-6 py-4 border-b border-dark-border flex justify-between items-center">
-                    <h3 class="font-semibold text-white">本地機台狀態 <span class="badge-local ml-2">本地</span></h3>
-                    <div class="flex items-center space-x-3">
-                        <input type="text" placeholder="搜尋機台..." class="bg-dark-bg border border-dark-border rounded-lg py-2 px-3 text-sm text-white placeholder-gray-500 focus:outline-none input-focus w-48">
-                        <button class="px-3 py-2 glass-card rounded-lg text-sm text-gray-300 hover:text-white"><i data-lucide="filter" class="w-4 h-4 inline mr-1"></i>篩選</button>
-                    </div>
-                </div>
-                <table class="min-w-full">
-                    <thead class="bg-dark-bg">
-                        <tr>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">機台編號</th>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">狀態</th>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">遊戲</th>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">本地餘額</th>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">本地營收</th>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">連線狀態</th>
-                            <th class="px-6 py-3 text-right text-xs font-medium text-gray-400 uppercase">操作</th>
-                        </tr>
-                    </thead>
-                    <tbody class="divide-y divide-dark-border">
-                        <tr class="table-row-hover">
-                            <td class="px-6 py-4 whitespace-nowrap"><div class="flex items-center"><span class="text-white font-mono font-medium">A-001</span><span class="ml-2 px-2 py-0.5 rounded text-xs bg-emerald-500/20 text-emerald-400">本地</span></div></td>
-                            <td class="px-6 py-4 whitespace-nowrap"><span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium bg-emerald-500/20 text-emerald-400"><span class="w-1.5 h-1.5 rounded-full bg-emerald-400 mr-1.5"></span>營運中</span></td>
-                            <td class="px-6 py-4 whitespace-nowrap text-white">經典拉霸王</td>
-                            <td class="px-6 py-4 whitespace-nowrap text-emerald-400 font-mono">$15,000</td>
-                            <td class="px-6 py-4 whitespace-nowrap text-white font-mono">$12,500</td>
-                            <td class="px-6 py-4 whitespace-nowrap"><span class="text-emerald-400 flex items-center text-sm"><i data-lucide="wifi" class="w-4 h-4 mr-1"></i>連線</span></td>
-                            <td class="px-6 py-4 whitespace-nowrap text-right">
-                                <button class="text-emerald-400 hover:text-emerald-300 mx-1"><i data-lucide="plus-circle" class="w-4 h-4"></i></button>
-                                <button class="text-cyan-400 hover:text-cyan-300 mx-1"><i data-lucide="settings" class="w-4 h-4"></i></button>
-                            </td>
-                        </tr>
-                        <tr class="table-row-hover">
-                            <td class="px-6 py-4 whitespace-nowrap"><div class="flex items-center"><span class="text-white font-mono font-medium">A-002</span><span class="ml-2 px-2 py-0.5 rounded text-xs bg-emerald-500/20 text-emerald-400">本地</span></div></td>
-                            <td class="px-6 py-4 whitespace-nowrap"><span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium bg-emerald-500/20 text-emerald-400"><span class="w-1.5 h-1.5 rounded-full bg-emerald-400 mr-1.5"></span>營運中</span></td>
-                            <td class="px-6 py-4 whitespace-nowrap text-white">幸運水果</td>
-                            <td class="px-6 py-4 whitespace-nowrap text-emerald-400 font-mono">$8,500</td>
-                            <td class="px-6 py-4 whitespace-nowrap text-white font-mono">$8,200</td>
-                            <td class="px-6 py-4 whitespace-nowrap"><span class="text-emerald-400 flex items-center text-sm"><i data-lucide="wifi" class="w-4 h-4 mr-1"></i>連線</span></td>
-                            <td class="px-6 py-4 whitespace-nowrap text-right">
-                                <button class="text-emerald-400 hover:text-emerald-300 mx-1"><i data-lucide="plus-circle" class="w-4 h-4"></i></button>
-                                <button class="text-cyan-400 hover:text-cyan-300 mx-1"><i data-lucide="settings" class="w-4 h-4"></i></button>
-                            </td>
-                        </tr>
-                        <tr class="table-row-hover">
-                            <td class="px-6 py-4 whitespace-nowrap"><div class="flex items-center"><span class="text-white font-mono font-medium">A-003</span><span class="ml-2 px-2 py-0.5 rounded text-xs bg-red-500/20 text-red-400">離線</span></div></td>
-                            <td class="px-6 py-4 whitespace-nowrap"><span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium bg-red-500/20 text-red-400"><span class="w-1.5 h-1.5 rounded-full bg-red-400 mr-1.5"></span>離線</span></td>
-                            <td class="px-6 py-4 whitespace-nowrap text-gray-500">-</td>
-                            <td class="px-6 py-4 whitespace-nowrap text-gray-500 font-mono">$0</td>
-                            <td class="px-6 py-4 whitespace-nowrap text-white font-mono">$5,800</td>
-                            <td class="px-6 py-4 whitespace-nowrap"><span class="text-red-400 flex items-center text-sm"><i data-lucide="wifi-off" class="w-4 h-4 mr-1"></i>斷線</span></td>
-                            <td class="px-6 py-4 whitespace-nowrap text-right">
-                                <button class="text-gray-400 mx-1 cursor-not-allowed"><i data-lucide="plus-circle" class="w-4 h-4"></i></button>
-                                <button class="text-cyan-400 hover:text-cyan-300 mx-1"><i data-lucide="settings" class="w-4 h-4"></i></button>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
             </div>
         </div>
     </main>
+
+    <!-- 底部導航欄 -->
+    <nav class="fixed bottom-0 left-0 right-0 glass border-t border-dark-border z-40 pb-safe">
+        <div class="flex justify-around items-center py-2 px-2">
+            <a href="mockup_local_dashboard.html" class="flex flex-col items-center px-4 py-2 text-emerald-400 touch-manipulation">
+                <i data-lucide="layout-dashboard" class="w-7 h-7"></i>
+                <span class="text-xs mt-1">儀表板</span>
+            </a>
+            <a href="#" class="flex flex-col items-center px-4 py-2 text-gray-400 touch-manipulation">
+                <i data-lucide="monitor" class="w-7 h-7"></i>
+                <span class="text-xs mt-1">機台</span>
+            </a>
+            <a href="#" class="flex flex-col items-center px-4 py-2 text-gray-400 touch-manipulation">
+                <i data-lucide="plus-circle" class="w-7 h-7"></i>
+                <span class="text-xs mt-1">開分</span>
+            </a>
+            <a href="#" class="flex flex-col items-center px-4 py-2 text-gray-400 touch-manipulation">
+                <i data-lucide="refresh-cw" class="w-7 h-7"></i>
+                <span class="text-xs mt-1">同步</span>
+            </a>
+            <a href="#" class="flex flex-col items-center px-4 py-2 text-gray-400 touch-manipulation">
+                <i data-lucide="settings" class="w-7 h-7"></i>
+                <span class="text-xs mt-1">設定</span>
+            </a>
+        </div>
+    </nav>
+
     <script>
         lucide.createIcons();
-        
-        // 本地營收圖表
-        const ctxRev = document.getElementById('localRevenueChart').getContext('2d');
-        new Chart(ctxRev, {
-            type: 'bar',
-            data: {
-                labels: ['08:00', '10:00', '12:00', '14:00', '16:00', '18:00', '20:00'],
-                datasets: [{
-                    label: '本地營收',
-                    data: [5200, 7800, 9200, 8500, 6100, 4500, 3200],
-                    backgroundColor: 'rgba(16, 185, 129, 0.7)',
-                    borderRadius: 6
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: { legend: { display: false } },
-                scales: {
-                    y: { beginAtZero: true, grid: { color: 'rgba(255,255,255,0.05)' }, ticks: { color: '#6b7280', callback: (v) => (v >= 1000 ? (v/1000) + 'K' : v) } },
-                    x: { grid: { display: false }, ticks: { color: '#6b7280' } }
-                }
-            }
+
+        function toggleMenu() {
+            const sidebar = document.getElementById('sidebar');
+            const overlay = document.getElementById('overlay');
+            const mainContent = document.getElementById('main-content');
+
+            sidebar.classList.toggle('active');
+            overlay.classList.toggle('active');
+            mainContent.classList.toggle('translate-x-72');
+        }
+
+        // 監聽螢幕旋轉
+        window.addEventListener('orientationchange', function() {
+            setTimeout(function() {
+                window.scrollTo(0, 1);
+            }, 100);
         });
+
+        // 防止雙擊縮放
+        document.addEventListener('dblclick', function(event) {
+            event.preventDefault();
+        }, { passive: false });
     </script>
+    <style>
+        .pb-safe { padding-bottom: env(safe-area-inset-bottom, 0); }
+    </style>
 </body>
 </html>
