@@ -1,4 +1,4 @@
-# 遊戲平台管理系統 - 系統設計文件（SD）
+# 遊戲平台管理系統 - 系統設計文件（SD）參考用
 
 > **版本**：v8.0 旗艦版 + C# .NET 8
 > **日期**：2026 年 3 月 2 日
@@ -138,7 +138,6 @@ npm test
 ```
 
 ---
-
 
 ## 2. 技術架構
 
@@ -430,91 +429,7 @@ CREATE INDEX idx_audit_logs_created ON audit_logs(created_at DESC);
 ### 4.4 API 結構總覽
 
 本系統 API 共 **35 個端點**，分為 **11 個群組**。
-
-```mermaid
-graph TB
-    subgraph API["遊戲平台管理系統 API v1"]
-        direction TB
-
-        subgraph Auth["認證 Auth<br/>(4 endpoints)"]
-            A1[POST /auth/login<br/>使用者登入]
-            A2[POST /auth/logout<br/>登出]
-            A3[GET /auth/verify<br/>驗證 Token]
-            A4[POST /auth/refresh<br/>刷新 Token]
-        end
-
-        subgraph Machines["機台管理 Machines<br/>(6 endpoints)"]
-            M1[GET /machines<br/>機台列表]
-            M2[POST /machines<br/>新增機台]
-            M3[GET /machines/{id}<br/>機台詳情]
-            M4[PUT /machines/{id}<br/>更新機台]
-            M5[DELETE /machines/{id}<br/>刪除機台]
-            M6[POST /machines/{id}/command<br/>遠端指令]
-        end
-
-        subgraph Games["遊戲管理 Games<br/>(5 endpoints)"]
-            G1[GET /games<br/>遊戲列表]
-            G2[POST /games<br/>新增遊戲]
-            G3[GET /games/{id}<br/>遊戲詳情]
-            G4[PUT /games/{id}<br/>更新遊戲]
-            G5[DELETE /games/{id}<br/>刪除遊戲]
-        end
-
-        subgraph Players["玩家管理 Players<br/>(3 endpoints)"]
-            P1[GET /players<br/>玩家列表]
-            P2[GET /players/{id}<br/>玩家詳情]
-            P3[PUT /players/{id}/balance<br/>調整餘額]
-        end
-
-        subgraph Transactions["交易管理 Transactions<br/>(2 endpoints)"]
-            T1[GET /transactions<br/>交易列表]
-            T2[POST /transactions/{id}/reverse<br/>沖銷交易]
-        end
-
-        subgraph Providers["遊戲商管理 Providers<br/>(3 endpoints)"]
-            PR1[GET /providers<br/>遊戲商列表]
-            PR2[POST /providers<br/>新增遊戲商]
-            PR3[GET /providers/{id}/balance<br/>查詢餘額]
-        end
-
-        subgraph Agents["代理商管理 Agents<br/>(2 endpoints)"]
-            AG1[GET /agents<br/>代理商列表]
-            AG2[POST /agents<br/>新增代理商]
-        end
-
-        subgraph OTA["OTA 更新 OTA<br/>(3 endpoints)"]
-            O1[GET /ota/versions<br/>版本列表]
-            O2[POST /ota/versions<br/>上傳版本]
-            O3[POST /ota/versions/{id}/publish<br/>發布版本]
-        end
-
-        subgraph Monitor["監控中心 Monitor<br/>(1 endpoint)"]
-            MO1[GET /monitor/system<br/>系統監控]
-        end
-
-        subgraph Discrepancies["錯帳管理 Discrepancies<br/>(2 endpoints)"]
-            D1[GET /discrepancies<br/>錯帳列表]
-            D2[POST /discrepancies/{id}/resolve<br/>處理錯帳]
-        end
-
-        subgraph Sync["同步管理 Sync<br/>(2 endpoints)"]
-            S1[POST /sync/upload<br/>上傳資料]
-            S2[GET /sync/download<br/>下載資料]
-        end
-    end
-
-    style Auth fill:#d3f9d8,stroke:#2f9e44
-    style Machines fill:#e7f5ff,stroke:#1971c2
-    style Games fill:#fff4e6,stroke:#e67700
-    style Players fill:#f3d9fa,stroke:#862e9c
-    style Transactions fill:#ffe3e3,stroke:#c92a2a
-    style Providers fill:#c5f6fa,stroke:#0c8599
-    style Agents fill:#e5dbff,stroke:#5f3dc4
-    style OTA fill:#ffe8cc,stroke:#d9480f
-    style Monitor fill:#f8f9fa,stroke:#868e96
-    style Discrepancies fill:#ffccc7,stroke:#cf1322
-    style Sync fill:#d9f7be,stroke:#389e0d
-```
+請參照 API_v1_openapi.yaml
 
 #### API 端點統計表
 
@@ -656,7 +571,6 @@ const offlineHandler = {
 
 ---
 
-
 ## 6. 安全性設計
 
 ### 6.1 認證與授權
@@ -778,14 +692,14 @@ class TransactionService {
         .where('id', playerId)
         .where('balance', '>=', amount)
         .decrement('balance', amount);
-    
+  
       if (updated === 0) {
         throw new AppError('VAL_002', '餘額不足');
       }
-    
+  
       // 記錄交易
       const tx = await trx('transactions').insert({...});
-    
+  
       return tx;
     });
   }
@@ -829,7 +743,6 @@ const optimisticLock = {
 ```
 
 ---
-
 
 ## 7. 第三方遊戲商串接
 
@@ -906,7 +819,6 @@ const externalApiHandler = {
 ```
 
 ---
-
 
 ## 8. OTA 遠端更新
 
@@ -1192,7 +1104,6 @@ const machines = await db.machines
 
 ---
 
-
 ## 13. 監控與日誌設計
 
 ### 13.1 監控項目
@@ -1281,7 +1192,6 @@ const requestTracking = {
 ```
 
 ---
-
 
 ## 14. 錯誤處理機制
 
@@ -1562,6 +1472,7 @@ v2.0.0 - 架構重構
 ```
 
 ---
+
 ## 18. 版本歷史
 
 | 版本 | 日期       | 說明                                                              | 作者      |
@@ -1574,8 +1485,7 @@ v2.0.0 - 架構重構
 
 ---
 
-*文件維護：工程團隊 (PM/SA 文秘專員) + 工程師*
+*文件維護：工程師*
 *審查狀態：✅ Round 4-5 完成 (v1.4)*
 
 ---
-
