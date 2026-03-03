@@ -529,7 +529,7 @@ services:
 
 ---
 
-*文件維護：docs agent + code agent 審查*
+*文件維護：工程團隊 + 開發團隊 審查*
 *審查狀態：✅ 第 1 輪審查完成*
 
 ---
@@ -1065,7 +1065,7 @@ CREATE INDEX idx_agents_parent ON agents(parent_agent_id);
 
 ---
 
-*文件維護：docs agent (PM/SA 文秘專員) + code agent (工程師)*
+*文件維護：工程團隊 (PM/SA 文秘專員) + 工程師*
 *審查狀態：✅ 第 1 輪技術審查完成 (v1.2)*
 
 ---
@@ -1644,5 +1644,5 @@ npm test
 
 ---
 
-*文件維護：docs agent (PM/SA 文秘專員) + code agent (工程師)*
+*文件維護：工程團隊 (PM/SA 文秘專員) + 工程師*
 *審查狀態：✅ Round 4-5 完成 (v1.4)*
