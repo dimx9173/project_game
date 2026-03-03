@@ -374,7 +374,7 @@ gradient-bg: linear-gradient(135deg, #0a0a0f 0%, #1a0a2e 50%, #0a0a0f 100%)
 **【操作流程】**
 1. 管理員搜尋並選擇目標玩家。
 2. 點擊「調整餘額」按鈕。
-3. 選擇調整類型（Deposit/Withdraw/Adjust）。
+3. 選擇調整類型（儲值/提現/調整）。
 4. 輸入調整金額與原因備註。
 5. 系統驗證餘額充足（提款時）。
 6. 系統更新玩家餘額並記錄交易。
@@ -399,7 +399,6 @@ gradient-bg: linear-gradient(135deg, #0a0a0f 0%, #1a0a2e 50%, #0a0a0f 100%)
 **【主要角色】**
 - 中央管理員（Admin）
 - 遊戲商（Provider）
-- 系統（PaymentRouter）
 
 **【前置條件】**
 1. 管理員已登入系統
