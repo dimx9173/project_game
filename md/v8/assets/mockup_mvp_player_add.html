@@ -3,9 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>玩家管理 - 遊戲平台管理中心</title>
+    <title>新增玩家 - 遊戲平台管理中心</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
     <script src="https://unpkg.com/lucide@latest"></script>
     <script>
         tailwind.config = {
@@ -36,7 +36,6 @@
         .sidebar-link::before { content: ''; position: absolute; left: 0; top: 50%; transform: translateY(-50%); width: 3px; height: 0; background: linear-gradient(180deg, #7c3aed, #c084fc); border-radius: 0 2px 2px 0; transition: height 0.3s ease; }
         .sidebar-link:hover::before, .sidebar-link.active::before { height: 60%; }
         .sidebar-link.active { background: linear-gradient(90deg, rgba(124, 58, 237, 0.2), transparent); }
-        .table-row-hover:hover { background: linear-gradient(90deg, rgba(124, 58, 237, 0.1), transparent); }
         .input-focus:focus { box-shadow: 0 0 0 3px rgba(168, 85, 247, 0.3), 0 0 20px rgba(168, 85, 247, 0.2); }
     </style>
 </head>
@@ -60,62 +59,78 @@
             <a href="mockup_flg_monitor.html" class="sidebar-link flex items-center px-3 py-2.5 text-gray-300 hover:text-white rounded-lg"><i data-lucide="activity" class="w-5 h-5 mr-3"></i><span>監控中心</span></a>
             <a href="mockup_flg_reconciliation.html" class="sidebar-link flex items-center px-3 py-2.5 text-gray-300 hover:text-white rounded-lg"><i data-lucide="file-check" class="w-5 h-5 mr-3"></i><span>對帳專區</span></a>
         </nav>
-        <div class="p-4 border-t border-dark-border">
-            <div class="flex items-center justify-between">
-                <div class="flex items-center">
-                    <div class="w-8 h-8 rounded-full gradient-purple flex items-center justify-center"><span class="text-sm font-bold text-white">A</span></div>
-                    <div class="ml-3"><p class="text-sm font-medium text-white">admin</p><p class="text-xs text-gray-500">系統管理員</p></div>
-                </div>
-                <a href="mockup_login.html" class="text-gray-400 hover:text-white"><i data-lucide="log-out" class="w-5 h-5"></i></a>
-            </div>
-        </div>
     </aside>
     <main class="flex-1 flex flex-col overflow-hidden">
-        <header class="h-16 glass border-b border-dark-border flex items-center justify-between px-6">
-            <h2 class="text-lg font-semibold text-white">玩家管理</h2>
-            <div class="flex items-center space-x-4">
-                <input type="text" placeholder="搜尋玩家..." class="bg-dark-bg border border-dark-border rounded-lg py-2 px-4 text-sm text-white placeholder-gray-500 focus:outline-none input-focus">
-                <button class="px-4 py-2 gradient-purple rounded-lg text-white font-medium shadow-glow-sm">匯入</button>
-                <a href="mockup_mvp_player_add.html" class="px-4 py-2 gradient-purple rounded-lg text-white font-medium shadow-glow-sm flex items-center">
-                    <i data-lucide="plus" class="w-4 h-4 mr-2"></i>新增玩家
-                </a>
-            </div>
-        </header>
         <div class="flex-1 overflow-y-auto p-6">
-            <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
-                <div class="glass-card rounded-xl p-4"><p class="text-sm text-gray-400">總玩家數</p><p class="text-2xl font-bold text-white mt-1">1,234</p></div>
-                <div class="glass-card rounded-xl p-4"><p class="text-sm text-emerald-400">活躍玩家</p><p class="text-2xl font-bold text-emerald-400 mt-1">856</p></div>
-                <div class="glass-card rounded-xl p-4"><p class="text-sm text-gray-400">新註冊</p><p class="text-2xl font-bold text-white mt-1">+42</p></div>
-                <div class="glass-card rounded-xl p-4"><p class="text-sm text-amber-400">沉睡玩家</p><p class="text-2xl font-bold text-amber-400 mt-1">378</p></div>
-            </div>
-            <div class="glass-card rounded-2xl overflow-hidden">
-                <table class="min-w-full">
-                    <thead class="bg-dark-bg">
-                        <tr>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">玩家ID</th>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">帳號</th>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">餘額</th>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">狀態</th>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">註冊日期</th>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">最後登入</th>
-                            <th class="px-6 py-3 text-right text-xs font-medium text-gray-400 uppercase">操作</th>
-                        </tr>
-                    </thead>
-                    <tbody class="divide-y divide-dark-border">
-                        <tr class="table-row-hover">
-                            <td class="px-6 py-4 whitespace-nowrap text-white font-mono">P001</td>
-                            <td class="px-6 py-4 whitespace-nowrap"><div class="flex items-center"><div class="w-8 h-8 rounded-full gradient-purple flex items-center justify-center mr-3"><span class="text-xs font-bold text-white">王</span></div><span class="text-white">王大明</span></div></td>
-                            <td class="px-6 py-4 whitespace-nowrap text-white font-mono">$45,680</td>
-                            <td class="px-6 py-4 whitespace-nowrap"><span class="px-2 py-1 rounded-full text-xs bg-emerald-500/20 text-emerald-400">正常</span></td>
-                            <td class="px-6 py-4 whitespace-nowrap text-gray-400">2025-01-15</td>
-                            <td class="px-6 py-4 whitespace-nowrap text-gray-400">今天 14:30</td>
-                            <td class="px-6 py-4 whitespace-nowrap text-right">
-                                <button class="text-purple-400 hover:text-purple-300 mx-1"><i data-lucide="eye" class="w-4 h-4"></i></button>
-                                <button class="text-cyan-400 hover:text-cyan-300 mx-1"><i data-lucide="edit" class="w-4 h-4"></i></button>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
+            <div class="max-w-3xl mx-auto">
+                <div class="glass-card rounded-2xl p-8">
+                    <div class="text-center mb-8">
+                        <div class="w-16 h-16 mx-auto rounded-2xl gradient-purple flex items-center justify-center mb-4">
+                            <i data-lucide="user-plus" class="w-8 h-8 text-white"></i>
+                        </div>
+                        <h1 class="text-2xl font-bold text-white">新增玩家</h1>
+                        <p class="text-gray-400 mt-2">建立新的玩家帳戶</p>
+                    </div>
+                    <form class="space-y-6">
+                        <div class="grid grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-300 mb-2">玩家帳號 *</label>
+                                <input type="text" placeholder="player001" class="w-full bg-dark-bg border border-dark-border rounded-lg px-4 py-3 text-white font-mono placeholder-gray-500 focus:outline-none input-focus">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-300 mb-2">玩家暱稱 *</label>
+                                <input type="text" placeholder="金牌玩家" class="w-full bg-dark-bg border border-dark-border rounded-lg px-4 py-3 text-white placeholder-gray-500 focus:outline-none input-focus">
+                            </div>
+                        </div>
+                        <div class="grid grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-300 mb-2">手機號碼 *</label>
+                                <input type="text" placeholder="+886 912 345 678" class="w-full bg-dark-bg border border-dark-border rounded-lg px-4 py-3 text-white font-mono placeholder-gray-500 focus:outline-none input-focus">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-300 mb-2">電子郵件</label>
+                                <input type="email" placeholder="player@example.com" class="w-full bg-dark-bg border border-dark-border rounded-lg px-4 py-3 text-white placeholder-gray-500 focus:outline-none input-focus">
+                            </div>
+                        </div>
+                        <div class="grid grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-300 mb-2">VIP 等級 *</label>
+                                <select class="w-full bg-dark-bg border border-dark-border rounded-lg px-4 py-3 text-white focus:outline-none input-focus">
+                                    <option>普通會員</option>
+                                    <option>白銀會員</option>
+                                    <option>黃金會員</option>
+                                    <option>白金會員</option>
+                                    <option>鑽石會員</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-300 mb-2">代理商 *</label>
+                                <select class="w-full bg-dark-bg border border-dark-border rounded-lg px-4 py-3 text-white focus:outline-none input-focus">
+                                    <option>代理商 A</option>
+                                    <option>代理商 B</option>
+                                    <option>代理商 C</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-300 mb-2">初始額度</label>
+                            <div class="relative">
+                                <span class="absolute left-4 top-1/2 -translate-y-1/2 text-gray-500 font-mono">$</span>
+                                <input type="text" value="0" class="w-full pl-8 pr-4 py-3 bg-dark-bg border border-dark-border rounded-lg text-white font-mono placeholder-gray-500 focus:outline-none input-focus">
+                            </div>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-300 mb-2">備註</label>
+                            <textarea rows="2" placeholder="選填備註說明..." class="w-full bg-dark-bg border border-dark-border rounded-lg px-4 py-3 text-white placeholder-gray-500 focus:outline-none input-focus"></textarea>
+                        </div>
+                        <div class="flex justify-end space-x-4 pt-4 border-t border-dark-border">
+                            <a href="mockup_mvp_player_list.html" class="px-6 py-3 glass border border-dark-border text-gray-400 rounded-lg font-medium hover:text-white">取消</a>
+                            <button type="button" class="px-6 py-3 gradient-purple text-white rounded-lg font-medium shadow-glow-sm hover:opacity-90 flex items-center">
+                                <i data-lucide="plus" class="w-4 h-4 mr-2"></i>建立帳戶
+                            </button>
+                        </div>
+                    </form>
+                </div>
             </div>
         </div>
     </main>
