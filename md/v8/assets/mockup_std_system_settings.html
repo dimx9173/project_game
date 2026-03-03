@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>系統設定 - 遊戲平台管理中心</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        cyber: { 50: '#f5f3ff', 100: '#ede9fe', 200: '#ddd6fe', 300: '#c4b5fd', 400: '#a78bfa', 500: '#8b5cf6', 600: '#7c3aed', 700: '#6d28d9', 800: '#5b21b6', 900: '#4c1d95', 950: '#2e1065' },
+                        dark: { bg: '#0a0a0f', card: '#12121a', sidebar: '#0d0d14', border: '#1e1e2e', hover: '#1a1a28' }
+                    },
+                    fontFamily: { sans: ['"Noto Sans TC"', 'sans-serif'], mono: ['"JetBrains Mono"', 'monospace'] },
+                    boxShadow: { glow: '0 0 30px rgba(168, 85, 247, 0.3)', 'glow-sm': '0 0 15px rgba(168, 85, 247, 0.2)' }
+                }
+            }
+        }
+    </script>
+    <style>
+        * { scrollbar-width: thin; scrollbar-color: #6d28d9 #0a0a0f; }
+        *::-webkit-scrollbar { width: 8px; height: 8px; }
+        *::-webkit-scrollbar-track { background: #0a0a0f; }
+        *::-webkit-scrollbar-thumb { background: linear-gradient(180deg, #7c3aed, #a855f7); border-radius: 4px; }
+        body { font-family: 'Noto Sans TC', sans-serif; background: #0a0a0f; }
+        .glass { background: rgba(18, 18, 26, 0.7); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border: 1px solid rgba(255, 255, 255, 0.08); }
+        .glass-card { background: linear-gradient(135deg, rgba(18, 18, 26, 0.9) 0%, rgba(30, 30, 46, 0.6) 100%); backdrop-filter: blur(20px); border: 1px solid rgba(168, 85, 247, 0.15); box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4); }
+        .glass-card:hover { border-color: rgba(168, 85, 247, 0.4); }
+        .gradient-bg { background: linear-gradient(135deg, #0a0a0f 0%, #1a0a2e 50%, #0a0a0f 100%); }
+        .gradient-purple { background: linear-gradient(135deg, #7c3aed 0%, #a855f7 50%, #c084fc 100%); }
+        .sidebar-link { position: relative; transition: all 0.3s ease; }
+        .sidebar-link::before { content: ''; position: absolute; left: 0; top: 50%; transform: translateY(-50%); width: 3px; height: 0; background: linear-gradient(180deg, #7c3aed, #c084fc); border-radius: 0 2px 2px 0; transition: height 0.3s ease; }
+        .sidebar-link:hover::before, .sidebar-link.active::before { height: 60%; }
+        .sidebar-link.active { background: linear-gradient(90deg, rgba(124, 58, 237, 0.2), transparent); }
+        .table-row-hover:hover { background: linear-gradient(90deg, rgba(124, 58, 237, 0.1), transparent); }
+        .input-focus:focus { box-shadow: 0 0 0 3px rgba(168, 85, 247, 0.3); outline: none; }
+        .tab-active { border-bottom: 2px solid #a855f7; color: #a855f7; }
+    </style>
+</head>
+<body class="gradient-bg min-h-screen flex">
+    <aside class="w-64 bg-dark-sidebar border-r border-dark-border flex flex-col">
+        <div class="h-16 flex items-center px-4 border-b border-dark-border">
+            <div class="w-10 h-10 rounded-xl gradient-purple flex items-center justify-center shadow-glow-sm mr-3">
+                <i data-lucide="gamepad-2" class="w-5 h-5 text-white"></i>
+            </div>
+            <div><span class="font-bold text-white">遊戲平台</span><span class="text-xs text-gray-500 block">管理中心</span></div>
+        </div>
+        <nav class="flex-1 py-4 px-3 space-y-1 overflow-y-auto">
+            <a href="mockup_dashboard.html" class="sidebar-link flex items-center px-3 py-2.5 text-gray-300 hover:text-white rounded-lg"><i data-lucide="layout-dashboard" class="w-5 h-5 mr-3"></i><span>儀表板</span></a>
+            <a href="mockup_mvp_machine_list.html" class="sidebar-link flex items-center px-3 py-2.5 text-gray-300 hover:text-white rounded-lg"><i data-lucide="monitor-play" class="w-5 h-5 mr-3"></i><span>機台管理</span></a>
+            <a href="mockup_mvp_game_list.html" class="sidebar-link flex items-center px-3 py-2.5 text-gray-300 hover:text-white rounded-lg"><i data-lucide="gamepad-2" class="w-5 h-5 mr-3"></i><span>遊戲管理</span></a>
+            <a href="mockup_mvp_player_list.html" class="sidebar-link flex items-center px-3 py-2.5 text-gray-300 hover:text-white rounded-lg"><i data-lucide="users" class="w-5 h-5 mr-3"></i><span>玩家管理</span></a>
+            <a href="mockup_mvp_data_list.html" class="sidebar-link flex items-center px-3 py-2.5 text-gray-300 hover:text-white rounded-lg"><i data-lucide="receipt" class="w-5 h-5 mr-3"></i><span>交易紀錄</span></a>
+            <a href="mockup_std_provider_list.html" class="sidebar-link flex items-center px-3 py-2.5 text-gray-300 hover:text-white rounded-lg"><i data-lucide="building-2" class="w-5 h-5 mr-3"></i><span>遊戲商管理</span></a>
+            <a href="mockup_std_agent_list.html" class="sidebar-link flex items-center px-3 py-2.5 text-gray-300 hover:text-white rounded-lg"><i data-lucide="user-check" class="w-5 h-5 mr-3"></i><span>代理商管理</span></a>
+            <a href="mockup_std_wallet.html" class="sidebar-link flex items-center px-3 py-2.5 text-gray-300 hover:text-white rounded-lg"><i data-lucide="wallet" class="w-5 h-5 mr-3"></i><span>錢包管理</span></a>
+            <a href="mockup_std_multiplayer.html" class="sidebar-link flex items-center px-3 py-2.5 text-gray-300 hover:text-white rounded-lg"><i data-lucide="users" class="w-5 h-5 mr-3"></i><span>多人遊戲</span></a>
+            <a href="mockup_flg_ota.html" class="sidebar-link flex items-center px-3 py-2.5 text-gray-300 hover:text-white rounded-lg"><i data-lucide="cloud-download" class="w-5 h-5 mr-3"></i><span>版本更新</span></a>
+            <a href="mockup_flg_monitor.html" class="sidebar-link flex items-center px-3 py-2.5 text-gray-300 hover:text-white rounded-lg"><i data-lucide="activity" class="w-5 h-5 mr-3"></i><span>監控中心</span></a>
+            <a href="mockup_flg_reconciliation.html" class="sidebar-link flex items-center px-3 py-2.5 text-gray-300 hover:text-white rounded-lg"><i data-lucide="scale" class="w-5 h-5 mr-3"></i><span>錯帳對帳</span></a>
+            <a href="mockup_std_reports.html" class="sidebar-link flex items-center px-3 py-2.5 text-gray-300 hover:text-white rounded-lg"><i data-lucide="file-text" class="w-5 h-5 mr-3"></i><span>報表</span></a>
+            <a href="mockup_std_backup.html" class="sidebar-link flex items-center px-3 py-2.5 text-gray-300 hover:text-white rounded-lg"><i data-lucide="database" class="w-5 h-5 mr-3"></i><span>備份</span></a>
+            <a href="mockup_std_system_settings.html" class="sidebar-link active flex items-center px-3 py-2.5 text-gray-300 hover:text-white rounded-lg"><i data-lucide="settings" class="w-5 h-5 mr-3"></i><span>系統設定</span></a>
+        </nav>
+        <div class="p-4 border-t border-dark-border">
+            <div class="flex items-center">
+                <div class="w-8 h-8 rounded-full bg-purple-600 flex items-center justify-center text-white text-sm font-bold">管</div>
+                <div class="ml-3">
+                    <div class="text-sm text-white">管理員</div>
+                    <div class="text-xs text-gray-500">系統管理員</div>
+                </div>
+            </div>
+        </div>
+    </aside>
+    <main class="flex-1 flex flex-col overflow-hidden">
+        <header class="h-16 glass border-b border-dark-border flex items-center justify-between px-6">
+            <h2 class="text-lg font-semibold text-white">系統設定</h2>
+        </header>
+        <div class="flex-1 overflow-y-auto p-6">
+            <!-- 標籤頁籤 -->
+            <div class="flex border-b border-dark-border mb-6">
+                <button class="tab-active px-6 py-3 text-gray-300 font-medium" onclick="switchTab(this, 'basic')">
+                    <i data-lucide="info" class="w-4 h-4 inline mr-2"></i>基本設定
+                </button>
+                <button class="px-6 py-3 text-gray-400 hover:text-white" onclick="switchTab(this, 'network')">
+                    <i data-lucide="wifi" class="w-4 h-4 inline mr-2"></i>網路設定
+                </button>
+                <button class="px-6 py-3 text-gray-400 hover:text-white" onclick="switchTab(this, 'security')">
+                    <i data-lucide="shield" class="w-4 h-4 inline mr-2"></i>安全設定
+                </button>
+                <button class="px-6 py-3 text-gray-400 hover:text-white" onclick="switchTab(this, 'backup')">
+                    <i data-lucide="database" class="w-4 h-4 inline mr-2"></i>備份與恢復
+                </button>
+            </div>
+
+            <!-- 基本設定 -->
+            <div id="tab-basic" class="tab-content">
+                <div class="glass-card rounded-xl p-6">
+                    <h3 class="text-lg font-semibold text-white mb-6 flex items-center">
+                        <i data-lucide="info" class="w-5 h-5 mr-2 text-purple-400"></i>基本設定
+                    </h3>
+                    <div class="grid grid-cols-2 gap-6">
+                        <div>
+                            <label class="block text-sm text-gray-400 mb-2">站點名稱</label>
+                            <input type="text" value="遊戲平台旗艦店" class="w-full px-4 py-2.5 bg-dark-bg border border-dark-border rounded-lg text-white input-focus">
+                        </div>
+                        <div>
+                            <label class="block text-sm text-gray-400 mb-2">站點代碼</label>
+                            <input type="text" value="HQ-001" readonly class="w-full px-4 py-2.5 bg-dark-bg border border-dark-border rounded-lg text-gray-500">
+                        </div>
+                        <div>
+                            <label class="block text-sm text-gray-400 mb-2">時區</label>
+                            <select class="w-full px-4 py-2.5 bg-dark-bg border border-dark-border rounded-lg text-white input-focus">
+                                <option>UTC+8 (台灣/香港)</option>
+                                <option>UTC+7 (曼谷)</option>
+                                <option>UTC+9 (日本)</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-sm text-gray-400 mb-2">語言</label>
+                            <select class="w-full px-4 py-2.5 bg-dark-bg border border-dark-border rounded-lg text-white input-focus">
+                                <option>繁體中文</option>
+                                <option>簡體中文</option>
+                                <option>English</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-sm text-gray-400 mb-2">日期格式</label>
+                            <select class="w-full px-4 py-2.5 bg-dark-bg border border-dark-border rounded-lg text-white input-focus">
+                                <option>YYYY-MM-DD</option>
+                                <option>DD/MM/YYYY</option>
+                                <option>MM-DD-YYYY</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-sm text-gray-400 mb-2">時間格式</label>
+                            <select class="w-full px-4 py-2.5 bg-dark-bg border border-dark-border rounded-lg text-white input-focus">
+                                <option>24小時制</option>
+                                <option>12小時制</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="mt-6 pt-6 border-t border-dark-border flex justify-end">
+                        <button class="px-6 py-2.5 gradient-purple text-white rounded-lg font-medium hover:opacity-90">
+                            <i data-lucide="save" class="w-4 h-4 inline mr-2"></i>儲存變更
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 網路設定 -->
+            <div id="tab-network" class="tab-content hidden">
+                <div class="glass-card rounded-xl p-6">
+                    <h3 class="text-lg font-semibold text-white mb-6 flex items-center">
+                        <i data-lucide="wifi" class="w-5 h-5 mr-2 text-purple-400"></i>網路設定
+                    </h3>
+                    <div class="grid grid-cols-2 gap-6">
+                        <div class="col-span-2">
+                            <label class="block text-sm text-gray-400 mb-2">中央伺服器位址</label>
+                            <input type="text" value="https://api.gameplatform.com" class="w-full px-4 py-2.5 bg-dark-bg border border-dark-border rounded-lg text-white font-mono input-focus">
+                        </div>
+                        <div>
+                            <label class="block text-sm text-gray-400 mb-2">連接埠</label>
+                            <input type="number" value="443" class="w-full px-4 py-2.5 bg-dark-bg border border-dark-border rounded-lg text-white input-focus">
+                        </div>
+                        <div>
+                            <label class="block text-sm text-gray-400 mb-2">心跳間隔 (秒)</label>
+                            <input type="number" value="30" class="w-full px-4 py-2.5 bg-dark-bg border border-dark-border rounded-lg text-white input-focus">
+                        </div>
+                        <div>
+                            <label class="block text-sm text-gray-400 mb-2">連線逾時 (秒)</label>
+                            <input type="number" value="10" class="w-full px-4 py-2.5 bg-dark-bg border border-dark-border rounded-lg text-white input-focus">
+                        </div>
+                        <div>
+                            <label class="block text-sm text-gray-400 mb-2">Proxy 伺服器</label>
+                            <input type="text" placeholder="http://proxy:8080" class="w-full px-4 py-2.5 bg-dark-bg border border-dark-border rounded-lg text-white input-focus">
+                        </div>
+                    </div>
+                    <div class="mt-6 pt-6 border-t border-dark-border flex justify-end space-x-4">
+                        <button class="px-6 py-2.5 glass border border-dark-border text-gray-300 rounded-lg font-medium hover:text-white">
+                            測試連線
+                        </button>
+                        <button class="px-6 py-2.5 gradient-purple text-white rounded-lg font-medium hover:opacity-90">
+                            <i data-lucide="save" class="w-4 h-4 inline mr-2"></i>儲存變更
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 安全設定 -->
+            <div id="tab-security" class="tab-content hidden">
+                <div class="glass-card rounded-xl p-6">
+                    <h3 class="text-lg font-semibold text-white mb-6 flex items-center">
+                        <i data-lucide="shield" class="w-5 h-5 mr-2 text-purple-400"></i>安全設定
+                    </h3>
+                    <div class="grid grid-cols-2 gap-6">
+                        <div>
+                            <label class="block text-sm text-gray-400 mb-2">密碼最小長度</label>
+                            <input type="number" value="8" class="w-full px-4 py-2.5 bg-dark-bg border border-dark-border rounded-lg text-white input-focus">
+                        </div>
+                        <div>
+                            <label class="block text-sm text-gray-400 mb-2">密碼複雜度</label>
+                            <select class="w-full px-4 py-2.5 bg-dark-bg border border-dark-border rounded-lg text-white input-focus">
+                                <option>高 (含大小寫+數字+特殊符號)</option>
+                                <option>中 (含大小寫+數字)</option>
+                                <option>低 (僅數字)</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-sm text-gray-400 mb-2">登入逾時 (分鐘)</label>
+                            <input type="number" value="15" class="w-full px-4 py-2.5 bg-dark-bg border border-dark-border rounded-lg text-white input-focus">
+                        </div>
+                        <div>
+                            <label class="block text-sm text-gray-400 mb-2">登入失敗鎖定次數</label>
+                            <input type="number" value="5" class="w-full px-4 py-2.5 bg-dark-bg border border-dark-border rounded-lg text-white input-focus">
+                        </div>
+                        <div class="col-span-2">
+                            <label class="block text-sm text-gray-400 mb-2">IP 白名單 (每行一個IP)</label>
+                            <textarea rows="4" class="w-full px-4 py-2.5 bg-dark-bg border border-dark-border rounded-lg text-white font-mono input-focus">127.0.0.1
+192.168.1.0/24
+10.0.0.0/8</textarea>
+                        </div>
+                        <div>
+                            <label class="flex items-center">
+                                <input type="checkbox" checked class="w-5 h-5 rounded border-dark-border bg-dark-bg text-purple-500 mr-3">
+                                <span class="text-gray-300">啟用 TLS 1.3 加密</span>
+                            </label>
+                        </div>
+                        <div>
+                            <label class="flex items-center">
+                                <input type="checkbox" checked class="w-5 h-5 rounded border-dark-border bg-dark-bg text-purple-500 mr-3">
+                                <span class="text-gray-300">啟用雙重驗證 (2FA)</span>
+                            </label>
+                        </div>
+                    </div>
+                    <div class="mt-6 pt-6 border-t border-dark-border flex justify-end">
+                        <button class="px-6 py-2.5 gradient-purple text-white rounded-lg font-medium hover:opacity-90">
+                            <i data-lucide="save" class="w-4 h-4 inline mr-2"></i>儲存變更
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 備份與恢復 -->
+            <div id="tab-backup" class="tab-content hidden">
+                <div class="grid grid-cols-2 gap-6 mb-6">
+                    <div class="glass-card rounded-xl p-6">
+                        <div class="flex items-center mb-4">
+                            <div class="w-12 h-12 rounded-xl bg-purple-500/20 flex items-center justify-center mr-4">
+                                <i data-lucide="upload-cloud" class="w-6 h-6 text-purple-400"></i>
+                            </div>
+                            <div>
+                                <h3 class="font-semibold text-white">手動備份</h3>
+                                <p class="text-xs text-gray-500">立即建立系統備份</p>
+                            </div>
+                        </div>
+                        <button class="w-full py-3 gradient-purple text-white rounded-lg font-medium hover:opacity-90">
+                            <i data-lucide="plus" class="w-4 h-4 inline mr-2"></i>建立備份
+                        </button>
+                    </div>
+                    <div class="glass-card rounded-xl p-6">
+                        <div class="flex items-center mb-4">
+                            <div class="w-12 h-12 rounded-xl bg-emerald-500/20 flex items-center justify-center mr-4">
+                                <i data-lucide="calendar" class="w-6 h-6 text-emerald-400"></i>
+                            </div>
+                            <div>
+                                <h3 class="font-semibold text-white">自動排程</h3>
+                                <p class="text-xs text-gray-500">每日凌晨 03:00 自動備份</p>
+                            </div>
+                        </div>
+                        <label class="flex items-center">
+                            <input type="checkbox" checked class="w-5 h-5 rounded border-dark-border bg-dark-bg text-purple-500 mr-3">
+                            <span class="text-gray-300">啟用自動備份</span>
+                        </label>
+                    </div>
+                </div>
+                <div class="glass-card rounded-xl p-6">
+                    <h3 class="text-lg font-semibold text-white mb-4 flex items-center">
+                        <i data-lucide="history" class="w-5 h-5 mr-2 text-purple-400"></i>備份歷史
+                    </h3>
+                    <table class="w-full">
+                        <thead>
+                            <tr class="text-left text-gray-500 text-sm border-b border-dark-border">
+                                <th class="pb-3">備份時間</th>
+                                <th class="pb-3">檔案大小</th>
+                                <th class="pb-3">類型</th>
+                                <th class="pb-3">狀態</th>
+                                <th class="pb-3">操作</th>
+                            </tr>
+                        </thead>
+                        <tbody class="text-gray-300">
+                            <tr class="border-b border-dark-border/50 table-row-hover">
+                                <td class="py-3">2026-03-03 03:00</td>
+                                <td class="py-3">2.4 GB</td>
+                                <td class="py-3"><span class="px-2 py-1 bg-purple-500/20 text-purple-400 rounded text-xs">自動</span></td>
+                                <td class="py-3"><span class="px-2 py-1 bg-emerald-500/20 text-emerald-400 rounded text-xs">完成</span></td>
+                                <td class="py-3">
+                                    <button class="text-purple-400 hover:text-purple-300 mr-3"><i data-lucide="download" class="w-4 h-4"></i></button>
+                                    <button class="text-red-400 hover:text-red-300"><i data-lucide="trash-2" class="w-4 h-4"></i></button>
+                                </td>
+                            </tr>
+                            <tr class="border-b border-dark-border/50 table-row-hover">
+                                <td class="py-3">2026-03-02 03:00</td>
+                                <td class="py-3">2.3 GB</td>
+                                <td class="py-3"><span class="px-2 py-1 bg-purple-500/20 text-purple-400 rounded text-xs">自動</span></td>
+                                <td class="py-3"><span class="px-2 py-1 bg-emerald-500/20 text-emerald-400 rounded text-xs">完成</span></td>
+                                <td class="py-3">
+                                    <button class="text-purple-400 hover:text-purple-300 mr-3"><i data-lucide="download" class="w-4 h-4"></i></button>
+                                    <button class="text-red-400 hover:text-red-300"><i data-lucide="trash-2" class="w-4 h-4"></i></button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </main>
+    <script>
+        lucide.createIcons();
+
+        function switchTab(btn, tabId) {
+            // 更新按鈕樣式
+            document.querySelectorAll('.tab-active').forEach(el => {
+                el.classList.remove('tab-active');
+                el.classList.add('text-gray-400');
+            });
+            btn.classList.add('tab-active');
+            btn.classList.remove('text-gray-400');
+
+            // 顯示對應內容
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
+            document.getElementById('tab-' + tabId).classList.remove('hidden');
+        }
+    </script>
+</body>
+</html>
