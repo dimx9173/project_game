@@ -262,6 +262,7 @@ CREATE TABLE transactions (
     machine_id UUID REFERENCES machines(id),
     game_id UUID REFERENCES games(id),
     provider_id UUID REFERENCES providers(id),
+    operator_id VARCHAR(50),
     type VARCHAR(20) NOT NULL,
     amount DECIMAL(15,2) NOT NULL,
     balance_before DECIMAL(15,2),
