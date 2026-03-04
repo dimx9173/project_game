@@ -19,9 +19,11 @@ tags:
   - name: 認證 (Auth)
   - name: 機台管理 (Machines)
   - name: 遊戲管理 (Games)
+  - name: 遊戲測試 (Game Test)
   - name: 玩家管理 (Players)
   - name: 交易管理 (Transactions)
   - name: 遊戲商管理 (Providers)
+  - name: 多人遊戲 (Multiplayer)
   - name: 代理商管理 (Agents)
   - name: OTA 更新 (OTA)
   - name: 監控中心 (Monitor)
@@ -141,6 +143,53 @@ paths:
       responses:
         '200': {description: 指令已發送}
 
+  /machines/{id}/heartbeat:
+    post:
+      tags: [機台管理 (Machines)]
+      summary: 機台心跳
+      description: 機台定期發送心跳以報告狀態
+      security: [{BearerAuth: []}, {PinAuth: []}]
+      parameters:
+        - {name: id, in: path, required: true, schema: {type: string, format: uuid}}
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                cpuUsage: {type: number}
+                memoryUsage: {type: number}
+                status: {type: string, enum: [online, offline, maintenance]}
+      responses:
+        '200': {description: 心跳收到}
+
+  /machines/{id}/config:
+    get:
+      tags: [機台管理 (Machines)]
+      summary: 取得機台配置
+      security: [{BearerAuth: []}]
+      parameters:
+        - {name: id, in: path, required: true, schema: {type: string, format: uuid}}
+      responses:
+        '200': {description: 成功}
+    put:
+      tags: [機台管理 (Machines)]
+      summary: 更新機台配置
+      security: [{BearerAuth: []}]
+      parameters:
+        - {name: id, in: path, required: true, schema: {type: string, format: uuid}}
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                config: {type: object}
+      responses:
+        '200': {description: 更新成功}
+
   # Games
   /games:
     get:
@@ -175,6 +224,76 @@ paths:
       security: [{BearerAuth: []}]
       responses:
         '204': {description: 刪除成功}
+
+  # Game Test (旗艦版)
+  /games/{id}/test/start:
+    post:
+      tags: [遊戲測試 (Game Test)]
+      summary: 啟動遊戲測試模式
+      description: 允許管理員在正式環境中進行虛擬下注以驗證遊戲邏輯
+      security: [{BearerAuth: []}]
+      parameters:
+        - {name: id, in: path, required: true, schema: {type: string, format: uuid}}
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                machineId: {type: string, format: uuid}
+      responses:
+        '200': {description: 測試模式已啟動}
+        '403': {description: 權限不足}
+
+  /games/{id}/test/bet:
+    post:
+      tags: [遊戲測試 (Game Test)]
+      summary: 執行虛擬下注
+      description: 在測試模式下進行虛擬下注，不扣除真實餘額
+      security: [{BearerAuth: []}]
+      parameters:
+        - {name: id, in: path, required: true, schema: {type: string, format: uuid}}
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                testSessionId: {type: string}
+                amount: {type: number}
+      responses:
+        '200': {description: 虛擬下注成功}
+
+  /games/{id}/test/end:
+    post:
+      tags: [遊戲測試 (Game Test)]
+      summary: 結束測試模式
+      security: [{BearerAuth: []}]
+      parameters:
+        - {name: id, in: path, required: true, schema: {type: string, format: uuid}}
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                testSessionId: {type: string}
+      responses:
+        '200': {description: 測試模式已結束}
+
+  /games/{id}/test/report:
+    get:
+      tags: [遊戲測試 (Game Test)]
+      summary: 取得測試報告
+      security: [{BearerAuth: []}]
+      parameters:
+        - {name: id, in: path, required: true, schema: {type: string, format: uuid}}
+        - {name: testSessionId, in: query, schema: {type: string}}
+      responses:
+        '200': {description: 取得測試報告成功}
 
   # Players
   /players:
@@ -264,6 +383,96 @@ paths:
       responses:
         '200': {description: 成功}
 
+  # Multiplayer (旗艦版)
+  /multiplayer/rooms:
+    get:
+      tags: [多人遊戲 (Multiplayer)]
+      summary: 取得遊戲房間列表
+      security: [{BearerAuth: []}]
+      parameters:
+        - {name: status, in: query, schema: {type: string, enum: [waiting, playing, closed]}}
+      responses:
+        '200': {description: 成功}
+    post:
+      tags: [多人遊戲 (Multiplayer)]
+      summary: 建立遊戲房間
+      security: [{BearerAuth: []}]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                gameId: {type: string, format: uuid}
+                minPlayers: {type: integer}
+                maxPlayers: {type: integer}
+      responses:
+        '201': {description: 建立成功}
+
+  /multiplayer/rooms/{id}:
+    get:
+      tags: [多人遊戲 (Multiplayer)]
+      summary: 取得房間詳情
+      security: [{BearerAuth: []}]
+      parameters:
+        - {name: id, in: path, required: true, schema: {type: string, format: uuid}}
+      responses:
+        '200': {description: 成功}
+    put:
+      tags: [多人遊戲 (Multiplayer)]
+      summary: 更新房間狀態
+      security: [{BearerAuth: []}]
+      parameters:
+        - {name: id, in: path, required: true, schema: {type: string, format: uuid}}
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                status: {type: string, enum: [waiting, playing, closed]}
+      responses:
+        '200': {description: 更新成功}
+
+  /multiplayer/rooms/{id}/join:
+    post:
+      tags: [多人遊戲 (Multiplayer)]
+      summary: 加入遊戲房間
+      security: [{BearerAuth: []}]
+      parameters:
+        - {name: id, in: path, required: true, schema: {type: string, format: uuid}}
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                playerId: {type: string, format: uuid}
+      responses:
+        '200': {description: 加入成功}
+        '409': {description: 房間已滿或遊戲進行中}
+
+  /multiplayer/rooms/{id}/leave:
+    post:
+      tags: [多人遊戲 (Multiplayer)]
+      summary: 離開遊戲房間
+      security: [{BearerAuth: []}]
+      parameters:
+        - {name: id, in: path, required: true, schema: {type: string, format: uuid}}
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                playerId: {type: string, format: uuid}
+      responses:
+        '200': {description: 離開成功}
+
   # Agents (標準版/旗艦版)
   /agents:
     get:
@@ -301,6 +510,16 @@ paths:
       security: [{BearerAuth: []}]
       responses:
         '200': {description: 發布成功}
+
+  /ota/versions/{id}/status:
+    get:
+      tags: [OTA 更新 (OTA)]
+      summary: 取得版本發布狀態
+      security: [{BearerAuth: []}]
+      parameters:
+        - {name: id, in: path, required: true, schema: {type: string, format: uuid}}
+      responses:
+        '200': {description: 成功}
 
   # Monitor (旗艦版)
   /monitor/system:
