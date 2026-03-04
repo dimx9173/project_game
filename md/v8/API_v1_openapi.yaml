@@ -25,6 +25,7 @@ tags:
   - name: 遊戲商管理 (Providers)
   - name: 多人遊戲 (Multiplayer)
   - name: 代理商管理 (Agents)
+  - name: 使用者權限 (RBAC)
   - name: OTA 更新 (OTA)
   - name: 監控中心 (Monitor)
   - name: 錯帳管理 (Discrepancies)
@@ -529,6 +530,120 @@ paths:
       security: [{BearerAuth: []}]
       responses:
         '200': {description: 成功}
+
+
+  # RBAC (Roles & Permissions)
+  /roles:
+    get:
+      tags: [使用者權限 (RBAC)]
+      summary: 取得角色列表
+      security: [{BearerAuth: []}]
+      responses:
+        '200': {description: 成功}
+    post:
+      tags: [使用者權限 (RBAC)]
+      summary: 新增角色
+      security: [{BearerAuth: []}]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [name, permissions]
+              properties:
+                name: {type: string}
+                description: {type: string}
+                permissions: {type: array, items: {type: string}}
+      responses:
+        '201': {description: 建立成功}
+
+  /roles/{id}:
+    get:
+      tags: [使用者權限 (RBAC)]
+      summary: 取得角色詳情
+      security: [{BearerAuth: []}]
+      parameters:
+        - {name: id, in: path, required: true, schema: {type: string, format: uuid}}
+      responses:
+        '200': {description: 成功}
+        '404': {description: 不存在}
+    put:
+      tags: [使用者權限 (RBAC)]
+      summary: 更新角色
+      security: [{BearerAuth: []}]
+      responses:
+        '200': {description: 更新成功}
+    delete:
+      tags: [使用者權限 (RBAC)]
+      summary: 刪除角色
+      security: [{BearerAuth: []}]
+      responses:
+        '204': {description: 刪除成功}
+
+  /permissions:
+    get:
+      tags: [使用者權限 (RBAC)]
+      summary: 取得權限列表
+      security: [{BearerAuth: []}]
+      responses:
+        '200': {description: 成功}
+    post:
+      tags: [使用者權限 (RBAC)]
+      summary: 新增權限
+      security: [{BearerAuth: []}]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [name, resource, action]
+              properties:
+                name: {type: string}
+                resource: {type: string}
+                action: {type: string}
+      responses:
+        '201': {description: 建立成功}
+
+  /permissions/{id}:
+    get:
+      tags: [使用者權限 (RBAC)]
+      summary: 取得權限詳情
+      security: [{BearerAuth: []}]
+      parameters:
+        - {name: id, in: path, required: true, schema: {type: string, format: uuid}}
+      responses:
+        '200': {description: 成功}
+    put:
+      tags: [使用者權限 (RBAC)]
+      summary: 更新權限
+      security: [{BearerAuth: []}]
+      responses:
+        '200': {description: 更新成功}
+    delete:
+      tags: [使用者權限 (RBAC)]
+      summary: 刪除權限
+      security: [{BearerAuth: []}]
+      responses:
+        '204': {description: 刪除成功}
+
+  /users/{id}/roles:
+    put:
+      tags: [使用者權限 (RBAC)]
+      summary: 分配角色給使用者
+      security: [{BearerAuth: []}]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [roleIds]
+              properties:
+                roleIds: {type: array, items: {type: string, format: uuid}}
+      responses:
+        '200': {description: 分配成功}
 
   # Discrepancies (旗艦版)
   /discrepancies:
