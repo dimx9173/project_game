@@ -62,9 +62,9 @@
 | - 玩家管理             | ✅                 |
 | - 交易管理             | ✅                 |
 | - 系統使用者           | ✅                 |
-| - 儀表板               | ✅                 |
-| - 即時機台監控         | ✅                 |
-| - 第三方遊戲商管理     | ✅                 |
+| - 儀表板               | ✅ [L08]           |
+| - 即時機台監控         | ✅ [C79]           |
+| - 第三方遊戲商管理     | ✅ [C41]           |
 | - 代理商管理           | ✅                 |
 | - 三層權限管理         | ✅                 |
 | - 第三方錢包轉帳       | ✅                 |
@@ -373,42 +373,53 @@ CREATE INDEX idx_audit_logs_created ON audit_logs(created_at DESC);
 
 ### 4.2 API 端點 (精簡版)
 
-#### 認證
+#### 認證 [Auth]
 
 - POST /api/v1/auth/login
 - POST /api/v1/auth/logout
 - GET /api/v1/auth/verify
 - POST /api/v1/auth/refresh
 
-#### 機台
+#### 機台 [C01-C35]
 
 - GET/POST /api/v1/machines
 - GET/PUT/DELETE /api/v1/machines/:id
 - POST /api/v1/machines/:id/command
 
-#### 遊戲商
+#### 遊戲商 [C41]
 
 - GET/POST /api/v1/providers
 - GET/PUT /api/v1/providers/:id
 - GET /api/v1/providers/:id/balance
 
-#### 玩家
+#### 錢包 [C106]
+
+- GET /api/v1/wallet/balances
+- POST /api/v1/wallet/transfer
+
+#### 玩家 [C13/C14/C15]
 
 - GET /api/v1/players
 - GET /api/v1/players/:id
 - PUT /api/v1/players/:id/balance
 
-#### 交易
+#### 交易 [C36/C37]
 
 - GET /api/v1/transactions
 - POST /api/v1/transactions/:id/reverse
 
-#### OTA
+#### OTA [C77]
 
 - GET/POST /api/v1/ota/versions
 - POST /api/v1/ota/deploy
 
-#### 錯帳
+#### 爭議處理 [L20]
+
+- GET /api/v1/disputes
+- POST /api/v1/disputes
+- PATCH /api/v1/disputes/:id
+
+#### 錯帳 [L20]
 
 - GET /api/v1/discrepancies
 - POST /api/v1/discrepancies/:id/resolve
@@ -440,6 +451,7 @@ CREATE INDEX idx_audit_logs_created ON audit_logs(created_at DESC);
 | ------------------------ | ------------ | ---------------------- |
 | 認證 (Auth)              | 4            | POST, GET              |
 | 機台管理 (Machines)      | 6            | GET, POST, PUT, DELETE |
+| 錢包管理 (Wallet)        | 2            | GET, POST              |
 | 遊戲管理 (Games)         | 5            | GET, POST, PUT, DELETE |
 | 玩家管理 (Players)       | 3            | GET, PUT               |
 | 交易管理 (Transactions)  | 2            | GET, POST              |
@@ -448,6 +460,8 @@ CREATE INDEX idx_audit_logs_created ON audit_logs(created_at DESC);
 | 代理商管理 (Agents)      | 2            | GET, POST              |
 | OTA 更新 (OTA)           | 3            | GET, POST              |
 | 監控中心 (Monitor)       | 1            | GET                    |
+| 爭議處理 (Dispute)       | 3            | GET, POST, PATCH       |
+| 系統備份 (System)        | 2            | POST                   |
 | 錯帳管理 (Discrepancies) | 2            | GET, POST              |
 | 同步管理 (Sync)          | 2            | GET, POST              |
 | **總計**           | **39** |                        |
@@ -978,6 +992,31 @@ const externalApiHandler = {
 - 發現差異立即告警
 - 支援人工對帳
 - 差異報告匯出
+
+---
+
+### 10.4 爭議對帳處理專區 [L20]
+
+**功能定義**：用於處理玩家與系統、或系統與遊戲商之間的交易爭議，包含建立爭議單、調查、裁決與補救。
+
+#### 爭議單建立
+1. 選擇爭議類型 (如：deposit_not_arrived, payout_error)。
+2. 關聯原始交易編號。
+3. 填寫問題描述與期望處理方式。
+
+#### 調查與裁決
+- **狀態追蹤**：待處理 -> 調查中 -> 裁決中 -> 結案。
+- **補救措施**：餘額調整、補發交易、沖銷交易、派彩修正。
+
+#### 補救操作邏輯
+```javascript
+async function executeRemedy(disputeId, authCode) {
+  // 1. 驗證主管授權碼
+  // 2. 根據裁決結果執行對應 API (如 /players/:id/balance)
+  // 3. 更新爭議單狀態為 closed
+  // 4. 寫入稽核日誌
+}
+```
 
 ---
 

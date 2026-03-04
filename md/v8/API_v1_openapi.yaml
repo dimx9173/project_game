@@ -23,10 +23,12 @@ tags:
   - name: 玩家管理 (Players)
   - name: 交易管理 (Transactions)
   - name: 遊戲商管理 (Providers)
+  - name: 錢包管理 (Wallet)
   - name: 多人遊戲 (Multiplayer)
   - name: 使用者權限 (RBAC)
   - name: OTA 更新 (OTA)
   - name: 監控中心 (Monitor)
+  - name: 爭議處理 (Disputes)
   - name: 錯帳管理 (Discrepancies)
   - name: 同步管理 (Sync)
   - name: 報表管理 (Reports)
@@ -431,6 +433,61 @@ paths:
       responses:
         "200": { description: 成功 }
 
+  # Wallet Management (旗艦版)
+  /wallet/balances:
+    get:
+      tags: [錢包管理 (Wallet)]
+      summary: 取得所有錢包餘額
+      description: 包含中央錢包與各串接遊戲商錢包餘額
+      security: [{ BearerAuth: [] }]
+      responses:
+        "200":
+          description: 成功
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  centralWallet: { type: number }
+                  providerWallets:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        providerId: { type: string }
+                        providerName: { type: string }
+                        balance: { type: number }
+
+  /wallet/transfer:
+    post:
+      tags: [錢包管理 (Wallet)]
+      summary: 執行錢包轉帳
+      description: 執行中央錢包與遊戲商錢包之間的資金劃轉
+      security: [{ BearerAuth: [] }]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [fromWallet, toWallet, amount]
+              properties:
+                fromWallet:
+                  {
+                    type: string,
+                    description: "來源錢包ID (central 或 providerId)",
+                  }
+                toWallet:
+                  {
+                    type: string,
+                    description: "目標錢包ID (central 或 providerId)",
+                  }
+                amount: { type: number, minimum: 0 }
+                remark: { type: string }
+      responses:
+        "200": { description: 轉帳成功 }
+        "400": { description: 餘額不足或參數錯誤 }
+
   # Multiplayer (旗艦版)
   /multiplayer/rooms:
     get:
@@ -758,6 +815,99 @@ paths:
       responses:
         "200": { description: 處理成功 }
 
+  # Disputes (旗艦版)
+  /disputes:
+    get:
+      tags: [爭議處理 (Disputes)]
+      summary: 取得爭議單列表
+      security: [{ BearerAuth: [] }]
+      parameters:
+        - { name: status, in: query, schema: { type: string } }
+        - { name: playerId, in: query, schema: { type: string } }
+      responses:
+        "200": { description: 成功 }
+    post:
+      tags: [爭議處理 (Disputes)]
+      summary: 建立爭議單
+      security: [{ BearerAuth: [] }]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [playerId, type, transactionId, description]
+              properties:
+                playerId: { type: string }
+                type:
+                  {
+                    type: string,
+                    enum:
+                      [
+                        deposit_not_arrived,
+                        duplicate_charge,
+                        payout_error,
+                        withdrawal_failed,
+                        balance_discrepancy,
+                        system_error,
+                        fraud_suspicion,
+                      ],
+                  }
+                transactionId: { type: string }
+                description: { type: string }
+                expectedAction: { type: string }
+                priority: { type: string, enum: [low, medium, high, urgent] }
+      responses:
+        "201": { description: 建立成功 }
+
+  /disputes/{id}:
+    get:
+      tags: [爭議處理 (Disputes)]
+      summary: 取得爭議單詳情
+      security: [{ BearerAuth: [] }]
+      parameters:
+        - { name: id, in: path, required: true, schema: { type: string } }
+      responses:
+        "200": { description: 成功 }
+    patch:
+      tags: [爭議處理 (Disputes)]
+      summary: 更新爭議單狀態/裁決
+      description: 用於調查進度更新、裁決、結案
+      security: [{ BearerAuth: [] }]
+      parameters:
+        - { name: id, in: path, required: true, schema: { type: string } }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                status:
+                  {
+                    type: string,
+                    enum:
+                      [
+                        investigating,
+                        pending_review,
+                        deliberating,
+                        processing,
+                        closed,
+                        rejected,
+                      ],
+                  }
+                verdict: { type: string }
+                verdictReason: { type: string }
+                remedyType:
+                  {
+                    type: string,
+                    enum: [refund, compensation, partial_refund, none],
+                  }
+                remedyAmount: { type: number }
+                authCode: { type: string, description: "主管授權碼" }
+      responses:
+        "200": { description: 更新成功 }
+
   # Sync
   /sync/upload:
     post:
@@ -955,3 +1105,39 @@ paths:
                   marqueeText: { type: string }
                   bannerUrls: { type: array, items: { type: string } }
                   featuredGameIds: { type: array, items: { type: string } }
+
+  /system/backup:
+    post:
+      tags: [系統設定 (System Configs)]
+      summary: 執行系統備份
+      security: [{ BearerAuth: [] }]
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                type:
+                  {
+                    type: string,
+                    enum: [full, incremental, config_only],
+                    default: full,
+                  }
+      responses:
+        "200": { description: 備份工作已啟動 }
+
+  /system/restore:
+    post:
+      tags: [系統設定 (System Configs)]
+      summary: 執行系統恢復
+      security: [{ BearerAuth: [] }]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                backupFileId: { type: string }
+      responses:
+        "200": { description: 恢復工作已啟動 }
