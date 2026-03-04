@@ -43,6 +43,7 @@ body {
 .sidebar-link {
   position: relative;
   transition: all 0.3s ease;
+  font-size: 0.875rem;  /* 14px, same as Tailwind text-sm */
 }
 .sidebar-link::before {
   content: '';
@@ -124,7 +125,10 @@ body {
   width: 72px;
 }
 .sidebar-collapsed .sidebar-text,
-.sidebar-collapsed .sidebar-group-header span {
+.sidebar-collapsed .sidebar-group-header span,
+.sidebar-collapsed .sidebar-link span,
+.sidebar-collapsed .sidebar-submenu,
+.sidebar-collapsed .sidebar-group-left span {
   display: none;
 }
 .sidebar-collapsed .sidebar-link {
@@ -133,6 +137,28 @@ body {
 }
 .sidebar-collapsed .sidebar-link i {
   margin-right: 0;
+}
+.sidebar-collapsed .sidebar-group-header {
+  justify-content: center;
+  padding: 10px;
+}
+.sidebar-collapsed .sidebar-has-submenu::after {
+  display: none;
+}
+.sidebar-collapsed .sidebar-logo-area {
+  display: none;
+}
+#sidebar.sidebar-collapsed > div:first-child {
+  justify-content: center;
+  padding: 0;
+}
+.sidebar-collapsed .p-4 {
+  padding: 10px;
+  display: flex;
+  justify-content: center;
+}
+.sidebar-collapsed .p-4 .flex.items-center.justify-between {
+  justify-content: center;
 }
 .sidebar-toggle-btn {
   transition: transform 0.3s ease;

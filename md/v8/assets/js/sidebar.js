@@ -8,14 +8,15 @@
   function link(href, baseClass, icon, text) {
     var a = document.createElement('a');
     a.href = href;
-    a.className = (baseClass || 'sidebar-link') + ' flex items-center px-3 py-2 text-gray-300 hover:text-white rounded-lg';
+    a.className = (baseClass || 'sidebar-link') + ' flex items-center px-3 py-2.5 text-sm text-gray-300 hover:text-white rounded-lg';
     if (icon) {
       var i = document.createElement('i');
       i.setAttribute('data-lucide', icon);
-      i.className = 'w-5 h-5 mr-3';
+      i.className = 'w-4 h-4 flex-shrink-0';
       a.appendChild(i);
     }
     var span = document.createElement('span');
+    span.className = 'ml-2';
     span.textContent = text;
     a.appendChild(span);
     return a;
@@ -24,7 +25,7 @@
   function subLink(href, text) {
     var a = document.createElement('a');
     a.href = href;
-    a.className = 'sidebar-link flex items-center px-3 py-2 text-gray-300 hover:text-white rounded-lg';
+    a.className = 'sidebar-link flex items-center px-3 py-2 text-sm text-gray-300 hover:text-white rounded-lg';
     var span = document.createElement('span');
     span.textContent = text;
     a.appendChild(span);
@@ -37,13 +38,17 @@
     var header = document.createElement('div');
     header.className = 'sidebar-group-header sidebar-has-submenu';
     header.setAttribute('onclick', 'toggleSidebarGroup(this)');
-    var headerSpan = document.createElement('span');
+    var leftWrap = document.createElement('div');
+    leftWrap.className = 'sidebar-group-left flex items-center';
     var icon = document.createElement('i');
     icon.setAttribute('data-lucide', iconName);
-    icon.className = 'w-4 h-4 inline mr-2';
-    headerSpan.appendChild(icon);
-    headerSpan.appendChild(document.createTextNode(title));
-    header.appendChild(headerSpan);
+    icon.className = 'w-4 h-4 flex-shrink-0';
+    leftWrap.appendChild(icon);
+    var headerSpan = document.createElement('span');
+    headerSpan.className = 'ml-2';
+    headerSpan.textContent = title;
+    leftWrap.appendChild(headerSpan);
+    header.appendChild(leftWrap);
     var sub = document.createElement('div');
     sub.className = 'sidebar-submenu';
     items.forEach(function (item) {
@@ -154,7 +159,7 @@
     var top = document.createElement('div');
     top.className = 'h-16 flex items-center px-4 border-b border-dark-border justify-between';
     var topLeft = document.createElement('div');
-    topLeft.className = 'flex items-center';
+    topLeft.className = 'sidebar-logo-area flex items-center';
     var logo = document.createElement('div');
     logo.className = 'w-10 h-10 rounded-xl gradient-purple flex items-center justify-center shadow-glow-sm mr-3 flex-shrink-0';
     var logoIcon = document.createElement('i');
@@ -199,7 +204,7 @@
     avatarSpan.textContent = 'A';
     avatar.appendChild(avatarSpan);
     var userInfo = document.createElement('div');
-    userInfo.className = 'ml-3';
+    userInfo.className = 'ml-3 sidebar-text';
     var p1 = document.createElement('p');
     p1.className = 'text-sm font-medium text-white';
     p1.textContent = 'admin';
