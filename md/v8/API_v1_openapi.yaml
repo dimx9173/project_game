@@ -24,7 +24,6 @@ tags:
   - name: 交易管理 (Transactions)
   - name: 遊戲商管理 (Providers)
   - name: 多人遊戲 (Multiplayer)
-  - name: 代理商管理 (Agents)
   - name: 使用者權限 (RBAC)
   - name: OTA 更新 (OTA)
   - name: 監控中心 (Monitor)
@@ -546,21 +545,6 @@ paths:
       responses:
         "200": { description: 離開成功 }
 
-  # Agents (標準版/旗艦版)
-  /agents:
-    get:
-      tags: [代理商管理 (Agents)]
-      summary: 取得代理商列表
-      security: [{ BearerAuth: [] }]
-      responses:
-        "200": { description: 成功 }
-    post:
-      tags: [代理商管理 (Agents)]
-      summary: 新增代理商
-      security: [{ BearerAuth: [] }]
-      responses:
-        "201": { description: 建立成功 }
-
   # OTA (旗艦版)
   /ota/versions:
     get:
@@ -931,7 +915,6 @@ paths:
                 type: object
                 properties:
                   defaultRtp: { type: number }
-                  maxAgentLevels: { type: integer }
                   autoSyncInterval: { type: integer }
                   maintenanceMode: { type: boolean }
                   frontendConfig: { type: object }
@@ -948,7 +931,6 @@ paths:
               type: object
               properties:
                 defaultRtp: { type: number }
-                maxAgentLevels: { type: integer }
                 autoSyncInterval: { type: integer }
                 maintenanceMode: { type: boolean }
                 frontendConfig: { type: object }
