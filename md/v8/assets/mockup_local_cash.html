@@ -48,6 +48,10 @@
         .keypad-btn.danger:active { background: rgba(239, 68, 68, 0.3); }
         @keyframes pulse-glow { 0%, 100% { box-shadow: 0 0 15px rgba(16, 185, 129, 0.3); } 50% { box-shadow: 0 0 25px rgba(16, 185, 129, 0.5); } }
         .status-online { animation: pulse-glow 2s infinite; }
+        .sidebar-group-header { cursor: pointer; display: flex; align-items: center; padding: 0.75rem; color: #9ca3af; border-radius: 0.5rem; }
+        .sidebar-group-header:hover { color: #fff; background: rgba(255, 255, 255, 0.05); }
+        .sidebar-submenu { display: none; padding-left: 8px; }
+        .sidebar-submenu.open { display: block; }
     </style>
 </head>
 <body class="gradient-bg min-h-screen pb-24">
@@ -308,6 +312,18 @@
         }
 
         lucide.createIcons();
+
+        function toggleSidebarGroup(header) {
+            const group = header.parentElement;
+            const submenu = group.querySelector('.sidebar-submenu');
+            if (group.classList.contains('open')) {
+                group.classList.remove('open');
+                submenu.classList.remove('open');
+            } else {
+                group.classList.add('open');
+                submenu.classList.add('open');
+            }
+        }
     </script>
 </body>
 </html>

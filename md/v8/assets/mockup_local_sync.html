@@ -40,6 +40,10 @@
         .overlay.active { opacity: 1; visibility: visible; }
         @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
         .animate-spin { animation: spin 1s linear infinite; }
+        .sidebar-group-header { cursor: pointer; display: flex; align-items: center; padding: 0.75rem; color: #9ca3af; border-radius: 0.5rem; }
+        .sidebar-group-header:hover { color: #fff; background: rgba(255, 255, 255, 0.05); }
+        .sidebar-submenu { display: none; padding-left: 8px; }
+        .sidebar-submenu.open { display: block; }
     </style>
 </head>
 <body class="gradient-bg min-h-screen pb-24">
@@ -277,6 +281,18 @@
             document.getElementById('overlay').classList.toggle('active');
         }
         lucide.createIcons();
+
+        function toggleSidebarGroup(header) {
+            const group = header.parentElement;
+            const submenu = group.querySelector('.sidebar-submenu');
+            if (group.classList.contains('open')) {
+                group.classList.remove('open');
+                submenu.classList.remove('open');
+            } else {
+                group.classList.add('open');
+                submenu.classList.add('open');
+            }
+        }
     </script>
 </body>
 </html>

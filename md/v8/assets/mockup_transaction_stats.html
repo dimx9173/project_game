@@ -37,6 +37,10 @@
         .sidebar-link:hover::before, .sidebar-link.active::before { height: 60%; }
         .sidebar-link.active { background: linear-gradient(90deg, rgba(124, 58, 237, 0.2), transparent); }
         .input-focus:focus { box-shadow: 0 0 0 3px rgba(168, 85, 247, 0.3), 0 0 20px rgba(168, 85, 247, 0.2); }
+        .sidebar-group-header { cursor: pointer; display: flex; align-items: center; padding: 0.75rem; color: #9ca3af; border-radius: 0.5rem; }
+        .sidebar-group-header:hover { color: #fff; background: rgba(255, 255, 255, 0.05); }
+        .sidebar-submenu { display: none; padding-left: 8px; }
+        .sidebar-submenu.open { display: block; }
     </style>
 </head>
 <body class="gradient-bg min-h-screen flex">
@@ -257,6 +261,20 @@
             </div>
         </div>
     </main>
-    <script>lucide.createIcons();</script>
+    <script>
+        lucide.createIcons();
+
+        function toggleSidebarGroup(header) {
+            const group = header.parentElement;
+            const submenu = group.querySelector('.sidebar-submenu');
+            if (group.classList.contains('open')) {
+                group.classList.remove('open');
+                submenu.classList.remove('open');
+            } else {
+                group.classList.add('open');
+                submenu.classList.add('open');
+            }
+        }
+    </script>
 </body>
 </html>

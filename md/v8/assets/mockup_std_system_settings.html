@@ -41,6 +41,10 @@
         .tab-active { border-bottom: 2px solid #a855f7; color: #a855f7; }
         .badge-local { background: #10b981; color: white; font-size: 10px; padding: 2px 6px; border-radius: 4px; }
         .badge-central { background: #8b5cf6; color: white; font-size: 10px; padding: 2px 6px; border-radius: 4px; }
+        .sidebar-group-header { cursor: pointer; display: flex; align-items: center; padding: 0.75rem; color: #9ca3af; border-radius: 0.5rem; }
+        .sidebar-group-header:hover { color: #fff; background: rgba(255, 255, 255, 0.05); }
+        .sidebar-submenu { display: none; padding-left: 8px; }
+        .sidebar-submenu.open { display: block; }
     </style>
 </head>
 <body class="gradient-bg min-h-screen flex">
@@ -443,6 +447,18 @@
             // 顯示對應內容
             document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
             document.getElementById('tab-' + tabId).classList.remove('hidden');
+        }
+
+        function toggleSidebarGroup(header) {
+            const group = header.parentElement;
+            const submenu = group.querySelector('.sidebar-submenu');
+            if (group.classList.contains('open')) {
+                group.classList.remove('open');
+                submenu.classList.remove('open');
+            } else {
+                group.classList.add('open');
+                submenu.classList.add('open');
+            }
         }
     </script>
 </body>
