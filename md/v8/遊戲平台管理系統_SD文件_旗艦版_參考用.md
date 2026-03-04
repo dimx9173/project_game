@@ -647,8 +647,10 @@ const offlineHandler = {
 
 #### PIN 碼保護
 
-- 6 位數字
-- bcrypt 雜湊儲存
+- 供單機本地端快速登入使用，與 `system_users` 綁定
+- 4-6 位數字
+- bcrypt 雜湊儲存（對應 `system_users.pin_hash`）
+- 透過「使用者管理」功能（系統管理權限）進行初設與重置
 - 錯誤 5 次後鎖定 30 分鐘
 
 ### 6.2 權限模型 - 動態自定義 RBAC

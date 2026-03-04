@@ -38,6 +38,7 @@
         .sidebar-link.active { background: linear-gradient(90deg, rgba(124, 58, 237, 0.2), transparent); }
         .table-row-hover:hover { background: linear-gradient(90deg, rgba(124, 58, 237, 0.1), transparent); }
         .input-focus:focus { box-shadow: 0 0 0 3px rgba(168, 85, 247, 0.3), 0 0 20px rgba(168, 85, 247, 0.2); }
+        .sidebar-group-header { display: flex; align-items: center; justify-content: space-between; padding: 8px 12px; color: #9ca3af; font-size: 13px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; cursor: pointer; }
     </style>
 </head>
 <body class="gradient-bg min-h-screen flex">
@@ -58,9 +59,9 @@
             <span><i data-lucide="monitor" class="w-4 h-4 inline mr-2"></i>機台管理</span>
         </div>
         <div class="sidebar-submenu">
-            <a href="mockup_mvp_machine_list.html" class="sidebar-link flex items-center px-3 py-2 text-gray-400 hover:text-white rounded-lg text-sm"><span>機台列表</span></a>
-            <a href="mockup_mvp_machine_add.html" class="sidebar-link flex items-center px-3 py-2 text-gray-400 hover:text-white rounded-lg text-sm"><span>新增機台</span></a>
-            <a href="mockup_machine_remote_control.html" class="sidebar-link flex items-center px-3 py-2 text-gray-400 hover:text-white rounded-lg text-sm"><span>遠端控制</span></a>
+            <a href="mockup_mvp_machine_list.html" class="sidebar-link flex items-center px-3 py-2 text-gray-400 hover:text-white rounded-lg text-base"><span>機台列表</span></a>
+            <a href="mockup_mvp_machine_add.html" class="sidebar-link flex items-center px-3 py-2 text-gray-400 hover:text-white rounded-lg text-base"><span>新增機台</span></a>
+            <a href="mockup_machine_remote_control.html" class="sidebar-link flex items-center px-3 py-2 text-gray-400 hover:text-white rounded-lg text-base"><span>遠端控制</span></a>
         </div>
     </div>
 
@@ -70,12 +71,12 @@
             <span><i data-lucide="gamepad-2" class="w-4 h-4 inline mr-2"></i>遊戲管理</span>
         </div>
         <div class="sidebar-submenu">
-            <a href="mockup_mvp_data_list.html" class="sidebar-link flex items-center px-3 py-2 text-gray-400 hover:text-white rounded-lg text-sm"><span>遊戲列表</span></a>
-            <a href="mockup_mvp_game_add.html" class="sidebar-link flex items-center px-3 py-2 text-gray-400 hover:text-white rounded-lg text-sm"><span>新增遊戲</span></a>
-            <a href="mockup_game_detail.html" class="sidebar-link flex items-center px-3 py-2 text-gray-400 hover:text-white rounded-lg text-sm"><span>遊戲詳情</span></a>
-            <a href="mockup_game_sync.html" class="sidebar-link flex items-center px-3 py-2 text-gray-400 hover:text-white rounded-lg text-sm"><span>遊戲同步</span></a>
-            <a href="mockup_game_test.html" class="sidebar-link flex items-center px-3 py-2 text-gray-400 hover:text-white rounded-lg text-sm"><span>遊戲測試</span></a>
-            <a href="mockup_recommended_games.html" class="sidebar-link flex items-center px-3 py-2 text-gray-400 hover:text-white rounded-lg text-sm"><span>推薦遊戲</span></a>
+            <a href="mockup_mvp_data_list.html" class="sidebar-link flex items-center px-3 py-2 text-gray-400 hover:text-white rounded-lg text-base"><span>遊戲列表</span></a>
+            <a href="mockup_mvp_game_add.html" class="sidebar-link flex items-center px-3 py-2 text-gray-400 hover:text-white rounded-lg text-base"><span>新增遊戲</span></a>
+            <a href="mockup_game_detail.html" class="sidebar-link flex items-center px-3 py-2 text-gray-400 hover:text-white rounded-lg text-base"><span>遊戲詳情</span></a>
+            <a href="mockup_game_sync.html" class="sidebar-link flex items-center px-3 py-2 text-gray-400 hover:text-white rounded-lg text-base"><span>遊戲同步</span></a>
+            <a href="mockup_game_test.html" class="sidebar-link flex items-center px-3 py-2 text-gray-400 hover:text-white rounded-lg text-base"><span>遊戲測試</span></a>
+            <a href="mockup_recommended_games.html" class="sidebar-link flex items-center px-3 py-2 text-gray-400 hover:text-white rounded-lg text-base"><span>推薦遊戲</span></a>
         </div>
     </div>
 
@@ -85,9 +86,9 @@
             <span><i data-lucide="users" class="w-4 h-4 inline mr-2"></i>玩家管理</span>
         </div>
         <div class="sidebar-submenu">
-            <a href="mockup_mvp_player_list.html" class="sidebar-link flex items-center px-3 py-2 text-gray-400 hover:text-white rounded-lg text-sm"><span>玩家列表</span></a>
-            <a href="mockup_player_detail.html" class="sidebar-link flex items-center px-3 py-2 text-gray-400 hover:text-white rounded-lg text-sm"><span>玩家詳情</span></a>
-            <a href="mockup_mvp_player_adjust.html" class="sidebar-link flex items-center px-3 py-2 text-gray-400 hover:text-white rounded-lg text-sm"><span>餘額調整</span></a>
+            <a href="mockup_mvp_player_list.html" class="sidebar-link flex items-center px-3 py-2 text-gray-400 hover:text-white rounded-lg text-base"><span>玩家列表</span></a>
+            <a href="mockup_player_detail.html" class="sidebar-link flex items-center px-3 py-2 text-gray-400 hover:text-white rounded-lg text-base"><span>玩家詳情</span></a>
+            <a href="mockup_mvp_player_adjust.html" class="sidebar-link flex items-center px-3 py-2 text-gray-400 hover:text-white rounded-lg text-base"><span>餘額調整</span></a>
         </div>
     </div>
 
@@ -97,9 +98,9 @@
             <span><i data-lucide="wallet" class="w-4 h-4 inline mr-2"></i>交易紀錄管理</span>
         </div>
         <div class="sidebar-submenu">
-            <a href="mockup_std_wallet.html" class="sidebar-link flex items-center px-3 py-2 text-gray-400 hover:text-white rounded-lg text-sm"><span>錢包交易</span></a>
-            <a href="mockup_std_transaction_detail.html" class="sidebar-link flex items-center px-3 py-2 text-gray-400 hover:text-white rounded-lg text-sm"><span>交易詳情</span></a>
-            <a href="mockup_transaction_export.html" class="sidebar-link flex items-center px-3 py-2 text-gray-400 hover:text-white rounded-lg text-sm"><span>交易匯出</span></a>
+            <a href="mockup_std_wallet.html" class="sidebar-link flex items-center px-3 py-2 text-gray-400 hover:text-white rounded-lg text-base"><span>錢包交易</span></a>
+            <a href="mockup_std_transaction_detail.html" class="sidebar-link flex items-center px-3 py-2 text-gray-400 hover:text-white rounded-lg text-base"><span>交易詳情</span></a>
+            <a href="mockup_transaction_export.html" class="sidebar-link flex items-center px-3 py-2 text-gray-400 hover:text-white rounded-lg text-base"><span>交易匯出</span></a>
         </div>
     </div>
 
@@ -109,8 +110,8 @@
             <span><i data-lucide="plug" class="w-4 h-4 inline mr-2"></i>串接遊戲</span>
         </div>
         <div class="sidebar-submenu">
-            <a href="mockup_std_provider_list.html" class="sidebar-link flex items-center px-3 py-2 text-gray-400 hover:text-white rounded-lg text-sm"><span>遊戲商列表</span></a>
-            <a href="mockup_api_log.html" class="sidebar-link flex items-center px-3 py-2 text-gray-400 hover:text-white rounded-lg text-sm"><span>API 日誌</span></a>
+            <a href="mockup_std_provider_list.html" class="sidebar-link flex items-center px-3 py-2 text-gray-400 hover:text-white rounded-lg text-base"><span>遊戲商列表</span></a>
+            <a href="mockup_api_log.html" class="sidebar-link flex items-center px-3 py-2 text-gray-400 hover:text-white rounded-lg text-base"><span>API 日誌</span></a>
         </div>
     </div>
 
@@ -123,8 +124,8 @@
             <span><i data-lucide="shield-user" class="w-4 h-4 inline mr-2"></i>使用者權限</span>
         </div>
         <div class="sidebar-submenu">
-            <a href="mockup_user_permission.html" class="sidebar-link flex items-center px-3 py-2 text-gray-400 hover:text-white rounded-lg text-sm"><span>帳號管理</span></a>
-            <a href="mockup_security_settings.html" class="sidebar-link flex items-center px-3 py-2 text-gray-400 hover:text-white rounded-lg text-sm"><span>安全設定</span></a>
+            <a href="mockup_user_permission.html" class="sidebar-link flex items-center px-3 py-2 text-gray-400 hover:text-white rounded-lg text-base"><span>帳號管理</span></a>
+            <a href="mockup_security_settings.html" class="sidebar-link flex items-center px-3 py-2 text-gray-400 hover:text-white rounded-lg text-base"><span>安全設定</span></a>
         </div>
     </div>
 
@@ -134,7 +135,7 @@
             <span><i data-lucide="download" class="w-4 h-4 inline mr-2"></i>版本更新</span>
         </div>
         <div class="sidebar-submenu">
-            <a href="mockup_flg_ota.html" class="sidebar-link flex items-center px-3 py-2 text-gray-400 hover:text-white rounded-lg text-sm"><span>OTA 版本管理</span></a>
+            <a href="mockup_flg_ota.html" class="sidebar-link flex items-center px-3 py-2 text-gray-400 hover:text-white rounded-lg text-base"><span>OTA 版本管理</span></a>
         </div>
     </div>
 
@@ -144,9 +145,9 @@
             <span><i data-lucide="layout" class="w-4 h-4 inline mr-2"></i>介面設定</span>
         </div>
         <div class="sidebar-submenu">
-            <a href="mockup_announcement.html" class="sidebar-link flex items-center px-3 py-2 text-gray-400 hover:text-white rounded-lg text-sm"><span>公告管理</span></a>
-            <a href="mockup_lobby_settings.html" class="sidebar-link flex items-center px-3 py-2 text-gray-400 hover:text-white rounded-lg text-sm"><span>遊戲大廳設定</span></a>
-            <a href="mockup_std_game_category.html" class="sidebar-link flex items-center px-3 py-2 text-gray-400 hover:text-white rounded-lg text-sm"><span>遊戲分類排序</span></a>
+            <a href="mockup_announcement.html" class="sidebar-link flex items-center px-3 py-2 text-gray-400 hover:text-white rounded-lg text-base"><span>公告管理</span></a>
+            <a href="mockup_lobby_settings.html" class="sidebar-link flex items-center px-3 py-2 text-gray-400 hover:text-white rounded-lg text-base"><span>遊戲大廳設定</span></a>
+            <a href="mockup_std_game_category.html" class="sidebar-link flex items-center px-3 py-2 text-gray-400 hover:text-white rounded-lg text-base"><span>遊戲分類排序</span></a>
         </div>
     </div>
 
@@ -156,10 +157,10 @@
             <span><i data-lucide="activity" class="w-4 h-4 inline mr-2"></i>監控中心</span>
         </div>
         <div class="sidebar-submenu">
-            <a href="mockup_flg_monitor.html" class="sidebar-link flex items-center px-3 py-2 text-gray-400 hover:text-white rounded-lg text-sm"><span>系統監控</span></a>
-            <a href="mockup_api_status_monitor.html" class="sidebar-link flex items-center px-3 py-2 text-gray-400 hover:text-white rounded-lg text-sm"><span>API 狀態</span></a>
-            <a href="mockup_alert_threshold.html" class="sidebar-link flex items-center px-3 py-2 text-gray-400 hover:text-white rounded-lg text-sm"><span>告警設定</span></a>
-            <a href="mockup_audit_log.html" class="sidebar-link flex items-center px-3 py-2 text-gray-400 hover:text-white rounded-lg text-sm"><span>審計日誌</span></a>
+            <a href="mockup_flg_monitor.html" class="sidebar-link flex items-center px-3 py-2 text-gray-400 hover:text-white rounded-lg text-base"><span>系統監控</span></a>
+            <a href="mockup_api_status_monitor.html" class="sidebar-link flex items-center px-3 py-2 text-gray-400 hover:text-white rounded-lg text-base"><span>API 狀態</span></a>
+            <a href="mockup_alert_threshold.html" class="sidebar-link flex items-center px-3 py-2 text-gray-400 hover:text-white rounded-lg text-base"><span>告警設定</span></a>
+            <a href="mockup_audit_log.html" class="sidebar-link flex items-center px-3 py-2 text-gray-400 hover:text-white rounded-lg text-base"><span>審計日誌</span></a>
         </div>
     </div>
 
@@ -169,14 +170,14 @@
             <span><i data-lucide="settings" class="w-4 h-4 inline mr-2"></i>系統設定</span>
         </div>
         <div class="sidebar-submenu">
-            <a href="mockup_std_system_settings.html" class="sidebar-link flex items-center px-3 py-2 text-gray-400 hover:text-white rounded-lg text-sm"><span>基本設定</span></a>
+            <a href="mockup_std_system_settings.html" class="sidebar-link flex items-center px-3 py-2 text-gray-400 hover:text-white rounded-lg text-base"><span>基本設定</span></a>
         </div>
     </div>
 </nav><div class="p-4 border-t border-dark-border">
             <div class="flex items-center justify-between">
                 <div class="flex items-center">
-                    <div class="w-8 h-8 rounded-full gradient-purple flex items-center justify-center"><span class="text-sm font-bold text-white">A</span></div>
-                    <div class="ml-3"><p class="text-sm font-medium text-white">admin</p><p class="text-xs text-gray-500">系統管理員</p></div>
+                    <div class="w-8 h-8 rounded-full gradient-purple flex items-center justify-center"><span class="text-base font-bold text-white">A</span></div>
+                    <div class="ml-3"><p class="text-base font-medium text-white">admin</p><p class="text-xs text-gray-500">系統管理員</p></div>
                 </div>
                 <a href="mockup_login.html" class="text-gray-400 hover:text-white"><i data-lucide="log-out" class="w-5 h-5"></i></a>
             </div>
@@ -195,19 +196,19 @@
         <div class="flex-1 overflow-y-auto p-6">
             <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-6">
                 <div class="glass-card rounded-2xl p-5">
-                    <h3 class="text-gray-400 text-sm mb-2">待同步遊戲</h3>
+                    <h3 class="text-gray-400 text-base mb-2">待同步遊戲</h3>
                     <p class="text-2xl font-bold text-white font-mono">15</p>
                 </div>
                 <div class="glass-card rounded-2xl p-5">
-                    <h3 class="text-gray-400 text-sm mb-2">同步中</h3>
+                    <h3 class="text-gray-400 text-base mb-2">同步中</h3>
                     <p class="text-2xl font-bold text-blue-400 font-mono">3</p>
                 </div>
                 <div class="glass-card rounded-2xl p-5">
-                    <h3 class="text-gray-400 text-sm mb-2">同步完成</h3>
+                    <h3 class="text-gray-400 text-base mb-2">同步完成</h3>
                     <p class="text-2xl font-bold text-green-400 font-mono">287</p>
                 </div>
                 <div class="glass-card rounded-2xl p-5">
-                    <h3 class="text-gray-400 text-sm mb-2">同步失敗</h3>
+                    <h3 class="text-gray-400 text-base mb-2">同步失敗</h3>
                     <p class="text-2xl font-bold text-red-400 font-mono">2</p>
                 </div>
             </div>
@@ -216,7 +217,7 @@
                 <div class="overflow-x-auto">
                     <table class="w-full">
                         <thead>
-                            <tr class="text-left text-sm text-gray-400 border-b border-dark-border">
+                            <tr class="text-left text-base text-gray-400 border-b border-dark-border">
                                 <th class="pb-3 font-medium">遊戲商</th>
                                 <th class="pb-3 font-medium">遊戲名稱</th>
                                 <th class="pb-3 font-medium">遊戲ID</th>
@@ -233,7 +234,7 @@
                                 <td class="py-4 text-gray-400 font-mono">PT-001</td>
                                 <td class="py-4"><span class="bg-blue-500/20 text-blue-400 text-xs px-2 py-1 rounded-full">同步中</span></td>
                                 <td class="py-4"><div class="w-24 bg-gray-700 rounded-full h-2"><div class="bg-blue-500 h-2 rounded-full" style="width: 65%"></div></div><span class="text-xs text-gray-400">65%</span></td>
-                                <td class="py-4 text-gray-400 text-sm">2026-03-04 08:15</td>
+                                <td class="py-4 text-gray-400 text-base">2026-03-04 08:15</td>
                                 <td class="py-4"><button class="p-2 text-gray-400 hover:text-white"><i data-lucide="x" class="w-4 h-4"></i></button></td>
                             </tr>
                             <tr class="table-row-hover border-b border-dark-border/50">
@@ -242,7 +243,7 @@
                                 <td class="py-4 text-gray-400 font-mono">MG-023</td>
                                 <td class="py-4"><span class="bg-green-500/20 text-green-400 text-xs px-2 py-1 rounded-full">完成</span></td>
                                 <td class="py-4"><div class="w-24 bg-gray-700 rounded-full h-2"><div class="bg-green-500 h-2 rounded-full" style="width: 100%"></div></div><span class="text-xs text-gray-400">100%</span></td>
-                                <td class="py-4 text-gray-400 text-sm">2026-03-04 08:10</td>
+                                <td class="py-4 text-gray-400 text-base">2026-03-04 08:10</td>
                                 <td class="py-4"><button class="p-2 text-gray-400 hover:text-white"><i data-lucide="eye" class="w-4 h-4"></i></button></td>
                             </tr>
                             <tr class="table-row-hover border-b border-dark-border/50">
@@ -251,7 +252,7 @@
                                 <td class="py-4 text-gray-400 font-mono">PP-045</td>
                                 <td class="py-4"><span class="bg-red-500/20 text-red-400 text-xs px-2 py-1 rounded-full">失敗</span></td>
                                 <td class="py-4"><div class="w-24 bg-gray-700 rounded-full h-2"><div class="bg-red-500 h-2 rounded-full" style="width: 30%"></div></div><span class="text-xs text-gray-400">30%</span></td>
-                                <td class="py-4 text-gray-400 text-sm">2026-03-04 08:05</td>
+                                <td class="py-4 text-gray-400 text-base">2026-03-04 08:05</td>
                                 <td class="py-4"><button class="p-2 text-blue-400 hover:text-blue-300"><i data-lucide="refresh-cw" class="w-4 h-4"></i></button></td>
                             </tr>
                         </tbody>
@@ -262,7 +263,7 @@
                 <h3 class="text-white font-semibold mb-4">同步設定</h3>
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div>
-                        <label class="block text-gray-400 text-sm mb-2">自動同步間隔</label>
+                        <label class="block text-gray-400 text-base mb-2">自動同步間隔</label>
                         <select class="w-full bg-dark-bg border border-dark-border rounded-lg px-4 py-2 text-white input-focus">
                             <option>每小時</option>
                             <option selected>每6小時</option>
@@ -271,7 +272,7 @@
                         </select>
                     </div>
                     <div>
-                        <label class="block text-gray-400 text-sm mb-2">同步失敗重試次數</label>
+                        <label class="block text-gray-400 text-base mb-2">同步失敗重試次數</label>
                         <select class="w-full bg-dark-bg border border-dark-border rounded-lg px-4 py-2 text-white input-focus">
                             <option>1次</option>
                             <option selected>3次</option>
@@ -281,7 +282,7 @@
                     <div class="md:col-span-2 flex items-center justify-between">
                         <div>
                             <p class="text-white font-medium">自動同步遊戲餘額</p>
-                            <p class="text-gray-500 text-sm">當玩家餘額變化時自動同步</p>
+                            <p class="text-gray-500 text-base">當玩家餘額變化時自動同步</p>
                         </div>
                         <label class="relative inline-flex items-center cursor-pointer">
                             <input type="checkbox" class="sr-only peer" checked>
@@ -293,5 +294,18 @@
         </div>
     </main>
     <script>lucide.createIcons();</script>
+    <script>
+        function toggleSidebarGroup(header) {
+            const group = header.parentElement;
+            const submenu = group.querySelector('.sidebar-submenu');
+            if (group.classList.contains('open')) {
+                group.classList.remove('open');
+                submenu.classList.remove('open');
+            } else {
+                group.classList.add('open');
+                submenu.classList.add('open');
+            }
+        }
+    </script>
 </body>
 </html>
