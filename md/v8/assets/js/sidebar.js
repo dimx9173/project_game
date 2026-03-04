@@ -67,21 +67,17 @@
 
     nav.appendChild(group('monitor', '機台管理', [
       { href: 'mockup_mvp_machine_list.html', text: '機台列表' },
-      { href: 'mockup_mvp_machine_add.html', text: '新增機台' },
       { href: 'mockup_machine_remote_control.html', text: '遠端控制' }
     ]));
     nav.appendChild(group('gamepad-2', '遊戲管理', [
       { href: 'mockup_mvp_data_list.html', text: '遊戲列表' },
-      { href: 'mockup_mvp_game_add.html', text: '新增遊戲' },
       { href: 'mockup_game_detail.html', text: '遊戲詳情' },
       { href: 'mockup_game_sync.html', text: '遊戲同步' },
-      { href: 'mockup_game_test.html', text: '遊戲測試' },
-      { href: 'mockup_recommended_games.html', text: '推薦遊戲' }
+      { href: 'mockup_game_test.html', text: '遊戲測試' }
     ]));
     nav.appendChild(group('users', '玩家管理', [
       { href: 'mockup_mvp_player_list.html', text: '玩家列表' },
-      { href: 'mockup_player_detail.html', text: '玩家詳情' },
-      { href: 'mockup_mvp_player_adjust.html', text: '餘額調整' }
+      { href: 'mockup_player_detail.html', text: '玩家詳情' }
     ]));
     nav.appendChild(group('wallet', '交易紀錄管理', [
       { href: 'mockup_std_wallet.html', text: '錢包交易' },

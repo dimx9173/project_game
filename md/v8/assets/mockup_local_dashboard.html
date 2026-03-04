@@ -44,60 +44,10 @@
         .overlay.active { opacity: 1; visibility: visible; }
         @keyframes pulse-glow { 0%, 100% { box-shadow: 0 0 15px rgba(16, 185, 129, 0.3); } 50% { box-shadow: 0 0 25px rgba(16, 185, 129, 0.5); } }
         .status-online { animation: pulse-glow 2s infinite; }
-        .sidebar-group-header { cursor: pointer; display: flex; align-items: center; padding: 0.75rem; color: #9ca3af; border-radius: 0.5rem; }
-        .sidebar-group-header:hover { color: #fff; background: rgba(255, 255, 255, 0.05); }
-        .sidebar-submenu { display: none; padding-left: 8px; }
-        .sidebar-submenu.open { display: block; }
     </style>
 </head>
 <body class="gradient-bg min-h-screen pb-24">
-    <!-- 漢堡選單遮罩 -->
-    <div id="overlay" class="overlay fixed inset-0 bg-black/60 z-40" onclick="toggleMenu()"></div>
-
-    <!-- 側邊選單 -->
-    <aside id="sidebar" class="menu-slide fixed left-0 top-0 bottom-0 w-72 bg-dark-sidebar border-r border-dark-border z-50 flex flex-col">
-        <div class="h-16 flex items-center px-4 border-b border-dark-border">
-            <div class="w-10 h-10 rounded-xl gradient-local flex items-center justify-center shadow-glow-sm mr-3 flex-shrink-0">
-                <i data-lucide="laptop" class="w-5 h-5 text-white"></i>
-            </div>
-            <div>
-                <span class="font-bold text-white">本地後台</span>
-                <span class="text-xs text-gray-500 block">本地模式</span>
-            </div>
-        </div>
-        <nav class="flex-1 py-4 px-3 space-y-1 overflow-y-auto">
-    <!-- 儀表板 -->
-    <a href="mockup_dashboard.html" class="sidebar-link flex items-center px-3 py-2.5 text-gray-300 hover:text-white rounded-lg"><i data-lucide="layout-dashboard" class="w-5 h-5 mr-3"></i><span>儀表板</span></a>
-
-    <!-- 本地後台 -->
-    <div class="sidebar-group">
-        <div class="sidebar-group-header sidebar-has-submenu" onclick="toggleSidebarGroup(this)">
-            <span><i data-lucide="monitor-play" class="w-4 h-4 inline mr-2"></i>本地後台</span>
-        </div>
-        <div class="sidebar-submenu">
-            <a href="mockup_local_dashboard.html" class="sidebar-link flex items-center px-3 py-2 text-gray-400 hover:text-white rounded-lg text-sm"><span>本地儀表板</span></a>
-            <a href="mockup_local_machine.html" class="sidebar-link flex items-center px-3 py-2 text-gray-400 hover:text-white rounded-lg text-sm"><span>機台管理</span></a>
-            <a href="mockup_local_cash.html" class="sidebar-link flex items-center px-3 py-2 text-gray-400 hover:text-white rounded-lg text-sm"><span>現金交易</span></a>
-            <a href="mockup_local_sync.html" class="sidebar-link flex items-center px-3 py-2 text-gray-400 hover:text-white rounded-lg text-sm"><span>資料同步</span></a>
-        </div>
-    </div>
-</nav><div class="p-4 border-t border-dark-border">
-            <div class="flex items-center justify-between">
-                <div class="flex items-center">
-                    <div class="w-10 h-10 rounded-full gradient-local flex items-center justify-center flex-shrink-0">
-                        <span class="text-sm font-bold text-white">L</span>
-                    </div>
-                    <div class="ml-3">
-                        <p class="text-sm font-medium text-white">單機本地後台</p>
-                        <p class="text-xs text-gray-500">本地模式</p>
-                    </div>
-                </div>
-                <a href="mockup_login.html" class="text-gray-400 hover:text-white p-2 touch-manipulation">
-                    <i data-lucide="log-out" class="w-6 h-6"></i>
-                </a>
-            </div>
-        </div>
-    </aside>
+    <div id="sidebar-container"></div>
 
     <!-- 主內容區 -->
     <main class="flex flex-col min-h-screen" id="main-content">
@@ -294,42 +244,10 @@
         </div>
     </nav>
 
+    <script src="js/sidebar.js"></script>
     <script>
+        MockupSidebar.render('mockup_local_dashboard.html');
         lucide.createIcons();
-
-        function toggleMenu() {
-            const sidebar = document.getElementById('sidebar');
-            const overlay = document.getElementById('overlay');
-            const mainContent = document.getElementById('main-content');
-
-            sidebar.classList.toggle('active');
-            overlay.classList.toggle('active');
-            mainContent.classList.toggle('translate-x-72');
-        }
-
-        // 監聽螢幕旋轉
-        window.addEventListener('orientationchange', function() {
-            setTimeout(function() {
-                window.scrollTo(0, 1);
-            }, 100);
-        });
-
-        // 防止雙擊縮放
-        document.addEventListener('dblclick', function(event) {
-            event.preventDefault();
-        }, { passive: false });
-
-        function toggleSidebarGroup(header) {
-            const group = header.parentElement;
-            const submenu = group.querySelector('.sidebar-submenu');
-            if (group.classList.contains('open')) {
-                group.classList.remove('open');
-                submenu.classList.remove('open');
-            } else {
-                group.classList.add('open');
-                submenu.classList.add('open');
-            }
-        }
     </script>
     <style>
         .pb-safe { padding-bottom: env(safe-area-inset-bottom, 0); }
