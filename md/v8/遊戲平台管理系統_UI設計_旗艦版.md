@@ -168,6 +168,7 @@ gradient-bg: linear-gradient(135deg, #0a0a0f 0%, #1a0a2e 50%, #0a0a0f 100%)
 | **遊戲管理**     | 遊戲列表、新增/編輯/刪除、版本管理 |
 | **玩家管理**     | 玩家列表、詳情檢視、狀態管理       |
 | **錢包交易**     | 交易紀錄、統計分析、對帳           |
+| **營收報表**     | 多維度營收查詢、圖表分析、資料匯出 |
 | **串接遊戲管理** | 遊戲商 API 管理、連線監控          |
 | **多人遊戲**    | 牌桌管理、牌局歷史、荷官操作       |
 | **使用者權限**   | 帳號管理、角色權限設定（三層）     |
@@ -247,31 +248,41 @@ gradient-bg: linear-gradient(135deg, #0a0a0f 0%, #1a0a2e 50%, #0a0a0f 100%)
 
 ![錢包交易](./assets/mockup_std_wallet.png)
 
-### 5.7 集中式後台 - 串接遊戲商
+### 5.7 集中式後台 - 營收報表
+
+- **版面配置**：
+  - **頂部操作區**：多維度交叉篩選器（時間區間、店家/代理商、機台編號、遊戲分類等）。
+  - **中段視覺區**：資料 KPI 卡片（總下注、總派彩、總營收），搭配動態折線圖與長條圖呈現營收趨勢與佔比。
+  - **底部資料區**：詳細數據表格（Data Grid），顯示各維度匯總明細，支援按欄位排序與分頁。
+- **核心操作**：
+  - 條件選單變更時即時重繪圖表與表格資料。
+  - 提供帶有霓虹發光樣式（Primary）的「匯出 CSV/Excel」功能按鈕。
+
+### 5.8 集中式後台 - 串接遊戲商
 
 ![串接遊戲商](./assets/mockup_std_provider_list.png)
 
-### 5.8 集中式後台 - 使用者權限
+### 5.9 集中式後台 - 使用者權限
 
 ![使用者權限](./assets/mockup_std_agent_list.png)
 
-### 5.9 集中式後台 - OTA 版本管理
+### 5.10 集中式後台 - OTA 版本管理
 
 ![OTA版本派送](./assets/mockup_flg_ota.png)
 
-### 5.10 集中式後台 - 硬體監控中心
+### 5.11 集中式後台 - 硬體監控中心
 
 ![硬體監控系統](./assets/mockup_flg_monitor.png)
 
-### 5.11 集中式後台 - 對帳與爭議處理
+### 5.12 集中式後台 - 對帳與爭議處理
 
 ![對帳爭議處理](./assets/mockup_flg_reconciliation.png)
 
-### 5.12 單機本地後台 - 開洗分介面
+### 5.13 單機本地後台 - 開洗分介面
 
 ![本地開洗分](./assets/mockup_local_cash.png)
 
-### 5.13 單機本地後台 - 本機設定
+### 5.14 單機本地後台 - 本機設定
 
 ![本機設定](./assets/mockup_mvp_local_setup.png)
 
@@ -588,6 +599,7 @@ bg-amber-500/20 text-amber-400
 | `/games`          | 遊戲管理     | Admin                |
 | `/players`        | 玩家管理     | Admin/Agent/Operator |
 | `/transactions`   | 交易紀錄     | Admin/Agent/Operator |
+| `/reports/revenue`| 營收報表     | Admin/Agent/Operator |
 | `/providers`      | 串接遊戲管理 | Admin                |
 | `/agents`         | 多帳號管理   | Admin                |
 | `/users`          | 使用者權限   | Admin                |

@@ -31,6 +31,7 @@ tags:
   - name: 錯帳管理 (Discrepancies)
   - name: 同步管理 (Sync)
   - name: 報表管理 (Reports)
+  - name: 系統設定 (System Configs)
 
 components:
   securitySchemes:
@@ -764,3 +765,62 @@ paths:
               schema:
                 type: string
                 format: binary
+
+  # System Configs (旗艦版)
+  /system/config:
+    get:
+      tags: [系統設定 (System Configs)]
+      summary: 取得系統設定
+      description: 取得全站營運參數與管理員後台設定
+      security: [{BearerAuth: []}]
+      responses:
+        '200':
+          description: 成功
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  defaultRtp: {type: number}
+                  maxAgentLevels: {type: integer}
+                  autoSyncInterval: {type: integer}
+                  maintenanceMode: {type: boolean}
+                  frontendConfig: {type: object}
+    put:
+      tags: [系統設定 (System Configs)]
+      summary: 更新系統設定
+      description: 包含前端遊系大廳外觀與系統基礎配置
+      security: [{BearerAuth: []}]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                defaultRtp: {type: number}
+                maxAgentLevels: {type: integer}
+                autoSyncInterval: {type: integer}
+                maintenanceMode: {type: boolean}
+                frontendConfig: {type: object}
+      responses:
+        '200': {description: 更新成功}
+
+  /system/config/frontend:
+    get:
+      tags: [系統設定 (System Configs)]
+      summary: 取得前端大廳 UI 設定
+      description: 公開介面，供玩家端設備載入預設的視覺、Theme、熱門遊戲推薦等
+      responses:
+        '200':
+          description: 成功
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  theme: {type: string}
+                  lobbyTitle: {type: string}
+                  marqueeText: {type: string}
+                  bannerUrls: {type: array, items: {type: string}}
+                  featuredGameIds: {type: array, items: {type: string}}
