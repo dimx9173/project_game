@@ -30,6 +30,7 @@ tags:
   - name: 監控中心 (Monitor)
   - name: 錯帳管理 (Discrepancies)
   - name: 同步管理 (Sync)
+  - name: 報表管理 (Reports)
 
 components:
   securitySchemes:
@@ -696,3 +697,70 @@ paths:
       security: [{BearerAuth: []}, {PinAuth: []}]
       responses:
         '200': {description: 成功}
+
+  # Reports (旗艦版)
+  /reports/revenue:
+    get:
+      tags: [報表管理 (Reports)]
+      summary: 營收報表
+      description: |
+        取得營收報表資料
+        - 支援多維度篩選：門市、機台、遊戲、遊戲商
+        - 支援日期範圍：日/週/月/年
+        - 支援多選篩選條件
+      security: [{BearerAuth: []}]
+      parameters:
+        - {name: startDate, in: query, schema: {type: string, format: date}}
+        - {name: endDate, in: query, schema: {type: string, format: date}}
+        - {name: reportType, in: query, schema: {type: string, enum: [daily, weekly, monthly, yearly]}}
+        - {name: stores, in: query, schema: {type: array, items: {type: string}}, description: 門市ID列表（可多選）}
+        - {name: machines, in: query, schema: {type: array, items: {type: string}}, description: 機台ID列表（可多選）}
+        - {name: games, in: query, schema: {type: array, items: {type: string}}, description: 遊戲ID列表（可多選）}
+        - {name: providers, in: query, schema: {type: array, items: {type: string}}, description: 遊戲商ID列表（可多選）}
+      responses:
+        '200':
+          description: 成功
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        date: {type: string}
+                        store: {type: string}
+                        machine: {type: string}
+                        game: {type: string}
+                        provider: {type: string}
+                        totalBet: {type: number}
+                        totalPayout: {type: number}
+                        revenue: {type: number}
+                        rtp: {type: number}
+                        gameCount: {type: integer}
+
+  /reports/revenue/export:
+    get:
+      tags: [報表管理 (Reports)]
+      summary: 匯出營收報表
+      description: 匯出營收報表為 CSV 或 Excel
+      security: [{BearerAuth: []}]
+      parameters:
+        - {name: startDate, in: query, schema: {type: string, format: date}}
+        - {name: endDate, in: query, schema: {type: string, format: date}}
+        - {name: reportType, in: query, schema: {type: string, enum: [daily, weekly, monthly, yearly]}}
+        - {name: stores, in: query, schema: {type: array, items: {type: string}}}
+        - {name: machines, in: query, schema: {type: array, items: {type: string}}}
+        - {name: games, in: query, schema: {type: array, items: {type: string}}}
+        - {name: providers, in: query, schema: {type: array, items: {type: string}}}
+        - {name: format, in: query, schema: {type: string, enum: [csv, excel], default: csv}}
+      responses:
+        '200':
+          description: 成功匯出
+          content:
+            application/octet-stream:
+              schema:
+                type: string
+                format: binary
