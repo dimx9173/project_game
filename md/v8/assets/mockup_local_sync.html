@@ -58,32 +58,22 @@
             </div>
         </div>
         <nav class="flex-1 py-4 px-3 space-y-1 overflow-y-auto">
-            <a href="mockup_local_dashboard.html" class="sidebar-link flex items-center px-4 py-3.5 text-gray-300 hover:text-white rounded-xl touch-manipulation">
-                <i data-lucide="layout-dashboard" class="w-6 h-6 mr-3"></i>
-                <span class="text-base">本地儀表板</span>
-            </a>
-            <a href="mockup_local_machine.html" class="sidebar-link flex items-center px-4 py-3.5 text-gray-300 hover:text-white rounded-xl touch-manipulation">
-                <i data-lucide="monitor" class="w-6 h-6 mr-3"></i>
-                <span class="text-base">機台狀態</span>
-                <span class="badge-local ml-auto">本地</span>
-            </a>
-            <a href="mockup_local_cash.html" class="sidebar-link flex items-center px-4 py-3.5 text-gray-300 hover:text-white rounded-xl touch-manipulation">
-                <i data-lucide="plus-circle" class="w-6 h-6 mr-3"></i>
-                <span class="text-base">開分/洗分</span>
-                <span class="badge-local ml-auto">本地</span>
-            </a>
-            <a href="#" class="sidebar-link active flex items-center px-4 py-3.5 text-gray-300 hover:text-white rounded-xl touch-manipulation">
-                <i data-lucide="refresh-cw" class="w-6 h-6 mr-3"></i>
-                <span class="text-base">同步狀態</span>
-                <span class="badge-local ml-auto">本地</span>
-            </a>
-            <a href="mockup_mvp_local_setup.html" class="sidebar-link flex items-center px-4 py-3.5 text-gray-300 hover:text-white rounded-xl touch-manipulation">
-                <i data-lucide="settings" class="w-6 h-6 mr-3"></i>
-                <span class="text-base">本機設定</span>
-                <span class="badge-local ml-auto">本地</span>
-            </a>
-        </nav>
-    </aside>
+    <!-- 儀表板 -->
+    <a href="mockup_dashboard.html" class="sidebar-link flex items-center px-3 py-2.5 text-gray-300 hover:text-white rounded-lg"><i data-lucide="layout-dashboard" class="w-5 h-5 mr-3"></i><span>儀表板</span></a>
+
+    <!-- 本地後台 -->
+    <div class="sidebar-group">
+        <div class="sidebar-group-header sidebar-has-submenu" onclick="toggleSidebarGroup(this)">
+            <span><i data-lucide="monitor-play" class="w-4 h-4 inline mr-2"></i>本地後台</span>
+        </div>
+        <div class="sidebar-submenu">
+            <a href="mockup_local_dashboard.html" class="sidebar-link flex items-center px-3 py-2 text-gray-400 hover:text-white rounded-lg text-sm"><span>本地儀表板</span></a>
+            <a href="mockup_local_machine.html" class="sidebar-link flex items-center px-3 py-2 text-gray-400 hover:text-white rounded-lg text-sm"><span>機台管理</span></a>
+            <a href="mockup_local_cash.html" class="sidebar-link flex items-center px-3 py-2 text-gray-400 hover:text-white rounded-lg text-sm"><span>現金交易</span></a>
+            <a href="mockup_local_sync.html" class="sidebar-link flex items-center px-3 py-2 text-gray-400 hover:text-white rounded-lg text-sm"><span>資料同步</span></a>
+        </div>
+    </div>
+</nav></aside>
 
     <!-- 頂部導航 -->
     <header class="glass fixed top-0 left-0 right-0 z-30 h-16 flex items-center justify-between px-4 border-b border-dark-border">

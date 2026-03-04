@@ -45,25 +45,130 @@
             <div><span class="font-bold text-white">遊戲平台</span><span class="text-xs text-gray-500 block">管理中心</span></div>
         </div>
         <nav class="flex-1 py-4 px-3 space-y-1 overflow-y-auto">
-            <a href="mockup_dashboard.html" class="sidebar-link flex items-center px-3 py-2.5 text-gray-300 hover:text-white rounded-lg"><i data-lucide="layout-dashboard" class="w-5 h-5 mr-3"></i><span>儀表板</span></a>
-            <a href="mockup_mvp_machine_list.html" class="sidebar-link flex items-center px-3 py-2.5 text-gray-300 hover:text-white rounded-lg"><i data-lucide="monitor" class="w-5 h-5 mr-3"></i><span>機台管理</span></a>
-            <a href="mockup_mvp_data_list.html" class="sidebar-link active flex items-center px-3 py-2.5 text-gray-300 hover:text-white rounded-lg"><i data-lucide="gamepad-2" class="w-5 h-5 mr-3"></i><span>遊戲管理</span></a>
-            <a href="mockup_mvp_player_list.html" class="sidebar-link flex items-center px-3 py-2.5 text-gray-300 hover:text-white rounded-lg"><i data-lucide="users" class="w-5 h-5 mr-3"></i><span>玩家管理</span></a>
-            <a href="mockup_std_wallet.html" class="sidebar-link flex items-center px-3 py-2.5 text-gray-300 hover:text-white rounded-lg"><i data-lucide="wallet" class="w-5 h-5 mr-3"></i><span>錢包交易</span></a>
-            <a href="mockup_std_provider_list.html" class="sidebar-link flex items-center px-3 py-2.5 text-gray-300 hover:text-white rounded-lg"><i data-lucide="plug" class="w-5 h-5 mr-3"></i><span>串接遊戲商</span></a>
-            <a href="mockup_std_multiplayer.html" class="sidebar-link flex items-center px-3 py-2.5 text-gray-300 hover:text-white rounded-lg"><i data-lucide="users" class="w-5 h-5 mr-3"></i><span>多人遊戲</span></a>
-            <a href="mockup_user_permission.html" class="sidebar-link flex items-center px-3 py-2.5 text-gray-300 hover:text-white rounded-lg"><i data-lucide="shield-user" class="w-5 h-5 mr-3"></i><span>使用者權限</span></a>
-            <a href="mockup_flg_ota.html" class="sidebar-link flex items-center px-3 py-2.5 text-gray-300 hover:text-white rounded-lg"><i data-lucide="download" class="w-5 h-5 mr-3"></i><span>版本更新 OTA</span></a>
-            <a href="mockup_flg_monitor.html" class="sidebar-link flex items-center px-3 py-2.5 text-gray-300 hover:text-white rounded-lg"><i data-lucide="activity" class="w-5 h-5 mr-3"></i><span>監控中心</span></a>
-            <a href="mockup_flg_reconciliation.html" class="sidebar-link flex items-center px-3 py-2.5 text-gray-300 hover:text-white rounded-lg"><i data-lucide="file-check" class="w-5 h-5 mr-3"></i><span>錯帳對帳</span></a>
-            <a href="mockup_flg_dispute.html" class="sidebar-link flex items-center px-3 py-2.5 text-gray-300 hover:text-white rounded-lg"><i data-lucide="alert-circle" class="w-5 h-5 mr-3"></i><span>爭議處理</span></a>
-            <a href="mockup_std_system_settings.html" class="sidebar-link flex items-center px-3 py-2.5 text-gray-300 hover:text-white rounded-lg"><i data-lucide="settings" class="w-5 h-5 mr-3"></i><span>系統設定</span></a>
-            <a href="mockup_std_backup.html" class="sidebar-link flex items-center px-3 py-2.5 text-gray-300 hover:text-white rounded-lg"><i data-lucide="database" class="w-5 h-5 mr-3"></i><span>備份</span></a>
-            <a href="mockup_std_reports.html" class="sidebar-link flex items-center px-3 py-2.5 text-gray-300 hover:text-white rounded-lg"><i data-lucide="file-text" class="w-5 h-5 mr-3"></i><span>報表</span></a>
-            <div class="my-3 border-t border-dark-border"></div>
-            <a href="mockup_local_dashboard.html" class="sidebar-link flex items-center px-3 py-2.5 text-gray-300 hover:text-white rounded-lg"><i data-lucide="laptop" class="w-5 h-5 mr-3"></i><span>本地後台</span><span class="badge-local ml-auto">本地</span></a>
-        </nav>
-    </aside>
+    <!-- 儀表板 -->
+    <a href="mockup_dashboard.html" class="sidebar-link flex items-center px-3 py-2.5 text-gray-300 hover:text-white rounded-lg"><i data-lucide="layout-dashboard" class="w-5 h-5 mr-3"></i><span>儀表板</span></a>
+
+    <!-- 機台管理 -->
+    <div class="sidebar-group">
+        <div class="sidebar-group-header sidebar-has-submenu" onclick="toggleSidebarGroup(this)">
+            <span><i data-lucide="monitor" class="w-4 h-4 inline mr-2"></i>機台管理</span>
+        </div>
+        <div class="sidebar-submenu">
+            <a href="mockup_mvp_machine_list.html" class="sidebar-link flex items-center px-3 py-2 text-gray-400 hover:text-white rounded-lg text-sm"><span>機台列表</span></a>
+            <a href="mockup_mvp_machine_add.html" class="sidebar-link flex items-center px-3 py-2 text-gray-400 hover:text-white rounded-lg text-sm"><span>新增機台</span></a>
+            <a href="mockup_machine_remote_control.html" class="sidebar-link flex items-center px-3 py-2 text-gray-400 hover:text-white rounded-lg text-sm"><span>遠端控制</span></a>
+        </div>
+    </div>
+
+    <!-- 遊戲管理 -->
+    <div class="sidebar-group">
+        <div class="sidebar-group-header sidebar-has-submenu" onclick="toggleSidebarGroup(this)">
+            <span><i data-lucide="gamepad-2" class="w-4 h-4 inline mr-2"></i>遊戲管理</span>
+        </div>
+        <div class="sidebar-submenu">
+            <a href="mockup_mvp_data_list.html" class="sidebar-link flex items-center px-3 py-2 text-gray-400 hover:text-white rounded-lg text-sm"><span>遊戲列表</span></a>
+            <a href="mockup_mvp_game_add.html" class="sidebar-link flex items-center px-3 py-2 text-gray-400 hover:text-white rounded-lg text-sm"><span>新增遊戲</span></a>
+            <a href="mockup_game_detail.html" class="sidebar-link flex items-center px-3 py-2 text-gray-400 hover:text-white rounded-lg text-sm"><span>遊戲詳情</span></a>
+            <a href="mockup_game_sync.html" class="sidebar-link flex items-center px-3 py-2 text-gray-400 hover:text-white rounded-lg text-sm"><span>遊戲同步</span></a>
+            <a href="mockup_game_test.html" class="sidebar-link flex items-center px-3 py-2 text-gray-400 hover:text-white rounded-lg text-sm"><span>遊戲測試</span></a>
+            <a href="mockup_recommended_games.html" class="sidebar-link flex items-center px-3 py-2 text-gray-400 hover:text-white rounded-lg text-sm"><span>推薦遊戲</span></a>
+        </div>
+    </div>
+
+    <!-- 玩家管理 -->
+    <div class="sidebar-group">
+        <div class="sidebar-group-header sidebar-has-submenu" onclick="toggleSidebarGroup(this)">
+            <span><i data-lucide="users" class="w-4 h-4 inline mr-2"></i>玩家管理</span>
+        </div>
+        <div class="sidebar-submenu">
+            <a href="mockup_mvp_player_list.html" class="sidebar-link flex items-center px-3 py-2 text-gray-400 hover:text-white rounded-lg text-sm"><span>玩家列表</span></a>
+            <a href="mockup_player_detail.html" class="sidebar-link flex items-center px-3 py-2 text-gray-400 hover:text-white rounded-lg text-sm"><span>玩家詳情</span></a>
+            <a href="mockup_mvp_player_adjust.html" class="sidebar-link flex items-center px-3 py-2 text-gray-400 hover:text-white rounded-lg text-sm"><span>餘額調整</span></a>
+        </div>
+    </div>
+
+    <!-- 交易紀錄管理 -->
+    <div class="sidebar-group">
+        <div class="sidebar-group-header sidebar-has-submenu" onclick="toggleSidebarGroup(this)">
+            <span><i data-lucide="wallet" class="w-4 h-4 inline mr-2"></i>交易紀錄管理</span>
+        </div>
+        <div class="sidebar-submenu">
+            <a href="mockup_std_wallet.html" class="sidebar-link flex items-center px-3 py-2 text-gray-400 hover:text-white rounded-lg text-sm"><span>錢包交易</span></a>
+            <a href="mockup_std_transaction_detail.html" class="sidebar-link flex items-center px-3 py-2 text-gray-400 hover:text-white rounded-lg text-sm"><span>交易詳情</span></a>
+            <a href="mockup_transaction_export.html" class="sidebar-link flex items-center px-3 py-2 text-gray-400 hover:text-white rounded-lg text-sm"><span>交易匯出</span></a>
+        </div>
+    </div>
+
+    <!-- 串接遊戲 -->
+    <div class="sidebar-group">
+        <div class="sidebar-group-header sidebar-has-submenu" onclick="toggleSidebarGroup(this)">
+            <span><i data-lucide="plug" class="w-4 h-4 inline mr-2"></i>串接遊戲</span>
+        </div>
+        <div class="sidebar-submenu">
+            <a href="mockup_std_provider_list.html" class="sidebar-link flex items-center px-3 py-2 text-gray-400 hover:text-white rounded-lg text-sm"><span>遊戲商列表</span></a>
+            <a href="mockup_api_log.html" class="sidebar-link flex items-center px-3 py-2 text-gray-400 hover:text-white rounded-lg text-sm"><span>API 日誌</span></a>
+        </div>
+    </div>
+
+    <!-- 多人遊戲 -->
+    <a href="mockup_std_multiplayer.html" class="sidebar-link flex items-center px-3 py-2.5 text-gray-300 hover:text-white rounded-lg"><i data-lucide="users" class="w-5 h-5 mr-3"></i><span>多人遊戲</span></a>
+
+    <!-- 使用者權限 -->
+    <div class="sidebar-group">
+        <div class="sidebar-group-header sidebar-has-submenu" onclick="toggleSidebarGroup(this)">
+            <span><i data-lucide="shield-user" class="w-4 h-4 inline mr-2"></i>使用者權限</span>
+        </div>
+        <div class="sidebar-submenu">
+            <a href="mockup_user_permission.html" class="sidebar-link flex items-center px-3 py-2 text-gray-400 hover:text-white rounded-lg text-sm"><span>帳號管理</span></a>
+            <a href="mockup_security_settings.html" class="sidebar-link flex items-center px-3 py-2 text-gray-400 hover:text-white rounded-lg text-sm"><span>安全設定</span></a>
+        </div>
+    </div>
+
+    <!-- 版本更新 -->
+    <div class="sidebar-group">
+        <div class="sidebar-group-header sidebar-has-submenu" onclick="toggleSidebarGroup(this)">
+            <span><i data-lucide="download" class="w-4 h-4 inline mr-2"></i>版本更新</span>
+        </div>
+        <div class="sidebar-submenu">
+            <a href="mockup_flg_ota.html" class="sidebar-link flex items-center px-3 py-2 text-gray-400 hover:text-white rounded-lg text-sm"><span>OTA 版本管理</span></a>
+        </div>
+    </div>
+
+    <!-- 介面設定 -->
+    <div class="sidebar-group">
+        <div class="sidebar-group-header sidebar-has-submenu" onclick="toggleSidebarGroup(this)">
+            <span><i data-lucide="layout" class="w-4 h-4 inline mr-2"></i>介面設定</span>
+        </div>
+        <div class="sidebar-submenu">
+            <a href="mockup_announcement.html" class="sidebar-link flex items-center px-3 py-2 text-gray-400 hover:text-white rounded-lg text-sm"><span>公告管理</span></a>
+            <a href="mockup_lobby_settings.html" class="sidebar-link flex items-center px-3 py-2 text-gray-400 hover:text-white rounded-lg text-sm"><span>遊戲大廳設定</span></a>
+            <a href="mockup_std_game_category.html" class="sidebar-link flex items-center px-3 py-2 text-gray-400 hover:text-white rounded-lg text-sm"><span>遊戲分類排序</span></a>
+        </div>
+    </div>
+
+    <!-- 監控中心 -->
+    <div class="sidebar-group">
+        <div class="sidebar-group-header sidebar-has-submenu" onclick="toggleSidebarGroup(this)">
+            <span><i data-lucide="activity" class="w-4 h-4 inline mr-2"></i>監控中心</span>
+        </div>
+        <div class="sidebar-submenu">
+            <a href="mockup_flg_monitor.html" class="sidebar-link flex items-center px-3 py-2 text-gray-400 hover:text-white rounded-lg text-sm"><span>系統監控</span></a>
+            <a href="mockup_api_status_monitor.html" class="sidebar-link flex items-center px-3 py-2 text-gray-400 hover:text-white rounded-lg text-sm"><span>API 狀態</span></a>
+            <a href="mockup_alert_threshold.html" class="sidebar-link flex items-center px-3 py-2 text-gray-400 hover:text-white rounded-lg text-sm"><span>告警設定</span></a>
+            <a href="mockup_audit_log.html" class="sidebar-link flex items-center px-3 py-2 text-gray-400 hover:text-white rounded-lg text-sm"><span>審計日誌</span></a>
+        </div>
+    </div>
+
+    <!-- 系統設定 -->
+    <div class="sidebar-group">
+        <div class="sidebar-group-header sidebar-has-submenu" onclick="toggleSidebarGroup(this)">
+            <span><i data-lucide="settings" class="w-4 h-4 inline mr-2"></i>系統設定</span>
+        </div>
+        <div class="sidebar-submenu">
+            <a href="mockup_std_system_settings.html" class="sidebar-link flex items-center px-3 py-2 text-gray-400 hover:text-white rounded-lg text-sm"><span>基本設定</span></a>
+        </div>
+    </div>
+</nav></aside>
     <main class="flex-1 flex flex-col overflow-hidden">
         <header class="h-16 glass border-b border-dark-border flex items-center justify-between px-6">
             <div class="flex items-center space-x-4">
