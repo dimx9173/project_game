@@ -343,8 +343,6 @@ paths:
       responses:
         "200": { description: 取得測試報告成功 }
 
-  # [已移除玩家管理端點]
-
   # Transactions
   /transactions:
     get:
