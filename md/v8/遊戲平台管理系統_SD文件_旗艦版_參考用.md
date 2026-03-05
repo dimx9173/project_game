@@ -23,7 +23,7 @@
 
 | 邊界元素             | 說明                                     |
 | -------------------- | ---------------------------------------- |
-| **管理範圍**   | 所有機台、全部玩家、全平台遊戲、全部交易 |
+| **管理範圍**   | 所有機台、全平台遊戲、全部交易 |
 | **資料擁有者** | 中央系統（唯一真實來源）                 |
 | **可用性要求** | 99.5% 正常運行時間                       |
 | **網路依賴**   | 需持續連線（可離線一段時間）             |
@@ -33,7 +33,7 @@
 
 | 邊界元素             | 說明                                   |
 | -------------------- | -------------------------------------- |
-| **管理範圍**   | 單一機台、本地玩家、本機遊戲、本地交易 |
+| **管理範圍**   | 單一機台、本機遊戲、本地交易 |
 | **資料角色**   | 本地緩衝（需連線集中式才能運作）       |
 | **可用性要求** | 離線獨立運作能力（網路恢復後同步）     |
 | **網路依賴**   | 可離線運作（網路恢復後與集中式同步）   |
@@ -59,7 +59,6 @@
 | ---------------------- | ------------------ |
 | **中央後台**     |                    |
 | - 機台管理             | ✅                 |
-| - 玩家管理             | ✅                 |
 | - 交易管理             | ✅                 |
 | - 系統使用者           | ✅                 |
 | - 儀表板               | ✅ [L08]           |
@@ -82,7 +81,7 @@
 
 ```
 ┌─────────────────────────────────────────────────────────────────┐
-│                         玩家端應用程式                            │
+│                         機台端應用程式                            │
 └────────────────────────────┬────────────────────────────────────┘
                              │
                              ▼
@@ -229,19 +228,8 @@ CREATE TABLE games (
     created_at TIMESTAMP DEFAULT NOW()
 );
 
--- 玩家表
-CREATE TABLE players (
-    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    username VARCHAR(50) UNIQUE NOT NULL,
-    nickname VARCHAR(100),
-    password_hash VARCHAR(255),
-    balance DECIMAL(15,2) DEFAULT 0,
-    pending_balance DECIMAL(15,2) DEFAULT 0,
-    status VARCHAR(20) DEFAULT 'active',
-    vip_level INTEGER DEFAULT 0,
-    created_at TIMESTAMP DEFAULT NOW(),
-    last_login_at TIMESTAMP
-);
+
+
 
 -- 代理商表
 CREATE TABLE agents (
@@ -258,7 +246,6 @@ CREATE TABLE agents (
 -- 交易表
 CREATE TABLE transactions (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    player_id UUID REFERENCES players(id),
     machine_id UUID REFERENCES machines(id),
     game_id UUID REFERENCES games(id),
     provider_id UUID REFERENCES providers(id),
@@ -308,7 +295,6 @@ CREATE TABLE audit_logs (
 -- 本地交易
 CREATE TABLE local_transactions (
     id TEXT PRIMARY KEY,
-    player_id TEXT,
     game_id TEXT,
     type TEXT NOT NULL,
     amount REAL NOT NULL,
@@ -349,7 +335,7 @@ CREATE TABLE local_auth (
 ### 3.3 索引設計
 
 ```sql
-CREATE INDEX idx_transactions_player ON transactions(player_id);
+-- 交易表索引
 CREATE INDEX idx_transactions_machine ON transactions(machine_id);
 CREATE INDEX idx_transactions_created ON transactions(created_at DESC);
 CREATE INDEX idx_machines_status ON machines(status);
@@ -397,11 +383,8 @@ CREATE INDEX idx_audit_logs_created ON audit_logs(created_at DESC);
 - GET /api/v1/wallet/balances
 - POST /api/v1/wallet/transfer
 
-#### 玩家 [C13/C14/C15]
 
-- GET /api/v1/players
-- GET /api/v1/players/:id
-- PUT /api/v1/players/:id/balance
+
 
 #### 交易 [C36/C37]
 
@@ -453,7 +436,8 @@ CREATE INDEX idx_audit_logs_created ON audit_logs(created_at DESC);
 | 機台管理 (Machines)      | 6            | GET, POST, PUT, DELETE |
 | 錢包管理 (Wallet)        | 2            | GET, POST              |
 | 遊戲管理 (Games)         | 5            | GET, POST, PUT, DELETE |
-| 玩家管理 (Players)       | 3            | GET, PUT               |
+
+
 | 交易管理 (Transactions)  | 2            | GET, POST              |
 | 遊戲商管理 (Providers)   | 3            | GET, POST              |
 | 多人遊戲 (Multiplayer)   | 4            | GET, POST, PUT         |
@@ -464,7 +448,7 @@ CREATE INDEX idx_audit_logs_created ON audit_logs(created_at DESC);
 | 系統備份 (System)        | 2            | POST                   |
 | 錯帳管理 (Discrepancies) | 2            | GET, POST              |
 | 同步管理 (Sync)          | 2            | GET, POST              |
-| **總計**           | **39** |                        |
+| **總計**           | **36** |                        |
 
 ---
 
@@ -677,7 +661,7 @@ const offlineHandler = {
 | 權限類別 | 細項權限                                                          |
 | -------- | ----------------------------------------------------------------- |
 | 機台管理 | 機台列表檢視、機台狀態監控、遠端開分/洗分、遠端重啟、機台配置下發 |
-| 玩家管理 | 玩家列表檢視、玩家詳情檢視、玩家狀態管理、餘額調整                |
+| 機台帳務 | 交易列表檢視、交易詳情檢視、機台餘額調整                |
 | 交易管理 | 交易列表檢視、交易詳情檢視、交易統計、異常交易處理                |
 | 系統管理 | 系統設定、使用者管理、角色管理、權限管理                          |
 
@@ -748,18 +732,18 @@ const apiSecurity = {
 ```javascript
 // 交易處理最佳實踐
 class TransactionService {
-  async createTransaction(playerId, amount, type) {
+  async createTransaction(machineId, amount, type) {
     // 1. 樂觀鎖定
-    const player = await db.players.findById(playerId);
-    if (player.version !== req.headers['if-match']) {
+    const machine = await db.machines.findById(machineId);
+    if (machine.version !== req.headers['if-match']) {
       throw new AppError('VAL_005', '資料已更新，請重新整理');
     }
   
     // 2. 使用資料庫交易
     return await db.transaction(async (trx) => {
       // 扣款
-      const updated = await trx('players')
-        .where('id', playerId)
+      const updated = await trx('machines')
+        .where('id', machineId)
         .where('balance', '>=', amount)
         .decrement('balance', amount);
   
@@ -783,10 +767,10 @@ class TransactionService {
 ```sql
 -- 使用參數化查詢
 -- ❌ 錯誤範例
-SELECT * FROM players WHERE username = '${username}'
+SELECT * FROM machines WHERE name = '${machineName}'
 
 -- ✅ 正確範例
-SELECT * FROM players WHERE username = $1
+SELECT * FROM machines WHERE name = $1
 ```
 
 #### 並發處理 (樂觀鎖定)
@@ -795,13 +779,13 @@ SELECT * FROM players WHERE username = $1
 // 樂觀鎖定範例
 const optimisticLock = {
   // 使用 version 欄位
-  updatePlayer: async (playerId, updates) => {
-    const player = await db.players.findById(playerId);
+  updateMachine: async (machineId, updates) => {
+    const machine = await db.machines.findById(machineId);
   
-    const result = await db.players
-      .where('id', playerId)
-      .where('version', player.version)
-      .update({ ...updates, version: player.version + 1 });
+    const result = await db.machines
+      .where('id', machineId)
+      .where('version', machine.version)
+      .update({ ...updates, version: machine.version + 1 });
   
     if (result === 0) {
       throw new AppError('VAL_005', '並發衝突，請重試');
@@ -846,7 +830,7 @@ const optimisticLock = {
 ### 7.3 錢包轉帳流程
 
 ```
-玩家 ──▶ 中央錢包
+機台 ──▶ 中央錢包
           │
           ▼
     ── 第三方 API ──
@@ -854,13 +838,13 @@ const optimisticLock = {
     │
     ▼
 遊戲商錢包 ──▶ 遊戲中
-              │
-              ▼
-         ── 第三方 API ──
-         │   (轉出中央)
-         │
-         ▼
-    中央錢包 ──▶ 玩家
+               │
+               ▼
+          ── 第三方 API ──
+          │   (轉出中央)
+          │
+          ▼
+     中央錢包 ──▶ 機台
 ```
 
 ### 7.4 第三方 API 超時處理
@@ -997,7 +981,7 @@ const externalApiHandler = {
 
 ### 10.4 爭議對帳處理專區 [L20]
 
-**功能定義**：用於處理玩家與系統、或系統與遊戲商之間的交易爭議，包含建立爭議單、調查、裁決與補救。
+**功能定義**：用於處理機台交易異常、或系統與遊戲商之間的交易爭議，包含建立爭議單、調查、裁決與補救。
 
 #### 爭議單建立
 1. 選擇爭議類型 (如：deposit_not_arrived, payout_error)。
@@ -1012,7 +996,7 @@ const externalApiHandler = {
 ```javascript
 async function executeRemedy(disputeId, authCode) {
   // 1. 驗證主管授權碼
-  // 2. 根據裁決結果執行對應 API (如 /players/:id/balance)
+  // 2. 根據裁決結果執行對應 API (如 /machines/:id/balance)
   // 3. 更新爭議單狀態為 closed
   // 4. 寫入稽核日誌
 }
@@ -1177,7 +1161,7 @@ volumes:
 | WebSocket 延遲     | < 100ms  |
 | 系統可用性         | ≥ 99.5% |
 | 支援機台數         | 1000+    |
-| 支援同時在線玩家   | 500+     |
+| 支援同時在線機台   | 500+     |
 
 ### 12.2 優化策略
 
@@ -1462,24 +1446,24 @@ CREATE INDEX idx_agents_parent ON agents(parent_agent_id);
 // 交易服務單元測試
 describe('TransactionService', () => {
   it('should deduct balance on bet', async () => {
-    const player = await createTestPlayer({ balance: 1000 });
+    const machine = await createTestMachine({ balance: 1000 });
   
     await transactionService.createTransaction({
-      playerId: player.id,
+      machineId: machine.id,
       amount: 100,
       type: 'bet'
     });
   
-    const updated = await getPlayer(player.id);
+    const updated = await getMachine(machine.id);
     expect(updated.balance).toBe(900);
   });
   
   it('should throw error on insufficient balance', async () => {
-    const player = await createTestPlayer({ balance: 50 });
+    const machine = await createTestMachine({ balance: 50 });
   
     await expect(
       transactionService.createTransaction({
-        playerId: player.id,
+        machineId: machine.id,
         amount: 100,
         type: 'bet'
       })
@@ -1498,7 +1482,7 @@ describe('POST /api/v1/transactions', () => {
       .post('/api/v1/transactions')
       .set('Authorization', `Bearer ${token}`)
       .send({
-        playerId: playerId,
+        machineId: machineId,
         amount: 100,
         type: 'deposit'
       });
@@ -1581,7 +1565,7 @@ CREATE TABLE game_test_records (
 ```javascript
 // 虛擬交易請求格式
 const virtualBetRequest = {
-  playerId: "test-player-id",
+  machineId: "test-machine-id",
   gameId: "game-uuid",
   amount: 100,
   isVirtual: true,  // 虛擬下注標記
@@ -1612,7 +1596,7 @@ const virtualBetResponse = {
 // 統一使用 TypeScript 類型標註
 interface Transaction {
   id: string;
-  playerId: string;
+  machineId: string;
   amount: number;
   type: 'bet' | 'payout' | 'deposit' | 'withdraw';
   status: 'pending' | 'success' | 'failed';
@@ -1736,6 +1720,7 @@ v2.0.0 - 架構重構
 | v1.2 | 2026-02-26 | 技術審查修訂：API 版本化、錯誤碼擴充、資料庫優化                  | code      |
 | v1.3 | 2026-02-26 | 擴充章節：同步、安全、部署、監控、遷移                            | docs+code |
 | v1.4 | 2026-02-26 | 深度技術審查 + 最終審查 (Round 4-5)                               | code+docs |
+| v8.0 | 2026-03-05 | 移除所有玩家管理，轉向匿名機台化架構 (Refactor to Machine-centric) | antigravity |
 
 ---
 

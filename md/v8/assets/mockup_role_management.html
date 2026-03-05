@@ -6,6 +6,7 @@
     <title>角色權限管理 - 遊戲平台管理中心</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;600;700&family=JetBrains+Mono&display=swap" rel="stylesheet">
+    <link href="css/mockup-common.css" rel="stylesheet">
     <script src="https://unpkg.com/lucide@latest"></script>
     <script>
         tailwind.config = {
@@ -30,18 +31,7 @@
 </head>
 <body class="min-h-screen text-white">
     <div class="flex">
-        <aside class="w-64 bg-dark-sidebar border-r border-dark-border min-h-screen p-4">
-            <div class="flex items-center mb-8">
-                <div class="w-10 h-10 rounded-xl gradient-purple flex items-center justify-center mr-3"><i data-lucide="gamepad-2" class="w-5 h-5"></i></div>
-                <div><span class="font-bold">遊戲平台</span><span class="text-xs text-gray-500 block">管理中心</span></div>
-            </div>
-            <nav class="space-y-2">
-                <a href="mockup_dashboard.html" class="flex items-center px-3 py-2.5 text-gray-300 hover:text-white rounded-lg"><i data-lucide="layout-dashboard" class="w-5 h-5 mr-3"></i>儀表板</a>
-                <a href="mockup_user_permission.html" class="flex items-center px-3 py-2.5 text-cyber-400 rounded-lg bg-purple-500/20"><i data-lucide="shield-user" class="w-5 h-5 mr-3"></i>使用者權限</a>
-                <a href="#" class="flex items-center px-3 py-2.5 text-cyber-400 rounded-lg ml-4"><i data-lucide="users" class="w-5 h-5 mr-3"></i>角色管理</a>
-            </nav>
-        </aside>
-        
+        <div id="sidebar-container"></div>
         <main class="flex-1 p-6">
             <div class="flex items-center justify-between mb-6">
                 <div>
@@ -170,24 +160,7 @@
                                 <label class="flex items-center space-x-2 text-sm text-gray-300"><input type="checkbox" checked class="w-4 h-4 rounded border-dark-border bg-dark-bg text-cyber-600">刪除</label>
                             </div>
                         </div>
-                        
-                        <!-- 玩家管理 -->
-                        <div>
-                            <div class="flex items-center justify-between mb-3">
-                                <span class="font-medium"><i data-lucide="users" class="w-4 h-4 mr-2 inline text-cyber-400"></i>玩家管理</span>
-                                <label class="flex items-center space-x-2">
-                                    <input type="checkbox" checked class="w-4 h-4 rounded border-dark-border bg-dark-bg text-cyber-600">
-                                    <span class="text-sm text-gray-300">全選</span>
-                                </label>
-                            </div>
-                            <div class="grid grid-cols-4 gap-3 ml-6">
-                                <label class="flex items-center space-x-2 text-sm text-gray-300"><input type="checkbox" checked class="w-4 h-4 rounded border-dark-border bg-dark-bg text-cyber-600">檢視</label>
-                                <label class="flex items-center space-x-2 text-sm text-gray-300"><input type="checkbox" checked class="w-4 h-4 rounded border-dark-border bg-dark-bg text-cyber-600">新增</label>
-                                <label class="flex items-center space-x-2 text-sm text-gray-300"><input type="checkbox" checked class="w-4 h-4 rounded border-dark-border bg-dark-bg text-cyber-600">編輯</label>
-                                <label class="flex items-center space-x-2 text-sm text-gray-300"><input type="checkbox" checked class="w-4 h-4 rounded border-dark-border bg-dark-bg text-cyber-600">餘額調整</label>
-                            </div>
-                        </div>
-                        
+
                         <!-- 交易管理 -->
                         <div>
                             <div class="flex items-center justify-between mb-3">
@@ -214,5 +187,9 @@
         </main>
     </div>
     <script>lucide.createIcons();</script>
+<script src="js/sidebar.js"></script>
+    <script>
+        MockupSidebar.render('mockup_role_management.html');
+    </script>
 </body>
 </html>

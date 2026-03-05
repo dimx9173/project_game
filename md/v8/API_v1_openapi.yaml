@@ -20,7 +20,6 @@ tags:
   - name: 機台管理 (Machines)
   - name: 遊戲管理 (Games)
   - name: 遊戲測試 (Game Test)
-  - name: 玩家管理 (Players)
   - name: 交易管理 (Transactions)
   - name: 遊戲商管理 (Providers)
   - name: 錢包管理 (Wallet)
@@ -344,40 +343,7 @@ paths:
       responses:
         "200": { description: 取得測試報告成功 }
 
-  # Players
-  /players:
-    get:
-      tags: [玩家管理 (Players)]
-      summary: 取得玩家列表
-      security: [{ BearerAuth: [] }]
-      responses:
-        "200": { description: 成功 }
-
-  /players/{id}:
-    get:
-      tags: [玩家管理 (Players)]
-      summary: 取得玩家詳情
-      security: [{ BearerAuth: [] }]
-      responses:
-        "200": { description: 成功 }
-
-  /players/{id}/balance:
-    put:
-      tags: [玩家管理 (Players)]
-      summary: 調整玩家餘額
-      security: [{ BearerAuth: [] }]
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                amount: { type: number }
-                type: { type: string, enum: [deposit, withdraw, adjust] }
-      responses:
-        "200": { description: 調整成功 }
-        "400": { description: 餘額不足 }
+  # [已移除玩家管理端點]
 
   # Transactions
   /transactions:
@@ -388,7 +354,7 @@ paths:
       parameters:
         - { name: page, in: query, schema: { type: integer } }
         - { name: pageSize, in: query, schema: { type: integer } }
-        - { name: playerId, in: query, schema: { type: string, format: uuid } }
+        - { name: machineId, in: query, schema: { type: string, format: uuid } }
         - { name: type, in: query, schema: { type: string } }
         - { name: operatorId, in: query, schema: { type: string } }
       responses:
@@ -514,8 +480,8 @@ paths:
               type: object
               properties:
                 gameId: { type: string, format: uuid }
-                minPlayers: { type: integer }
-                maxPlayers: { type: integer }
+                minMachines: { type: integer }
+                maxMachines: { type: integer }
       responses:
         "201": { description: 建立成功 }
 
@@ -574,7 +540,7 @@ paths:
             schema:
               type: object
               properties:
-                playerId: { type: string, format: uuid }
+                machineId: { type: string, format: uuid }
       responses:
         "200": { description: 加入成功 }
         "409": { description: 房間已滿或遊戲進行中 }
@@ -598,7 +564,7 @@ paths:
             schema:
               type: object
               properties:
-                playerId: { type: string, format: uuid }
+                machineId: { type: string, format: uuid }
       responses:
         "200": { description: 離開成功 }
 
@@ -836,9 +802,9 @@ paths:
           application/json:
             schema:
               type: object
-              required: [playerId, type, transactionId, description]
+              required: [machineId, type, transactionId, description]
               properties:
-                playerId: { type: string }
+                machineId: { type: string }
                 type:
                   {
                     type: string,
@@ -1091,7 +1057,7 @@ paths:
     get:
       tags: [系統設定 (System Configs)]
       summary: 取得前端大廳 UI 設定
-      description: 公開介面，供玩家端設備載入預設的視覺、Theme、熱門遊戲推薦等
+      description: 公開介面，供機台端設備載入預設的視覺、Theme、熱門遊戲推薦等
       responses:
         "200":
           description: 成功
