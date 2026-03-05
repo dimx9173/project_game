@@ -6,6 +6,7 @@
     <title>廣播管理 - 遊戲平台管理中心</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;600;700&family=JetBrains+Mono&display=swap" rel="stylesheet">
+    <link href="../css/mockup-common.css" rel="stylesheet">
     <script src="https://unpkg.com/lucide@latest"></script>
     <script>
         tailwind.config = {
@@ -29,196 +30,189 @@
     </style>
 </head>
 <body class="min-h-screen text-white">
-    <div class="flex">
-        <aside class="w-64 bg-dark-sidebar border-r border-dark-border min-h-screen p-4">
-            <div class="flex items-center mb-8">
-                <div class="w-10 h-10 rounded-xl gradient-purple flex items-center justify-center mr-3"><i data-lucide="gamepad-2" class="w-5 h-5"></i></div>
-                <div><span class="font-bold">遊戲平台</span><span class="text-xs text-gray-500 block">管理中心</span></div>
+    <div id="sidebar-container"></div>
+    
+    <main class="flex-1 p-6">
+        <div class="flex items-center justify-between mb-6">
+            <div>
+                <h1 class="text-2xl font-bold">廣播管理</h1>
+                <p class="text-gray-400">即時廣播訊息到所有客戶端</p>
             </div>
-            <nav class="space-y-2">
-                <a href="mockup_dashboard.html" class="flex items-center px-3 py-2.5 text-gray-300 hover:text-white rounded-lg"><i data-lucide="layout-dashboard" class="w-5 h-5 mr-3"></i>儀表板</a>
-                <a href="mockup_std_system_settings.html" class="flex items-center px-3 py-2.5 text-cyber-400 rounded-lg bg-purple-500/20"><i data-lucide="settings" class="w-5 h-5 mr-3"></i>介面設定</a>
-                <a href="#" class="flex items-center px-3 py-2.5 text-cyber-400 rounded-lg ml-4"><i data-lucide="radio" class="w-5 h-5 mr-3"></i>廣播管理</a>
-            </nav>
-        </aside>
+            <button class="px-4 py-2 gradient-purple rounded-lg font-medium flex items-center">
+                <i data-lucide="send" class="w-4 h-4 mr-2"></i>發送廣播
+            </button>
+        </div>
         
-        <main class="flex-1 p-6">
-            <div class="flex items-center justify-between mb-6">
-                <div>
-                    <h1 class="text-2xl font-bold">廣播管理</h1>
-                    <p class="text-gray-400">即時廣播訊息到所有客戶端</p>
-                </div>
-                <button class="px-4 py-2 gradient-purple rounded-lg font-medium flex items-center">
-                    <i data-lucide="send" class="w-4 h-4 mr-2"></i>發送廣播
-                </button>
-            </div>
-            
-            <!-- 統計卡片 -->
-            <div class="grid grid-cols-4 gap-4 mb-6">
-                <div class="glass-card rounded-xl p-4">
-                    <div class="flex items-center justify-between">
-                        <div><p class="text-sm text-gray-400">本月發送</p><p class="text-2xl font-bold font-mono text-cyber-400">156</p></div>
-                        <div class="w-10 h-10 rounded-lg bg-cyber-500/20 flex items-center justify-center"><i data-lucide="send" class="w-5 h-5 text-cyber-400"></i></div>
-                    </div>
-                </div>
-                <div class="glass-card rounded-xl p-4">
-                    <div class="flex items-center justify-between">
-                        <div><p class="text-sm text-gray-400">平均送達率</p><p class="text-2xl font-bold font-mono text-emerald-400">98.5%</p></div>
-                        <div class="w-10 h-10 rounded-lg bg-emerald-500/20 flex items-center justify-center"><i data-lucide="check-circle" class="w-5 h-5 text-emerald-400"></i></div>
-                    </div>
-                </div>
-                <div class="glass-card rounded-xl p-4">
-                    <div class="flex items-center justify-between">
-                        <div><p class="text-sm text-gray-400">平均閱讀率</p><p class="text-2xl font-bold font-mono text-blue-400">76.2%</p></div>
-                        <div class="w-10 h-10 rounded-lg bg-blue-500/20 flex items-center justify-center"><i data-lucide="eye" class="w-5 h-5 text-blue-400"></i></div>
-                    </div>
-                </div>
-                <div class="glass-card rounded-xl p-4">
-                    <div class="flex items-center justify-between">
-                        <div><p class="text-sm text-gray-400">排程中</p><p class="text-2xl font-bold font-mono text-amber-400">8</p></div>
-                        <div class="w-10 h-10 rounded-lg bg-amber-500/20 flex items-center justify-center"><i data-lucide="clock" class="w-5 h-5 text-amber-400"></i></div>
-                    </div>
+        <!-- 統計卡片 -->
+        <div class="grid grid-cols-4 gap-4 mb-6">
+            <div class="glass-card rounded-xl p-4">
+                <div class="flex items-center justify-between">
+                    <div><p class="text-sm text-gray-400">本月發送</p><p class="text-2xl font-bold font-mono text-cyber-400">156</p></div>
+                    <div class="w-10 h-10 rounded-lg bg-cyber-500/20 flex items-center justify-center"><i data-lucide="send" class="w-5 h-5 text-cyber-400"></i></div>
                 </div>
             </div>
-            
-            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                <!-- 廣播列表 -->
-                <div class="lg:col-span-2 glass-card rounded-2xl p-6">
-                    <div class="flex items-center justify-between mb-6">
-                        <h3 class="font-semibold">廣播歷史</h3>
-                        <div class="flex space-x-2">
-                            <select class="bg-dark-bg border border-dark-border rounded-lg py-1.5 px-3 text-sm">
-                                <option>全部類型</option>
-                                <option>跑馬燈</option>
-                                <option>彈窗</option>
-                                <option>系統訊息</option>
-                            </select>
-                        </div>
-                    </div>
-                    
-                    <div class="space-y-3">
-                        <div class="glass rounded-xl p-4">
-                            <div class="flex items-start justify-between">
-                                <div class="flex items-start space-x-3">
-                                    <div class="w-10 h-10 rounded-lg bg-cyber-500/20 flex items-center justify-center mt-1"><i data-lucide="scroll-text" class="w-5 h-5 text-cyber-400"></i></div>
-                                    <div>
-                                        <div class="flex items-center space-x-2">
-                                            <span class="px-2 py-0.5 bg-cyber-500/20 text-cyber-400 text-xs rounded">跑馬燈</span>
-                                            <span class="text-xs text-gray-400">2026-03-05 10:00</span>
-                                        </div>
-                                        <p class="font-medium mt-1">系統維護通知：今晚 23:00-01:00 進行系統維護</p>
-                                        <div class="flex items-center space-x-4 mt-2 text-xs text-gray-400">
-                                            <span><i data-lucide="users" class="w-3 h-3 inline mr-1"></i>目標: 全體玩家</span>
-                                            <span><i data-lucide="check" class="w-3 h-3 inline mr-1 text-emerald-400"></i>送達: 12,450</span>
-                                            <span><i data-lucide="eye" class="w-3 h-3 inline mr-1 text-blue-400"></i>閱讀: 9,234</span>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="flex space-x-1">
-                                    <button class="p-2 text-gray-400 hover:text-cyber-400"><i data-lucide="copy" class="w-4 h-4"></i></button>
-                                    <button class="p-2 text-gray-400 hover:text-red-400"><i data-lucide="trash-2" class="w-4 h-4"></i></button>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <div class="glass rounded-xl p-4">
-                            <div class="flex items-start justify-between">
-                                <div class="flex items-start space-x-3">
-                                    <div class="w-10 h-10 rounded-lg bg-amber-500/20 flex items-center justify-center mt-1"><i data-lucide="popup" class="w-5 h-5 text-amber-400"></i></div>
-                                    <div>
-                                        <div class="flex items-center space-x-2">
-                                            <span class="px-2 py-0.5 bg-amber-500/20 text-amber-400 text-xs rounded">彈窗</span>
-                                            <span class="text-xs text-gray-400">2026-03-04 18:00</span>
-                                        </div>
-                                        <p class="font-medium mt-1">🎉 新遊戲上架：超級瑪利歐豪華版現已開放！</p>
-                                        <div class="flex items-center space-x-4 mt-2 text-xs text-gray-400">
-                                            <span><i data-lucide="users" class="w-3 h-3 inline mr-1"></i>目標: 在線玩家</span>
-                                            <span><i data-lucide="check" class="w-3 h-3 inline mr-1 text-emerald-400"></i>送達: 3,456</span>
-                                            <span><i data-lucide="eye" class="w-3 h-3 inline mr-1 text-blue-400"></i>閱讀: 2,890</span>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="flex space-x-1">
-                                    <button class="p-2 text-gray-400 hover:text-cyber-400"><i data-lucide="copy" class="w-4 h-4"></i></button>
-                                    <button class="p-2 text-gray-400 hover:text-red-400"><i data-lucide="trash-2" class="w-4 h-4"></i></button>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <div class="glass rounded-xl p-4 opacity-60">
-                            <div class="flex items-start justify-between">
-                                <div class="flex items-start space-x-3">
-                                    <div class="w-10 h-10 rounded-lg bg-gray-500/20 flex items-center justify-center mt-1"><i data-lucide="clock" class="w-5 h-5 text-gray-400"></i></div>
-                                    <div>
-                                        <div class="flex items-center space-x-2">
-                                            <span class="px-2 py-0.5 bg-blue-500/20 text-blue-400 text-xs rounded">系統訊息</span>
-                                            <span class="px-2 py-0.5 bg-amber-500/20 text-amber-400 text-xs rounded">排程中</span>
-                                            <span class="text-xs text-gray-400">2026-03-06 09:00</span>
-                                        </div>
-                                        <p class="font-medium mt-1">早安！今日幸運遊戲：捕魚達人</p>
-                                        <div class="flex items-center space-x-4 mt-2 text-xs text-gray-400">
-                                            <span><i data-lucide="users" class="w-3 h-3 inline mr-1"></i>目標: VIP玩家</span>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="flex space-x-1">
-                                    <button class="p-2 text-gray-400 hover:text-cyber-400"><i data-lucide="edit" class="w-4 h-4"></i></button>
-                                    <button class="p-2 text-gray-400 hover:text-red-400"><i data-lucide="trash-2" class="w-4 h-4"></i></button>
-                                </div>
-                            </div>
-                        </div>
+            <div class="glass-card rounded-xl p-4">
+                <div class="flex items-center justify-between">
+                    <div><p class="text-sm text-gray-400">平均送達率</p><p class="text-2xl font-bold font-mono text-emerald-400">98.5%</p></div>
+                    <div class="w-10 h-10 rounded-lg bg-emerald-500/20 flex items-center justify-center"><i data-lucide="check-circle" class="w-5 h-5 text-emerald-400"></i></div>
+                </div>
+            </div>
+            <div class="glass-card rounded-xl p-4">
+                <div class="flex items-center justify-between">
+                    <div><p class="text-sm text-gray-400">平均閱讀率</p><p class="text-2xl font-bold font-mono text-blue-400">76.2%</p></div>
+                    <div class="w-10 h-10 rounded-lg bg-blue-500/20 flex items-center justify-center"><i data-lucide="eye" class="w-5 h-5 text-blue-400"></i></div>
+                </div>
+            </div>
+            <div class="glass-card rounded-xl p-4">
+                <div class="flex items-center justify-between">
+                    <div><p class="text-sm text-gray-400">排程中</p><p class="text-2xl font-bold font-mono text-amber-400">8</p></div>
+                    <div class="w-10 h-10 rounded-lg bg-amber-500/20 flex items-center justify-center"><i data-lucide="clock" class="w-5 h-5 text-amber-400"></i></div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            <!-- 廣播列表 -->
+            <div class="lg:col-span-2 glass-card rounded-2xl p-6">
+                <div class="flex items-center justify-between mb-6">
+                    <h3 class="font-semibold">廣播歷史</h3>
+                    <div class="flex space-x-2">
+                        <select class="bg-dark-bg border border-dark-border rounded-lg py-1.5 px-3 text-sm">
+                            <option>全部類型</option>
+                            <option>跑馬燈</option>
+                            <option>彈窗</option>
+                            <option>系統訊息</option>
+                        </select>
                     </div>
                 </div>
                 
-                <!-- 發送表單 -->
-                <div class="glass-card rounded-2xl p-6">
-                    <h3 class="font-semibold mb-4">發送廣播</h3>
-                    <div class="space-y-4">
-                        <div>
-                            <label class="block text-sm text-gray-300 mb-2">廣播類型</label>
-                            <select class="w-full bg-dark-bg border border-dark-border rounded-lg py-2.5 px-4">
-                                <option>跑馬燈</option>
-                                <option>彈窗</option>
-                                <option>系統訊息</option>
-                                <option>遊戲通知</option>
-                            </select>
-                        </div>
-                        <div>
-                            <label class="block text-sm text-gray-300 mb-2">廣播標題</label>
-                            <input type="text" placeholder="輸入標題" class="w-full bg-dark-bg border border-dark-border rounded-lg py-2.5 px-4 input-focus">
-                        </div>
-                        <div>
-                            <label class="block text-sm text-gray-300 mb-2">廣播內容</label>
-                            <textarea rows="3" placeholder="輸入廣播內容" class="w-full bg-dark-bg border border-dark-border rounded-lg py-2.5 px-4 input-focus resize-none"></textarea>
-                        </div>
-                        <div>
-                            <label class="block text-sm text-gray-300 mb-2">目標對象</label>
-                            <select class="w-full bg-dark-bg border border-dark-border rounded-lg py-2.5 px-4">
-                                <option>全體玩家</option>
-                                <option>在線玩家</option>
-                                <option>VIP玩家</option>
-                                <option>指定玩家</option>
-                            </select>
-                        </div>
-                        <div>
-                            <label class="block text-sm text-gray-300 mb-2">發送時間</label>
-                            <div class="grid grid-cols-2 gap-2">
-                                <input type="date" class="bg-dark-bg border border-dark-border rounded-lg py-2.5 px-4 input-focus">
-                                <input type="time" class="bg-dark-bg border border-dark-border rounded-lg py-2.5 px-4 input-focus">
+                <div class="space-y-3">
+                    <div class="glass rounded-xl p-4">
+                        <div class="flex items-start justify-between">
+                            <div class="flex items-start space-x-3">
+                                <div class="w-10 h-10 rounded-lg bg-cyber-500/20 flex items-center justify-center mt-1"><i data-lucide="scroll-text" class="w-5 h-5 text-cyber-400"></i></div>
+                                <div>
+                                    <div class="flex items-center space-x-2">
+                                        <span class="px-2 py-0.5 bg-cyber-500/20 text-cyber-400 text-xs rounded">跑馬燈</span>
+                                        <span class="text-xs text-gray-400">2026-03-05 10:00</span>
+                                    </div>
+                                    <p class="font-medium mt-1">系統維護通知：今晚 23:00-01:00 進行系統維護</p>
+                                    <div class="flex items-center space-x-4 mt-2 text-xs text-gray-400">
+                                        <span><i data-lucide="users" class="w-3 h-3 inline mr-1"></i>目標: 全體玩家</span>
+                                        <span><i data-lucide="check" class="w-3 h-3 inline mr-1 text-emerald-400"></i>送達: 12,450</span>
+                                        <span><i data-lucide="eye" class="w-3 h-3 inline mr-1 text-blue-400"></i>閱讀: 9,234</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="flex space-x-1">
+                                <button class="p-2 text-gray-400 hover:text-cyber-400"><i data-lucide="copy" class="w-4 h-4"></i></button>
+                                <button class="p-2 text-gray-400 hover:text-red-400"><i data-lucide="trash-2" class="w-4 h-4"></i></button>
                             </div>
                         </div>
-                        <div class="flex items-center justify-between">
-                            <span class="text-sm text-gray-300">立即發送</span>
-                            <button class="w-12 h-6 rounded-full bg-dark-bg border border-dark-border relative"><span class="absolute left-1 top-1 w-4 h-4 bg-gray-400 rounded-full"></span></button>
+                    </div>
+                    
+                    <div class="glass rounded-xl p-4">
+                        <div class="flex items-start justify-between">
+                            <div class="flex items-start space-x-3">
+                                <div class="w-10 h-10 rounded-lg bg-amber-500/20 flex items-center justify-center mt-1"><i data-lucide="megaphone" class="w-5 h-5 text-amber-400"></i></div>
+                                <div>
+                                    <div class="flex items-center space-x-2">
+                                        <span class="px-2 py-0.5 bg-amber-500/20 text-amber-400 text-xs rounded">彈窗</span>
+                                        <span class="text-xs text-gray-400">2026-03-04 18:00</span>
+                                    </div>
+                                    <p class="font-medium mt-1">🎉 新遊戲上架：超級瑪利歐豪華版現已開放！</p>
+                                    <div class="flex items-center space-x-4 mt-2 text-xs text-gray-400">
+                                        <span><i data-lucide="users" class="w-3 h-3 inline mr-1"></i>目標: 在線玩家</span>
+                                        <span><i data-lucide="check" class="w-3 h-3 inline mr-1 text-emerald-400"></i>送達: 3,456</span>
+                                        <span><i data-lucide="eye" class="w-3 h-3 inline mr-1 text-blue-400"></i>閱讀: 2,890</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="flex space-x-1">
+                                <button class="p-2 text-gray-400 hover:text-cyber-400"><i data-lucide="copy" class="w-4 h-4"></i></button>
+                                <button class="p-2 text-gray-400 hover:text-red-400"><i data-lucide="trash-2" class="w-4 h-4"></i></button>
+                            </div>
                         </div>
-                        <button class="w-full py-2.5 gradient-purple rounded-lg font-medium mt-2">
-                            <i data-lucide="send" class="w-4 h-4 inline mr-2"></i>發送廣播
-                        </button>
+                    </div>
+                    
+                    <div class="glass rounded-xl p-4 opacity-60">
+                        <div class="flex items-start justify-between">
+                            <div class="flex items-start space-x-3">
+                                <div class="w-10 h-10 rounded-lg bg-gray-500/20 flex items-center justify-center mt-1"><i data-lucide="clock" class="w-5 h-5 text-gray-400"></i></div>
+                                <div>
+                                    <div class="flex items-center space-x-2">
+                                        <span class="px-2 py-0.5 bg-blue-500/20 text-blue-400 text-xs rounded">系統訊息</span>
+                                        <span class="px-2 py-0.5 bg-amber-500/20 text-amber-400 text-xs rounded">排程中</span>
+                                        <span class="text-xs text-gray-400">2026-03-06 09:00</span>
+                                    </div>
+                                    <p class="font-medium mt-1">早安！今日幸運遊戲：捕魚達人</p>
+                                    <div class="flex items-center space-x-4 mt-2 text-xs text-gray-400">
+                                        <span><i data-lucide="users" class="w-3 h-3 inline mr-1"></i>目標: VIP玩家</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="flex space-x-1">
+                                <button class="p-2 text-gray-400 hover:text-cyber-400"><i data-lucide="edit" class="w-4 h-4"></i></button>
+                                <button class="p-2 text-gray-400 hover:text-red-400"><i data-lucide="trash-2" class="w-4 h-4"></i></button>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
-        </main>
-    </div>
-    <script>lucide.createIcons();</script>
+            
+            <!-- 發送表單 -->
+            <div class="glass-card rounded-2xl p-6">
+                <h3 class="font-semibold mb-4">發送廣播</h3>
+                <div class="space-y-4">
+                    <div>
+                        <label class="block text-sm text-gray-300 mb-2">廣播類型</label>
+                        <select class="w-full bg-dark-bg border border-dark-border rounded-lg py-2.5 px-4">
+                            <option>跑馬燈</option>
+                            <option>彈窗</option>
+                            <option>系統訊息</option>
+                            <option>遊戲通知</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-sm text-gray-300 mb-2">廣播標題</label>
+                        <input type="text" placeholder="輸入標題" class="w-full bg-dark-bg border border-dark-border rounded-lg py-2.5 px-4 input-focus">
+                    </div>
+                    <div>
+                        <label class="block text-sm text-gray-300 mb-2">廣播內容</label>
+                        <textarea rows="3" placeholder="輸入廣播內容" class="w-full bg-dark-bg border border-dark-border rounded-lg py-2.5 px-4 input-focus resize-none"></textarea>
+                    </div>
+                    <div>
+                        <label class="block text-sm text-gray-300 mb-2">目標對象</label>
+                        <select class="w-full bg-dark-bg border border-dark-border rounded-lg py-2.5 px-4">
+                            <option>全體玩家</option>
+                            <option>在線玩家</option>
+                            <option>VIP玩家</option>
+                            <option>指定玩家</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-sm text-gray-300 mb-2">發送時間</label>
+                        <div class="grid grid-cols-2 gap-2">
+                            <input type="date" class="bg-dark-bg border border-dark-border rounded-lg py-2.5 px-4 input-focus">
+                            <input type="time" class="bg-dark-bg border border-dark-border rounded-lg py-2.5 px-4 input-focus">
+                        </div>
+                    </div>
+                    <div class="flex items-center justify-between">
+                        <span class="text-sm text-gray-300">立即發送</span>
+                        <button class="w-12 h-6 rounded-full bg-dark-bg border border-dark-border relative"><span class="absolute left-1 top-1 w-4 h-4 bg-gray-400 rounded-full"></span></button>
+                    </div>
+                    <button class="w-full py-2.5 gradient-purple rounded-lg font-medium mt-2">
+                        <i data-lucide="send" class="w-4 h-4 inline mr-2"></i>發送廣播
+                    </button>
+                </div>
+            </div>
+        </div>
+    </main>
+    
+    <script src="../js/sidebar.js"></script>
+    <script>
+        MockupSidebar.render('mockup_broadcast_management.html');
+        lucide.createIcons();
+    </script>
 </body>
 </html>
