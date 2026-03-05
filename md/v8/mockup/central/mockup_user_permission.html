@@ -182,15 +182,40 @@
     </div>
 
     <div id="editPermissionModal" class="fixed inset-0 bg-black/70 hidden z-50 flex items-center justify-center">
-        <div class="glass-card rounded-2xl w-full max-w-2xl mx-4">
+        <div class="glass-card rounded-2xl w-full max-w-md mx-4">
             <div class="px-6 py-4 border-b border-dark-border flex justify-between items-center">
-                <h3 class="font-semibold text-white">權限設定 - <span id="editUserName"></span></h3>
+                <h3 class="font-semibold text-white">設定角色 - <span id="editUserName"></span></h3>
                 <button onclick="closeModal('editPermissionModal')" class="text-gray-400 hover:text-white"><i data-lucide="x" class="w-5 h-5"></i></button>
             </div>
-            <div class="p-6 space-y-4 max-h-96 overflow-y-auto" id="permissionList"></div>
+            <div class="p-6 space-y-4">
+                <p class="text-sm text-gray-400 mb-4">請選擇使用者角色，系統將自動分配對應權限</p>
+                <div class="space-y-3" id="roleSelectionList">
+                    <label class="flex items-center p-4 glass rounded-xl cursor-pointer hover:border-purple-500/50 transition-colors">
+                        <input type="radio" name="userRole" value="admin" class="w-4 h-4 text-purple-600 focus:ring-purple-600 bg-dark-bg border-dark-border">
+                        <div class="ml-3">
+                            <p class="font-medium text-white">管理員</p>
+                            <p class="text-xs text-gray-400">擁有所有功能的完整權限</p>
+                        </div>
+                    </label>
+                    <label class="flex items-center p-4 glass rounded-xl cursor-pointer hover:border-purple-500/50 transition-colors">
+                        <input type="radio" name="userRole" value="operator" class="w-4 h-4 text-purple-600 focus:ring-purple-600 bg-dark-bg border-dark-border">
+                        <div class="ml-3">
+                            <p class="font-medium text-white">操作員</p>
+                            <p class="text-xs text-gray-400">可進行日常操作但無法修改系統設定</p>
+                        </div>
+                    </label>
+                    <label class="flex items-center p-4 glass rounded-xl cursor-pointer hover:border-purple-500/50 transition-colors">
+                        <input type="radio" name="userRole" value="viewer" class="w-4 h-4 text-purple-600 focus:ring-purple-600 bg-dark-bg border-dark-border">
+                        <div class="ml-3">
+                            <p class="font-medium text-white">檢視者</p>
+                            <p class="text-xs text-gray-400">僅可查看資料，無法進行任何修改</p>
+                        </div>
+                    </label>
+                </div>
+            </div>
             <div class="px-6 py-4 border-t border-dark-border flex justify-end space-x-3">
                 <button onclick="closeModal('editPermissionModal')" class="px-4 py-2 bg-dark-bg border border-dark-border rounded-lg text-gray-300 hover:bg-dark-hover">取消</button>
-                <button onclick="savePermissions()" class="px-4 py-2 gradient-purple rounded-lg text-white font-medium">儲存權限</button>
+                <button onclick="saveRole()" class="px-4 py-2 gradient-purple rounded-lg text-white font-medium">儲存角色</button>
             </div>
         </div>
     </div>
@@ -253,6 +278,9 @@
                     </td>
                     <td class="px-6 py-4 whitespace-nowrap text-gray-300">${user.name}</td>
                     <td class="px-6 py-4 whitespace-nowrap">
+                        <span class="px-2 py-1 rounded text-xs ${user.role === 'admin' ? 'bg-red-500/20 text-red-400' : user.role === 'operator' ? 'bg-blue-500/20 text-blue-400' : 'bg-gray-500/20 text-gray-400'}">
+                            ${user.role === 'admin' ? '管理員' : user.role === 'operator' ? '操作員' : '檢視者'}
+                        </span>
                     </td>
                     <td class="px-6 py-4 whitespace-nowrap text-gray-300">${user.agent}</td>
                     <td class="px-6 py-4 whitespace-nowrap">
@@ -265,7 +293,7 @@
                     </td>
                     <td class="px-6 py-4 whitespace-nowrap text-gray-400 text-sm">${user.lastLogin}</td>
                     <td class="px-6 py-4 whitespace-nowrap text-right">
-                        <button onclick="editPermissions(${user.id}, '${user.username}')" class="text-purple-400 hover:text-purple-300 mx-1" title="權限設定"><i data-lucide="shield" class="w-4 h-4 inline"></i></button>
+                        <button onclick="editPermissions(${user.id}, '${user.username}')" class="text-purple-400 hover:text-purple-300 mx-1" title="設定角色"><i data-lucide="shield" class="w-4 h-4 inline"></i></button>
                         <button onclick="alert('編輯使用者: ${user.username}')" class="text-cyan-400 hover:text-cyan-300 mx-1" title="編輯"><i data-lucide="edit-2" class="w-4 h-4 inline"></i></button>
                         <button onclick="deleteUser(${user.id})" class="text-red-400 hover:text-red-300 mx-1" title="刪除"><i data-lucide="trash-2" class="w-4 h-4 inline"></i></button>
                     </td>
@@ -302,23 +330,27 @@
         function editPermissions(userId, username) {
             editingUserId = userId;
             document.getElementById('editUserName').textContent = username;
-            const grouped = permissions.reduce((acc, p) => { if (!acc[p.category]) acc[p.category] = []; acc[p.category].push(p); return acc; }, {});
-            const container = document.getElementById('permissionList');
-            container.innerHTML = Object.entries(grouped).map(([category, perms]) => `
-                <div class="mb-4">
-                    <h4 class="text-sm font-medium text-purple-400 mb-2">${category}</h4>
-                    <div class="grid grid-cols-2 gap-2">
-                        ${perms.map(p => '<label class="flex items-center space-x-2 cursor-pointer"><input type="checkbox" class="w-4 h-4 rounded border-dark-border bg-dark-bg text-purple-600 focus:ring-purple-600 permission-checkbox" data-permission="' + p.id + '" checked><span class="text-sm text-gray-300">' + p.name + '</span></label>').join('')}
-                    </div>
-                </div>
-            `).join('');
+            // 取得使用者目前的角色並選中
+            const user = users.find(u => u.id === userId);
+            const radios = document.querySelectorAll('input[name="userRole"]');
+            radios.forEach(r => {
+                r.checked = (r.value === user.role);
+            });
             openModal('editPermissionModal');
         }
 
-        function savePermissions() {
-            const checkboxes = document.querySelectorAll('.permission-checkbox:checked');
-            const selected = Array.from(checkboxes).map(c => c.dataset.permission);
-            alert('已儲存權限 (' + selected.length + ' 項)');
+        function saveRole() {
+            const selectedRole = document.querySelector('input[name="userRole"]:checked');
+            if (!selectedRole) {
+                alert('請選擇角色');
+                return;
+            }
+            const user = users.find(u => u.id === editingUserId);
+            if (user) {
+                user.role = selectedRole.value;
+                alert('已設定角色：' + (selectedRole.value === 'admin' ? '管理員' : selectedRole.value === 'operator' ? '操作員' : '檢視者'));
+                renderTable();
+            }
             closeModal('editPermissionModal');
         }
 
