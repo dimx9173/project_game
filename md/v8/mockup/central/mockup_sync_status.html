@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>同步狀態 - 遊戲平台管理中心</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="../css/mockup-common.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        cyber: { 50: '#f5f3ff', 100: '#ede9fe', 200: '#ddd6fe', 300: '#c4b5fd', 400: '#a78bfa', 500: '#8b5cf6', 600: '#7c3aed', 700: '#6d28d9', 800: '#5b21b6', 900: '#4c1d95', 950: '#2e1065' },
+                        dark: { bg: '#0a0a0f', card: '#12121a', sidebar: '#0d0d14', border: '#1e1e2e', hover: '#1a1a28' }
+                    },
+                    fontFamily: { sans: ['"Noto Sans TC"', 'sans-serif'], mono: ['"JetBrains Mono"', 'monospace'] },
+                    boxShadow: { glow: '0 0 30px rgba(168, 85, 247, 0.3)', 'glow-sm': '0 0 15px rgba(168, 85, 247, 0.2)' }
+                }
+            }
+        }
+    </script>
+    <style>
+        * { scrollbar-width: thin; scrollbar-color: #6d28d9 #0a0a0f; }
+        *::-webkit-scrollbar { width: 8px; height: 8px; }
+        *::-webkit-scrollbar-track { background: #0a0a0f; }
+        *::-webkit-scrollbar-thumb { background: linear-gradient(180deg, #7c3aed, #a855f7); border-radius: 4px; }
+        body { font-family: 'Noto Sans TC', sans-serif; background: #0a0a0f; }
+        .glass { background: rgba(18, 18, 26, 0.7); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border: 1px solid rgba(255, 255, 255, 0.08); }
+        .glass-card { background: linear-gradient(135deg, rgba(18, 18, 26, 0.9) 0%, rgba(30, 30, 46, 0.6) 100%); backdrop-filter: blur(20px); border: 1px solid rgba(168, 85, 247, 0.15); box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4); }
+        .glass-card:hover { border-color: rgba(168, 85, 247, 0.4); box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4), 0 0 30px rgba(168, 85, 247, 0.2); }
+        .gradient-bg { background: linear-gradient(135deg, #0a0a0f 0%, #1a0a2e 50%, #0a0a0f 100%); }
+        .gradient-purple { background: linear-gradient(135deg, #7c3aed 0%, #a855f7 50%, #c084fc 100%); }
+        .input-focus:focus { box-shadow: 0 0 0 3px rgba(168, 85, 247, 0.3), 0 0 20px rgba(168, 85, 247, 0.2); }
+    </style>
+</head>
+<body class="gradient-bg min-h-screen flex">
+    <div id="sidebar-container"></div>
+    <main class="flex-1 flex flex-col overflow-hidden">
+        <header class="h-16 glass border-b border-dark-border flex items-center justify-between px-6">
+            <h2 class="text-lg font-semibold text-white">同步狀態</h2>
+            <div class="flex items-center space-x-3">
+                <button class="px-4 py-2 bg-dark-hover border border-dark-border text-gray-300 rounded-lg flex items-center">
+                    <i data-lucide="filter" class="w-4 h-4 mr-2"></i>篩選
+                </button>
+                <button class="px-4 py-2 gradient-purple rounded-lg text-white font-medium shadow-glow-sm flex items-center">
+                    <i data-lucide="refresh-cw" class="w-4 h-4 mr-2"></i>重新整理
+                </button>
+            </div>
+        </header>
+        <div class="flex-1 overflow-y-auto p-6">
+            <!-- 全域同步概覽 -->
+            <div class="grid grid-cols-4 gap-4 mb-6">
+                <div class="glass-card rounded-xl p-4">
+                    <div class="flex items-center justify-between"><span class="text-gray-400 text-sm">總站點數</span><i data-lucide="server" class="w-5 h-5 text-cyber-400"></i></div>
+                    <p class="font-mono text-2xl text-white mt-2">12</p>
+                </div>
+                <div class="glass-card rounded-xl p-4">
+                    <div class="flex items-center justify-between"><span class="text-gray-400 text-sm">線上同步</span><i data-lucide="wifi" class="w-5 h-5 text-green-400"></i></div>
+                    <p class="font-mono text-2xl text-green-400 mt-2">10</p>
+                </div>
+                <div class="glass-card rounded-xl p-4">
+                    <div class="flex items-center justify-between"><span class="text-gray-400 text-sm">離線</span><i data-lucide="wifi-off" class="w-5 h-5 text-red-400"></i></div>
+                    <p class="font-mono text-2xl text-red-400 mt-2">2</p>
+                </div>
+                <div class="glass-card rounded-xl p-4">
+                    <div class="flex items-center justify-between"><span class="text-gray-400 text-sm">待處理衝突</span><i data-lucide="alert-circle" class="w-5 h-5 text-yellow-400"></i></div>
+                    <p class="font-mono text-2xl text-yellow-400 mt-2">3</p>
+                </div>
+            </div>
+
+            <!-- 同步健康度 -->
+            <div class="grid grid-cols-3 gap-4 mb-6">
+                <div class="glass-card rounded-xl p-4">
+                    <div class="flex items-center justify-between mb-2">
+                        <span class="text-gray-400 text-sm">同步成功率</span>
+                        <span class="text-green-400 text-sm font-medium">98.5%</span>
+                    </div>
+                    <div class="w-full bg-dark-bg rounded-full h-2">
+                        <div class="bg-green-500 h-2 rounded-full" style="width: 98.5%"></div>
+                    </div>
+                </div>
+                <div class="glass-card rounded-xl p-4">
+                    <div class="flex items-center justify-between mb-2">
+                        <span class="text-gray-400 text-sm">平均同步延遲</span>
+                        <span class="text-cyber-400 text-sm font-medium">1.2 秒</span>
+                    </div>
+                    <div class="w-full bg-dark-bg rounded-full h-2">
+                        <div class="bg-cyber-500 h-2 rounded-full" style="width: 85%"></div>
+                    </div>
+                </div>
+                <div class="glass-card rounded-xl p-4">
+                    <div class="flex items-center justify-between mb-2">
+                        <span class="text-gray-400 text-sm">最後全面同步</span>
+                        <span class="text-gray-300 text-sm font-medium">14:32:15</span>
+                    </div>
+                    <div class="w-full bg-dark-bg rounded-full h-2">
+                        <div class="bg-blue-500 h-2 rounded-full" style="width: 100%"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 站點同步狀態列表 -->
+            <div class="glass-card rounded-2xl overflow-hidden">
+                <div class="p-4 border-b border-dark-border flex items-center justify-between">
+                    <h3 class="font-semibold text-white">站點同步狀態</h3>
+                    <span class="text-xs text-gray-500">顯示 12 個站點</span>
+                </div>
+                <table class="w-full">
+                    <thead class="bg-dark-bg">
+                        <tr>
+                            <th class="text-left py-3 px-4 text-xs text-gray-400 font-medium">站點 ID</th>
+                            <th class="text-left py-3 px-4 text-xs text-gray-400 font-medium">站點名稱</th>
+                            <th class="text-left py-3 px-4 text-xs text-gray-400 font-medium">連線狀態</th>
+                            <th class="text-left py-3 px-4 text-xs text-gray-400 font-medium">最後同步</th>
+                            <th class="text-left py-3 px-4 text-xs text-gray-400 font-medium">待上傳</th>
+                            <th class="text-left py-3 px-4 text-xs text-gray-400 font-medium">待下載</th>
+                            <th class="text-left py-3 px-4 text-xs text-gray-400 font-medium">狀態</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr class="border-t border-dark-border">
+                            <td class="py-3 px-4 font-mono text-sm text-white">A-01</td>
+                            <td class="py-3 px-4 text-sm text-gray-300">台北旗艦店</td>
+                            <td class="py-3 px-4"><span class="px-2 py-1 bg-green-600/20 text-green-400 text-xs rounded flex items-center w-fit"><i data-lucide="wifi" class="w-3 h-3 mr-1"></i>線上</span></td>
+                            <td class="py-3 px-4 text-sm text-gray-400">14:32:15</td>
+                            <td class="py-3 px-4 font-mono text-sm text-gray-400">0</td>
+                            <td class="py-3 px-4 font-mono text-sm text-gray-400">0</td>
+                            <td class="py-3 px-4"><span class="px-2 py-1 bg-green-600/20 text-green-400 text-xs rounded">已同步</span></td>
+                        </tr>
+                        <tr class="border-t border-dark-border">
+                            <td class="py-3 px-4 font-mono text-sm text-white">A-02</td>
+                            <td class="py-3 px-4 text-sm text-gray-300">台中分店</td>
+                            <td class="py-3 px-4"><span class="px-2 py-1 bg-green-600/20 text-green-400 text-xs rounded flex items-center w-fit"><i data-lucide="wifi" class="w-3 h-3 mr-1"></i>線上</span></td>
+                            <td class="py-3 px-4 text-sm text-gray-400">14:30:22</td>
+                            <td class="py-3 px-4 font-mono text-sm text-gray-400">0</td>
+                            <td class="py-3 px-4 font-mono text-sm text-yellow-400">3</td>
+                            <td class="py-3 px-4"><span class="px-2 py-1 bg-yellow-600/20 text-yellow-400 text-xs rounded">待下載</span></td>
+                        </tr>
+                        <tr class="border-t border-dark-border">
+                            <td class="py-3 px-4 font-mono text-sm text-white">A-03</td>
+                            <td class="py-3 px-4 text-sm text-gray-300">高雄分店</td>
+                            <td class="py-3 px-4"><span class="px-2 py-1 bg-green-600/20 text-green-400 text-xs rounded flex items-center w-fit"><i data-lucide="wifi" class="w-3 h-3 mr-1"></i>線上</span></td>
+                            <td class="py-3 px-4 text-sm text-gray-400">14:28:45</td>
+                            <td class="py-3 px-4 font-mono text-sm text-yellow-400">5</td>
+                            <td class="py-3 px-4 font-mono text-sm text-gray-400">0</td>
+                            <td class="py-3 px-4"><span class="px-2 py-1 bg-blue-600/20 text-blue-400 text-xs rounded">同步中</span></td>
+                        </tr>
+                        <tr class="border-t border-dark-border">
+                            <td class="py-3 px-4 font-mono text-sm text-white">B-01</td>
+                            <td class="py-3 px-4 text-sm text-gray-300">桃園據點</td>
+                            <td class="py-3 px-4"><span class="px-2 py-1 bg-red-600/20 text-red-400 text-xs rounded flex items-center w-fit"><i data-lucide="wifi-off" class="w-3 h-3 mr-1"></i>離線</span></td>
+                            <td class="py-3 px-4 text-sm text-gray-400">12:15:30</td>
+                            <td class="py-3 px-4 font-mono text-sm text-yellow-400">12</td>
+                            <td class="py-3 px-4 font-mono text-sm text-gray-400">-</td>
+                            <td class="py-3 px-4"><span class="px-2 py-1 bg-red-600/20 text-red-400 text-xs rounded">離線</span></td>
+                        </tr>
+                        <tr class="border-t border-dark-border">
+                            <td class="py-3 px-4 font-mono text-sm text-white">B-02</td>
+                            <td class="py-3 px-4 text-sm text-gray-300">新竹據點</td>
+                            <td class="py-3 px-4"><span class="px-2 py-1 bg-red-600/20 text-red-400 text-xs rounded flex items-center w-fit"><i data-lucide="wifi-off" class="w-3 h-3 mr-1"></i>離線</span></td>
+                            <td class="py-3 px-4 text-sm text-gray-400">10:45:12</td>
+                            <td class="py-3 px-4 font-mono text-sm text-yellow-400">28</td>
+                            <td class="py-3 px-4 font-mono text-sm text-gray-400">-</td>
+                            <td class="py-3 px-4"><span class="px-2 py-1 bg-red-600/20 text-red-400 text-xs rounded">離線</span></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- 同步日誌 -->
+            <div class="glass-card rounded-2xl p-6 mt-6">
+                <h3 class="font-semibold text-white mb-4 flex items-center"><i data-lucide="file-text" class="w-5 h-5 mr-2 text-cyber-400"></i>同步日誌 (最近活動)</h3>
+                <div class="space-y-3">
+                    <div class="flex items-center justify-between py-2 border-b border-dark-border/50">
+                        <div class="flex items-center">
+                            <div class="w-8 h-8 rounded-full bg-green-500/20 flex items-center justify-center mr-3">
+                                <i data-lucide="check" class="w-4 h-4 text-green-400"></i>
+                            </div>
+                            <div>
+                                <div class="text-sm font-medium text-white">台北旗艦店 (A-01) 同步完成</div>
+                                <div class="text-xs text-gray-500">14:32:15 - 交易紀錄 5 筆</div>
+                            </div>
+                        </div>
+                        <div class="text-xs text-green-400">成功</div>
+                    </div>
+                    <div class="flex items-center justify-between py-2 border-b border-dark-border/50">
+                        <div class="flex items-center">
+                            <div class="w-8 h-8 rounded-full bg-blue-500/20 flex items-center justify-center mr-3">
+                                <i data-lucide="refresh-cw" class="w-4 h-4 text-blue-400"></i>
+                            </div>
+                            <div>
+                                <div class="text-sm font-medium text-white">高雄分店 (A-03) 同步中</div>
+                                <div class="text-xs text-gray-500">14:31:20 - 上傳中 5 筆</div>
+                            </div>
+                        </div>
+                        <div class="text-xs text-blue-400">同步中</div>
+                    </div>
+                    <div class="flex items-center justify-between py-2 border-b border-dark-border/50">
+                        <div class="flex items-center">
+                            <div class="w-8 h-8 rounded-full bg-yellow-500/20 flex items-center justify-center mr-3">
+                                <i data-lucide="alert-circle" class="w-4 h-4 text-yellow-400"></i>
+                            </div>
+                            <div>
+                                <div class="text-sm font-medium text-white">台中分店 (A-02) 衝突偵測</div>
+                                <div class="text-xs text-gray-500">14:30:22 - 餘額不一致</div>
+                            </div>
+                        </div>
+                        <div class="text-xs text-yellow-400">待處理</div>
+                    </div>
+                    <div class="flex items-center justify-between py-2">
+                        <div class="flex items-center">
+                            <div class="w-8 h-8 rounded-full bg-red-500/20 flex items-center justify-center mr-3">
+                                <i data-lucide="wifi-off" class="w-4 h-4 text-red-400"></i>
+                            </div>
+                            <div>
+                                <div class="text-sm font-medium text-white">桃園據點 (B-01) 離線</div>
+                                <div class="text-xs text-gray-500">12:15:30 - 連線中斷</div>
+                            </div>
+                        </div>
+                        <div class="text-xs text-red-400">離線</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+    <script>
+        lucide.createIcons();
+    </script>
+<script src="../js/sidebar.js"></script>
+    <script>
+        MockupSidebar.render('mockup_sync_status.html');
+    </script>
+</body>
+</html>

@@ -143,13 +143,11 @@
     ]));
     
     nav.appendChild(group('refresh-cw', '同步對帳', [
-      { href: '../local/mockup_local_sync.html', text: '同步狀態' },
+      { href: 'mockup_sync_status.html', text: '同步狀態' },
       { href: 'mockup_sync_conflict.html', text: '衝突處理' }
     ]));
     
     nav.appendChild(group('settings', '系統設定', [
-      { href: 'mockup_std_system_settings.html', text: '基本設定' },
-      { href: 'mockup_network_settings.html', text: '網路設定' },
       { href: 'mockup_std_backup.html', text: '備份與恢復' }
     ]));
 
