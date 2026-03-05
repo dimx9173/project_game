@@ -78,11 +78,8 @@
     ]));
     
     nav.appendChild(group('wallet', '交易紀錄管理', [
-      { href: 'mockup_std_wallet.html', text: '錢包交易' },
-      { href: 'mockup_transaction_stats.html', text: '交易統計' },
-      { href: 'mockup_transaction_exception.html', text: '異常交易' },
-      { href: 'mockup_flg_reconciliation.html', text: '對帳專區' },
-      { href: 'mockup_flg_dispute.html', text: '爭議處理' },
+      { href: 'mockup_std_wallet.html', text: '交易列表' },
+      { href: 'mockup_flg_reconciliation.html', text: '對帳中心' },
       { href: 'mockup_transaction_export.html', text: '交易導出' }
     ]));
     
@@ -93,46 +90,37 @@
     ]));
     
     nav.appendChild(group('plug', '串接遊戲', [
-      { href: 'mockup_std_provider_list.html', text: '遊戲商列表' },
-      { href: 'mockup_api_status_monitor.html', text: 'API 狀態監控' },
+      { href: 'mockup_std_provider_list.html', text: '遊戲商管理' },
+      { href: 'mockup_api_status_monitor.html', text: 'API 監控' },
       { href: 'mockup_api_log.html', text: 'API 日誌' }
     ]));
     
     nav.appendChild(group('users', '多人遊戲', [
-      { href: 'mockup_std_multiplayer.html', text: '牌桌列表' },
-      { href: 'mockup_multiplayer_history.html', text: '牌局歷史' },
-      { href: 'mockup_multiplayer_shoe.html', text: '牌靴管理' }
+      { href: 'mockup_std_multiplayer.html', text: '牌桌管理' },
+      { href: 'mockup_multiplayer_history.html', text: '牌局歷史' }
     ]));
     
     nav.appendChild(group('shield-user', '使用者權限', [
       { href: 'mockup_user_permission.html', text: '帳號管理' },
-      { href: 'mockup_role_management.html', text: '角色管理' },
-      { href: 'mockup_permission_matrix.html', text: '權限矩陣' }
+      { href: 'mockup_role_management.html', text: '角色管理' }
     ]));
     
     nav.appendChild(group('download', '版本更新', [
-      { href: 'mockup_flg_ota.html', text: '版本列表' },
-      { href: 'mockup_flg_ota.html', text: '更新任務' }
+      { href: 'mockup_flg_ota.html', text: '版本管理' }
     ]));
     
     nav.appendChild(group('layout', '介面設定', [
       { href: 'mockup_announcement.html', text: '公告管理' },
       { href: 'mockup_broadcast_management.html', text: '廣播管理' },
       { href: 'mockup_recommended_games.html', text: '推薦遊戲' },
-      { href: 'mockup_game_category_management.html', text: '遊戲分類管理' }
+      { href: 'mockup_game_category_management.html', text: '遊戲分類' }
     ]));
     
     nav.appendChild(group('activity', '監控中心', [
       { href: 'mockup_flg_monitor.html', text: '系統監控' },
-      { href: 'mockup_heartbeat_monitor.html', text: '心跳檢測' },
-      { href: 'mockup_alert_notifications.html', text: '告警通知' },
-      { href: 'mockup_device_health.html', text: '設備健康度' },
-      { href: 'mockup_network_monitor.html', text: '網路監控' },
-      { href: 'mockup_hardware_monitor.html', text: '硬體監控' },
+      { href: 'mockup_device_health.html', text: '設備監控' },
       { href: 'mockup_log_query.html', text: '日誌查詢' },
-      { href: 'mockup_alert_threshold.html', text: '告警設定' },
-      { href: 'mockup_audit_log.html', text: '審計日誌' },
-      { href: 'mockup_api_status_monitor.html', text: 'API 監控' }
+      { href: 'mockup_alert_notifications.html', text: '告警管理' }
     ]));
     
     nav.appendChild(group('refresh-cw', '同步對帳', [
