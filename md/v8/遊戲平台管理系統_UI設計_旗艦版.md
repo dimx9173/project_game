@@ -225,23 +225,23 @@ gradient-bg: linear-gradient(135deg, #0a0a0f 0%, #1a0a2e 50%, #0a0a0f 100%)
 
 ### 5.1 集中式後台 - 登入頁面
 
-![登入頁面](./assets/mockup_login.png)
+![登入頁面](./mockup/central/mockup_login.png)
 
 ### 5.2 集中式後台 - 儀表板
 
-![儀表板](./assets/mockup_dashboard.png)
+![儀表板](./mockup/central/mockup_dashboard.png)
 
 ### 5.3 集中式後台 - 機台管理
 
-![機台管理](./assets/mockup_mvp_machine_list.png)
+![機台管理](./mockup/central/mockup_mvp_machine_list.png)
 
 ### 5.4 集中式後台 - 遊戲管理
 
-![遊戲管理](./assets/mockup_mvp_data_list.png)
+![遊戲管理](./mockup/central/mockup_mvp_data_list.png)
 
 ### 5.5 集中式後台 - 錢包交易
 
-![錢包交易](./assets/mockup_std_wallet.png)
+![錢包交易](./mockup/central/mockup_std_wallet.png)
 
 ### 5.6 集中式後台 - 營收報表
 
@@ -255,31 +255,31 @@ gradient-bg: linear-gradient(135deg, #0a0a0f 0%, #1a0a2e 50%, #0a0a0f 100%)
 
 ### 5.7 集中式後台 - 串接遊戲商
 
-![串接遊戲商](./assets/mockup_std_provider_list.png)
+![串接遊戲商](./mockup/central/mockup_std_provider_list.png)
 
 ### 5.8 集中式後台 - 使用者權限
 
-![使用者權限](./assets/mockup_std_agent_list.png)
+![使用者權限](./mockup/central/mockup_std_agent_add.png)
 
 ### 5.10 集中式後台 - OTA 版本管理
 
-![OTA版本派送](./assets/mockup_flg_ota.png)
+![OTA版本派送](./mockup/central/mockup_flg_ota.png)
 
 ### 5.11 集中式後台 - 硬體監控中心
 
-![硬體監控系統](./assets/mockup_flg_monitor.png)
+![硬體監控系統](./mockup/central/mockup_flg_monitor.png)
 
 ### 5.12 集中式後台 - 對帳與爭議處理
 
-![對帳爭議處理](./assets/mockup_flg_reconciliation.png)
+![對帳爭議處理](./mockup/central/mockup_flg_reconciliation.png)
 
 ### 5.13 單機本地後台 - 開洗分介面
 
-![本地開洗分](./assets/mockup_local_cash.png)
+![本地開洗分](./mockup/local/mockup_local_cash.png)
 
 ### 5.14 單機本地後台 - 本機設定
 
-![本機設定](./assets/mockup_mvp_local_setup.png)
+![本機設定](./mockup/local/mockup_mvp_local_setup.png)
 
 ---
 
@@ -656,8 +656,17 @@ bg-amber-500/20 text-amber-400
 ### 10.3 檔案清單
 
 ```
-assets/
-├── mockup_premium_cyber_dark.html   # 集中式後台（全部 12 頁）
-├── mockup_local_cyber_dark.html     # 單機本地後台（全部 8 頁）
-└── game_icon.jpg                   # 遊戲圖示（共用）
+mockup/
+├── central/                          # 集中式後台
+│   ├── mockup_*.html                 # 50+ 頁面原型
+│   └── mockup_*.png                  # 頁面截圖
+├── local/                            # 單機本地後台
+│   ├── mockup_local_*.html           # 本地端頁面
+│   └── mockup_local_*.png            # 本地端截圖
+├── css/
+│   └── mockup-common.css             # 共用樣式
+├── js/
+│   └── sidebar.js                    # 共用側邊欄
+├── README_SIDEBAR.md                 # 側邊欄使用說明
+└── game_icon.jpg                     # 遊戲圖示（共用）
 ```
