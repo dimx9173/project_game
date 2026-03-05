@@ -294,7 +294,7 @@
                     <td class="px-6 py-4 whitespace-nowrap text-gray-400 text-sm">${user.lastLogin}</td>
                     <td class="px-6 py-4 whitespace-nowrap text-right">
                         <button onclick="editPermissions(${user.id}, '${user.username}')" class="text-purple-400 hover:text-purple-300 mx-1" title="設定角色"><i data-lucide="shield" class="w-4 h-4 inline"></i></button>
-                        <button onclick="alert('編輯使用者: ${user.username}')" class="text-cyan-400 hover:text-cyan-300 mx-1" title="編輯"><i data-lucide="edit-2" class="w-4 h-4 inline"></i></button>
+                        <button onclick="window.location.href='mockup_user_edit.html?id=${user.id}'" class="text-cyan-400 hover:text-cyan-300 mx-1" title="編輯"><i data-lucide="edit-2" class="w-4 h-4 inline"></i></button>
                         <button onclick="deleteUser(${user.id})" class="text-red-400 hover:text-red-300 mx-1" title="刪除"><i data-lucide="trash-2" class="w-4 h-4 inline"></i></button>
                     </td>
                 </tr>

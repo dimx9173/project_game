@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>編輯使用者 - 遊戲平台管理中心</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="../css/mockup-common.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        cyber: { 50: '#f5f3ff', 100: '#ede9fe', 200: '#ddd6fe', 300: '#c4b5fd', 400: '#a78bfa', 500: '#8b5cf6', 600: '#7c3aed', 700: '#6d28d9', 800: '#5b21b6', 900: '#4c1d95', 950: '#2e1065' },
+                        dark: { bg: '#0a0a0f', card: '#12121a', sidebar: '#0d0d14', border: '#1e1e2e', hover: '#1a1a28' }
+                    },
+                    fontFamily: { sans: ['"Noto Sans TC"', 'sans-serif'], mono: ['"JetBrains Mono"', 'monospace'] },
+                    boxShadow: { glow: '0 0 30px rgba(168, 85, 247, 0.3)', 'glow-sm': '0 0 15px rgba(168, 85, 247, 0.2)' }
+                }
+            }
+        }
+    </script>
+    <style>
+        * { scrollbar-width: thin; scrollbar-color: #6d28d9 #0a0a0f; }
+        *::-webkit-scrollbar { width: 8px; height: 8px; }
+        *::-webkit-scrollbar-track { background: #0a0a0f; }
+        *::-webkit-scrollbar-thumb { background: linear-gradient(180deg, #7c3aed, #a855f7); border-radius: 4px; }
+        body { font-family: 'Noto Sans TC', sans-serif; background: #0a0a0f; }
+        .glass { background: rgba(18, 18, 26, 0.7); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border: 1px solid rgba(255, 255, 255, 0.08); }
+        .glass-card { background: linear-gradient(135deg, rgba(18, 18, 26, 0.9) 0%, rgba(30, 30, 46, 0.6) 100%); backdrop-filter: blur(20px); border: 1px solid rgba(168, 85, 247, 0.15); box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4); }
+        .gradient-bg { background: linear-gradient(135deg, #0a0a0f 0%, #1a0a2e 50%, #0a0a0f 100%); }
+        .gradient-purple { background: linear-gradient(135deg, #7c3aed 0%, #a855f7 50%, #c084fc 100%); }
+        .input-focus:focus { box-shadow: 0 0 0 3px rgba(168, 85, 247, 0.3); outline: none; }
+    </style>
+</head>
+<body class="gradient-bg min-h-screen flex">
+    <div id="sidebar-container"></div>
+    <main class="flex-1 flex flex-col overflow-hidden">
+        <header class="h-16 glass border-b border-dark-border flex items-center justify-between px-6">
+            <div class="flex items-center">
+                <a href="mockup_user_permission.html" class="text-gray-400 hover:text-white mr-4">
+                    <i data-lucide="arrow-left" class="w-5 h-5"></i>
+                </a>
+                <h2 class="text-lg font-semibold text-white">編輯使用者</h2>
+            </div>
+            <div class="flex items-center space-x-3">
+                <button onclick="history.back()" class="px-4 py-2 bg-dark-bg border border-dark-border rounded-lg text-gray-300 hover:bg-dark-hover transition-colors">
+                    取消
+                </button>
+                <button onclick="saveUser()" class="px-4 py-2 gradient-purple rounded-lg text-white font-medium shadow-glow-sm hover:opacity-90 transition-opacity">
+                    <i data-lucide="save" class="w-4 h-4 inline mr-2"></i>儲存變更
+                </button>
+            </div>
+        </header>
+        <div class="flex-1 overflow-y-auto p-6">
+            <div class="max-w-3xl mx-auto">
+                <div class="glass-card rounded-2xl p-6 mb-6">
+                    <h3 class="font-semibold text-white mb-6 flex items-center">
+                        <i data-lucide="user" class="w-5 h-5 mr-2 text-purple-400"></i>基本資訊
+                    </h3>
+                    <div class="grid grid-cols-2 gap-6">
+                        <div>
+                            <label class="block text-sm text-gray-400 mb-2">使用者帳號</label>
+                            <input type="text" id="username" value="admin001" readonly 
+                                class="w-full bg-dark-bg/50 border border-dark-border rounded-lg py-2.5 px-4 text-gray-400 cursor-not-allowed">
+                            <p class="text-xs text-gray-500 mt-1">帳號建立後無法修改</p>
+                        </div>
+                        <div>
+                            <label class="block text-sm text-gray-400 mb-2">姓名 <span class="text-red-400">*</span></label>
+                            <input type="text" id="name" value="系統管理員" 
+                                class="w-full bg-dark-bg border border-dark-border rounded-lg py-2.5 px-4 text-white input-focus">
+                        </div>
+                        <div>
+                            <label class="block text-sm text-gray-400 mb-2">電子郵件 <span class="text-red-400">*</span></label>
+                            <input type="email" id="email" value="admin@example.com" 
+                                class="w-full bg-dark-bg border border-dark-border rounded-lg py-2.5 px-4 text-white input-focus">
+                        </div>
+                        <div>
+                            <label class="block text-sm text-gray-400 mb-2">電話</label>
+                            <input type="tel" id="phone" placeholder="+886 912 345 678" 
+                                class="w-full bg-dark-bg border border-dark-border rounded-lg py-2.5 px-4 text-white input-focus">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="glass-card rounded-2xl p-6 mb-6">
+                    <h3 class="font-semibold text-white mb-6 flex items-center">
+                        <i data-lucide="shield" class="w-5 h-5 mr-2 text-purple-400"></i>角色與權限
+                    </h3>
+                    <div class="grid grid-cols-2 gap-6">
+                        <div>
+                            <label class="block text-sm text-gray-400 mb-2">角色 <span class="text-red-400">*</span></label>
+                            <select id="role" class="w-full bg-dark-bg border border-dark-border rounded-lg py-2.5 px-4 text-white input-focus">
+                                <option value="admin" selected>管理員</option>
+                                <option value="operator">操作員</option>
+                                <option value="viewer">檢視者</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-sm text-gray-400 mb-2">所屬代理</label>
+                            <select id="agent" class="w-full bg-dark-bg border border-dark-border rounded-lg py-2.5 px-4 text-white input-focus">
+                                <option value="">無</option>
+                                <option value="agent001">代理 A001</option>
+                                <option value="agent002">代理 A002</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="mt-4 p-4 glass rounded-xl">
+                        <p class="text-sm text-gray-400 mb-2">角色權限預覽：</p>
+                        <ul id="rolePreview" class="text-sm text-gray-300 space-y-1">
+                            <li class="flex items-center"><i data-lucide="check" class="w-4 h-4 mr-2 text-emerald-400"></i>完整系統管理權限</li>
+                            <li class="flex items-center"><i data-lucide="check" class="w-4 h-4 mr-2 text-emerald-400"></i>使用者管理</li>
+                            <li class="flex items-center"><i data-lucide="check" class="w-4 h-4 mr-2 text-emerald-400"></i>系統設定修改</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="glass-card rounded-2xl p-6 mb-6">
+                    <h3 class="font-semibold text-white mb-6 flex items-center">
+                        <i data-lucide="lock" class="w-5 h-5 mr-2 text-purple-400"></i>密碼管理
+                    </h3>
+                    <div class="space-y-4">
+                        <div class="flex items-center justify-between p-4 glass rounded-xl">
+                            <div>
+                                <p class="font-medium text-white">重設密碼</p>
+                                <p class="text-sm text-gray-400">發送密碼重設連結到使用者信箱</p>
+                            </div>
+                            <button onclick="resetPassword()" class="px-4 py-2 bg-dark-bg border border-dark-border rounded-lg text-gray-300 hover:bg-dark-hover transition-colors">
+                                發送重設連結
+                            </button>
+                        </div>
+                        <div class="flex items-center justify-between p-4 glass rounded-xl">
+                            <div>
+                                <p class="font-medium text-white">強制登出</p>
+                                <p class="text-sm text-gray-400">立即終止所有裝置的登入狀態</p>
+                            </div>
+                            <button onclick="forceLogout()" class="px-4 py-2 bg-red-500/20 border border-red-500/30 rounded-lg text-red-400 hover:bg-red-500/30 transition-colors">
+                                強制登出
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="glass-card rounded-2xl p-6">
+                    <h3 class="font-semibold text-white mb-6 flex items-center">
+                        <i data-lucide="activity" class="w-5 h-5 mr-2 text-purple-400"></i>帳號狀態
+                    </h3>
+                    <div class="grid grid-cols-2 gap-6">
+                        <div>
+                            <label class="block text-sm text-gray-400 mb-2">目前狀態</label>
+                            <div class="flex items-center">
+                                <span class="px-3 py-1 rounded-full text-xs bg-emerald-500/20 text-emerald-400">啟用中</span>
+                            </div>
+                        </div>
+                        <div>
+                            <label class="block text-sm text-gray-400 mb-2">最後登入</label>
+                            <p class="text-white">2024-01-15 09:30:25</p>
+                            <p class="text-xs text-gray-500">IP: 203.145.12.45</p>
+                        </div>
+                        <div>
+                            <label class="block text-sm text-gray-400 mb-2">建立時間</label>
+                            <p class="text-white">2023-06-01 14:22:10</p>
+                        </div>
+                        <div>
+                            <label class="block text-sm text-gray-400 mb-2">建立者</label>
+                            <p class="text-white">system</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script src="../js/sidebar.js"></script>
+    <script>
+        MockupSidebar.render('mockup_user_permission.html');
+        lucide.createIcons();
+
+        const rolePermissions = {
+            admin: [
+                '完整系統管理權限',
+                '使用者管理',
+                '系統設定修改'
+            ],
+            operator: [
+                '機台管理',
+                '遊戲管理',
+                '交易紀錄查看',
+                '報表查看'
+            ],
+            viewer: [
+                '僅可查看資料',
+                '無法進行任何修改'
+            ]
+        };
+
+        document.getElementById('role').addEventListener('change', function() {
+            const role = this.value;
+            const preview = document.getElementById('rolePreview');
+            const permissions = rolePermissions[role] || [];
+            preview.innerHTML = permissions.map(p => 
+                `<li class="flex items-center"><i data-lucide="check" class="w-4 h-4 mr-2 text-emerald-400"></i>${p}</li>`
+            ).join('');
+            lucide.createIcons();
+        });
+
+        function saveUser() {
+            alert('使用者資料已儲存');
+            window.location.href = 'mockup_user_permission.html';
+        }
+
+        function resetPassword() {
+            alert('密碼重設連結已發送至使用者信箱');
+        }
+
+        function forceLogout() {
+            if (confirm('確定要強制登出此使用者嗎？')) {
+                alert('已強制登出該使用者');
+            }
+        }
+    </script>
+</body>
+</html>
