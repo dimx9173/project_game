@@ -646,11 +646,8 @@ bg-amber-500/20 text-amber-400
 | Audit          | 審計、稽核                     |
 | Heartbeat      | 心跳監控                       |
 
-### 10.2 版本歷史
-
 | 版本 | 日期 | 變更說明 |
 |------|------|----------|
-| v8.0 | 2026-03-02 | 合併 Premium Dark + Glassmorphism 設計系統 |
 | v6.2 | 2026-02-25 | Corporate Precision 風格（舊版，已廢止） |
 
 ### 10.3 檔案清單
