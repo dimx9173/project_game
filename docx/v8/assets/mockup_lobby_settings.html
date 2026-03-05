@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>遊戲大廳設定 - 遊戲平台管理中心</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="css/mockup-common.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        cyber: { 50: '#f5f3ff', 100: '#ede9fe', 200: '#ddd6fe', 300: '#c4b5fd', 400: '#a78bfa', 500: '#8b5cf6', 600: '#7c3aed', 700: '#6d28d9', 800: '#5b21b6', 900: '#4c1d95', 950: '#2e1065' },
+                        dark: { bg: '#0a0a0f', card: '#12121a', sidebar: '#0d0d14', border: '#1e1e2e', hover: '#1a1a28' }
+                    },
+                    fontFamily: { sans: ['"Noto Sans TC"', 'sans-serif'], mono: ['"JetBrains Mono"', 'monospace'] },
+                    boxShadow: { glow: '0 0 30px rgba(168, 85, 247, 0.3)', 'glow-sm': '0 0 15px rgba(168, 85, 247, 0.2)' }
+                }
+            }
+        }
+    </script>
+    <style>
+        * { scrollbar-width: thin; scrollbar-color: #6d28d9 #0a0a0f; }
+        *::-webkit-scrollbar { width: 8px; height: 8px; }
+        *::-webkit-scrollbar-track { background: #0a0a0f; }
+        *::-webkit-scrollbar-thumb { background: linear-gradient(180deg, #7c3aed, #a855f7); border-radius: 4px; }
+        body { font-family: 'Noto Sans TC', sans-serif; background: #0a0a0f; }
+        .glass { background: rgba(18, 18, 26, 0.7); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border: 1px solid rgba(255, 255, 255, 0.08); }
+        .glass-card { background: linear-gradient(135deg, rgba(18, 18, 26, 0.9) 0%, rgba(30, 30, 46, 0.6) 100%); backdrop-filter: blur(20px); border: 1px solid rgba(168, 85, 247, 0.15); box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4); }
+        .glass-card:hover { border-color: rgba(168, 85, 247, 0.4); }
+        .gradient-bg { background: linear-gradient(135deg, #0a0a0f 0%, #1a0a2e 50%, #0a0a0f 100%); }
+        .gradient-purple { background: linear-gradient(135deg, #7c3aed 0%, #a855f7 50%, #c084fc 100%); }
+        
+        
+        
+        
+        .table-row-hover:hover { background: linear-gradient(90deg, rgba(124, 58, 237, 0.1), transparent); }
+        .input-focus:focus { box-shadow: 0 0 0 3px rgba(168, 85, 247, 0.3); outline: none; }
+        .badge-local { background: #10b981; color: white; font-size: 10px; padding: 2px 6px; border-radius: 4px; }
+        
+        
+        
+        
+    </style>
+</head>
+<body class="gradient-bg min-h-screen flex">
+    <div id="sidebar-container"></div>
+    <main class="flex-1 flex flex-col overflow-hidden">
+        <header class="h-16 glass border-b border-dark-border flex items-center justify-between px-6">
+            <div class="flex items-center">
+                <h2 class="text-lg font-semibold text-white">遊戲大廳設定</h2>
+            </div>
+            <button class="px-4 py-2 gradient-purple rounded-lg text-sm text-white font-medium shadow-glow-sm">
+                <i data-lucide="save" class="w-4 h-4 mr-2"></i>儲存設定
+            </button>
+        </header>
+        <div class="flex-1 overflow-y-auto p-6">
+            <div class="grid grid-cols-2 gap-6">
+                <!-- 大廳外觀 -->
+                <div class="glass-card rounded-xl p-6">
+                    <h3 class="text-lg font-semibold text-white mb-6 flex items-center">
+                        <i data-lucide="palette" class="w-5 h-5 mr-2 text-purple-400"></i>大廳外觀
+                    </h3>
+                    <div class="space-y-4">
+                        <div>
+                            <label class="block text-sm text-gray-400 mb-2">大廳標題</label>
+                            <input type="text" value="極致遊戲體驗" class="w-full px-4 py-2.5 bg-dark-bg border border-dark-border rounded-lg text-white input-focus">
+                        </div>
+                        <div>
+                            <label class="block text-sm text-gray-400 mb-2">主題色彩</label>
+                            <div class="flex gap-3">
+                                <label class="flex items-center">
+                                    <input type="radio" name="theme" class="hidden">
+                                    <div class="w-10 h-10 rounded-lg bg-gradient-to-br from-purple-600 to-pink-600 border-2 border-white cursor-pointer"></div>
+                                </label>
+                                <label class="flex items-center">
+                                    <input type="radio" name="theme" class="hidden" checked>
+                                    <div class="w-10 h-10 rounded-lg bg-gradient-to-br from-blue-600 to-cyan-600 border-2 border-purple-400 cursor-pointer"></div>
+                                </label>
+                                <label class="flex items-center">
+                                    <input type="radio" name="theme" class="hidden">
+                                    <div class="w-10 h-10 rounded-lg bg-gradient-to-br from-green-600 to-teal-600 border-2 border-transparent cursor-pointer"></div>
+                                </label>
+                                <label class="flex items-center">
+                                    <input type="radio" name="theme" class="hidden">
+                                    <div class="w-10 h-10 rounded-lg bg-gradient-to-br from-orange-500 to-red-500 border-2 border-transparent cursor-pointer"></div>
+                                </label>
+                            </div>
+                        </div>
+                        <div>
+                            <label class="block text-sm text-gray-400 mb-2">背景樣式</label>
+                            <select class="w-full px-4 py-2.5 bg-dark-bg border border-dark-border rounded-lg text-white input-focus">
+                                <option>動態粒子背景</option>
+                                <option>漸層背景</option>
+                                <option>純色背景</option>
+                                <option>圖片背景</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="flex items-center">
+                                <input type="checkbox" checked class="rounded border-dark-border mr-3">
+                                <span class="text-sm text-gray-300">顯示遊戲分類標籤</span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 遊戲顯示 -->
+                <div class="glass-card rounded-xl p-6">
+                    <h3 class="text-lg font-semibold text-white mb-6 flex items-center">
+                        <i data-lucide="layout-grid" class="w-5 h-5 mr-2 text-purple-400"></i>遊戲顯示
+                    </h3>
+                    <div class="space-y-4">
+                        <div>
+                            <label class="block text-sm text-gray-400 mb-2">每列顯示數量</label>
+                            <select class="w-full px-4 py-2.5 bg-dark-bg border border-dark-border rounded-lg text-white input-focus">
+                                <option>3</option>
+                                <option selected>4</option>
+                                <option>5</option>
+                                <option>6</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-sm text-gray-400 mb-2">遊戲卡片大小</label>
+                            <div class="flex items-center gap-4">
+                                <input type="range" min="150" max="250" value="180" class="flex-1">
+                                <span class="text-white text-sm w-16">180px</span>
+                            </div>
+                        </div>
+                        <div>
+                            <label class="block text-sm text-gray-400 mb-2">預設排序方式</label>
+                            <select class="w-full px-4 py-2.5 bg-dark-bg border border-dark-border rounded-lg text-white input-focus">
+                                <option selected>熱門程度</option>
+                                <option>名稱 A-Z</option>
+                                <option>最近新增</option>
+                                <option> RTP 高到低</option>
+                            </select>
+                        </div>
+                        <div class="space-y-3 pt-2">
+                            <label class="flex items-center">
+                                <input type="checkbox" checked class="rounded border-dark-border mr-3">
+                                <span class="text-sm text-gray-300">顯示遊戲 RTP</span>
+                            </label>
+                            <label class="flex items-center">
+                                <input type="checkbox" checked class="rounded border-dark-border mr-3">
+                                <span class="text-sm text-gray-300">顯示在線人數</span>
+                            </label>
+                            <label class="flex items-center">
+                                <input type="checkbox" class="rounded border-dark-border mr-3">
+                                <span class="text-sm text-gray-300">顯示收藏按鈕</span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 搜尋與篩選 -->
+                <div class="glass-card rounded-xl p-6">
+                    <h3 class="text-lg font-semibold text-white mb-6 flex items-center">
+                        <i data-lucide="search" class="w-5 h-5 mr-2 text-purple-400"></i>搜尋與篩選
+                    </h3>
+                    <div class="space-y-4">
+                        <div>
+                            <label class="block text-sm text-gray-400 mb-2">熱門搜尋關鍵字</label>
+                            <input type="text" value="百家樂,老虎機,21點,輪盤" class="w-full px-4 py-2.5 bg-dark-bg border border-dark-border rounded-lg text-white input-focus">
+                            <p class="text-xs text-gray-500 mt-1">多個關鍵字用逗號分隔</p>
+                        </div>
+                        <div class="space-y-3 pt-2">
+                            <label class="flex items-center">
+                                <input type="checkbox" checked class="rounded border-dark-border mr-3">
+                                <span class="text-sm text-gray-300">啟用搜尋建議</span>
+                            </label>
+                            <label class="flex items-center">
+                                <input type="checkbox" checked class="rounded border-dark-border mr-3">
+                                <span class="text-sm text-gray-300">顯示篩選面板</span>
+                            </label>
+                            <label class="flex items-center">
+                                <input type="checkbox" checked class="rounded border-dark-border mr-3">
+                                <span class="text-sm text-gray-300">允許收藏遊戲</span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 效能優化 -->
+                <div class="glass-card rounded-xl p-6">
+                    <h3 class="text-lg font-semibold text-white mb-6 flex items-center">
+                        <i data-lucide="zap" class="w-5 h-5 mr-2 text-purple-400"></i>效能優化
+                    </h3>
+                    <div class="space-y-4">
+                        <div>
+                            <label class="block text-sm text-gray-400 mb-2">Lazy Load 數量</label>
+                            <select class="w-full px-4 py-2.5 bg-dark-bg border border-dark-border rounded-lg text-white input-focus">
+                                <option>12</option>
+                                <option selected>24</option>
+                                <option>48</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-sm text-gray-400 mb-2">圖片品質</label>
+                            <select class="w-full px-4 py-2.5 bg-dark-bg border border-dark-border rounded-lg text-white input-focus">
+                                <option>低 (載入快)</option>
+                                <option selected>中 (平衡)</option>
+                                <option>高 (畫質佳)</option>
+                            </select>
+                        </div>
+                        <div class="space-y-3 pt-2">
+                            <label class="flex items-center">
+                                <input type="checkbox" checked class="rounded border-dark-border mr-3">
+                                <span class="text-sm text-gray-300">預先載入遊戲縮圖</span>
+                            </label>
+                            <label class="flex items-center">
+                                <input type="checkbox" checked class="rounded border-dark-border mr-3">
+                                <span class="text-sm text-gray-300">啟用遊戲快取</span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+    <script>
+        lucide.createIcons();
+
+        function toggleSidebarGroup(header) {
+            const group = header.parentElement;
+            const submenu = group.querySelector('.sidebar-submenu');
+            if (group.classList.contains('open')) {
+                group.classList.remove('open');
+                submenu.classList.remove('open');
+            } else {
+                group.classList.add('open');
+                submenu.classList.add('open');
+            }
+        }
+    </script>
+<script src="js/sidebar.js"></script>
+    <script>
+        MockupSidebar.render('mockup_lobby_settings.html');
+    </script>
+</body>
+</html>

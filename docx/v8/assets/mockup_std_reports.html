@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>統計報表 - 遊戲平台管理中心</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="css/mockup-common.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        cyber: { 50: '#f5f3ff', 100: '#ede9fe', 200: '#ddd6fe', 300: '#c4b5fd', 400: '#a78bfa', 500: '#8b5cf6', 600: '#7c3aed', 700: '#6d28d9', 800: '#5b21b6', 900: '#4c1d95', 950: '#2e1065' },
+                        dark: { bg: '#0a0a0f', card: '#12121a', sidebar: '#0d0d14', border: '#1e1e2e', hover: '#1a1a28' }
+                    },
+                    fontFamily: { sans: ['"Noto Sans TC"', 'sans-serif'], mono: ['"JetBrains Mono"', 'monospace'] },
+                    boxShadow: { glow: '0 0 30px rgba(168, 85, 247, 0.3)', 'glow-sm': '0 0 15px rgba(168, 85, 247, 0.2)' }
+                }
+            }
+        }
+    </script>
+    <style>
+        * { scrollbar-width: thin; scrollbar-color: #6d28d9 #0a0a0f; }
+        *::-webkit-scrollbar { width: 8px; height: 8px; }
+        *::-webkit-scrollbar-track { background: #0a0a0f; }
+        *::-webkit-scrollbar-thumb { background: linear-gradient(180deg, #7c3aed, #a855f7); border-radius: 4px; }
+        body { font-family: 'Noto Sans TC', sans-serif; background: #0a0a0f; }
+        .glass { background: rgba(18, 18, 26, 0.7); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border: 1px solid rgba(255, 255, 255, 0.08); }
+        .glass-card { background: linear-gradient(135deg, rgba(18, 18, 26, 0.9) 0%, rgba(30, 30, 46, 0.6) 100%); backdrop-filter: blur(20px); border: 1px solid rgba(168, 85, 247, 0.15); box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4); }
+        
+        
+        
+        
+        .input-focus:focus { box-shadow: 0 0 0 3px rgba(168, 85, 247, 0.3), 0 0 20px rgba(168, 85, 247, 0.2); }
+        
+        
+        
+        
+    </style>
+</head>
+<body class="gradient-bg min-h-screen flex">
+    <div id="sidebar-container"></div>
+    <main class="flex-1 flex flex-col overflow-hidden">
+        <header class="h-16 glass border-b border-dark-border flex items-center justify-between px-6">
+            <h2 class="text-lg font-semibold text-white">統計報表</h2>
+            <div class="flex items-center space-x-3">
+                <select class="px-4 py-2 bg-dark-bg border border-dark-border rounded-lg text-sm text-white">
+                    <option>本月</option>
+                    <option>上月</option>
+                    <option>本季</option>
+                    <option>本年</option>
+                </select>
+                <button class="px-4 py-2 gradient-purple rounded-lg text-sm text-white font-medium">
+                    <i data-lucide="download" class="w-4 h-4 inline mr-2"></i>匯出
+                </button>
+            </div>
+        </header>
+        <div class="flex-1 overflow-y-auto p-6">
+            <div class="grid grid-cols-4 gap-4 mb-6">
+                <div class="glass-card rounded-xl p-5">
+                    <p class="text-xs text-gray-500">總營收</p>
+                    <p class="text-2xl font-bold text-white mt-1">$2,845,000</p>
+                    <p class="text-xs text-emerald-400 mt-1">+15.2%</p>
+                </div>
+                <div class="glass-card rounded-xl p-5">
+                    <p class="text-xs text-gray-500">總下注</p>
+                    <p class="text-2xl font-bold text-white mt-1">$12,450,000</p>
+                    <p class="text-xs text-emerald-400 mt-1">+8.5%</p>
+                </div>
+                <div class="glass-card rounded-xl p-5">
+                    <p class="text-xs text-gray-500">總派彩</p>
+                    <p class="text-2xl font-bold text-white mt-1">$9,605,000</p>
+                    <p class="text-xs text-emerald-400 mt-1">+12.3%</p>
+                </div>
+                <div class="glass-card rounded-xl p-5">
+                    <p class="text-xs text-gray-500">平均 RTP</p>
+                    <p class="text-2xl font-bold text-purple-400 mt-1">77.1%</p>
+                    <p class="text-xs text-gray-500 mt-1">目標 75-85%</p>
+                </div>
+            </div>
+            <div class="grid grid-cols-2 gap-6 mb-6">
+                <div class="glass-card rounded-xl p-5">
+                    <h3 class="font-semibold text-white mb-4">營收趨勢</h3>
+                    <div class="h-48"><canvas id="revenueChart"></canvas></div>
+                </div>
+                <div class="glass-card rounded-xl p-5">
+                    <h3 class="font-semibold text-white mb-4">遊戲類型營收占比</h3>
+                    <div class="h-48"><canvas id="gameTypeChart"></canvas></div>
+                </div>
+            </div>
+            <div class="grid grid-cols-2 gap-6 mb-6">
+                <div class="glass-card rounded-xl p-5">
+                    <h3 class="font-semibold text-white mb-4">遊戲排行 TOP 10</h3>
+                    <div class="space-y-3">
+                        <div class="flex items-center justify-between py-2 border-b border-dark-border">
+                            <div class="flex items-center">
+                                <span class="w-6 h-6 rounded-full bg-yellow-500/20 text-yellow-400 text-xs font-bold flex items-center justify-center mr-3">1</span>
+                                <span class="text-white">經典拉霸王</span>
+                            </div>
+                            <span class="text-emerald-400 font-mono">$425,000</span>
+                        </div>
+                        <div class="flex items-center justify-between py-2 border-b border-dark-border">
+                            <div class="flex items-center">
+                                <span class="w-6 h-6 rounded-full bg-gray-400/20 text-gray-300 text-xs font-bold flex items-center justify-center mr-3">2</span>
+                                <span class="text-white">幸運777</span>
+                            </div>
+                            <span class="text-emerald-400 font-mono">$382,000</span>
+                        </div>
+                        <div class="flex items-center justify-between py-2">
+                            <div class="flex items-center">
+                                <span class="w-6 h-6 rounded-full bg-amber-700/20 text-amber-600 text-xs font-bold flex items-center justify-center mr-3">3</span>
+                                <span class="text-white">水果樂園</span>
+                            </div>
+                            <span class="text-emerald-400 font-mono">$298,000</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="glass-card rounded-xl p-5">
+                    <h3 class="font-semibold text-white mb-4">玩家排行 TOP 10</h3>
+                    <div class="space-y-3">
+                        <div class="flex items-center justify-between py-2 border-b border-dark-border">
+                            <div class="flex items-center">
+                                <span class="w-6 h-6 rounded-full bg-yellow-500/20 text-yellow-400 text-xs font-bold flex items-center justify-center mr-3">1</span>
+                                <span class="text-white">player001</span>
+                            </div>
+                            <span class="text-emerald-400 font-mono">$125,800</span>
+                        </div>
+                        <div class="flex items-center justify-between py-2 border-b border-dark-border">
+                            <div class="flex items-center">
+                                <span class="w-6 h-6 rounded-full bg-gray-400/20 text-gray-300 text-xs font-bold flex items-center justify-center mr-3">2</span>
+                                <span class="text-white">vip8888</span>
+                            </div>
+                            <span class="text-emerald-400 font-mono">$98,500</span>
+                        </div>
+                        <div class="flex items-center justify-between py-2">
+                            <div class="flex items-center">
+                                <span class="w-6 h-6 rounded-full bg-amber-700/20 text-amber-600 text-xs font-bold flex items-center justify-center mr-3">3</span>
+                                <span class="text-white">luckystar</span>
+                            </div>
+                            <span class="text-emerald-400 font-mono">$76,200</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+    <script>
+        lucide.createIcons();
+        new Chart(document.getElementById('revenueChart').getContext('2d'), {
+            type: 'line',
+            data: {
+                labels: ['第1週', '第2週', '第3週', '第4週'],
+                datasets: [{
+                    label: '營收',
+                    data: [620000, 785000, 698000, 742000],
+                    borderColor: '#a855f7',
+                    backgroundColor: 'rgba(168, 85, 247, 0.1)',
+                    fill: true,
+                    tension: 0.4
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: { legend: { display: false } },
+                scales: {
+                    y: { beginAtZero: true, grid: { color: 'rgba(255,255,255,0.05)' }, ticks: { color: '#6b7280' } },
+                    x: { grid: { display: false }, ticks: { color: '#6b7280' } }
+                }
+            }
+        });
+        new Chart(document.getElementById('gameTypeChart').getContext('2d'), {
+            type: 'doughnut',
+            data: {
+                labels: ['老虎機', '捕魚機', '棋牌', '其他'],
+                datasets: [{ data: [65, 20, 10, 5], backgroundColor: ['#a855f7', '#3b82f6', '#10b981', '#6b7280'], borderWidth: 0 }]
+            },
+            options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'right', labels: { color: '#9ca3af' } } } }
+        });
+    </script>
+    <script>
+        lucide.createIcons();
+
+        function toggleSidebarGroup(header) {
+            const group = header.parentElement;
+            const submenu = group.querySelector('.sidebar-submenu');
+            if (group.classList.contains('open')) {
+                group.classList.remove('open');
+                submenu.classList.remove('open');
+            } else {
+                group.classList.add('open');
+                submenu.classList.add('open');
+            }
+        }
+    </script>
+<script src="js/sidebar.js"></script>
+    <script>
+        MockupSidebar.render('mockup_std_reports.html');
+    </script>
+</body>
+</html>

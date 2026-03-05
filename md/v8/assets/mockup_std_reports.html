@@ -92,42 +92,59 @@
                     <div class="h-48"><canvas id="gameTypeChart"></canvas></div>
                 </div>
             </div>
-            <div class="glass-card rounded-xl p-5">
-                <h3 class="font-semibold text-white mb-4">遊戲排行 TOP 10</h3>
-                <table class="min-w-full">
-                    <thead class="bg-dark-bg">
-                        <tr>
-                            <th class="px-4 py-2 text-left text-xs font-medium text-gray-400 uppercase">排名</th>
-                            <th class="px-4 py-2 text-left text-xs font-medium text-gray-400 uppercase">遊戲名稱</th>
-                            <th class="px-4 py-2 text-right text-xs font-medium text-gray-400 uppercase">總營收</th>
-                            <th class="px-4 py-2 text-right text-xs font-medium text-gray-400 uppercase">遊戲次數</th>
-                            <th class="px-4 py-2 text-right text-xs font-medium text-gray-400 uppercase">RTP</th>
-                        </tr>
-                    </thead>
-                    <tbody class="divide-y divide-dark-border">
-                        <tr class="hover:bg-purple-500/5">
-                            <td class="px-4 py-3"><span class="w-6 h-6 rounded-full bg-yellow-500/20 text-yellow-400 text-xs font-bold flex items-center justify-center">1</span></td>
-                            <td class="px-4 py-3 text-white">經典拉霸王</td>
-                            <td class="px-4 py-3 text-right text-white font-mono">$425,000</td>
-                            <td class="px-4 py-3 text-right text-gray-400">12,450</td>
-                            <td class="px-4 py-3 text-right text-emerald-400">78.5%</td>
-                        </tr>
-                        <tr class="hover:bg-purple-500/5">
-                            <td class="px-4 py-3"><span class="w-6 h-6 rounded-full bg-gray-400/20 text-gray-300 text-xs font-bold flex items-center justify-center">2</span></td>
-                            <td class="px-4 py-3 text-white">幸運777</td>
-                            <td class="px-4 py-3 text-right text-white font-mono">$382,000</td>
-                            <td class="px-4 py-3 text-right text-gray-400">10,230</td>
-                            <td class="px-4 py-3 text-right text-emerald-400">76.2%</td>
-                        </tr>
-                        <tr class="hover:bg-purple-500/5">
-                            <td class="px-4 py-3"><span class="w-6 h-6 rounded-full bg-amber-700/20 text-amber-600 text-xs font-bold flex items-center justify-center">3</span></td>
-                            <td class="px-4 py-3 text-white">水果樂園</td>
-                            <td class="px-4 py-3 text-right text-white font-mono">$298,000</td>
-                            <td class="px-4 py-3 text-right text-gray-400">8,920</td>
-                            <td class="px-4 py-3 text-right text-emerald-400">79.1%</td>
-                        </tr>
-                    </tbody>
-                </table>
+            <div class="grid grid-cols-2 gap-6 mb-6">
+                <div class="glass-card rounded-xl p-5">
+                    <h3 class="font-semibold text-white mb-4">遊戲排行 TOP 10</h3>
+                    <div class="space-y-3">
+                        <div class="flex items-center justify-between py-2 border-b border-dark-border">
+                            <div class="flex items-center">
+                                <span class="w-6 h-6 rounded-full bg-yellow-500/20 text-yellow-400 text-xs font-bold flex items-center justify-center mr-3">1</span>
+                                <span class="text-white">經典拉霸王</span>
+                            </div>
+                            <span class="text-emerald-400 font-mono">$425,000</span>
+                        </div>
+                        <div class="flex items-center justify-between py-2 border-b border-dark-border">
+                            <div class="flex items-center">
+                                <span class="w-6 h-6 rounded-full bg-gray-400/20 text-gray-300 text-xs font-bold flex items-center justify-center mr-3">2</span>
+                                <span class="text-white">幸運777</span>
+                            </div>
+                            <span class="text-emerald-400 font-mono">$382,000</span>
+                        </div>
+                        <div class="flex items-center justify-between py-2">
+                            <div class="flex items-center">
+                                <span class="w-6 h-6 rounded-full bg-amber-700/20 text-amber-600 text-xs font-bold flex items-center justify-center mr-3">3</span>
+                                <span class="text-white">水果樂園</span>
+                            </div>
+                            <span class="text-emerald-400 font-mono">$298,000</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="glass-card rounded-xl p-5">
+                    <h3 class="font-semibold text-white mb-4">玩家排行 TOP 10</h3>
+                    <div class="space-y-3">
+                        <div class="flex items-center justify-between py-2 border-b border-dark-border">
+                            <div class="flex items-center">
+                                <span class="w-6 h-6 rounded-full bg-yellow-500/20 text-yellow-400 text-xs font-bold flex items-center justify-center mr-3">1</span>
+                                <span class="text-white">player001</span>
+                            </div>
+                            <span class="text-emerald-400 font-mono">$125,800</span>
+                        </div>
+                        <div class="flex items-center justify-between py-2 border-b border-dark-border">
+                            <div class="flex items-center">
+                                <span class="w-6 h-6 rounded-full bg-gray-400/20 text-gray-300 text-xs font-bold flex items-center justify-center mr-3">2</span>
+                                <span class="text-white">vip8888</span>
+                            </div>
+                            <span class="text-emerald-400 font-mono">$98,500</span>
+                        </div>
+                        <div class="flex items-center justify-between py-2">
+                            <div class="flex items-center">
+                                <span class="w-6 h-6 rounded-full bg-amber-700/20 text-amber-600 text-xs font-bold flex items-center justify-center mr-3">3</span>
+                                <span class="text-white">luckystar</span>
+                            </div>
+                            <span class="text-emerald-400 font-mono">$76,200</span>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </main>

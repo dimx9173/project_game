@@ -82,7 +82,8 @@
     nav.appendChild(group('wallet', '交易紀錄管理', [
       { href: 'mockup_std_wallet.html', text: '錢包交易' },
       { href: 'mockup_std_transaction_detail.html', text: '交易詳情' },
-      { href: 'mockup_transaction_export.html', text: '交易匯出' }
+      { href: 'mockup_transaction_export.html', text: '交易匯出' },
+      { href: 'mockup_revenue_report.html', text: '營收報表' }
     ]));
     nav.appendChild(group('plug', '串接遊戲', [
       { href: 'mockup_std_provider_list.html', text: '遊戲商列表' },

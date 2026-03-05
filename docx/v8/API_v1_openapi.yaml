@@ -1,0 +1,1143 @@
+openapi: 3.0.3
+info:
+  title: 遊戲平台管理系統 API
+  description: |
+    遊戲平台管理系統 V8 API 文檔
+    - 支援 MVP / 標準版 / 旗艦版
+    - Version: 1.0.0
+  version: 1.0.0
+
+servers:
+  - url: https://api.gameplatform.com/api/v1
+  - url: http://localhost:3000/api/v1
+
+security:
+  - BearerAuth: []
+  - PinAuth: []
+
+tags:
+  - name: 認證 (Auth)
+  - name: 機台管理 (Machines)
+  - name: 遊戲管理 (Games)
+  - name: 遊戲測試 (Game Test)
+  - name: 玩家管理 (Players)
+  - name: 交易管理 (Transactions)
+  - name: 遊戲商管理 (Providers)
+  - name: 錢包管理 (Wallet)
+  - name: 多人遊戲 (Multiplayer)
+  - name: 使用者權限 (RBAC)
+  - name: OTA 更新 (OTA)
+  - name: 監控中心 (Monitor)
+  - name: 爭議處理 (Disputes)
+  - name: 錯帳管理 (Discrepancies)
+  - name: 同步管理 (Sync)
+  - name: 報表管理 (Reports)
+  - name: 系統設定 (System Configs)
+
+components:
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+    PinAuth:
+      type: apiKey
+      in: header
+      name: X-PIN-Code
+
+paths:
+  # Auth
+  /auth/login:
+    post:
+      tags: [認證 (Auth)]
+      summary: 使用者登入
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [username, password]
+              properties:
+                username: { type: string }
+                password: { type: string }
+      responses:
+        "200": { description: 登入成功 }
+        "401": { description: 登入失敗 }
+
+  /auth/logout:
+    post:
+      tags: [認證 (Auth)]
+      summary: 登出
+      security: [{ BearerAuth: [] }]
+      responses:
+        "200": { description: 登出成功 }
+
+  /auth/verify:
+    get:
+      tags: [認證 (Auth)]
+      summary: 驗證 Token
+      security: [{ BearerAuth: [] }]
+      responses:
+        "200": { description: Token 有效 }
+
+  /auth/refresh:
+    post:
+      tags: [認證 (Auth)]
+      summary: 刷新 Token
+      responses:
+        "200": { description: 刷新成功 }
+
+  # Machines
+  /machines:
+    get:
+      tags: [機台管理 (Machines)]
+      summary: 取得機台列表
+      security: [{ BearerAuth: [] }]
+      parameters:
+        - { name: page, in: query, schema: { type: integer, default: 1 } }
+        - { name: pageSize, in: query, schema: { type: integer, default: 20 } }
+        - {
+            name: status,
+            in: query,
+            schema: { type: string, enum: [online, offline, maintenance] },
+          }
+      responses:
+        "200": { description: 成功 }
+    post:
+      tags: [機台管理 (Machines)]
+      summary: 新增機台
+      security: [{ BearerAuth: [] }]
+      responses:
+        "201": { description: 建立成功 }
+
+  /machines/{id}:
+    get:
+      tags: [機台管理 (Machines)]
+      summary: 取得機台詳情
+      security: [{ BearerAuth: [] }]
+      parameters:
+        - {
+            name: id,
+            in: path,
+            required: true,
+            schema: { type: string, format: uuid },
+          }
+      responses:
+        "200": { description: 成功 }
+        "404": { description: 不存在 }
+    put:
+      tags: [機台管理 (Machines)]
+      summary: 更新機台
+      security: [{ BearerAuth: [] }]
+      responses:
+        "200": { description: 更新成功 }
+    delete:
+      tags: [機台管理 (Machines)]
+      summary: 刪除機台
+      security: [{ BearerAuth: [] }]
+      responses:
+        "204": { description: 刪除成功 }
+
+  /machines/{id}/command:
+    post:
+      tags: [機台管理 (Machines)]
+      summary: 發送遠端指令
+      security: [{ BearerAuth: [] }]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                command:
+                  { type: string, enum: [restart, shutdown, cash_in, cash_out] }
+                params: { type: object }
+      responses:
+        "200": { description: 指令已發送 }
+
+  /machines/{id}/heartbeat:
+    post:
+      tags: [機台管理 (Machines)]
+      summary: 機台心跳
+      description: 機台定期發送心跳以報告狀態
+      security: [{ BearerAuth: [] }, { PinAuth: [] }]
+      parameters:
+        - {
+            name: id,
+            in: path,
+            required: true,
+            schema: { type: string, format: uuid },
+          }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                cpuUsage: { type: number }
+                memoryUsage: { type: number }
+                status: { type: string, enum: [online, offline, maintenance] }
+      responses:
+        "200": { description: 心跳收到 }
+
+  /machines/{id}/config:
+    get:
+      tags: [機台管理 (Machines)]
+      summary: 取得機台配置
+      security: [{ BearerAuth: [] }]
+      parameters:
+        - {
+            name: id,
+            in: path,
+            required: true,
+            schema: { type: string, format: uuid },
+          }
+      responses:
+        "200": { description: 成功 }
+    put:
+      tags: [機台管理 (Machines)]
+      summary: 更新機台配置
+      security: [{ BearerAuth: [] }]
+      parameters:
+        - {
+            name: id,
+            in: path,
+            required: true,
+            schema: { type: string, format: uuid },
+          }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                config: { type: object }
+      responses:
+        "200": { description: 更新成功 }
+
+  # Games
+  /games:
+    get:
+      tags: [遊戲管理 (Games)]
+      summary: 取得遊戲列表
+      security: [{ BearerAuth: [] }]
+      responses:
+        "200": { description: 成功 }
+    post:
+      tags: [遊戲管理 (Games)]
+      summary: 新增遊戲
+      security: [{ BearerAuth: [] }]
+      responses:
+        "201": { description: 建立成功 }
+
+  /games/{id}:
+    get:
+      tags: [遊戲管理 (Games)]
+      summary: 取得遊戲詳情
+      security: [{ BearerAuth: [] }]
+      responses:
+        "200": { description: 成功 }
+    put:
+      tags: [遊戲管理 (Games)]
+      summary: 更新遊戲
+      security: [{ BearerAuth: [] }]
+      responses:
+        "200": { description: 更新成功 }
+    delete:
+      tags: [遊戲管理 (Games)]
+      summary: 刪除遊戲
+      security: [{ BearerAuth: [] }]
+      responses:
+        "204": { description: 刪除成功 }
+
+  # Game Test (旗艦版)
+  /games/{id}/test/start:
+    post:
+      tags: [遊戲測試 (Game Test)]
+      summary: 啟動遊戲測試模式
+      description: 允許管理員在正式環境中進行虛擬下注以驗證遊戲邏輯
+      security: [{ BearerAuth: [] }]
+      parameters:
+        - {
+            name: id,
+            in: path,
+            required: true,
+            schema: { type: string, format: uuid },
+          }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                machineId: { type: string, format: uuid }
+      responses:
+        "200": { description: 測試模式已啟動 }
+        "403": { description: 權限不足 }
+
+  /games/{id}/test/bet:
+    post:
+      tags: [遊戲測試 (Game Test)]
+      summary: 執行虛擬下注
+      description: 在測試模式下進行虛擬下注，不扣除真實餘額
+      security: [{ BearerAuth: [] }]
+      parameters:
+        - {
+            name: id,
+            in: path,
+            required: true,
+            schema: { type: string, format: uuid },
+          }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                testSessionId: { type: string }
+                amount: { type: number }
+      responses:
+        "200": { description: 虛擬下注成功 }
+
+  /games/{id}/test/end:
+    post:
+      tags: [遊戲測試 (Game Test)]
+      summary: 結束測試模式
+      security: [{ BearerAuth: [] }]
+      parameters:
+        - {
+            name: id,
+            in: path,
+            required: true,
+            schema: { type: string, format: uuid },
+          }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                testSessionId: { type: string }
+      responses:
+        "200": { description: 測試模式已結束 }
+
+  /games/{id}/test/report:
+    get:
+      tags: [遊戲測試 (Game Test)]
+      summary: 取得測試報告
+      security: [{ BearerAuth: [] }]
+      parameters:
+        - {
+            name: id,
+            in: path,
+            required: true,
+            schema: { type: string, format: uuid },
+          }
+        - { name: testSessionId, in: query, schema: { type: string } }
+      responses:
+        "200": { description: 取得測試報告成功 }
+
+  # Players
+  /players:
+    get:
+      tags: [玩家管理 (Players)]
+      summary: 取得玩家列表
+      security: [{ BearerAuth: [] }]
+      responses:
+        "200": { description: 成功 }
+
+  /players/{id}:
+    get:
+      tags: [玩家管理 (Players)]
+      summary: 取得玩家詳情
+      security: [{ BearerAuth: [] }]
+      responses:
+        "200": { description: 成功 }
+
+  /players/{id}/balance:
+    put:
+      tags: [玩家管理 (Players)]
+      summary: 調整玩家餘額
+      security: [{ BearerAuth: [] }]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                amount: { type: number }
+                type: { type: string, enum: [deposit, withdraw, adjust] }
+      responses:
+        "200": { description: 調整成功 }
+        "400": { description: 餘額不足 }
+
+  # Transactions
+  /transactions:
+    get:
+      tags: [交易管理 (Transactions)]
+      summary: 取得交易列表
+      security: [{ BearerAuth: [] }]
+      parameters:
+        - { name: page, in: query, schema: { type: integer } }
+        - { name: pageSize, in: query, schema: { type: integer } }
+        - { name: playerId, in: query, schema: { type: string, format: uuid } }
+        - { name: type, in: query, schema: { type: string } }
+        - { name: operatorId, in: query, schema: { type: string } }
+      responses:
+        "200": { description: 成功 }
+
+  /transactions/{id}/reverse:
+    post:
+      tags: [交易管理 (Transactions)]
+      summary: 沖銷交易
+      security: [{ BearerAuth: [] }]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                reason: { type: string }
+      responses:
+        "200": { description: 沖銷成功 }
+
+  # Providers (標準版/旗艦版)
+  /providers:
+    get:
+      tags: [遊戲商管理 (Providers)]
+      summary: 取得遊戲商列表
+      security: [{ BearerAuth: [] }]
+      responses:
+        "200": { description: 成功 }
+    post:
+      tags: [遊戲商管理 (Providers)]
+      summary: 新增遊戲商
+      security: [{ BearerAuth: [] }]
+      responses:
+        "201": { description: 建立成功 }
+
+  /providers/{id}/balance:
+    get:
+      tags: [遊戲商管理 (Providers)]
+      summary: 取得遊戲商餘額
+      security: [{ BearerAuth: [] }]
+      responses:
+        "200": { description: 成功 }
+
+  # Wallet Management (旗艦版)
+  /wallet/balances:
+    get:
+      tags: [錢包管理 (Wallet)]
+      summary: 取得所有錢包餘額
+      description: 包含中央錢包與各串接遊戲商錢包餘額
+      security: [{ BearerAuth: [] }]
+      responses:
+        "200":
+          description: 成功
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  centralWallet: { type: number }
+                  providerWallets:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        providerId: { type: string }
+                        providerName: { type: string }
+                        balance: { type: number }
+
+  /wallet/transfer:
+    post:
+      tags: [錢包管理 (Wallet)]
+      summary: 執行錢包轉帳
+      description: 執行中央錢包與遊戲商錢包之間的資金劃轉
+      security: [{ BearerAuth: [] }]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [fromWallet, toWallet, amount]
+              properties:
+                fromWallet:
+                  {
+                    type: string,
+                    description: "來源錢包ID (central 或 providerId)",
+                  }
+                toWallet:
+                  {
+                    type: string,
+                    description: "目標錢包ID (central 或 providerId)",
+                  }
+                amount: { type: number, minimum: 0 }
+                remark: { type: string }
+      responses:
+        "200": { description: 轉帳成功 }
+        "400": { description: 餘額不足或參數錯誤 }
+
+  # Multiplayer (旗艦版)
+  /multiplayer/rooms:
+    get:
+      tags: [多人遊戲 (Multiplayer)]
+      summary: 取得遊戲房間列表
+      security: [{ BearerAuth: [] }]
+      parameters:
+        - {
+            name: status,
+            in: query,
+            schema: { type: string, enum: [waiting, playing, closed] },
+          }
+      responses:
+        "200": { description: 成功 }
+    post:
+      tags: [多人遊戲 (Multiplayer)]
+      summary: 建立遊戲房間
+      security: [{ BearerAuth: [] }]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                gameId: { type: string, format: uuid }
+                minPlayers: { type: integer }
+                maxPlayers: { type: integer }
+      responses:
+        "201": { description: 建立成功 }
+
+  /multiplayer/rooms/{id}:
+    get:
+      tags: [多人遊戲 (Multiplayer)]
+      summary: 取得房間詳情
+      security: [{ BearerAuth: [] }]
+      parameters:
+        - {
+            name: id,
+            in: path,
+            required: true,
+            schema: { type: string, format: uuid },
+          }
+      responses:
+        "200": { description: 成功 }
+    put:
+      tags: [多人遊戲 (Multiplayer)]
+      summary: 更新房間狀態
+      security: [{ BearerAuth: [] }]
+      parameters:
+        - {
+            name: id,
+            in: path,
+            required: true,
+            schema: { type: string, format: uuid },
+          }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                status: { type: string, enum: [waiting, playing, closed] }
+      responses:
+        "200": { description: 更新成功 }
+
+  /multiplayer/rooms/{id}/join:
+    post:
+      tags: [多人遊戲 (Multiplayer)]
+      summary: 加入遊戲房間
+      security: [{ BearerAuth: [] }]
+      parameters:
+        - {
+            name: id,
+            in: path,
+            required: true,
+            schema: { type: string, format: uuid },
+          }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                playerId: { type: string, format: uuid }
+      responses:
+        "200": { description: 加入成功 }
+        "409": { description: 房間已滿或遊戲進行中 }
+
+  /multiplayer/rooms/{id}/leave:
+    post:
+      tags: [多人遊戲 (Multiplayer)]
+      summary: 離開遊戲房間
+      security: [{ BearerAuth: [] }]
+      parameters:
+        - {
+            name: id,
+            in: path,
+            required: true,
+            schema: { type: string, format: uuid },
+          }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                playerId: { type: string, format: uuid }
+      responses:
+        "200": { description: 離開成功 }
+
+  # OTA (旗艦版)
+  /ota/versions:
+    get:
+      tags: [OTA 更新 (OTA)]
+      summary: 取得版本列表
+      security: [{ BearerAuth: [] }]
+      responses:
+        "200": { description: 成功 }
+    post:
+      tags: [OTA 更新 (OTA)]
+      summary: 上傳新版本
+      security: [{ BearerAuth: [] }]
+      responses:
+        "201": { description: 上傳成功 }
+
+  /ota/versions/{id}/publish:
+    post:
+      tags: [OTA 更新 (OTA)]
+      summary: 發布版本
+      security: [{ BearerAuth: [] }]
+      responses:
+        "200": { description: 發布成功 }
+
+  /ota/versions/{id}/status:
+    get:
+      tags: [OTA 更新 (OTA)]
+      summary: 取得版本發布狀態
+      security: [{ BearerAuth: [] }]
+      parameters:
+        - {
+            name: id,
+            in: path,
+            required: true,
+            schema: { type: string, format: uuid },
+          }
+      responses:
+        "200": { description: 成功 }
+
+  # Monitor (旗艦版)
+  /monitor/system:
+    get:
+      tags: [監控中心 (Monitor)]
+      summary: 取得系統監控數據
+      security: [{ BearerAuth: [] }]
+      responses:
+        "200": { description: 成功 }
+
+  # RBAC (Roles & Permissions)
+  /roles:
+    get:
+      tags: [使用者權限 (RBAC)]
+      summary: 取得角色列表
+      security: [{ BearerAuth: [] }]
+      responses:
+        "200": { description: 成功 }
+    post:
+      tags: [使用者權限 (RBAC)]
+      summary: 新增角色
+      security: [{ BearerAuth: [] }]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [name, permissions]
+              properties:
+                name: { type: string }
+                description: { type: string }
+                permissions: { type: array, items: { type: string } }
+      responses:
+        "201": { description: 建立成功 }
+
+  /roles/{id}:
+    get:
+      tags: [使用者權限 (RBAC)]
+      summary: 取得角色詳情
+      security: [{ BearerAuth: [] }]
+      parameters:
+        - {
+            name: id,
+            in: path,
+            required: true,
+            schema: { type: string, format: uuid },
+          }
+      responses:
+        "200": { description: 成功 }
+        "404": { description: 不存在 }
+    put:
+      tags: [使用者權限 (RBAC)]
+      summary: 更新角色
+      security: [{ BearerAuth: [] }]
+      responses:
+        "200": { description: 更新成功 }
+    delete:
+      tags: [使用者權限 (RBAC)]
+      summary: 刪除角色
+      security: [{ BearerAuth: [] }]
+      responses:
+        "204": { description: 刪除成功 }
+
+  /permissions:
+    get:
+      tags: [使用者權限 (RBAC)]
+      summary: 取得權限列表
+      security: [{ BearerAuth: [] }]
+      responses:
+        "200": { description: 成功 }
+    post:
+      tags: [使用者權限 (RBAC)]
+      summary: 新增權限
+      security: [{ BearerAuth: [] }]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [name, resource, action]
+              properties:
+                name: { type: string }
+                resource: { type: string }
+                action: { type: string }
+      responses:
+        "201": { description: 建立成功 }
+
+  /permissions/{id}:
+    get:
+      tags: [使用者權限 (RBAC)]
+      summary: 取得權限詳情
+      security: [{ BearerAuth: [] }]
+      parameters:
+        - {
+            name: id,
+            in: path,
+            required: true,
+            schema: { type: string, format: uuid },
+          }
+      responses:
+        "200": { description: 成功 }
+    put:
+      tags: [使用者權限 (RBAC)]
+      summary: 更新權限
+      security: [{ BearerAuth: [] }]
+      responses:
+        "200": { description: 更新成功 }
+    delete:
+      tags: [使用者權限 (RBAC)]
+      summary: 刪除權限
+      security: [{ BearerAuth: [] }]
+      responses:
+        "204": { description: 刪除成功 }
+
+  /users/{id}/roles:
+    put:
+      tags: [使用者權限 (RBAC)]
+      summary: 分配角色給使用者
+      security: [{ BearerAuth: [] }]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [roleIds]
+              properties:
+                roleIds: { type: array, items: { type: string, format: uuid } }
+      responses:
+        "200": { description: 分配成功 }
+
+  /users/{id}/pin:
+    put:
+      tags: [使用者權限 (RBAC)]
+      summary: 設定或重置使用者的本地端 PIN 碼
+      security: [{ BearerAuth: [] }]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [pinCode]
+              properties:
+                pinCode: { type: string, minLength: 4, maxLength: 6 }
+      responses:
+        "200": { description: 設定成功 }
+
+  # Discrepancies (旗艦版)
+  /discrepancies:
+    get:
+      tags: [錯帳管理 (Discrepancies)]
+      summary: 取得錯帳列表
+      security: [{ BearerAuth: [] }]
+      responses:
+        "200": { description: 成功 }
+
+  /discrepancies/{id}/resolve:
+    post:
+      tags: [錯帳管理 (Discrepancies)]
+      summary: 處理錯帳
+      security: [{ BearerAuth: [] }]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                resolution: { type: string }
+                action: { type: string }
+      responses:
+        "200": { description: 處理成功 }
+
+  # Disputes (旗艦版)
+  /disputes:
+    get:
+      tags: [爭議處理 (Disputes)]
+      summary: 取得爭議單列表
+      security: [{ BearerAuth: [] }]
+      parameters:
+        - { name: status, in: query, schema: { type: string } }
+        - { name: playerId, in: query, schema: { type: string } }
+      responses:
+        "200": { description: 成功 }
+    post:
+      tags: [爭議處理 (Disputes)]
+      summary: 建立爭議單
+      security: [{ BearerAuth: [] }]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [playerId, type, transactionId, description]
+              properties:
+                playerId: { type: string }
+                type:
+                  {
+                    type: string,
+                    enum:
+                      [
+                        deposit_not_arrived,
+                        duplicate_charge,
+                        payout_error,
+                        withdrawal_failed,
+                        balance_discrepancy,
+                        system_error,
+                        fraud_suspicion,
+                      ],
+                  }
+                transactionId: { type: string }
+                description: { type: string }
+                expectedAction: { type: string }
+                priority: { type: string, enum: [low, medium, high, urgent] }
+      responses:
+        "201": { description: 建立成功 }
+
+  /disputes/{id}:
+    get:
+      tags: [爭議處理 (Disputes)]
+      summary: 取得爭議單詳情
+      security: [{ BearerAuth: [] }]
+      parameters:
+        - { name: id, in: path, required: true, schema: { type: string } }
+      responses:
+        "200": { description: 成功 }
+    patch:
+      tags: [爭議處理 (Disputes)]
+      summary: 更新爭議單狀態/裁決
+      description: 用於調查進度更新、裁決、結案
+      security: [{ BearerAuth: [] }]
+      parameters:
+        - { name: id, in: path, required: true, schema: { type: string } }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                status:
+                  {
+                    type: string,
+                    enum:
+                      [
+                        investigating,
+                        pending_review,
+                        deliberating,
+                        processing,
+                        closed,
+                        rejected,
+                      ],
+                  }
+                verdict: { type: string }
+                verdictReason: { type: string }
+                remedyType:
+                  {
+                    type: string,
+                    enum: [refund, compensation, partial_refund, none],
+                  }
+                remedyAmount: { type: number }
+                authCode: { type: string, description: "主管授權碼" }
+      responses:
+        "200": { description: 更新成功 }
+
+  # Sync
+  /sync/upload:
+    post:
+      tags: [同步管理 (Sync)]
+      summary: 上傳本地資料
+      security: [{ BearerAuth: [] }, { PinAuth: [] }]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                transactions: { type: array }
+                version: { type: integer }
+      responses:
+        "200": { description: 上傳成功 }
+
+  /sync/download:
+    get:
+      tags: [同步管理 (Sync)]
+      summary: 下載中央資料
+      security: [{ BearerAuth: [] }, { PinAuth: [] }]
+      responses:
+        "200": { description: 成功 }
+
+  # Reports (旗艦版)
+  /reports/revenue:
+    get:
+      tags: [報表管理 (Reports)]
+      summary: 營收報表
+      description: |
+        取得營收報表資料
+        - 支援多維度篩選：門市、機台、遊戲、遊戲商
+        - 支援日期範圍：日/週/月/年
+        - 支援多選篩選條件
+      security: [{ BearerAuth: [] }]
+      parameters:
+        - { name: startDate, in: query, schema: { type: string, format: date } }
+        - { name: endDate, in: query, schema: { type: string, format: date } }
+        - {
+            name: reportType,
+            in: query,
+            schema: { type: string, enum: [daily, weekly, monthly, yearly] },
+          }
+        - {
+            name: stores,
+            in: query,
+            schema: { type: array, items: { type: string } },
+            description: 門市ID列表（可多選）,
+          }
+        - {
+            name: machines,
+            in: query,
+            schema: { type: array, items: { type: string } },
+            description: 機台ID列表（可多選）,
+          }
+        - {
+            name: games,
+            in: query,
+            schema: { type: array, items: { type: string } },
+            description: 遊戲ID列表（可多選）,
+          }
+        - {
+            name: providers,
+            in: query,
+            schema: { type: array, items: { type: string } },
+            description: 遊戲商ID列表（可多選）,
+          }
+      responses:
+        "200":
+          description: 成功
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        date: { type: string }
+                        store: { type: string }
+                        machine: { type: string }
+                        game: { type: string }
+                        provider: { type: string }
+                        totalBet: { type: number }
+                        totalPayout: { type: number }
+                        revenue: { type: number }
+                        rtp: { type: number }
+                        gameCount: { type: integer }
+
+  /reports/revenue/export:
+    get:
+      tags: [報表管理 (Reports)]
+      summary: 匯出營收報表
+      description: 匯出營收報表為 CSV 或 Excel
+      security: [{ BearerAuth: [] }]
+      parameters:
+        - { name: startDate, in: query, schema: { type: string, format: date } }
+        - { name: endDate, in: query, schema: { type: string, format: date } }
+        - {
+            name: reportType,
+            in: query,
+            schema: { type: string, enum: [daily, weekly, monthly, yearly] },
+          }
+        - {
+            name: stores,
+            in: query,
+            schema: { type: array, items: { type: string } },
+          }
+        - {
+            name: machines,
+            in: query,
+            schema: { type: array, items: { type: string } },
+          }
+        - {
+            name: games,
+            in: query,
+            schema: { type: array, items: { type: string } },
+          }
+        - {
+            name: providers,
+            in: query,
+            schema: { type: array, items: { type: string } },
+          }
+        - {
+            name: format,
+            in: query,
+            schema: { type: string, enum: [csv, excel], default: csv },
+          }
+      responses:
+        "200":
+          description: 成功匯出
+          content:
+            application/octet-stream:
+              schema:
+                type: string
+                format: binary
+
+  # System Configs (旗艦版)
+  /system/config:
+    get:
+      tags: [系統設定 (System Configs)]
+      summary: 取得系統設定
+      description: 取得全站營運參數與管理員後台設定
+      security: [{ BearerAuth: [] }]
+      responses:
+        "200":
+          description: 成功
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  defaultRtp: { type: number }
+                  autoSyncInterval: { type: integer }
+                  maintenanceMode: { type: boolean }
+                  frontendConfig: { type: object }
+    put:
+      tags: [系統設定 (System Configs)]
+      summary: 更新系統設定
+      description: 包含前端遊系大廳外觀與系統基礎配置
+      security: [{ BearerAuth: [] }]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                defaultRtp: { type: number }
+                autoSyncInterval: { type: integer }
+                maintenanceMode: { type: boolean }
+                frontendConfig: { type: object }
+      responses:
+        "200": { description: 更新成功 }
+
+  /system/config/frontend:
+    get:
+      tags: [系統設定 (System Configs)]
+      summary: 取得前端大廳 UI 設定
+      description: 公開介面，供玩家端設備載入預設的視覺、Theme、熱門遊戲推薦等
+      responses:
+        "200":
+          description: 成功
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  theme: { type: string }
+                  lobbyTitle: { type: string }
+                  marqueeText: { type: string }
+                  bannerUrls: { type: array, items: { type: string } }
+                  featuredGameIds: { type: array, items: { type: string } }
+
+  /system/backup:
+    post:
+      tags: [系統設定 (System Configs)]
+      summary: 執行系統備份
+      security: [{ BearerAuth: [] }]
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                type:
+                  {
+                    type: string,
+                    enum: [full, incremental, config_only],
+                    default: full,
+                  }
+      responses:
+        "200": { description: 備份工作已啟動 }
+
+  /system/restore:
+    post:
+      tags: [系統設定 (System Configs)]
+      summary: 執行系統恢復
+      security: [{ BearerAuth: [] }]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                backupFileId: { type: string }
+      responses:
+        "200": { description: 恢復工作已啟動 }
