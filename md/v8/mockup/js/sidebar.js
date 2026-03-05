@@ -150,7 +150,7 @@
     nav.appendChild(group('settings', '系統設定', [
       { href: 'mockup_std_system_settings.html', text: '基本設定' },
       { href: 'mockup_network_settings.html', text: '網路設定' },
-      { href: 'mockup_std_backup.html', text: '備份還原' }
+      { href: 'mockup_std_backup.html', text: '備份與恢復' }
     ]));
 
     return nav;
