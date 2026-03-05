@@ -78,10 +78,6 @@
       { href: 'mockup_game_test.html', text: '遊戲測試' }
     ]));
     
-    nav.appendChild(group('users', '玩家管理', [
-      { href: 'mockup_mvp_player_list.html', text: '玩家列表' }
-    ]));
-    
     nav.appendChild(group('wallet', '交易紀錄管理', [
       { href: 'mockup_std_wallet.html', text: '錢包交易' },
       { href: 'mockup_transaction_stats.html', text: '交易統計' },
