@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>新增機台 - 遊戲平台管理中心</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="../css/mockup-common.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        cyber: { 50: '#f5f3ff', 100: '#ede9fe', 200: '#ddd6fe', 300: '#c4b5fd', 400: '#a78bfa', 500: '#8b5cf6', 600: '#7c3aed', 700: '#6d28d9', 800: '#5b21b6', 900: '#4c1d95', 950: '#2e1065' },
+                        dark: { bg: '#0a0a0f', card: '#12121a', sidebar: '#0d0d14', border: '#1e1e2e', hover: '#1a1a28' }
+                    },
+                    fontFamily: { sans: ['"Noto Sans TC"', 'sans-serif'], mono: ['"JetBrains Mono"', 'monospace'] },
+                    boxShadow: { glow: '0 0 30px rgba(168, 85, 247, 0.3)', 'glow-sm': '0 0 15px rgba(168, 85, 247, 0.2)' }
+                }
+            }
+        }
+    </script>
+    <style>
+        * { scrollbar-width: thin; scrollbar-color: #6d28d9 #0a0a0f; }
+        *::-webkit-scrollbar { width: 8px; height: 8px; }
+        *::-webkit-scrollbar-track { background: #0a0a0f; }
+        *::-webkit-scrollbar-thumb { background: linear-gradient(180deg, #7c3aed, #a855f7); border-radius: 4px; }
+        body { font-family: 'Noto Sans TC', sans-serif; background: #0a0a0f; }
+        .glass { background: rgba(18, 18, 26, 0.7); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border: 1px solid rgba(255, 255, 255, 0.08); }
+        .glass-card { background: linear-gradient(135deg, rgba(18, 18, 26, 0.9) 0%, rgba(30, 30, 46, 0.6) 100%); backdrop-filter: blur(20px); border: 1px solid rgba(168, 85, 247, 0.15); box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4); }
+        .gradient-bg { background: linear-gradient(135deg, #0a0a0f 0%, #1a0a2e 50%, #0a0a0f 100%); }
+        .gradient-purple { background: linear-gradient(135deg, #7c3aed 0%, #a855f7 50%, #c084fc 100%); }
+        
+        
+        
+        
+        .input-focus:focus { box-shadow: 0 0 0 3px rgba(168, 85, 247, 0.3), 0 0 20px rgba(168, 85, 247, 0.2); }
+        
+        
+        
+        
+        
+        
+        /* 側邊欄折疊樣式 */
+        
+        .sidebar-collapsed .sidebar-text,
+        .sidebar-collapsed .sidebar-group-header span { display: none; }
+        .sidebar-collapsed 
+        .sidebar-collapsed .sidebar-link i { margin-right: 0; }
+        
+        
+    </style>
+</head>
+<body class="gradient-bg min-h-screen flex">
+    <div id="sidebar-container"></div>
+    <main class="flex-1 flex flex-col overflow-hidden">
+        <div class="flex-1 overflow-y-auto p-6">
+            <div class="max-w-3xl mx-auto">
+                <div class="glass-card rounded-2xl p-8">
+                    <div class="text-center mb-8">
+                        <div class="w-16 h-16 mx-auto rounded-2xl gradient-purple flex items-center justify-center mb-4">
+                            <i data-lucide="monitor" class="w-8 h-8 text-white"></i>
+                        </div>
+                        <h1 class="text-2xl font-bold text-white">新增機台</h1>
+                        <p class="text-gray-400 mt-2">建立新的遊戲機台設備</p>
+                    </div>
+                    <form class="space-y-6">
+                        <div class="grid grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-300 mb-2">機台編號 *</label>
+                                <input type="text" placeholder="MCH-0001" class="w-full bg-dark-bg border border-dark-border rounded-lg px-4 py-3 text-white font-mono placeholder-gray-500 focus:outline-none input-focus">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-300 mb-2">機台名稱 *</label>
+                                <input type="text" placeholder="旗艦店A-01" class="w-full bg-dark-bg border border-dark-border rounded-lg px-4 py-3 text-white placeholder-gray-500 focus:outline-none input-focus">
+                            </div>
+                        </div>
+                        <div class="grid grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-300 mb-2">機台型號 *</label>
+                                <select class="w-full bg-dark-bg border border-dark-border rounded-lg px-4 py-3 text-white focus:outline-none input-focus">
+                                    <option>旗艦版 Pro</option>
+                                    <option>標準版 Standard</option>
+                                    <option>精簡版 Lite</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-300 mb-2">所屬站點 *</label>
+                                <select class="w-full bg-dark-bg border border-dark-border rounded-lg px-4 py-3 text-white focus:outline-none input-focus">
+                                    <option>台北門市 A 區</option>
+                                    <option>台北門市 B 區</option>
+                                    <option>台中門市</option>
+                                    <option>高雄門市</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="grid grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-300 mb-2">IP 位址 *</label>
+                                <input type="text" placeholder="192.168.1.100" class="w-full bg-dark-bg border border-dark-border rounded-lg px-4 py-3 text-white font-mono placeholder-gray-500 focus:outline-none input-focus">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-300 mb-2">連接埠</label>
+                                <input type="text" placeholder="8080" class="w-full bg-dark-bg border border-dark-border rounded-lg px-4 py-3 text-white font-mono placeholder-gray-500 focus:outline-none input-focus">
+                            </div>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-300 mb-2">遊戲類型 *</label>
+                            <div class="flex flex-wrap gap-4">
+                                <label class="flex items-center space-x-2 cursor-pointer">
+                                    <input type="checkbox" checked class="w-4 h-4 rounded bg-dark-bg border-dark-border text-purple-600">
+                                    <span class="text-gray-300">老虎機</span>
+                                </label>
+                                <label class="flex items-center space-x-2 cursor-pointer">
+                                    <input type="checkbox" class="w-4 h-4 rounded bg-dark-bg border-dark-border text-purple-600">
+                                    <span class="text-gray-300">捕魚機</span>
+                                </label>
+                                <label class="flex items-center space-x-2 cursor-pointer">
+                                    <input type="checkbox" class="w-4 h-4 rounded bg-dark-bg border-dark-border text-purple-600">
+                                    <span class="text-gray-300">棋牌</span>
+                                </label>
+                            </div>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-300 mb-2">備註</label>
+                            <textarea rows="2" placeholder="選填備註說明..." class="w-full bg-dark-bg border border-dark-border rounded-lg px-4 py-3 text-white placeholder-gray-500 focus:outline-none input-focus"></textarea>
+                        </div>
+                        <div class="flex justify-end space-x-4 pt-4 border-t border-dark-border">
+                            <a href="mockup_mvp_machine_list.html" class="px-6 py-3 glass border border-dark-border text-gray-400 rounded-lg font-medium hover:text-white">取消</a>
+                            <button type="button" class="px-6 py-3 gradient-purple text-white rounded-lg font-medium shadow-glow-sm hover:opacity-90 flex items-center">
+                                <i data-lucide="plus" class="w-4 h-4 mr-2"></i>建立機台
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </main>
+    <script src="../js/sidebar.js"></script>
+    <script>
+        MockupSidebar.render('mockup_mvp_machine_add.html');
+    </script>
+</body>
+</html>

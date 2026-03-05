@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>代理商管理 - 遊戲平台管理中心</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;600;700&family=JetBrains+Mono&display=swap" rel="stylesheet">
+    <link href="../css/mockup-common.css" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        cyber: { 600: '#7c3aed', 400: '#a78bfa', 500: '#8b5cf6' },
+                        dark: { bg: '#0a0a0f', card: '#12121a', sidebar: '#0d0d14', border: '#1e1e2e' }
+                    },
+                    fontFamily: { sans: ['"Noto Sans TC"', 'sans-serif'] }
+                }
+            }
+        }
+    </script>
+    <style>
+        body { font-family: 'Noto Sans TC', sans-serif; background: linear-gradient(135deg, #0a0a0f 0%, #1a0a2e 50%, #0a0a0f 100%); }
+        .glass { background: rgba(18, 18, 26, 0.7); backdrop-filter: blur(20px); border: 1px solid rgba(255, 255, 255, 0.08); }
+        .glass-card { background: linear-gradient(135deg, rgba(18, 18, 26, 0.9) 0%, rgba(30, 30, 46, 0.6) 100%); backdrop-filter: blur(20px); border: 1px solid rgba(168, 85, 247, 0.15); }
+        .gradient-purple { background: linear-gradient(135deg, #7c3aed 0%, #a855f7 50%, #c084fc 100%); }
+        .tree-line { border-left: 2px dashed rgba(124, 58, 237, 0.3); }
+        .tree-node:hover { background: rgba(124, 58, 237, 0.1); }
+    </style>
+</head>
+<body class="min-h-screen text-white">
+    <div class="flex">
+        <div id="sidebar-container"></div>
+        <main class="flex-1 p-6">
+            <div class="flex items-center justify-between mb-6">
+                <div>
+                    <h1 class="text-2xl font-bold">代理商管理</h1>
+                    <p class="text-gray-400">多層級代理商樹狀結構</p>
+                </div>
+                <button class="px-4 py-2 gradient-purple rounded-lg font-medium flex items-center">
+                    <i data-lucide="plus" class="w-4 h-4 mr-2"></i>新增代理商
+                </button>
+            </div>
+            
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                <!-- 樹狀結構 -->
+                <div class="lg:col-span-2 glass-card rounded-2xl p-6">
+                    <div class="flex items-center justify-between mb-6">
+                        <h3 class="font-semibold">代理商樹狀結構</h3>
+                        <div class="flex space-x-2">
+                            <button class="px-3 py-1.5 bg-dark-bg border border-dark-border rounded-lg text-sm text-gray-300 hover:text-white"><i data-lucide="expand" class="w-4 h-4 mr-1 inline"></i>展開全部</button>
+                            <button class="px-3 py-1.5 bg-dark-bg border border-dark-border rounded-lg text-sm text-gray-300 hover:text-white"><i data-lucide="shrink" class="w-4 h-4 mr-1 inline"></i>收合</button>
+                        </div>
+                    </div>
+                    
+                    <!-- 第一層 -->
+                    <div class="space-y-2">
+                        <div class="tree-node glass rounded-xl p-4 cursor-pointer">
+                            <div class="flex items-center justify-between">
+                                <div class="flex items-center space-x-3">
+                                    <i data-lucide="chevron-down" class="w-4 h-4 text-cyber-400"></i>
+                                    <div class="w-10 h-10 rounded-lg gradient-purple flex items-center justify-center"><i data-lucide="building-2" class="w-5 h-5"></i></div>
+                                    <div>
+                                        <p class="font-medium">總公司</p>
+                                        <p class="text-xs text-gray-400">Admin · 抽成 0%</p>
+                                    </div>
+                                </div>
+                                <div class="flex items-center space-x-4">
+                                    <div class="text-right">
+                                        <p class="text-sm font-mono text-emerald-400">$2,450,000</p>
+                                        <p class="text-xs text-gray-400">本月營收</p>
+                                    </div>
+                                    <span class="px-2 py-1 bg-emerald-500/20 text-emerald-400 text-xs rounded">啟用</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- 第二層 -->
+                        <div class="ml-8 tree-line pl-6 space-y-2">
+                            <div class="tree-node glass rounded-xl p-4 cursor-pointer">
+                                <div class="flex items-center justify-between">
+                                    <div class="flex items-center space-x-3">
+                                        <i data-lucide="chevron-down" class="w-4 h-4 text-cyber-400"></i>
+                                        <div class="w-10 h-10 rounded-lg bg-emerald-500/20 flex items-center justify-center"><i data-lucide="store" class="w-5 h-5 text-emerald-400"></i></div>
+                                        <div>
+                                            <p class="font-medium">台北分公司</p>
+                                            <p class="text-xs text-gray-400">agent_tpe · 抽成 15%</p>
+                                        </div>
+                                    </div>
+                                    <div class="flex items-center space-x-4">
+                                        <div class="text-right">
+                                            <p class="text-sm font-mono text-emerald-400">$890,000</p>
+                                            <p class="text-xs text-gray-400">本月營收</p>
+                                        </div>
+                                        <span class="px-2 py-1 bg-emerald-500/20 text-emerald-400 text-xs rounded">啟用</span>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- 第三層 -->
+                            <div class="ml-8 tree-line pl-6 space-y-2">
+                                <div class="tree-node glass rounded-xl p-4 cursor-pointer">
+                                    <div class="flex items-center justify-between">
+                                        <div class="flex items-center space-x-3">
+                                            <i data-lucide="minus" class="w-4 h-4 text-gray-500"></i>
+                                            <div class="w-10 h-10 rounded-lg bg-blue-500/20 flex items-center justify-center"><i data-lucide="user" class="w-5 h-5 text-blue-400"></i></div>
+                                            <div>
+                                                <p class="font-medium">士林店</p>
+                                                <p class="text-xs text-gray-400">agent_sln · 抽成 20%</p>
+                                            </div>
+                                        </div>
+                                        <div class="flex items-center space-x-4">
+                                            <div class="text-right">
+                                                <p class="text-sm font-mono text-emerald-400">$320,000</p>
+                                                <p class="text-xs text-gray-400">本月營收</p>
+                                            </div>
+                                            <span class="px-2 py-1 bg-emerald-500/20 text-emerald-400 text-xs rounded">啟用</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="tree-node glass rounded-xl p-4 cursor-pointer">
+                                    <div class="flex items-center justify-between">
+                                        <div class="flex items-center space-x-3">
+                                            <i data-lucide="minus" class="w-4 h-4 text-gray-500"></i>
+                                            <div class="w-10 h-10 rounded-lg bg-blue-500/20 flex items-center justify-center"><i data-lucide="user" class="w-5 h-5 text-blue-400"></i></div>
+                                            <div>
+                                                <p class="font-medium">西門店</p>
+                                                <p class="text-xs text-gray-400">agent_xmn · 抽成 20%</p>
+                                            </div>
+                                        </div>
+                                        <div class="flex items-center space-x-4">
+                                            <div class="text-right">
+                                                <p class="text-sm font-mono text-emerald-400">$450,000</p>
+                                                <p class="text-xs text-gray-400">本月營收</p>
+                                            </div>
+                                            <span class="px-2 py-1 bg-emerald-500/20 text-emerald-400 text-xs rounded">啟用</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="tree-node glass rounded-xl p-4 cursor-pointer">
+                                <div class="flex items-center justify-between">
+                                    <div class="flex items-center space-x-3">
+                                        <i data-lucide="chevron-right" class="w-4 h-4 text-gray-500"></i>
+                                        <div class="w-10 h-10 rounded-lg bg-amber-500/20 flex items-center justify-center"><i data-lucide="store" class="w-5 h-5 text-amber-400"></i></div>
+                                        <div>
+                                            <p class="font-medium">台中分公司</p>
+                                            <p class="text-xs text-gray-400">agent_tch · 抽成 15%</p>
+                                        </div>
+                                    </div>
+                                    <div class="flex items-center space-x-4">
+                                        <div class="text-right">
+                                            <p class="text-sm font-mono text-emerald-400">$780,000</p>
+                                            <p class="text-xs text-gray-400">本月營收</p>
+                                        </div>
+                                        <span class="px-2 py-1 bg-emerald-500/20 text-emerald-400 text-xs rounded">啟用</span>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="tree-node glass rounded-xl p-4 cursor-pointer opacity-60">
+                                <div class="flex items-center justify-between">
+                                    <div class="flex items-center space-x-3">
+                                        <i data-lucide="minus" class="w-4 h-4 text-gray-500"></i>
+                                        <div class="w-10 h-10 rounded-lg bg-gray-500/20 flex items-center justify-center"><i data-lucide="store" class="w-5 h-5 text-gray-400"></i></div>
+                                        <div>
+                                            <p class="font-medium">高雄分公司</p>
+                                            <p class="text-xs text-gray-400">agent_khh · 抽成 12%</p>
+                                        </div>
+                                    </div>
+                                    <div class="flex items-center space-x-4">
+                                        <div class="text-right">
+                                            <p class="text-sm font-mono text-gray-400">$0</p>
+                                            <p class="text-xs text-gray-400">已停用</p>
+                                        </div>
+                                        <span class="px-2 py-1 bg-red-500/20 text-red-400 text-xs rounded">停用</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 新增/編輯代理商 -->
+                <div class="glass-card rounded-2xl p-6">
+                    <h3 class="font-semibold mb-4">新增代理商</h3>
+                    <div class="space-y-4">
+                        <div>
+                            <label class="block text-sm text-gray-300 mb-2">代理商名稱</label>
+                            <input type="text" placeholder="輸入代理商名稱" class="w-full bg-dark-bg border border-dark-border rounded-lg py-2.5 px-4 focus:outline-none focus:ring-2 focus:ring-cyber-500">
+                        </div>
+                        <div>
+                            <label class="block text-sm text-gray-300 mb-2">代理商代碼</label>
+                            <input type="text" placeholder="輸入英文代碼" class="w-full bg-dark-bg border border-dark-border rounded-lg py-2.5 px-4 font-mono focus:outline-none focus:ring-2 focus:ring-cyber-500">
+                        </div>
+                        <div>
+                            <label class="block text-sm text-gray-300 mb-2">上層代理商</label>
+                            <select class="w-full bg-dark-bg border border-dark-border rounded-lg py-2.5 px-4 focus:outline-none focus:ring-2 focus:ring-cyber-500">
+                                <option>總公司 (Admin)</option>
+                                <option>台北分公司 (agent_tpe)</option>
+                                <option>台中分公司 (agent_tch)</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-sm text-gray-300 mb-2">抽成比例 (%)</label>
+                            <input type="number" placeholder="0-50" class="w-full bg-dark-bg border border-dark-border rounded-lg py-2.5 px-4 font-mono focus:outline-none focus:ring-2 focus:ring-cyber-500">
+                            <p class="text-xs text-gray-500 mt-1">不得高於上層代理商</p>
+                        </div>
+                        <div>
+                            <label class="block text-sm text-gray-300 mb-2">聯絡人</label>
+                            <input type="text" placeholder="輸入聯絡人姓名" class="w-full bg-dark-bg border border-dark-border rounded-lg py-2.5 px-4 focus:outline-none focus:ring-2 focus:ring-cyber-500">
+                        </div>
+                        <div>
+                            <label class="block text-sm text-gray-300 mb-2">聯絡電話</label>
+                            <input type="tel" placeholder="輸入聯絡電話" class="w-full bg-dark-bg border border-dark-border rounded-lg py-2.5 px-4 focus:outline-none focus:ring-2 focus:ring-cyber-500">
+                        </div>
+                        <div class="flex items-center justify-between">
+                            <span class="text-sm text-gray-300">啟用狀態</span>
+                            <button class="w-12 h-6 rounded-full gradient-purple relative"><span class="absolute right-1 top-1 w-4 h-4 bg-white rounded-full"></span></button>
+                        </div>
+                        <button class="w-full py-2.5 gradient-purple rounded-lg font-medium mt-4">儲存代理商</button>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+    <script>lucide.createIcons();</script>
+<script src="../js/sidebar.js"></script>
+    <script>
+        MockupSidebar.render('mockup_agent_tree.html');
+    </script>
+</body>
+</html>
