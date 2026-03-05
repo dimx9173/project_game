@@ -136,7 +136,7 @@
     ]));
     
     nav.appendChild(group('refresh-cw', '同步對帳', [
-      { href: 'mockup_local_sync.html', text: '同步狀態' },
+      { href: '../local/mockup_local_sync.html', text: '同步狀態' },
       { href: 'mockup_sync_conflict.html', text: '衝突處理' }
     ]));
     
