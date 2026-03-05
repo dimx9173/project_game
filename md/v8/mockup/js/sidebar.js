@@ -102,7 +102,9 @@
     ]));
     
     nav.appendChild(group('users', '多人遊戲', [
-      { href: 'mockup_std_multiplayer.html', text: '牌桌管理' }
+      { href: 'mockup_std_multiplayer.html', text: '牌桌列表' },
+      { href: 'mockup_multiplayer_history.html', text: '牌局歷史' },
+      { href: 'mockup_multiplayer_shoe.html', text: '牌靴管理' }
     ]));
     
     nav.appendChild(group('shield-user', '使用者權限', [
@@ -114,7 +116,8 @@
     ]));
     
     nav.appendChild(group('download', '版本更新', [
-      { href: 'mockup_flg_ota.html', text: 'OTA 版本管理' }
+      { href: 'mockup_flg_ota.html', text: '版本列表' },
+      { href: 'mockup_flg_ota.html', text: '更新任務' }
     ]));
     
     nav.appendChild(group('layout', '介面設定', [
@@ -128,12 +131,17 @@
     nav.appendChild(group('activity', '監控中心', [
       { href: 'mockup_flg_monitor.html', text: '系統監控' },
       { href: 'mockup_alert_threshold.html', text: '告警設定' },
-      { href: 'mockup_audit_log.html', text: '審計日誌' }
+      { href: 'mockup_audit_log.html', text: '審計日誌' },
+      { href: 'mockup_api_status_monitor.html', text: 'API 監控' }
+    ]));
+    
+    nav.appendChild(group('refresh-cw', '同步對帳', [
+      { href: 'mockup_local_sync.html', text: '同步狀態' },
+      { href: 'mockup_sync_conflict.html', text: '衝突處理' }
     ]));
     
     nav.appendChild(group('settings', '系統設定', [
       { href: 'mockup_std_system_settings.html', text: '基本設定' },
-      { href: 'mockup_sync_conflict.html', text: '同步衝突' },
       { href: 'mockup_std_backup.html', text: '備份還原' }
     ]));
 
