@@ -67,7 +67,6 @@
 
     nav.appendChild(group('monitor', '機台管理', [
       { href: 'mockup_mvp_machine_list.html', text: '機台列表' },
-      { href: 'mockup_machine_settings.html', text: '機台設定' },
       { href: 'mockup_machine_remote_control.html', text: '遠端控制' }
     ]));
     
