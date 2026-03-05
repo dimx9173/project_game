@@ -86,7 +86,7 @@
       { href: 'mockup_transaction_exception.html', text: '異常交易' },
       { href: 'mockup_flg_reconciliation.html', text: '對帳專區' },
       { href: 'mockup_flg_dispute.html', text: '爭議處理' },
-      { href: 'mockup_transaction_export.html', text: '交易匯出' }
+      { href: 'mockup_transaction_export.html', text: '交易導出' }
     ]));
     
     nav.appendChild(group('bar-chart-2', '報表中心', [
