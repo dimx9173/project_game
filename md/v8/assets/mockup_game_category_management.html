@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>遊戲分類管理 - 遊戲平台管理中心</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        cyber: { 600: '#7c3aed', 400: '#a78bfa', 500: '#8b5cf6' },
+                        dark: { bg: '#0a0a0f', card: '#12121a', sidebar: '#0d0d14', border: '#1e1e2e' }
+                    },
+                    fontFamily: { sans: ['"Noto Sans TC"', 'sans-serif'] }
+                }
+            }
+        }
+    </script>
+    <style>
+        body { font-family: 'Noto Sans TC', sans-serif; background: linear-gradient(135deg, #0a0a0f 0%, #1a0a2e 50%, #0a0a0f 100%); }
+        .glass { background: rgba(18, 18, 26, 0.7); backdrop-filter: blur(20px); border: 1px solid rgba(255, 255, 255, 0.08); }
+        .glass-card { background: linear-gradient(135deg, rgba(18, 18, 26, 0.9) 0%, rgba(30, 30, 46, 0.6) 100%); backdrop-filter: blur(20px); border: 1px solid rgba(168, 85, 247, 0.15); }
+        .gradient-purple { background: linear-gradient(135deg, #7c3aed 0%, #a855f7 50%, #c084fc 100%); }
+        .input-focus:focus { box-shadow: 0 0 0 3px rgba(168, 85, 247, 0.3), 0 0 20px rgba(168, 85, 247, 0.2); }
+        .drag-handle { cursor: grab; }
+        .category-item:hover { background: rgba(124, 58, 237, 0.1); }
+    </style>
+</head>
+<body class="min-h-screen text-white">
+    <div class="flex">
+        <!-- Sidebar -->
+        <aside class="w-64 bg-dark-sidebar border-r border-dark-border min-h-screen p-4">
+            <div class="flex items-center mb-8">
+                <div class="w-10 h-10 rounded-xl gradient-purple flex items-center justify-center mr-3">
+                    <i data-lucide="gamepad-2" class="w-5 h-5"></i>
+                </div>
+                <div>
+                    <span class="font-bold">遊戲平台</span>
+                    <span class="text-xs text-gray-500 block">管理中心</span>
+                </div>
+            </div>
+            <nav class="space-y-2">
+                <a href="mockup_dashboard.html" class="flex items-center px-3 py-2.5 text-gray-300 hover:text-white rounded-lg"><i data-lucide="layout-dashboard" class="w-5 h-5 mr-3"></i>儀表板</a>
+                <a href="mockup_mvp_machine_list.html" class="flex items-center px-3 py-2.5 text-gray-300 hover:text-white rounded-lg"><i data-lucide="monitor" class="w-5 h-5 mr-3"></i>機台管理</a>
+                <a href="mockup_mvp_data_list.html" class="flex items-center px-3 py-2.5 text-gray-300 hover:text-white rounded-lg bg-purple-500/20"><i data-lucide="gamepad-2" class="w-5 h-5 mr-3"></i>遊戲管理</a>
+                <a href="#" class="flex items-center px-3 py-2.5 text-cyber-400 rounded-lg ml-4"><i data-lucide="folder" class="w-5 h-5 mr-3"></i>分類管理</a>
+                <a href="mockup_mvp_player_list.html" class="flex items-center px-3 py-2.5 text-gray-300 hover:text-white rounded-lg"><i data-lucide="users" class="w-5 h-5 mr-3"></i>玩家管理</a>
+                <a href="mockup_user_permission.html" class="flex items-center px-3 py-2.5 text-gray-300 hover:text-white rounded-lg"><i data-lucide="shield-user" class="w-5 h-5 mr-3"></i>使用者權限</a>
+            </nav>
+        </aside>
+        
+        <!-- Main Content -->
+        <main class="flex-1 p-6">
+            <div class="flex items-center justify-between mb-6">
+                <div>
+                    <h1 class="text-2xl font-bold">遊戲分類管理</h1>
+                    <p class="text-gray-400">管理遊戲分類與排序</p>
+                </div>
+                <button class="px-4 py-2 gradient-purple rounded-lg font-medium flex items-center">
+                    <i data-lucide="plus" class="w-4 h-4 mr-2"></i>新增分類
+                </button>
+            </div>
+            
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                <!-- 分類列表 -->
+                <div class="lg:col-span-2 glass-card rounded-2xl p-6">
+                    <div class="flex items-center justify-between mb-4">
+                        <h3 class="font-semibold">分類列表</h3>
+                        <span class="text-sm text-gray-400">拖曳調整順序</span>
+                    </div>
+                    <div class="space-y-3">
+                        <div class="category-item glass rounded-xl p-4 flex items-center justify-between transition-all">
+                            <div class="flex items-center space-x-4">
+                                <i data-lucide="grip-vertical" class="w-5 h-5 text-gray-500 drag-handle"></i>
+                                <div class="w-12 h-12 rounded-xl gradient-purple flex items-center justify-center"><i data-lucide="sparkles" class="w-6 h-6"></i></div>
+                                <div>
+                                    <p class="font-medium">老虎機</p>
+                                    <p class="text-sm text-gray-400">128 款遊戲</p>
+                                </div>
+                            </div>
+                            <div class="flex items-center space-x-3">
+                                <span class="px-3 py-1 bg-emerald-500/20 text-emerald-400 text-xs rounded-full">啟用</span>
+                                <span class="text-sm text-gray-400">排序: 1</span>
+                                <button class="p-2 text-gray-400 hover:text-cyber-400"><i data-lucide="edit" class="w-4 h-4"></i></button>
+                                <button class="p-2 text-gray-400 hover:text-red-400"><i data-lucide="trash-2" class="w-4 h-4"></i></button>
+                            </div>
+                        </div>
+                        <div class="category-item glass rounded-xl p-4 flex items-center justify-between">
+                            <div class="flex items-center space-x-4">
+                                <i data-lucide="grip-vertical" class="w-5 h-5 text-gray-500 drag-handle"></i>
+                                <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-cyan-500 to-blue-500 flex items-center justify-center"><i data-lucide="fish" class="w-6 h-6"></i></div>
+                                <div>
+                                    <p class="font-medium">捕魚機</p>
+                                    <p class="text-sm text-gray-400">45 款遊戲</p>
+                                </div>
+                            </div>
+                            <div class="flex items-center space-x-3">
+                                <span class="px-3 py-1 bg-emerald-500/20 text-emerald-400 text-xs rounded-full">啟用</span>
+                                <span class="text-sm text-gray-400">排序: 2</span>
+                                <button class="p-2 text-gray-400 hover:text-cyber-400"><i data-lucide="edit" class="w-4 h-4"></i></button>
+                                <button class="p-2 text-gray-400 hover:text-red-400"><i data-lucide="trash-2" class="w-4 h-4"></i></button>
+                            </div>
+                        </div>
+                        <div class="category-item glass rounded-xl p-4 flex items-center justify-between">
+                            <div class="flex items-center space-x-4">
+                                <i data-lucide="grip-vertical" class="w-5 h-5 text-gray-500 drag-handle"></i>
+                                <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-amber-500 to-orange-500 flex items-center justify-center"><i data-lucide="cards" class="w-6 h-6"></i></div>
+                                <div>
+                                    <p class="font-medium">棋牌遊戲</p>
+                                    <p class="text-sm text-gray-400">67 款遊戲</p>
+                                </div>
+                            </div>
+                            <div class="flex items-center space-x-3">
+                                <span class="px-3 py-1 bg-emerald-500/20 text-emerald-400 text-xs rounded-full">啟用</span>
+                                <span class="text-sm text-gray-400">排序: 3</span>
+                                <button class="p-2 text-gray-400 hover:text-cyber-400"><i data-lucide="edit" class="w-4 h-4"></i></button>
+                                <button class="p-2 text-gray-400 hover:text-red-400"><i data-lucide="trash-2" class="w-4 h-4"></i></button>
+                            </div>
+                        </div>
+                        <div class="category-item glass rounded-xl p-4 flex items-center justify-between opacity-60">
+                            <div class="flex items-center space-x-4">
+                                <i data-lucide="grip-vertical" class="w-5 h-5 text-gray-500 drag-handle"></i>
+                                <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-gray-500 to-gray-600 flex items-center justify-center"><i data-lucide="ghost" class="w-6 h-6"></i></div>
+                                <div>
+                                    <p class="font-medium">真人娛樂</p>
+                                    <p class="text-sm text-gray-400">15 款遊戲</p>
+                                </div>
+                            </div>
+                            <div class="flex items-center space-x-3">
+                                <span class="px-3 py-1 bg-red-500/20 text-red-400 text-xs rounded-full">停用</span>
+                                <span class="text-sm text-gray-400">排序: 5</span>
+                                <button class="p-2 text-gray-400 hover:text-cyber-400"><i data-lucide="edit" class="w-4 h-4"></i></button>
+                                <button class="p-2 text-gray-400 hover:text-red-400"><i data-lucide="trash-2" class="w-4 h-4"></i></button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 新增/編輯表單 -->
+                <div class="glass-card rounded-2xl p-6">
+                    <h3 class="font-semibold mb-4">新增分類</h3>
+                    <div class="space-y-4">
+                        <div>
+                            <label class="block text-sm text-gray-300 mb-2">分類名稱</label>
+                            <input type="text" placeholder="輸入分類名稱" class="w-full bg-dark-bg border border-dark-border rounded-lg py-2.5 px-4 focus:outline-none input-focus">
+                        </div>
+                        <div>
+                            <label class="block text-sm text-gray-300 mb-2">分類代碼</label>
+                            <input type="text" placeholder="輸入英文代碼" class="w-full bg-dark-bg border border-dark-border rounded-lg py-2.5 px-4 font-mono focus:outline-none input-focus">
+                        </div>
+                        <div>
+                            <label class="block text-sm text-gray-300 mb-2">分類圖示</label>
+                            <div class="grid grid-cols-6 gap-2">
+                                <button class="w-10 h-10 rounded-lg bg-dark-bg border border-cyber-500 flex items-center justify-center text-cyber-400"><i data-lucide="sparkles" class="w-5 h-5"></i></button>
+                                <button class="w-10 h-10 rounded-lg bg-dark-bg border border-dark-border flex items-center justify-center text-gray-400 hover:border-cyber-500"><i data-lucide="fish" class="w-5 h-5"></i></button>
+                                <button class="w-10 h-10 rounded-lg bg-dark-bg border border-dark-border flex items-center justify-center text-gray-400 hover:border-cyber-500"><i data-lucide="cards" class="w-5 h-5"></i></button>
+                                <button class="w-10 h-10 rounded-lg bg-dark-bg border border-dark-border flex items-center justify-center text-gray-400 hover:border-cyber-500"><i data-lucide="dices" class="w-5 h-5"></i></button>
+                            </div>
+                        </div>
+                        <div>
+                            <label class="block text-sm text-gray-300 mb-2">主題色彩</label>
+                            <div class="grid grid-cols-6 gap-2">
+                                <button class="w-10 h-10 rounded-lg gradient-purple border-2 border-white"></button>
+                                <button class="w-10 h-10 rounded-lg bg-gradient-to-br from-cyan-500 to-blue-500 border-2 border-transparent hover:border-white"></button>
+                                <button class="w-10 h-10 rounded-lg bg-gradient-to-br from-amber-500 to-orange-500 border-2 border-transparent hover:border-white"></button>
+                                <button class="w-10 h-10 rounded-lg bg-gradient-to-br from-pink-500 to-rose-500 border-2 border-transparent hover:border-white"></button>
+                            </div>
+                        </div>
+                        <div class="flex items-center justify-between">
+                            <span class="text-sm text-gray-300">啟用狀態</span>
+                            <button class="w-12 h-6 rounded-full gradient-purple relative"><span class="absolute right-1 top-1 w-4 h-4 bg-white rounded-full"></span></button>
+                        </div>
+                        <button class="w-full py-2.5 gradient-purple rounded-lg font-medium mt-4">儲存分類</button>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+    <script>lucide.createIcons();</script>
+</body>
+</html>
