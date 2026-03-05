@@ -87,6 +87,43 @@ paths:
       responses:
         "200": { description: 刷新成功 }
 
+  /auth/forgot-password:
+    post:
+      tags: [認證 (Auth)]
+      summary: 忘記密碼 - 發送重設連結
+      description: 系統使用者透過 Email 重設密碼
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [email]
+              properties:
+                email: { type: string, format: email }
+      responses:
+        "200": { description: 重設連結已發送 }
+        "404": { description: Email 不存在 }
+
+  /auth/reset-password:
+    post:
+      tags: [認證 (Auth)]
+      summary: 重設密碼
+      description: 使用重設 Token 設定新密碼
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [token, newPassword]
+              properties:
+                token: { type: string, description: 重設 Token }
+                newPassword: { type: string, minLength: 8 }
+      responses:
+        "200": { description: 密碼重設成功 }
+        "400": { description: Token 無效或過期 }
+
   # Machines
   /machines:
     get:
@@ -793,6 +830,75 @@ paths:
                 pinCode: { type: string, minLength: 4, maxLength: 6 }
       responses:
         "200": { description: 設定成功 }
+
+  /users/{id}/pin/unlock:
+    post:
+      tags: [使用者權限 (RBAC)]
+      summary: 解鎖被鎖定的 PIN 碼
+      description: 當使用者 PIN 錯誤 5 次被鎖定後，由管理員執行解鎖
+      security: [{ BearerAuth: [] }]
+      parameters:
+        - {
+            name: id,
+            in: path,
+            required: true,
+            schema: { type: string, format: uuid },
+          }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                resetPin:
+                  type: boolean
+                  description: 是否同時重設 PIN 碼
+                newPin:
+                  type: string
+                  minLength: 4
+                  maxLength: 6
+                  description: 新 PIN 碼（若 resetPin 為 true 則必填）
+      responses:
+        "200": { description: 解鎖成功 }
+        "400": { description: 使用者未被鎖定 }
+
+  /auth/forgot-password:
+    post:
+      tags: [認證 (Auth)]
+      summary: 忘記密碼 - 發送重設連結
+      description: 系統使用者透過 Email 重設密碼
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [email]
+              properties:
+                email: { type: string, format: email }
+      responses:
+        "200": { description: 重設連結已發送 }
+        "404": { description: Email 不存在 }
+
+  /auth/reset-password:
+    post:
+      tags: [認證 (Auth)]
+      summary: 重設密碼
+      description: 使用重設 Token 設定新密碼
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [token, newPassword]
+              properties:
+                token: { type: string, description: 重設 Token }
+                newPassword: { type: string, minLength: 8 }
+      responses:
+        "200": { description: 密碼重設成功 }
+        "400": { description: Token 無效或過期 }
 
   # Discrepancies (旗艦版)
   /discrepancies:
