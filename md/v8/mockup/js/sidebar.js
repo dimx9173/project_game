@@ -142,7 +142,6 @@
     ]));
     
     nav.appendChild(group('settings', '系統設定', [
-      { href: 'mockup_security_settings.html', text: '安全設定' },
       { href: 'mockup_std_backup.html', text: '備份與恢復' }
     ]));
 
