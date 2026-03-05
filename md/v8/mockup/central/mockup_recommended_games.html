@@ -264,24 +264,10 @@
             </div>
         </div>
     </main>
-    <script>
-        lucide.createIcons();
-
-        function toggleSidebarGroup(header) {
-            const group = header.parentElement;
-            const submenu = group.querySelector('.sidebar-submenu');
-            if (group.classList.contains('open')) {
-                group.classList.remove('open');
-                submenu.classList.remove('open');
-            } else {
-                group.classList.add('open');
-                submenu.classList.add('open');
-            }
-        }
-    </script>
-<script src="../js/sidebar.js"></script>
+    <script src="../js/sidebar.js"></script>
     <script>
         MockupSidebar.render('mockup_recommended_games.html');
+        lucide.createIcons();
     </script>
 </body>
 </html>
