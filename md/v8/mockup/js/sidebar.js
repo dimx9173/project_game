@@ -67,6 +67,7 @@
 
     nav.appendChild(group('monitor', '機台管理', [
       { href: 'mockup_mvp_machine_list.html', text: '機台列表' },
+      { href: 'mockup_machine_settings.html', text: '機台設定' },
       { href: 'mockup_machine_remote_control.html', text: '遠端控制' }
     ]));
     
@@ -130,6 +131,12 @@
     
     nav.appendChild(group('activity', '監控中心', [
       { href: 'mockup_flg_monitor.html', text: '系統監控' },
+      { href: 'mockup_heartbeat_monitor.html', text: '心跳檢測' },
+      { href: 'mockup_alert_notifications.html', text: '告警通知' },
+      { href: 'mockup_device_health.html', text: '設備健康度' },
+      { href: 'mockup_network_monitor.html', text: '網路監控' },
+      { href: 'mockup_hardware_monitor.html', text: '硬體監控' },
+      { href: 'mockup_log_query.html', text: '日誌查詢' },
       { href: 'mockup_alert_threshold.html', text: '告警設定' },
       { href: 'mockup_audit_log.html', text: '審計日誌' },
       { href: 'mockup_api_status_monitor.html', text: 'API 監控' }
@@ -142,6 +149,7 @@
     
     nav.appendChild(group('settings', '系統設定', [
       { href: 'mockup_std_system_settings.html', text: '基本設定' },
+      { href: 'mockup_network_settings.html', text: '網路設定' },
       { href: 'mockup_std_backup.html', text: '備份還原' }
     ]));
 

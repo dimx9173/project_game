@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>日誌查詢 - 遊戲平台管理中心</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;600;700&family=JetBrains+Mono&display=swap" rel="stylesheet">
+    <link href="../css/mockup-common.css" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        cyber: { 600: '#7c3aed', 400: '#a78bfa', 500: '#8b5cf6' },
+                        dark: { bg: '#0a0a0f', card: '#12121a', sidebar: '#0d0d14', border: '#1e1e2e' }
+                    },
+                    fontFamily: { sans: ['"Noto Sans TC"', 'sans-serif'], mono: ['"JetBrains Mono"', 'monospace'] }
+                }
+            }
+        }
+    </script>
+    <style>
+        body { font-family: 'Noto Sans TC', sans-serif; background: linear-gradient(135deg, #0a0a0f 0%, #1a0a2e 50%, #0a0a0f 100%); }
+        .glass { background: rgba(18, 18, 26, 0.7); backdrop-filter: blur(20px); border: 1px solid rgba(255, 255, 255, 0.08); }
+        .glass-card { background: linear-gradient(135deg, rgba(18, 18, 26, 0.9) 0%, rgba(30, 30, 46, 0.6) 100%); backdrop-filter: blur(20px); border: 1px solid rgba(168, 85, 247, 0.15); }
+        .gradient-purple { background: linear-gradient(135deg, #7c3aed 0%, #a855f7 50%, #c084fc 100%); }
+        .input-focus:focus { box-shadow: 0 0 0 3px rgba(168, 85, 247, 0.3), 0 0 20px rgba(168, 85, 247, 0.2); }
+    </style>
+</head>
+<body class="gradient-bg min-h-screen flex">
+    <div id="sidebar-container"></div>
+    
+    <main class="flex-1 p-6">
+        <div class="flex items-center justify-between mb-6">
+            <div>
+                <h1 class="text-2xl font-bold">日誌查詢</h1>
+                <p class="text-gray-400">本地記錄日誌查詢與匯出</p>
+            </div>
+            <button class="px-4 py-2 bg-cyber-500/20 text-cyber-400 rounded-lg flex items-center">
+                <i data-lucide="download" class="w-4 h-4 mr-2"></i>匯出日誌
+            </button>
+        </div>
+        
+        <!-- 篩選條件 -->
+        <div class="glass-card rounded-2xl p-6 mb-6">
+            <div class="grid grid-cols-4 gap-4">
+                <div>
+                    <label class="block text-sm text-gray-400 mb-2">日誌類型</label>
+                    <select class="w-full bg-dark-bg border border-dark-border rounded-lg py-2.5 px-4 text-white">
+                        <option>全部類型</option>
+                        <option>系統日誌</option>
+                        <option>API 日誌</option>
+                        <option>交易日誌</option>
+                        <option>錯誤日誌</option>
+                    </select>
+                </div>
+                
+                <div>
+                    <label class="block text-sm text-gray-400 mb-2">開始時間</label>
+                    <input type="datetime-local" class="w-full bg-dark-bg border border-dark-border rounded-lg py-2.5 px-4 text-white">
+                </div>
+                
+                <div>
+                    <label class="block text-sm text-gray-400 mb-2">結束時間</label>
+                    <input type="datetime-local" class="w-full bg-dark-bg border border-dark-border rounded-lg py-2.5 px-4 text-white">
+                </div>
+                
+                <div>
+                    <label class="block text-sm text-gray-400 mb-2">關鍵字搜尋</label>
+                    <div class="flex">
+                        <input type="text" placeholder="搜尋..." class="flex-1 bg-dark-bg border border-dark-border rounded-l-lg py-2.5 px-4 text-white">
+                        <button class="px-4 gradient-purple rounded-r-lg">
+                            <i data-lucide="search" class="w-4 h-4"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="flex space-x-2 mt-4">
+                <button class="px-3 py-1.5 text-xs bg-cyber-500/20 text-cyber-400 rounded-lg">今天</button>
+                <button class="px-3 py-1.5 text-xs text-gray-400 hover:text-white rounded-lg">昨天</button>
+                <button class="px-3 py-1.5 text-xs text-gray-400 hover:text-white rounded-lg">最近 7 天</button>
+                <button class="px-3 py-1.5 text-xs text-gray-400 hover:text-white rounded-lg">最近 30 天</button>
+            </div>
+        </div>
+        
+        <!-- 日誌列表 -->
+        <div class="glass-card rounded-2xl p-6">
+            <div class="flex items-center justify-between mb-4">
+                <p class="text-sm text-gray-400">共 1,234 筆記錄</p>
+                <div class="flex space-x-2">
+                    <button class="p-2 text-gray-400 hover:text-white">
+                        <i data-lucide="filter" class="w-4 h-4"></i>
+                    </button>
+                    <button class="p-2 text-gray-400 hover:text-white">
+                        <i data-lucide="arrow-up-down" class="w-4 h-4"></i>
+                    </button>
+                </div>
+            </div>
+            
+            <div class="overflow-x-auto">
+                <table class="w-full">
+                    <thead class="bg-dark-bg">
+                        <tr>
+                            <th class="px-4 py-3 text-left text-xs font-medium text-gray-400 uppercase">時間</th>
+                            <th class="px-4 py-3 text-left text-xs font-medium text-gray-400 uppercase">類型</th>
+                            <th class="px-4 py-3 text-left text-xs font-medium text-gray-400 uppercase">來源</th>
+                            <th class="px-4 py-3 text-left text-xs font-medium text-gray-400 uppercase">訊息</th>
+                            <th class="px-4 py-3 text-left text-xs font-medium text-gray-400 uppercase">狀態</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-dark-border">
+                        <tr class="hover:bg-dark-hover">
+                            <td class="px-4 py-3 font-mono text-xs text-gray-400">2026-03-05 12:30:45</td>
+                            <td class="px-4 py-3"><span class="px-2 py-1 bg-blue-500/20 text-blue-400 text-xs rounded">API</span></td>
+                            <td class="px-4 py-3 text-sm">/api/game/list</td>
+                            <td class="px-4 py-3 text-sm max-w-md truncate">取得遊戲列表成功</td>
+                            <td class="px-4 py-3"><span class="px-2 py-1 bg-emerald-500/20 text-emerald-400 text-xs rounded">成功</span></td>
+                        </tr>
+                        
+                        <tr class="hover:bg-dark-hover">
+                            <td class="px-4 py-3 font-mono text-xs text-gray-400">2026-03-05 12:29:33</td>
+                            <td class="px-4 py-3"><span class="px-2 py-1 bg-amber-500/20 text-amber-400 text-xs rounded">警告</span></td>
+                            <td class="px-4 py-3 text-sm">heartbeat</td>
+                            <td class="px-4 py-3 text-sm max-w-md truncate">機台 A-003 心跳逾時</td>
+                            <td class="px-4 py-3"><span class="px-2 py-1 bg-amber-500/20 text-amber-400 text-xs rounded">警告</span></td>
+                        </tr>
+                        
+                        <tr class="hover:bg-dark-hover">
+                            <td class="px-4 py-3 font-mono text-xs text-gray-400">2026-03-05 12:28:15</td>
+                            <td class="px-4 py-3"><span class="px-2 py-1 bg-red-500/20 text-red-400 text-xs rounded">錯誤</span></td>
+                            <td class="px-4 py-3 text-sm">/api/wallet/transfer</td>
+                            <td class="px-4 py-3 text-sm max-w-md truncate">轉帳失敗：餘額不足</td>
+                            <td class="px-4 py-3"><span class="px-2 py-1 bg-red-500/20 text-red-400 text-xs rounded">錯誤</span></td>
+                        </tr>
+                        
+                        <tr class="hover:bg-dark-hover">
+                            <td class="px-4 py-3 font-mono text-xs text-gray-400">2026-03-05 12:27:00</td>
+                            <td class="px-4 py-3"><span class="px-2 py-1 bg-gray-500/20 text-gray-400 text-xs rounded">系統</span></td>
+                            <td class="px-4 py-3 text-sm">sync</td>
+                            <td class="px-4 py-3 text-sm max-w-md truncate">同步完成，共 156 筆資料</td>
+                            <td class="px-4 py-3"><span class="px-2 py-1 bg-emerald-500/20 text-emerald-400 text-xs rounded">成功</span></td>
+                        </tr>
+                        
+                        <tr class="hover:bg-dark-hover">
+                            <td class="px-4 py-3 font-mono text-xs text-gray-400">2026-03-05 12:26:30</td>
+                            <td class="px-4 py-3"><span class="px-2 py-1 bg-blue-500/20 text-blue-400 text-xs rounded">API</span></td>
+                            <td class="px-4 py-3 text-sm">/api/auth/login</td>
+                            <td class="px-4 py-3 text-sm max-w-md truncate">管理員登入成功</td>
+                            <td class="px-4 py-3"><span class="px-2 py-1 bg-emerald-500/20 text-emerald-400 text-xs rounded">成功</span></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            
+            <!-- 分頁 -->
+            <div class="flex items-center justify-between mt-4 pt-4 border-t border-dark-border">
+                <p class="text-sm text-gray-400">顯示 1-10 筆，共 1,234 筆</p>
+                <div class="flex space-x-2">
+                    <button class="px-3 py-1.5 text-sm text-gray-400 hover:text-white rounded-lg disabled:opacity-50" disabled>上一頁</button>
+                    <button class="px-3 py-1.5 text-sm bg-cyber-500/20 text-cyber-400 rounded-lg">1</button>
+                    <button class="px-3 py-1.5 text-sm text-gray-400 hover:text-white rounded-lg">2</button>
+                    <button class="px-3 py-1.5 text-sm text-gray-400 hover:text-white rounded-lg">3</button>
+                    <button class="px-3 py-1.5 text-sm text-gray-400 hover:text-white rounded-lg">...</button>
+                    <button class="px-3 py-1.5 text-sm text-gray-400 hover:text-white rounded-lg">124</button>
+                    <button class="px-3 py-1.5 text-sm text-gray-400 hover:text-white rounded-lg">下一頁</button>
+                </div>
+            </div>
+        </div>
+    </main>
+    
+    <script src="../js/sidebar.js"></script>
+    <script>
+        MockupSidebar.render('mockup_log_query.html');
+        lucide.createIcons();
+    </script>
+</body>
+</html>

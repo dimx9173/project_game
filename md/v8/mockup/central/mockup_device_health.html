@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>設備健康度 - 遊戲平台管理中心</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;600;700&family=JetBrains+Mono&display=swap" rel="stylesheet">
+    <link href="../css/mockup-common.css" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        cyber: { 600: '#7c3aed', 400: '#a78bfa', 500: '#8b5cf6' },
+                        dark: { bg: '#0a0a0f', card: '#12121a', sidebar: '#0d0d14', border: '#1e1e2e' }
+                    },
+                    fontFamily: { sans: ['"Noto Sans TC"', 'sans-serif'], mono: ['"JetBrains Mono"', 'monospace'] }
+                }
+            }
+        }
+    </script>
+    <style>
+        body { font-family: 'Noto Sans TC', sans-serif; background: linear-gradient(135deg, #0a0a0f 0%, #1a0a2e 50%, #0a0a0f 100%); }
+        .glass { background: rgba(18, 18, 26, 0.7); backdrop-filter: blur(20px); border: 1px solid rgba(255, 255, 255, 0.08); }
+        .glass-card { background: linear-gradient(135deg, rgba(18, 18, 26, 0.9) 0%, rgba(30, 30, 46, 0.6) 100%); backdrop-filter: blur(20px); border: 1px solid rgba(168, 85, 247, 0.15); }
+        .gradient-purple { background: linear-gradient(135deg, #7c3aed 0%, #a855f7 50%, #c084fc 100%); }
+        .health-good { color: #10b981; }
+        .health-warning { color: #f59e0b; }
+        .health-danger { color: #ef4444; }
+        .circular-progress { transform: rotate(-90deg); }
+    </style>
+</head>
+<body class="gradient-bg min-h-screen flex">
+    <div id="sidebar-container"></div>
+    
+    <main class="flex-1 p-6">
+        <div class="flex items-center justify-between mb-6">
+            <div>
+                <h1 class="text-2xl font-bold">設備健康度</h1>
+                <p class="text-gray-400">本機硬體與系統健康狀態</p>
+            </div>
+            <button class="px-4 py-2 gradient-purple rounded-lg font-medium flex items-center">
+                <i data-lucide="refresh-cw" class="w-4 h-4 mr-2"></i>重新檢測
+            </button>
+        </div>
+        
+        <!-- 總覽卡片 -->
+        <div class="grid grid-cols-4 gap-4 mb-6">
+            <div class="glass-card rounded-xl p-4">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-sm text-gray-400">總體健康度</p>
+                        <p class="text-2xl font-bold health-good font-mono">92%</p>
+                    </div>
+                    <div class="w-12 h-12 rounded-full bg-emerald-500/20 flex items-center justify-center">
+                        <i data-lucide="heart-pulse" class="w-6 h-6 text-emerald-400"></i>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="glass-card rounded-xl p-4">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-sm text-gray-400">CPU 狀態</p>
+                        <p class="text-2xl font-bold health-good font-mono">良好</p>
+                    </div>
+                    <div class="w-12 h-12 rounded-full bg-emerald-500/20 flex items-center justify-center">
+                        <i data-lucide="cpu" class="w-6 h-6 text-emerald-400"></i>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="glass-card rounded-xl p-4">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-sm text-gray-400">記憶體狀態</p>
+                        <p class="text-2xl font-bold health-warning font-mono">警告</p>
+                    </div>
+                    <div class="w-12 h-12 rounded-full bg-amber-500/20 flex items-center justify-center">
+                        <i data-lucide="hard-drive" class="w-6 h-6 text-amber-400"></i>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="glass-card rounded-xl p-4">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-sm text-gray-400">磁碟狀態</p>
+                        <p class="text-2xl font-bold health-good font-mono">良好</p>
+                    </div>
+                    <div class="w-12 h-12 rounded-full bg-emerald-500/20 flex items-center justify-center">
+                        <i data-lucide="database" class="w-6 h-6 text-emerald-400"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <!-- CPU 使用趨勢 -->
+            <div class="glass-card rounded-2xl p-6">
+                <h3 class="font-semibold mb-4">CPU 使用率（24小時）</h3>
+                <div class="h-48">
+                    <canvas id="cpuChart"></canvas>
+                </div>
+            </div>
+            
+            <!-- 記憶體使用 -->
+            <div class="glass-card rounded-2xl p-6">
+                <h3 class="font-semibold mb-4">記憶體使用狀態</h3>
+                <div class="flex items-center justify-center h-48">
+                    <div class="relative w-32 h-32">
+                        <svg class="w-full h-full circular-progress" viewBox="0 0 100 100">
+                            <circle cx="50" cy="50" r="40" fill="none" stroke="#1e1e2e" stroke-width="10"/>
+                            <circle cx="50" cy="50" r="40" fill="none" stroke="#f59e0b" stroke-width="10" stroke-dasharray="188.5" stroke-dashoffset="47" stroke-linecap="round"/>
+                        </svg>
+                        <div class="absolute inset-0 flex flex-col items-center justify-center">
+                            <span class="text-2xl font-bold text-white">75%</span>
+                            <span class="text-xs text-gray-400">已使用</span>
+                        </div>
+                    </div>
+                    <div class="ml-8 space-y-2">
+                        <div>
+                            <span class="text-sm text-gray-400">總容量：</span>
+                            <span class="font-mono">16 GB</span>
+                        </div>
+                        <div>
+                            <span class="text-sm text-gray-400">已使用：</span>
+                            <span class="font-mono text-amber-400">12 GB</span>
+                        </div>
+                        <div>
+                            <span class="text-sm text-gray-400">可用：</span>
+                            <span class="font-mono">4 GB</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 磁碟使用 -->
+            <div class="glass-card rounded-2xl p-6">
+                <h3 class="font-semibold mb-4">磁碟使用狀態</h3>
+                <div class="space-y-4">
+                    <div>
+                        <div class="flex justify-between mb-2">
+                            <span class="text-sm">系統磁碟 (C:)</span>
+                            <span class="text-sm font-mono">45% / 500GB</span>
+                        </div>
+                        <div class="h-2 bg-dark-bg rounded-full overflow-hidden">
+                            <div class="h-full bg-emerald-400 rounded-full" style="width: 45%"></div>
+                        </div>
+                    </div>
+                    
+                    <div>
+                        <div class="flex justify-between mb-2">
+                            <span class="text-sm">資料磁碟 (D:)</span>
+                            <span class="text-sm font-mono">78% / 1TB</span>
+                        </div>
+                        <div class="h-2 bg-dark-bg rounded-full overflow-hidden">
+                            <div class="h-full bg-amber-400 rounded-full" style="width: 78%"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 系統溫度 -->
+            <div class="glass-card rounded-2xl p-6">
+                <h3 class="font-semibold mb-4">系統溫度</h3>
+                <div class="space-y-4">
+                    <div class="flex items-center justify-between">
+                        <span class="text-sm">CPU 溫度</span>
+                        <div class="flex items-center">
+                            <span class="font-mono mr-2">65°C</span>
+                            <span class="px-2 py-0.5 bg-emerald-500/20 text-emerald-400 text-xs rounded">正常</span>
+                        </div>
+                    </div>
+                    
+                    <div class="flex items-center justify-between">
+                        <span class="text-sm">GPU 溫度</span>
+                        <div class="flex items-center">
+                            <span class="font-mono mr-2">58°C</span>
+                            <span class="px-2 py-0.5 bg-emerald-500/20 text-emerald-400 text-xs rounded">正常</span>
+                        </div>
+                    </div>
+                    
+                    <div class="flex items-center justify-between">
+                        <span class="text-sm">主機板溫度</span>
+                        <div class="flex items-center">
+                            <span class="font-mono mr-2">42°C</span>
+                            <span class="px-2 py-0.5 bg-emerald-500/20 text-emerald-400 text-xs rounded">正常</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+    
+    <script src="../js/sidebar.js"></script>
+    <script>
+        MockupSidebar.render('mockup_device_health.html');
+        lucide.createIcons();
+        
+        // CPU Chart
+        new Chart(document.getElementById('cpuChart'), {
+            type: 'line',
+            data: {
+                labels: ['00:00', '04:00', '08:00', '12:00', '16:00', '20:00', '24:00'],
+                datasets: [{
+                    label: 'CPU %',
+                    data: [25, 20, 45, 65, 40, 35, 30],
+                    borderColor: '#8b5cf6',
+                    backgroundColor: 'rgba(139, 92, 246, 0.1)',
+                    fill: true,
+                    tension: 0.4
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: { legend: { display: false } },
+                scales: {
+                    y: { max: 100, grid: { color: 'rgba(255, 255, 255, 0.1)' }, ticks: { color: '#9ca3af' } },
+                    x: { grid: { display: false }, ticks: { color: '#9ca3af' } }
+                }
+            }
+        });
+    </script>
+</body>
+</html>
