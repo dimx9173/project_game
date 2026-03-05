@@ -92,6 +92,10 @@ paths:
     get:
       tags: [機台管理 (Machines)]
       summary: 取得機台列表
+      description: |
+        取得機台列表，支援多維度篩選。
+        - 支援依標籤（tags）篩選，可多選
+        - 支援依狀態、IP、名稱篩選
       security: [{ BearerAuth: [] }]
       parameters:
         - { name: page, in: query, schema: { type: integer, default: 1 } }
@@ -101,12 +105,36 @@ paths:
             in: query,
             schema: { type: string, enum: [online, offline, maintenance] },
           }
+        - {
+            name: tags,
+            in: query,
+            schema: { type: array, items: { type: string } },
+            description: 標籤篩選（可多選，AND 邏輯）,
+          }
+        - { name: name, in: query, schema: { type: string }, description: 機台名稱（模糊搜尋） }
+        - { name: ip, in: query, schema: { type: string }, description: IP 位址 }
       responses:
         "200": { description: 成功 }
     post:
       tags: [機台管理 (Machines)]
       summary: 新增機台
       security: [{ BearerAuth: [] }]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [name, mac]
+              properties:
+                name: { type: string }
+                ip: { type: string }
+                mac: { type: string }
+                tags: 
+                  type: array
+                  items: { type: string }
+                  description: 機台標籤
+                hostName: { type: string }
       responses:
         "201": { description: 建立成功 }
 
@@ -129,6 +157,19 @@ paths:
       tags: [機台管理 (Machines)]
       summary: 更新機台
       security: [{ BearerAuth: [] }]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name: { type: string }
+                tags: 
+                  type: array
+                  items: { type: string }
+                  description: 機台標籤
+                status: { type: string }
       responses:
         "200": { description: 更新成功 }
     delete:
@@ -905,7 +946,7 @@ paths:
       summary: 營收報表
       description: |
         取得營收報表資料
-        - 支援多維度篩選：門市、機台、遊戲、遊戲商
+        - 支援多維度篩選：門市、機台、遊戲、遊戲商、標籤
         - 支援日期範圍：日/週/月/年
         - 支援多選篩選條件
       security: [{ BearerAuth: [] }]
@@ -928,6 +969,12 @@ paths:
             in: query,
             schema: { type: array, items: { type: string } },
             description: 機台ID列表（可多選）,
+          }
+        - {
+            name: tags,
+            in: query,
+            schema: { type: array, items: { type: string } },
+            description: 機台標籤列表（可多選，AND 邏輯）,
           }
         - {
             name: games,
@@ -957,6 +1004,9 @@ paths:
                         date: { type: string }
                         store: { type: string }
                         machine: { type: string }
+                        tags: 
+                          type: array
+                          items: { type: string }
                         game: { type: string }
                         provider: { type: string }
                         totalBet: { type: number }
@@ -988,6 +1038,12 @@ paths:
             name: machines,
             in: query,
             schema: { type: array, items: { type: string } },
+          }
+        - {
+            name: tags,
+            in: query,
+            schema: { type: array, items: { type: string } },
+            description: 機台標籤列表（可多選）,
           }
         - {
             name: games,
