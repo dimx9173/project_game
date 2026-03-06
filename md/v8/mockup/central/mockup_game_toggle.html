@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>遊戲啟用/停用 - 遊戲平台管理中心</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="../css/mockup-common.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        cyber: { 50: '#f5f3ff', 100: '#ede9fe', 200: '#ddd6fe', 300: '#c4b5fd', 400: '#a78bfa', 500: '#8b5cf6', 600: '#7c3aed', 700: '#6d28d9', 800: '#5b21b6', 900: '#4c1d95', 950: '#2e1065' },
+                        dark: { bg: '#0a0a0f', card: '#12121a', sidebar: '#0d0d14', border: '#1e1e2e', hover: '#1a1a28' }
+                    },
+                    fontFamily: { sans: ['"Noto Sans TC"', 'sans-serif'], mono: ['"JetBrains Mono"', 'monospace'] },
+                    boxShadow: { glow: '0 0 30px rgba(168, 85, 247, 0.3)', 'glow-sm': '0 0 15px rgba(168, 85, 247, 0.2)' }
+                }
+            }
+        }
+    </script>
+    <style>
+        * { scrollbar-width: thin; scrollbar-color: #6d28d9 #0a0a0f; }
+        *::-webkit-scrollbar { width: 8px; height: 8px; }
+        *::-webkit-scrollbar-track { background: #0a0a0f; }
+        *::-webkit-scrollbar-thumb { background: linear-gradient(180deg, #7c3aed, #a855f7); border-radius: 4px; }
+        body { font-family: 'Noto Sans TC', sans-serif; background: #0a0a0f; }
+        .glass { background: rgba(18, 18, 26, 0.7); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border: 1px solid rgba(255, 255, 255, 0.08); }
+        .glass-card { background: linear-gradient(135deg, rgba(18, 18, 26, 0.9) 0%, rgba(30, 30, 46, 0.6) 100%); backdrop-filter: blur(20px); border: 1px solid rgba(168, 85, 247, 0.15); box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4); }
+        .gradient-bg { background: linear-gradient(135deg, #0a0a0f 0%, #1a0a2e 50%, #0a0a0f 100%); }
+        .gradient-purple { background: linear-gradient(135deg, #7c3aed 0%, #a855f7 50%, #c084fc 100%); }
+        .game-card { transition: all 0.2s ease; }
+        .game-card:hover { transform: translateY(-2px); box-shadow: 0 8px 32px rgba(0,0,0,0.4); }
+        .toggle-checkbox:checked { right: 0; border-color: #10b981; }
+        .toggle-checkbox:checked + .toggle-label { background-color: #10b981; }
+    </style>
+</head>
+<body class="gradient-bg min-h-screen flex">
+    <div id="sidebar-container"></div>
+    
+    <main class="flex-1 flex flex-col overflow-hidden">
+        <!-- Header -->
+        <header class="h-16 glass border-b border-dark-border flex items-center justify-between px-6">
+            <div class="flex items-center">
+                <h2 class="text-lg font-semibold text-white">遊戲啟用/停用</h2>
+            </div>
+            <div class="flex items-center space-x-4">
+                <div class="flex space-x-2">
+                    <span class="px-3 py-1 bg-emerald-500/20 text-emerald-400 text-sm rounded-full">啟用中: 45</span>
+                    <span class="px-3 py-1 bg-gray-500/20 text-gray-400 text-sm rounded-full">停用: 5</span>
+                    <span class="px-3 py-1 bg-amber-500/20 text-amber-400 text-sm rounded-full">維護中: 2</span>
+                </div>
+            </div>
+        </header>
+
+        <!-- Filters -->
+        <div class="px-6 py-4 border-b border-dark-border">
+            <div class="flex flex-wrap items-center gap-4">
+                <div class="flex space-x-2">
+                    <button class="px-4 py-2 bg-cyber-500/20 text-cyber-400 rounded-lg text-sm border border-cyber-500/30">全部</button>
+                    <button class="px-4 py-2 bg-dark-bg border border-dark-border rounded-lg text-gray-400 text-sm hover:bg-dark-hover">啟用中</button>
+                    <button class="px-4 py-2 bg-dark-bg border border-dark-border rounded-lg text-gray-400 text-sm hover:bg-dark-hover">停用</button>
+                    <button class="px-4 py-2 bg-dark-bg border border-dark-border rounded-lg text-gray-400 text-sm hover:bg-dark-hover">維護中</button>
+                </div>
+                <div class="flex-1"></div>
+                <div class="relative">
+                    <input type="text" placeholder="搜尋遊戲..." class="bg-dark-bg border border-dark-border rounded-lg py-2 px-4 pl-10 text-sm text-white w-64">
+                    <i data-lucide="search" class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500"></i>
+                </div>
+            </div>
+        </div>
+
+        <!-- Game Grid -->
+        <div class="flex-1 overflow-y-auto p-6">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+
+                <!-- Game 1 - Active -->
+                <div class="game-card glass-card rounded-xl overflow-hidden">
+                    <div class="h-32 bg-gradient-to-br from-purple-900 to-indigo-900 relative">
+                        <div class="absolute inset-0 flex items-center justify-center">
+                            <i data-lucide="gamepad-2" class="w-12 h-12 text-purple-500/50"></i>
+                        </div>
+                        <div class="absolute top-2 right-2">
+                            <span class="px-2 py-1 bg-emerald-500/80 text-white text-xs rounded">啟用中</span>
+                        </div>
+                    </div>
+                    
+                    <div class="p-4">
+                        <div class="flex items-center justify-between mb-2">
+                            <h3 class="font-semibold text-white">經典拉霸王</h3>
+                            <label class="relative inline-flex items-center cursor-pointer">
+                                <input type="checkbox" checked class="sr-only peer">
+                                <div class="w-11 h-6 bg-emerald-500 rounded-full peer-checked:after:translate-x-full after:content-[''] after:absolute after:top-0.5 after:right-0.5 after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all"></div>
+                            </label>
+                        </div>
+                        
+                        <p class="text-sm text-gray-400 mb-3">ProSlot Inc.</p>
+                        
+                        <div class="flex items-center justify-between text-sm">
+                            <span class="text-gray-500">RTP: <span class="text-emerald-400">96.5%</span></span>
+                            <span class="text-xs text-gray-500">熱門</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Game 2 - Active -->
+                <div class="game-card glass-card rounded-xl overflow-hidden">
+                    <div class="h-32 bg-gradient-to-br from-cyan-900 to-blue-900 relative">
+                        <div class="absolute inset-0 flex items-center justify-center">
+                            <i data-lucide="dice-5" class="w-12 h-12 text-cyan-500/50"></i>
+                        </div>
+                        <div class="absolute top-2 right-2">
+                            <span class="px-2 py-1 bg-emerald-500/80 text-white text-xs rounded">啟用中</span>
+                        </div>
+                    </div>
+                    
+                    <div class="p-4">
+                        <div class="flex items-center justify-between mb-2">
+                            <h3 class="font-semibold text-white">決戰百家樂</h3>
+                            <label class="relative inline-flex items-center cursor-pointer">
+                                <input type="checkbox" checked class="sr-only peer">
+                                <div class="w-11 h-6 bg-emerald-500 rounded-full peer-checked:after:translate-x-full after:content-[''] after:absolute after:top-0.5 after:right-0.5 after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all"></div>
+                            </label>
+                        </div>
+                        
+                        <p class="text-sm text-gray-400 mb-3">LiveCasino Co.</p>
+                        
+                        <div class="flex items-center justify-between text-sm">
+                            <span class="text-gray-500">RTP: <span class="text-emerald-400">98.2%</span></span>
+                            <span class="text-xs text-gray-500">真人</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Game 3 - Disabled -->
+                <div class="game-card glass-card rounded-xl overflow-hidden opacity-60">
+                    <div class="h-32 bg-gradient-to-br from-gray-800 to-gray-900 relative">
+                        <div class="absolute inset-0 flex items-center justify-center">
+                            <i data-lucide="gamepad-2" class="w-12 h-12 text-gray-600"></i>
+                        </div>
+                        <div class="absolute top-2 right-2">
+                            <span class="px-2 py-1 bg-gray-500/80 text-white text-xs rounded">停用</span>
+                        </div>
+                    </div>
+                    
+                    <div class="p-4">
+                        <div class="flex items-center justify-between mb-2">
+                            <h3 class="font-semibold text-gray-400">幸運拉霸</h3>
+                            <label class="relative inline-flex items-center cursor-pointer">
+                                <input type="checkbox" class="sr-only peer">
+                                <div class="w-11 h-6 bg-gray-600 rounded-full peer-checked:bg-emerald-500 after:content-[''] after:absolute after:top-0.5 after:left-0.5 after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:after:translate-x-full"></div>
+                            </label>
+                        </div>
+                        
+                        <p class="text-sm text-gray-500 mb-3">SlotMaster</p>
+                        
+                        <div class="flex items-center justify-between text-sm">
+                            <span class="text-gray-500">RTP: <span class="text-gray-400">95.8%</span></span>
+                            <span class="text-xs text-red-400">合約到期</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Game 4 - Maintenance -->
+                <div class="game-card glass-card rounded-xl overflow-hidden">
+                    <div class="h-32 bg-gradient-to-br from-amber-900 to-orange-900 relative">
+                        <div class="absolute inset-0 flex items-center justify-center">
+                            <i data-lucide="spade" class="w-12 h-12 text-amber-500/50"></i>
+                        </div>
+                        <div class="absolute top-2 right-2">
+                            <span class="px-2 py-1 bg-amber-500/80 text-white text-xs rounded">維護中</span>
+                        </div>
+                    </div>
+                    
+                    <div class="p-4">
+                        <div class="flex items-center justify-between mb-2">
+                            <h3 class="font-semibold text-white">21點經典</h3>
+                            <button class="px-3 py-1 bg-amber-500/20 text-amber-400 text-xs rounded border border-amber-500/30">維護設定</button>
+                        </div>
+                        
+                        <p class="text-sm text-gray-400 mb-3">CardGames Pro</p>
+                        
+                        <div class="flex items-center justify-between text-sm">
+                            <span class="text-gray-500">預計完成: <span class="text-amber-400">2小時後</span></span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- More games... -->
+                <div class="game-card glass-card rounded-xl overflow-hidden">
+                    <div class="h-32 bg-gradient-to-br from-rose-900 to-pink-900 relative">
+                        <div class="absolute inset-0 flex items-center justify-center">
+                            <i data-lucide="diamond" class="w-12 h-12 text-rose-500/50"></i>
+                        </div>
+                        <div class="absolute top-2 right-2">
+                            <span class="px-2 py-1 bg-emerald-500/80 text-white text-xs rounded">啟用中</span>
+                        </div>
+                    </div>
+                    
+                    <div class="p-4">
+                        <div class="flex items-center justify-between mb-2">
+                            <h3 class="font-semibold text-white">鑽石大亨</h3>
+                            <label class="relative inline-flex items-center cursor-pointer">
+                                <input type="checkbox" checked class="sr-only peer">
+                                <div class="w-11 h-6 bg-emerald-500 rounded-full peer-checked:after:translate-x-full after:content-[''] after:absolute after:top-0.5 after:right-0.5 after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all"></div>
+                            </label>
+                        </div>
+                        
+                        <p class="text-sm text-gray-400 mb-3">JewelSlots</p>
+                        
+                        <div class="flex items-center justify-between text-sm">
+                            <span class="text-gray-500">RTP: <span class="text-emerald-400">97.1%</span></span>
+                            <span class="text-xs text-gray-500">新上架</span>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </main>
+
+    <script src="../js/sidebar.js"></script>
+    <script>
+        MockupSidebar.render('mockup_game_toggle.html');
+        lucide.createIcons();
+    </script>
+</body>
+</html>

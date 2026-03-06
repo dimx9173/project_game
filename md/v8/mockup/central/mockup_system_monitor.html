@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>系統監控 - 遊戲平台管理中心</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="../css/mockup-common.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: { cyber: { 50: '#f5f3ff', 100: '#ede9fe', 200: '#ddd6fe', 300: '#c4b5fd', 400: '#a78bfa', 500: '#8b5cf6', 600: '#7c3aed', 700: '#6d28d9', 800: '#5b21b6', 900: '#4c1d95', 950: '#2e1065' }, dark: { bg: '#0a0a0f', card: '#12121a', sidebar: '#0d0d14', border: '#1e1e2e', hover: '#1a1a28' } },
+                    fontFamily: { sans: ['"Noto Sans TC"', 'sans-serif'], mono: ['"JetBrains Mono"', 'monospace'] }
+                }
+            }
+        }
+    </script>
+    <style>
+        * { scrollbar-width: thin; scrollbar-color: #6d28d9 #0a0a0f; }
+        *::-webkit-scrollbar { width: 8px; height: 8px; }
+        *::-webkit-scrollbar-track { background: #0a0a0f; }
+        *::-webkit-scrollbar-thumb { background: linear-gradient(180deg, #7c3aed, #a855f7); border-radius: 4px; }
+        body { font-family: 'Noto Sans TC', sans-serif; background: #0a0a0f; }
+        .glass { background: rgba(18, 18, 26, 0.7); backdrop-filter: blur(20px); border: 1px solid rgba(255, 255, 255, 0.08); }
+        .glass-card { background: linear-gradient(135deg, rgba(18, 18, 26, 0.9) 0%, rgba(30, 30, 46, 0.6) 100%); border: 1px solid rgba(168, 85, 247, 0.15); box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4); }
+        .gradient-bg { background: linear-gradient(135deg, #0a0a0f 0%, #1a0a2e 50%, #0a0a0f 100%); }
+    </style>
+</head>
+<body class="gradient-bg min-h-screen flex">
+    <div id="sidebar-container"></div>
+    <main class="flex-1 flex flex-col overflow-hidden">
+        <header class="h-16 glass border-b border-dark-border flex items-center justify-between px-6">
+            <h2 class="text-lg font-semibold text-white">系統監控</h2>
+            <div class="flex items-center space-x-3">
+                <span class="px-2 py-1 bg-emerald-500/20 text-emerald-400 text-xs rounded-full flex items-center"><span class="w-2 h-2 rounded-full bg-emerald-400 mr-1.5 animate-pulse"></span>系統正常</span>
+                <button class="px-4 py-2 bg-dark-bg border border-dark-border rounded-lg text-gray-300 text-sm hover:bg-dark-hover"><i data-lucide="refresh-cw" class="w-4 h-4 inline mr-1"></i>重新整理</button>
+            </div>
+        </header>
+        <div class="flex-1 overflow-y-auto p-6">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+                <div class="glass-card rounded-xl p-4"><div class="text-sm text-gray-400 mb-1">CPU 使用率</div><div class="text-2xl font-mono text-emerald-400">42%</div><div class="w-full bg-dark-bg rounded-full h-2 mt-2"><div class="bg-emerald-500 h-2 rounded-full" style="width: 42%"></div></div></div>
+                <div class="glass-card rounded-xl p-4"><div class="text-sm text-gray-400 mb-1">記憶體</div><div class="text-2xl font-mono text-amber-400">68%</div><div class="w-full bg-dark-bg rounded-full h-2 mt-2"><div class="bg-amber-500 h-2 rounded-full" style="width: 68%"></div></div></div>
+                <div class="glass-card rounded-xl p-4"><div class="text-sm text-gray-400 mb-1">磁碟</div><div class="text-2xl font-mono text-emerald-400">35%</div><div class="w-full bg-dark-bg rounded-full h-2 mt-2"><div class="bg-emerald-500 h-2 rounded-full" style="width: 35%"></div></div></div>
+                <div class="glass-card rounded-xl p-4"><div class="text-sm text-gray-400 mb-1">網路延遲</div><div class="text-2xl font-mono text-emerald-400">12ms</div></div>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div class="glass-card rounded-2xl p-6"><h3 class="text-lg font-semibold text-white mb-4"><i data-lucide="server" class="w-5 h-5 inline mr-2 text-cyber-400"></i>伺服器狀態</h3>
+                    <div class="space-y-3">
+                        <div class="flex justify-between p-3 bg-dark-bg rounded-lg"><span class="text-gray-300">Web Server</span><span class="text-emerald-400">線上</span></div>
+                        <div class="flex justify-between p-3 bg-dark-bg rounded-lg"><span class="text-gray-300">API Server</span><span class="text-emerald-400">線上</span></div>
+                        <div class="flex justify-between p-3 bg-dark-bg rounded-lg"><span class="text-gray-300">Database</span><span class="text-emerald-400">線上</span></div>
+                        <div class="flex justify-between p-3 bg-dark-bg rounded-lg"><span class="text-gray-300">Cache Server</span><span class="text-emerald-400">線上</span></div>
+                    </div>
+                </div>
+                <div class="glass-card rounded-2xl p-6"><h3 class="text-lg font-semibold text-white mb-4"><i data-lucide="activity" class="w-5 h-5 inline mr-2 text-cyber-400"></i>即時流量</h3>
+                    <div class="space-y-3">
+                        <div class="flex justify-between p-3 bg-dark-bg rounded-lg"><span class="text-gray-300">線上人數</span><span class="text-white font-mono">1,234</span></div>
+                        <div class="flex justify-between p-3 bg-dark-bg rounded-lg"><span class="text-gray-300">今日請求</span><span class="text-white font-mono">5.6M</span></div>
+                        <div class="flex justify-between p-3 bg-dark-bg rounded-lg"><span class="text-gray-300">API 調用</span><span class="text-white font-mono">2.3M</span></div>
+                        <div class="flex justify-between p-3 bg-dark-bg rounded-lg"><span class="text-gray-300">錯誤率</span><span class="text-emerald-400 font-mono">0.01%</span></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+    <script src="../js/sidebar.js"></script>
+    <script>MockupSidebar.render('mockup_system_monitor.html');lucide.createIcons();</script>
+</body>
+</html>

@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>手動同步 - 遊戲平台管理中心</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="../css/mockup-common.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: { cyber: { 50: '#f5f3ff', 100: '#ede9fe', 200: '#ddd6fe', 300: '#c4b5fd', 400: '#a78bfa', 500: '#8b5cf6', 600: '#7c3aed', 700: '#6d28d9', 800: '#5b21b6', 900: '#4c1d95', 950: '#2e1065' }, dark: { bg: '#0a0a0f', card: '#12121a', sidebar: '#0d0d14', border: '#1e1e2e', hover: '#1a1a28' } },
+                    fontFamily: { sans: ['"Noto Sans TC"', 'sans-serif'], mono: ['"JetBrains Mono"', 'monospace'] }
+                }
+            }
+        }
+    </script>
+    <style>
+        * { scrollbar-width: thin; scrollbar-color: #6d28d9 #0a0a0f; }
+        *::-webkit-scrollbar { width: 8px; height: 8px; }
+        *::-webkit-scrollbar-track { background: #0a0a0f; }
+        *::-webkit-scrollbar-thumb { background: linear-gradient(180deg, #7c3aed, #a855f7); border-radius: 4px; }
+        body { font-family: 'Noto Sans TC', sans-serif; background: #0a0a0f; }
+        .glass { background: rgba(18, 18, 26, 0.7); backdrop-filter: blur(20px); border: 1px solid rgba(255, 255, 255, 0.08); }
+        .glass-card { background: linear-gradient(135deg, rgba(18, 18, 26, 0.9) 0%, rgba(30, 30, 46, 0.6) 100%); border: 1px solid rgba(168, 85, 247, 0.15); box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4); }
+        .gradient-bg { background: linear-gradient(135deg, #0a0a0f 0%, #1a0a2e 50%, #0a0a0f 100%); }
+        .gradient-purple { background: linear-gradient(135deg, #7c3aed 0%, #a855f7 50%, #c084fc 100%); }
+    </style>
+</head>
+<body class="gradient-bg min-h-screen flex">
+    <div id="sidebar-container"></div>
+    <main class="flex-1 flex flex-col overflow-hidden">
+        <header class="h-16 glass border-b border-dark-border flex items-center justify-between px-6">
+            <h2 class="text-lg font-semibold text-white">手動同步</h2>
+            <div class="flex items-center space-x-3">
+                <span class="px-2 py-1 bg-emerald-500/20 text-emerald-400 text-xs rounded-full flex items-center"><span class="w-2 h-2 rounded-full bg-emerald-400 mr-1.5"></span>已連線</span>
+            </div>
+        </header>
+        <div class="flex-1 overflow-y-auto p-6">
+            <div class="max-w-4xl mx-auto space-y-6">
+                <!-- 同步狀態 -->
+                <div class="glass-card rounded-2xl p-6">
+                    <div class="flex items-center justify-between mb-4">
+                        <h3 class="text-lg font-semibold text-white">同步狀態</h3>
+                        <span class="px-3 py-1 bg-emerald-500/20 text-emerald-400 text-sm rounded-full">已同步</span>
+                    </div>
+                    <div class="grid grid-cols-3 gap-4 text-center">
+                        <div class="p-4 bg-dark-bg rounded-xl"><div class="text-xs text-gray-500 mb-1">最後同步</div><div class="text-white font-mono">14:32:18</div></div>
+                        <div class="p-4 bg-dark-bg rounded-xl"><div class="text-xs text-gray-500 mb-1">待同步</div><div class="text-white font-mono">0 筆</div></div>
+                        <div class="p-4 bg-dark-bg rounded-xl"><div class="text-xs text-gray-500 mb-1">衝突</div><div class="text-white font-mono">0 筆</div></div>
+                    </div>
+                </div>
+                <!-- 手動同步選項 -->
+                <div class="glass-card rounded-2xl p-6">
+                    <h3 class="text-lg font-semibold text-white mb-4">執行手動同步</h3>
+                    <div class="space-y-3">
+                        <button class="w-full p-4 bg-dark-bg rounded-xl text-left hover:bg-dark-hover transition-colors border border-dark-border hover:border-cyber-500">
+                            <div class="flex items-center"><i data-lucide="refresh-cw" class="w-5 h-5 text-cyber-400 mr-3"></i><div><div class="text-white font-medium">立即同步所有資料</div><div class="text-xs text-gray-500">同步交易、機台狀態、遊戲資料</div></div></div>
+                        </button>
+                        <button class="w-full p-4 bg-dark-bg rounded-xl text-left hover:bg-dark-hover transition-colors border border-dark-border hover:border-cyber-500">
+                            <div class="flex items-center"><i data-lucide="upload-cloud" class="w-5 h-5 text-cyan-400 mr-3"></i><div><div class="text-white font-medium">上傳本地交易紀錄</div><div class="text-xs text-gray-500">將本地佇列的交易資料上傳至雲端</div></div></div>
+                        </button>
+                        <button class="w-full p-4 bg-dark-bg rounded-xl text-left hover:bg-dark-hover transition-colors border border-dark-border hover:border-cyber-500">
+                            <div class="flex items-center"><i data-lucide="download-cloud" class="w-5 h-5 text-emerald-400 mr-3"></i><div><div class="text-white font-medium">下載雲端資料</div><div class="text-xs text-gray-500">強制下載最新資料覆蓋本地</div></div></div>
+                        </button>
+                    </div>
+                </div>
+                <!-- 同步日誌 -->
+                <div class="glass-card rounded-2xl p-6">
+                    <h3 class="text-lg font-semibold text-white mb-4">同步日誌</h3>
+                    <div class="space-y-2 text-sm">
+                        <div class="flex items-center p-2 border-b border-dark-border"><span class="text-gray-500 w-24">14:32:18</span><span class="text-emerald-400">✓</span><span class="ml-2 text-gray-300">交易資料同步完成 (12筆)</span></div>
+                        <div class="flex items-center p-2 border-b border-dark-border"><span class="text-gray-500 w-24">14:30:00</span><span class="text-emerald-400">✓</span><span class="ml-2 text-gray-300">機台狀態同步完成</span></div>
+                        <div class="flex items-center p-2 border-b border-dark-border"><span class="text-gray-500 w-24">14:28:45</span><span class="text-emerald-400">✓</span><span class="ml-2 text-gray-300">遊戲資料同步完成 (55款)</span></div>
+                        <div class="flex items-center p-2 border-b border-dark-border"><span class="text-gray-500 w-24">14:25:12</span><span class="text-amber-400">⚠</span><span class="ml-2 text-gray-300">網路延遲偏高 (45ms)</span></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+    <script src="../js/sidebar.js"></script>
+    <script>MockupSidebar.render('mockup_manual_sync.html');lucide.createIcons();</script>
+</body>
+</html>

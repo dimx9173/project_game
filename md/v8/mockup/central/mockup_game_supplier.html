@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>遊戲供應商管理 - 遊戲平台管理中心</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="../css/mockup-common.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: { cyber: { 50: '#f5f3ff', 100: '#ede9fe', 200: '#ddd6fe', 300: '#c4b5fd', 400: '#a78bfa', 500: '#8b5cf6', 600: '#7c3aed', 700: '#6d28d9', 800: '#5b21b6', 900: '#4c1d95', 950: '#2e1065' }, dark: { bg: '#0a0a0f', card: '#12121a', sidebar: '#0d0d14', border: '#1e1e2e', hover: '#1a1a28' } },
+                    fontFamily: { sans: ['"Noto Sans TC"', 'sans-serif'], mono: ['"JetBrains Mono"', 'monospace'] }
+                }
+            }
+        }
+    </script>
+    <style>
+        * { scrollbar-width: thin; scrollbar-color: #6d28d9 #0a0a0f; }
+        *::-webkit-scrollbar { width: 8px; height: 8px; }
+        *::-webkit-scrollbar-track { background: #0a0a0f; }
+        *::-webkit-scrollbar-thumb { background: linear-gradient(180deg, #7c3aed, #a855f7); border-radius: 4px; }
+        body { font-family: 'Noto Sans TC', sans-serif; background: #0a0a0f; }
+        .glass { background: rgba(18, 18, 26, 0.7); backdrop-filter: blur(20px); border: 1px solid rgba(255, 255, 255, 0.08); }
+        .glass-card { background: linear-gradient(135deg, rgba(18, 18, 26, 0.9) 0%, rgba(30, 30, 46, 0.6) 100%); border: 1px solid rgba(168, 85, 247, 0.15); box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4); }
+        .gradient-bg { background: linear-gradient(135deg, #0a0a0f 0%, #1a0a2e 50%, #0a0a0f 100%); }
+        .gradient-purple { background: linear-gradient(135deg, #7c3aed 0%, #a855f7 50%, #c084fc 100%); }
+    </style>
+</head>
+<body class="gradient-bg min-h-screen flex">
+    <div id="sidebar-container"></div>
+    <main class="flex-1 flex flex-col overflow-hidden">
+        <header class="h-16 glass border-b border-dark-border flex items-center justify-between px-6">
+            <h2 class="text-lg font-semibold text-white">遊戲供應商管理</h2>
+            <button class="px-4 py-2 gradient-purple rounded-lg text-white font-medium text-sm"><i data-lucide="plus" class="w-4 h-4 inline mr-1"></i>新增供應商</button>
+        </header>
+        <div class="flex-1 overflow-y-auto p-6">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                <!-- Supplier 1 -->
+                <div class="glass-card rounded-2xl p-5">
+                    <div class="flex items-start justify-between mb-4">
+                        <div class="w-14 h-14 rounded-xl bg-purple-500/20 flex items-center justify-center"><i data-lucide="building-2" class="w-7 h-7 text-purple-400"></i></div>
+                        <span class="px-2 py-1 rounded text-xs bg-emerald-500/20 text-emerald-400">正常</span>
+                    </div>
+                    <h3 class="text-lg font-semibold text-white mb-1">ProSlot Inc.</h3>
+                    <p class="text-sm text-gray-400 mb-4">老虎機遊戲供應商</p>
+                    <div class="space-y-2 text-sm">
+                        <div class="flex justify-between"><span class="text-gray-500">遊戲數量</span><span class="text-white">25 款</span></div>
+                        <div class="flex justify-between"><span class="text-gray-500">API 狀態</span><span class="text-emerald-400">正常</span></div>
+                        <div class="flex justify-between"><span class="text-gray-500">餘額</span><span class="text-white font-mono">$125,000</span></div>
+                    </div>
+                    <div class="mt-4 pt-4 border-t border-dark-border flex space-x-2">
+                        <button class="flex-1 py-2 bg-cyber-500/20 text-cyber-400 rounded-lg text-sm hover:bg-cyber-500/30">管理</button>
+                        <button class="px-3 py-2 bg-dark-bg border border-dark-border rounded-lg text-gray-400 hover:text-white"><i data-lucide="settings" class="w-4 h-4"></i></button>
+                    </div>
+                </div>
+                <!-- Supplier 2 -->
+                <div class="glass-card rounded-2xl p-5">
+                    <div class="flex items-start justify-between mb-4">
+                        <div class="w-14 h-14 rounded-xl bg-cyan-500/20 flex items-center justify-center"><i data-lucide="building-2" class="w-7 h-7 text-cyan-400"></i></div>
+                        <span class="px-2 py-1 rounded text-xs bg-emerald-500/20 text-emerald-400">正常</span>
+                    </div>
+                    <h3 class="text-lg font-semibold text-white mb-1">LiveCasino Co.</h3>
+                    <p class="text-sm text-gray-400 mb-4">真人百家樂供應商</p>
+                    <div class="space-y-2 text-sm">
+                        <div class="flex justify-between"><span class="text-gray-500">遊戲數量</span><span class="text-white">12 款</span></div>
+                        <div class="flex justify-between"><span class="text-gray-500">API 狀態</span><span class="text-emerald-400">正常</span></div>
+                        <div class="flex justify-between"><span class="text-gray-500">餘額</span><span class="text-white font-mono">$89,500</span></div>
+                    </div>
+                    <div class="mt-4 pt-4 border-t border-dark-border flex space-x-2">
+                        <button class="flex-1 py-2 bg-cyber-500/20 text-cyber-400 rounded-lg text-sm hover:bg-cyber-500/30">管理</button>
+                        <button class="px-3 py-2 bg-dark-bg border border-dark-border rounded-lg text-gray-400 hover:text-white"><i data-lucide="settings" class="w-4 h-4"></i></button>
+                    </div>
+                </div>
+                <!-- Supplier 3 -->
+                <div class="glass-card rounded-2xl p-5">
+                    <div class="flex items-start justify-between mb-4">
+                        <div class="w-14 h-14 rounded-xl bg-amber-500/20 flex items-center justify-center"><i data-lucide="building-2" class="w-7 h-7 text-amber-400"></i></div>
+                        <span class="px-2 py-1 rounded text-xs bg-amber-500/20 text-amber-400">維護中</span>
+                    </div>
+                    <h3 class="text-lg font-semibold text-white mb-1">SlotMaster</h3>
+                    <p class="text-sm text-gray-400 mb-4">經典老虎機供應商</p>
+                    <div class="space-y-2 text-sm">
+                        <div class="flex justify-between"><span class="text-gray-500">遊戲數量</span><span class="text-white">18 款</span></div>
+                        <div class="flex justify-between"><span class="text-gray-500">API 狀態</span><span class="text-amber-400">維護中</span></div>
+                        <div class="flex justify-between"><span class="text-gray-500">餘額</span><span class="text-white font-mono">$45,000</span></div>
+                    </div>
+                    <div class="mt-4 pt-4 border-t border-dark-border flex space-x-2">
+                        <button class="flex-1 py-2 bg-cyber-500/20 text-cyber-400 rounded-lg text-sm hover:bg-cyber-500/30">管理</button>
+                        <button class="px-3 py-2 bg-dark-bg border border-dark-border rounded-lg text-gray-400 hover:text-white"><i data-lucide="settings" class="w-4 h-4"></i></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+    <script src="../js/sidebar.js"></script>
+    <script>MockupSidebar.render('mockup_game_supplier.html');lucide.createIcons();</script>
+</body>
+</html>

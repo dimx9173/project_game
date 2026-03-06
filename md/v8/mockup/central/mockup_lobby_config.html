@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>遊戲大廳設定 - 遊戲平台管理中心</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="../css/mockup-common.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: { cyber: { 50: '#f5f3ff', 100: '#ede9fe', 200: '#ddd6fe', 300: '#c4b5fd', 400: '#a78bfa', 500: '#8b5cf6', 600: '#7c3aed', 700: '#6d28d9', 800: '#5b21b6', 900: '#4c1d95', 950: '#2e1065' }, dark: { bg: '#0a0a0f', card: '#12121a', sidebar: '#0d0d14', border: '#1e1e2e', hover: '#1a1a28' } },
+                    fontFamily: { sans: ['"Noto Sans TC"', 'sans-serif'], mono: ['"JetBrains Mono"', 'monospace'] }
+                }
+            }
+        }
+    </script>
+    <style>
+        * { scrollbar-width: thin; scrollbar-color: #6d28d9 #0a0a0f; }
+        *::-webkit-scrollbar { width: 8px; height: 8px; }
+        *::-webkit-scrollbar-track { background: #0a0a0f; }
+        *::-webkit-scrollbar-thumb { background: linear-gradient(180deg, #7c3aed, #a855f7); border-radius: 4px; }
+        body { font-family: 'Noto Sans TC', sans-serif; background: #0a0a0f; }
+        .glass { background: rgba(18, 18, 26, 0.7); backdrop-filter: blur(20px); border: 1px solid rgba(255, 255, 255, 0.08); }
+        .glass-card { background: linear-gradient(135deg, rgba(18, 18, 26, 0.9) 0%, rgba(30, 30, 46, 0.6) 100%); border: 1px solid rgba(168, 85, 247, 0.15); box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4); }
+        .gradient-bg { background: linear-gradient(135deg, #0a0a0f 0%, #1a0a2e 50%, #0a0a0f 100%); }
+        .gradient-purple { background: linear-gradient(135deg, #7c3aed 0%, #a855f7 50%, #c084fc 100%); }
+    </style>
+</head>
+<body class="gradient-bg min-h-screen flex">
+    <div id="sidebar-container"></div>
+    <main class="flex-1 flex flex-col overflow-hidden">
+        <header class="h-16 glass border-b border-dark-border flex items-center justify-between px-6">
+            <h2 class="text-lg font-semibold text-white">遊戲大廳設定</h2>
+            <div class="flex items-center space-x-3">
+                <button class="px-4 py-2 bg-dark-bg border border-dark-border rounded-lg text-gray-300 text-sm hover:bg-dark-hover">預覽</button>
+                <button class="px-4 py-2 gradient-purple rounded-lg text-white font-medium text-sm"><i data-lucide="save" class="w-4 h-4 inline mr-1"></i>儲存設定</button>
+            </div>
+        </header>
+        <div class="flex-1 overflow-y-auto p-6">
+            <div class="max-w-4xl mx-auto space-y-6">
+                <!-- 大廳輪播 -->
+                <div class="glass-card rounded-2xl p-6">
+                    <h3 class="text-lg font-semibold text-white mb-4"><i data-lucide="images" class="w-5 h-5 inline mr-2 text-cyber-400"></i>大廳輪播圖</h3>
+                    <div class="grid grid-cols-4 gap-4">
+                        <div class="aspect-video bg-dark-bg rounded-lg border-2 border-dashed border-dark-border flex items-center justify-center text-gray-500 cursor-pointer hover:border-cyber-500"><i data-lucide="plus" class="w-8 h-8"></i></div>
+                        <div class="aspect-video bg-gradient-to-br from-purple-900 to-indigo-900 rounded-lg relative"><span class="absolute bottom-2 left-2 text-xs text-white bg-black/50 px-2 py-1 rounded">banner1.jpg</span></div>
+                        <div class="aspect-video bg-gradient-to-br from-cyan-900 to-blue-900 rounded-lg relative"><span class="absolute bottom-2 left-2 text-xs text-white bg-black/50 px-2 py-1 rounded">banner2.jpg</span></div>
+                        <div class="aspect-video bg-gradient-to-br from-amber-900 to-orange-900 rounded-lg relative"><span class="absolute bottom-2 left-2 text-xs text-white bg-black/50 px-2 py-1 rounded">banner3.jpg</span></div>
+                    </div>
+                </div>
+                <!-- 遊戲分類 -->
+                <div class="glass-card rounded-2xl p-6">
+                    <h3 class="text-lg font-semibold text-white mb-4"><i data-lucide="folder" class="w-5 h-5 inline mr-2 text-cyber-400"></i>遊戲分類顯示</h3>
+                    <div class="space-y-3">
+                        <label class="flex items-center p-3 bg-dark-bg rounded-lg cursor-pointer hover:bg-dark-hover"><input type="checkbox" checked class="mr-3"><span class="text-white">老虎機</span></label>
+                        <label class="flex items-center p-3 bg-dark-bg rounded-lg cursor-pointer hover:bg-dark-hover"><input type="checkbox" checked class="mr-3"><span class="text-white">百家樂</span></label>
+                        <label class="flex items-center p-3 bg-dark-bg rounded-lg cursor-pointer hover:bg-dark-hover"><input type="checkbox" checked class="mr-3"><span class="text-white">二十一點</span></label>
+                        <label class="flex items-center p-3 bg-dark-bg rounded-lg cursor-pointer hover:bg-dark-hover"><input type="checkbox" class="mr-3"><span class="text-gray-500">賽馬</span></label>
+                    </div>
+                </div>
+                <!-- 熱門遊戲 -->
+                <div class="glass-card rounded-2xl p-6">
+                    <h3 class="text-lg font-semibold text-white mb-4"><i data-lucide="flame" class="w-5 h-5 inline mr-2 text-cyber-400"></i>熱門遊戲排序</h3>
+                    <div class="space-y-2">
+                        <div class="flex items-center p-3 bg-dark-bg rounded-lg"><span class="w-6 text-center text-cyber-400 font-bold">1</span><span class="ml-3 text-white">經典拉霸王</span><span class="ml-auto text-gray-500 text-sm">ProSlot Inc.</span></div>
+                        <div class="flex items-center p-3 bg-dark-bg rounded-lg"><span class="w-6 text-center text-cyber-400 font-bold">2</span><span class="ml-3 text-white">決戰百家樂</span><span class="ml-auto text-gray-500 text-sm">LiveCasino Co.</span></div>
+                        <div class="flex items-center p-3 bg-dark-bg rounded-lg"><span class="w-6 text-center text-cyber-400 font-bold">3</span><span class="ml-3 text-white">幸運拉霸</span><span class="ml-auto text-gray-500 text-sm">SlotMaster</span></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+    <script src="../js/sidebar.js"></script>
+    <script>MockupSidebar.render('mockup_lobby_config.html');lucide.createIcons();</script>
+</body>
+</html>
