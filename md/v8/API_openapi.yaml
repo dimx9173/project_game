@@ -176,6 +176,8 @@ paths:
         "201": { description: 建立成功 }
 
   /machines/{id}:
+    parameters:
+      - { name: id, in: path, required: true, schema: { type: string, format: uuid } }
     get:
       tags: [機台管理 (Machines)]
       summary: 取得機台詳情
@@ -217,6 +219,8 @@ paths:
         "204": { description: 刪除成功 }
 
   /machines/{id}/command:
+    parameters:
+      - { name: id, in: path, required: true, schema: { type: string, format: uuid } }
     post:
       tags: [機台管理 (Machines)]
       summary: 發送遠端指令
@@ -235,6 +239,8 @@ paths:
         "200": { description: 指令已發送 }
 
   /machines/{id}/heartbeat:
+    parameters:
+      - { name: id, in: path, required: true, schema: { type: string, format: uuid } }
     post:
       tags: [機台管理 (Machines)]
       summary: 機台心跳
@@ -261,6 +267,8 @@ paths:
         "200": { description: 心跳收到 }
 
   /machines/{id}/config:
+    parameters:
+      - { name: id, in: path, required: true, schema: { type: string, format: uuid } }
     get:
       tags: [機台管理 (Machines)]
       summary: 取得機台配置
@@ -312,6 +320,8 @@ paths:
         "201": { description: 建立成功 }
 
   /games/{id}:
+    parameters:
+      - { name: id, in: path, required: true, schema: { type: string, format: uuid } }
     get:
       tags: [遊戲管理 (Games)]
       summary: 取得遊戲詳情
@@ -333,6 +343,8 @@ paths:
 
   # Game Test (旗艦版)
   /games/{id}/test/start:
+    parameters:
+      - { name: id, in: path, required: true, schema: { type: string, format: uuid } }
     post:
       tags: [遊戲測試 (Game Test)]
       summary: 啟動遊戲測試模式
@@ -358,6 +370,8 @@ paths:
         "403": { description: 權限不足 }
 
   /games/{id}/test/bet:
+    parameters:
+      - { name: id, in: path, required: true, schema: { type: string, format: uuid } }
     post:
       tags: [遊戲測試 (Game Test)]
       summary: 執行虛擬下注
@@ -383,6 +397,8 @@ paths:
         "200": { description: 虛擬下注成功 }
 
   /games/{id}/test/end:
+    parameters:
+      - { name: id, in: path, required: true, schema: { type: string, format: uuid } }
     post:
       tags: [遊戲測試 (Game Test)]
       summary: 結束測試模式
@@ -406,6 +422,8 @@ paths:
         "200": { description: 測試模式已結束 }
 
   /games/{id}/test/report:
+    parameters:
+      - { name: id, in: path, required: true, schema: { type: string, format: uuid } }
     get:
       tags: [遊戲測試 (Game Test)]
       summary: 取得測試報告
@@ -437,6 +455,8 @@ paths:
         "200": { description: 成功 }
 
   /transactions/{id}/reverse:
+    parameters:
+      - { name: id, in: path, required: true, schema: { type: string, format: uuid } }
     post:
       tags: [交易管理 (Transactions)]
       summary: 沖銷交易
@@ -468,6 +488,8 @@ paths:
         "201": { description: 建立成功 }
 
   /providers/{id}/balance:
+    parameters:
+      - { name: id, in: path, required: true, schema: { type: string, format: uuid } }
     get:
       tags: [遊戲商管理 (Providers)]
       summary: 取得遊戲商餘額
@@ -562,6 +584,8 @@ paths:
         "201": { description: 建立成功 }
 
   /multiplayer/rooms/{id}:
+    parameters:
+      - { name: id, in: path, required: true, schema: { type: string, format: uuid } }
     get:
       tags: [多人遊戲 (Multiplayer)]
       summary: 取得房間詳情
@@ -598,6 +622,8 @@ paths:
         "200": { description: 更新成功 }
 
   /multiplayer/rooms/{id}/join:
+    parameters:
+      - { name: id, in: path, required: true, schema: { type: string, format: uuid } }
     post:
       tags: [多人遊戲 (Multiplayer)]
       summary: 加入遊戲房間
@@ -622,6 +648,8 @@ paths:
         "409": { description: 房間已滿或遊戲進行中 }
 
   /multiplayer/rooms/{id}/leave:
+    parameters:
+      - { name: id, in: path, required: true, schema: { type: string, format: uuid } }
     post:
       tags: [多人遊戲 (Multiplayer)]
       summary: 離開遊戲房間
@@ -660,6 +688,8 @@ paths:
         "201": { description: 上傳成功 }
 
   /ota/versions/{id}/publish:
+    parameters:
+      - { name: id, in: path, required: true, schema: { type: string, format: uuid } }
     post:
       tags: [OTA 更新 (OTA)]
       summary: 發布版本
@@ -668,6 +698,8 @@ paths:
         "200": { description: 發布成功 }
 
   /ota/versions/{id}/status:
+    parameters:
+      - { name: id, in: path, required: true, schema: { type: string, format: uuid } }
     get:
       tags: [OTA 更新 (OTA)]
       summary: 取得版本發布狀態
@@ -718,6 +750,8 @@ paths:
         "201": { description: 建立成功 }
 
   /roles/{id}:
+    parameters:
+      - { name: id, in: path, required: true, schema: { type: string, format: uuid } }
     get:
       tags: [使用者權限 (RBAC)]
       summary: 取得角色詳情
@@ -771,6 +805,8 @@ paths:
         "201": { description: 建立成功 }
 
   /permissions/{id}:
+    parameters:
+      - { name: id, in: path, required: true, schema: { type: string, format: uuid } }
     get:
       tags: [使用者權限 (RBAC)]
       summary: 取得權限詳情
@@ -798,6 +834,8 @@ paths:
         "204": { description: 刪除成功 }
 
   /users/{id}/roles:
+    parameters:
+      - { name: id, in: path, required: true, schema: { type: string, format: uuid } }
     put:
       tags: [使用者權限 (RBAC)]
       summary: 分配角色給使用者
@@ -815,6 +853,8 @@ paths:
         "200": { description: 分配成功 }
 
   /users/{id}/pin:
+    parameters:
+      - { name: id, in: path, required: true, schema: { type: string, format: uuid } }
     put:
       tags: [使用者權限 (RBAC)]
       summary: 設定或重置使用者的本地端 PIN 碼
@@ -832,6 +872,8 @@ paths:
         "200": { description: 設定成功 }
 
   /users/{id}/pin/unlock:
+    parameters:
+      - { name: id, in: path, required: true, schema: { type: string, format: uuid } }
     post:
       tags: [使用者權限 (RBAC)]
       summary: 解鎖被鎖定的 PIN 碼
@@ -863,43 +905,6 @@ paths:
         "200": { description: 解鎖成功 }
         "400": { description: 使用者未被鎖定 }
 
-  /auth/forgot-password:
-    post:
-      tags: [認證 (Auth)]
-      summary: 忘記密碼 - 發送重設連結
-      description: 系統使用者透過 Email 重設密碼
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              required: [email]
-              properties:
-                email: { type: string, format: email }
-      responses:
-        "200": { description: 重設連結已發送 }
-        "404": { description: Email 不存在 }
-
-  /auth/reset-password:
-    post:
-      tags: [認證 (Auth)]
-      summary: 重設密碼
-      description: 使用重設 Token 設定新密碼
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              required: [token, newPassword]
-              properties:
-                token: { type: string, description: 重設 Token }
-                newPassword: { type: string, minLength: 8 }
-      responses:
-        "200": { description: 密碼重設成功 }
-        "400": { description: Token 無效或過期 }
-
   # Discrepancies (旗艦版)
   /discrepancies:
     get:
@@ -910,6 +915,8 @@ paths:
         "200": { description: 成功 }
 
   /discrepancies/{id}/resolve:
+    parameters:
+      - { name: id, in: path, required: true, schema: { type: string, format: uuid } }
     post:
       tags: [錯帳管理 (Discrepancies)]
       summary: 處理錯帳
@@ -972,6 +979,8 @@ paths:
         "201": { description: 建立成功 }
 
   /disputes/{id}:
+    parameters:
+      - { name: id, in: path, required: true, schema: { type: string, format: uuid } }
     get:
       tags: [爭議處理 (Disputes)]
       summary: 取得爭議單詳情
