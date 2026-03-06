@@ -23,103 +23,143 @@
     </script>
     <style>
         * { scrollbar-width: thin; scrollbar-color: #059669 #0a0a0f; -webkit-tap-highlight-color: transparent; }
-        *::-webkit-scrollbar { width: 4px; height: 4px; }
-        *::-webkit-scrollbar-track { background: #0a0a0f; }
-        *::-webkit-scrollbar-thumb { background: linear-gradient(180deg, #10b981, #34d399); border-radius: 4px; }
         body { font-family: 'Noto Sans TC', sans-serif; background: #0a0a0f; touch-action: manipulation; }
-        .glass { background: rgba(18, 18, 26, 0.9); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border: 1px solid rgba(255, 255, 255, 0.08); }
-        .glass-card { background: linear-gradient(135deg, rgba(18, 18, 26, 0.95) 0%, rgba(30, 30, 46, 0.7) 100%); backdrop-filter: blur(20px); border: 1px solid rgba(16, 185, 129, 0.2); box-shadow: 0 4px 24px rgba(0, 0, 0, 0.5); }
+        .glass { background: rgba(18, 18, 26, 0.9); backdrop-filter: blur(20px); border: 1px solid rgba(255, 255, 255, 0.08); }
+        .glass-card { background: linear-gradient(135deg, rgba(18, 18, 26, 0.95) 0%, rgba(30, 30, 46, 0.7) 100%); backdrop-filter: blur(20px); border: 1px solid rgba(16, 185, 129, 0.2); }
         .gradient-bg { background: linear-gradient(180deg, #0a0a0f 0%, #0a1a14 50%, #0a0a0f 100%); }
         .gradient-local { background: linear-gradient(135deg, #10b981 0%, #34d399 50%, #6ee7b7 100%); }
-        .btn-touch { min-height: 56px; min-width: 56px; touch-action: manipulation; }
+        .btn-touch { min-height: 56px; touch-action: manipulation; }
         .btn-touch:active { transform: scale(0.95); opacity: 0.9; }
-        .pin-dot { width: 12px; height: 12px; border-radius: 50%; background: #10b981; transition: all 0.2s; }
-        .pin-dot.empty { background: transparent; border: 2px solid #374151; }
-        .keypad-btn { display: flex; align-items: center; justify-content: center; min-height: 72px; background: rgba(16, 185, 129, 0.1); border: 1px solid rgba(16, 185, 129, 0.3); border-radius: 16px; font-size: 1.75rem; font-family: 'JetBrains Mono', monospace; font-weight: 600; color: white; transition: all 0.15s; cursor: pointer; }
-        .keypad-btn:active { background: rgba(16, 185, 129, 0.3); transform: scale(0.95); box-shadow: 0 0 20px rgba(16, 185, 129, 0.3); }
-        .keypad-btn.danger { background: rgba(239, 68, 68, 0.1); border-color: rgba(239, 68, 68, 0.3); }
-        .keypad-btn.danger:active { background: rgba(239, 68, 68, 0.3); box-shadow: 0 0 20px rgba(239, 68, 68, 0.3); }
-        .keypad-btn.action { background: rgba(16, 185, 129, 0.2); }
-        .keypad-btn.action:active { background: rgba(16, 185, 129, 0.4); }
+        .keypad-btn { display: flex; align-items: center; justify-content: center; min-height: 64px; background: rgba(16, 185, 129, 0.1); border: 1px solid rgba(16, 185, 129, 0.3); border-radius: 12px; font-size: 1.5rem; font-family: monospace; font-weight: bold; color: white; }
+        .keypad-btn:active { background: rgba(16, 185, 129, 0.3); }
+        .pin-box { width: 36px; height: 48px; border: 2px solid #374151; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 1.25rem; font-weight: 600; font-family: monospace; color: #10b981; transition: all 0.2s; }
+        .pin-box.active { border-color: #10b981; box-shadow: 0 0 10px rgba(16, 185, 129, 0.3); }
+        .pin-box.filled { border-color: #10b981; background: rgba(16, 185, 129, 0.1); }
+        .mode-tab { transition: all 0.3s; }
+        .mode-tab.active { background: rgba(16, 185, 129, 0.2); border-color: #10b981; }
         @keyframes pulse-glow { 0%, 100% { box-shadow: 0 0 15px rgba(16, 185, 129, 0.3); } 50% { box-shadow: 0 0 25px rgba(16, 185, 129, 0.5); } }
         .status-online { animation: pulse-glow 2s infinite; }
-        .pin-input-box { width: 40px; height: 50px; border: 2px solid #374151; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; font-weight: 600; font-family: 'JetBrains Mono', monospace; color: #10b981; background: rgba(16, 185, 129, 0.05); transition: all 0.2s; }
-        .pin-input-box.active { border-color: #10b981; background: rgba(16, 185, 129, 0.15); box-shadow: 0 0 15px rgba(16, 185, 129, 0.3); }
-        .pin-input-box.filled { border-color: #10b981; background: rgba(16, 185, 129, 0.1); }
-        .shake { animation: shake 0.5s cubic-bezier(.36,.07,.19,.97) both; }
-        @keyframes shake { 10%, 90% { transform: translate3d(-1px, 0, 0); } 20%, 80% { transform: translate3d(2px, 0, 0); } 30%, 50%, 70% { transform: translate3d(-4px, 0, 0); } 40%, 60% { transform: translate3d(4px, 0, 0); } }
-        .fade-in { animation: fadeIn 0.3s ease-in; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
     </style>
 </head>
 <body class="gradient-bg min-h-screen flex flex-col">
     
-    <!-- 連線狀態指示器 -->
+    <!-- 連線狀態 -->
     <div class="fixed top-4 left-1/2 transform -translate-x-1/2 z-50">
-        <div id="connectionStatus" class="glass rounded-full px-4 py-2 flex items-center space-x-2">
-            <div id="statusDot" class="w-2 h-2 rounded-full bg-emerald-400 status-online"></div>
-            <span id="statusText" class="text-xs font-medium text-emerald-400">已連線</span>
+        <div class="glass rounded-full px-4 py-2 flex items-center space-x-2">
+            <div class="w-2 h-2 rounded-full bg-emerald-400 status-online"></div>
+            <span class="text-xs font-medium text-emerald-400">● 已連線</span>
         </div>
     </div>
 
-    <!-- 主要內容區 -->
-    <main class="flex-1 flex flex-col items-center justify-center px-6 py-8">
+    <main class="flex-1 flex flex-col items-center justify-center px-5 py-6">
         
-        <!-- Logo 區域 -->
-        <div class="text-center mb-8">
-            <div class="w-20 h-20 rounded-2xl gradient-local flex items-center justify-center mx-auto mb-4 shadow-glow">
-                <i data-lucide="gamepad-2" class="w-10 h-10 text-white"></i>
+        <!-- Logo -->
+        <div class="text-center mb-6">
+            <div class="w-16 h-16 rounded-xl gradient-local flex items-center justify-center mx-auto mb-3">
+                <i data-lucide="gamepad-2" class="w-8 h-8 text-white"></i>
             </div>
-            <h1 class="text-2xl font-bold text-white mb-1">本地後台登入</h1>
-            <p class="text-sm text-gray-500">機台編號: <span class="font-mono text-emerald-400">A-01</span></p>
+            <h1 class="text-xl font-bold text-white mb-1">本地後台登入</h1>
+            <p class="text-xs text-gray-500">機台編號: <span class="font-mono text-emerald-400">A-01</span></p>
         </div>
 
-        <!-- PIN 輸入區域 -->
-        <div class="w-full max-w-sm mb-6">
-            <p class="text-center text-sm text-gray-400 mb-4">請輸入 PIN 碼（8位數字）</p>
-            
-            <!-- PIN 顯示框 -->
-            <div id="pinContainer" class="flex justify-center space-x-2 mb-4">
-                <div class="pin-input-box" data-index="0"></div>
-                <div class="pin-input-box" data-index="1"></div>
-                <div class="pin-input-box" data-index="2"></div>
-                <div class="pin-input-box" data-index="3"></div>
-                <div class="pin-input-box" data-index="4"></div>
-                <div class="pin-input-box" data-index="5"></div>
-                <div class="pin-input-box" data-index="6"></div>
-                <div class="pin-input-box" data-index="7"></div>
-            </div>
-
-            <!-- 首次開機提示 -->
-            <div id="firstBootHint" class="glass-card rounded-xl p-4 mb-4 hidden fade-in">
-                <div class="flex items-start">
-                    <div class="w-8 h-8 rounded-lg bg-amber-500/20 flex items-center justify-center mr-3 flex-shrink-0">
-                        <i data-lucide="info" class="w-4 h-4 text-amber-400"></i>
+        <!-- 模式選擇 -->
+        <div class="w-full max-w-xs mb-6">
+            <div class="glass-card rounded-xl p-1 flex">
+                <button id="modeOnline" class="flex-1 py-3 px-2 rounded-lg text-sm font-medium mode-tab active border border-emerald-500 text-white" onclick="switchMode('online')">
+                    <div class="flex items-center justify-center">
+                        <div class="w-2 h-2 rounded-full bg-emerald-400 mr-2"></div>
+                        <span>線上認證</span>
                     </div>
-                    <div>
-                        <p class="text-sm font-medium text-amber-400 mb-1">首次開機</p>
-                        <p class="text-xs text-gray-400">請輸入預設 PIN 碼</p>
-                        <p class="text-lg font-mono font-bold text-amber-400 mt-1">00000000</p>
+                </button>
+                <button id="modeOffline" class="flex-1 py-3 px-2 rounded-lg text-sm font-medium mode-tab border border-transparent text-gray-400" onclick="switchMode('offline')">
+                    <div class="flex items-center justify-center">
+                        <div class="w-2 h-2 rounded-full bg-gray-500 mr-2"></div>
+                        <span>本地維護</span>
+                    </div>
+                </button>
+            </div>
+        </div>
+
+        <!-- 線上認證內容 -->
+        <div id="contentOnline" class="w-full max-w-xs">
+            <div class="glass-card rounded-2xl p-5">
+                <p class="text-center text-sm text-gray-400 mb-4">請輸入 8 位值班 PIN</p>
+                
+                <!-- 8位 PIN -->
+                <div class="flex justify-center space-x-1.5 mb-5">
+                    <div class="pin-box" data-online="0"></div>
+                    <div class="pin-box" data-online="1"></div>
+                    <div class="pin-box" data-online="2"></div>
+                    <div class="pin-box" data-online="3"></div>
+                    <div class="pin-box" data-online="4"></div>
+                    <div class="pin-box" data-online="5"></div>
+                    <div class="pin-box" data-online="6"></div>
+                    <div class="pin-box" data-online="7"></div>
+                </div>
+
+                <!-- 權限說明 -->
+                <div class="space-y-2 mb-5">
+                    <div class="flex items-center text-xs text-emerald-400">
+                        <i data-lucide="check" class="w-4 h-4 mr-2"></i>
+                        可執行開分/洗分
+                    </div>
+                    <div class="flex items-center text-xs text-emerald-400">
+                        <i data-lucide="check" class="w-4 h-4 mr-2"></i>
+                        所有功能開啟
+                    </div>
+                    <div class="flex items-center text-xs text-gray-500">
+                        <i data-lucide="clock" class="w-4 h-4 mr-2"></i>
+                        PIN 有效期 12 小時
                     </div>
                 </div>
-            </div>
 
-            <!-- 錯誤訊息 -->
-            <div id="errorMessage" class="text-center text-sm text-red-400 mb-4 hidden">
-                <i data-lucide="alert-circle" class="w-4 h-4 inline mr-1"></i>
-                <span id="errorText">PIN 碼錯誤</span>
+                <button class="w-full py-3.5 gradient-local rounded-xl text-white font-semibold btn-touch">
+                    登入
+                </button>
             </div>
+        </div>
 
-            <!-- 登入按鈕 -->
-            <button id="loginBtn" onclick="handleLogin()" class="w-full py-4 gradient-local rounded-xl text-white font-semibold text-lg shadow-glow btn-touch disabled:opacity-50 disabled:cursor-not-allowed" disabled>
-                <span id="loginBtnText">登入</span>
-                <i id="loginSpinner" data-lucide="loader-2" class="w-5 h-5 animate-spin hidden inline ml-2"></i>
-            </button>
+        <!-- 本地維護內容 -->
+        <div id="contentOffline" class="w-full max-w-xs hidden">
+            <div class="glass-card rounded-2xl p-5">
+                <p class="text-center text-sm text-gray-400 mb-4">請輸入 7 位機台 PIN</p>
+                
+                <!-- 7位 PIN -->
+                <div class="flex justify-center space-x-1.5 mb-5">
+                    <div class="pin-box" data-offline="0"></div>
+                    <div class="pin-box" data-offline="1"></div>
+                    <div class="pin-box" data-offline="2"></div>
+                    <div class="pin-box" data-offline="3"></div>
+                    <div class="pin-box" data-offline="4"></div>
+                    <div class="pin-box" data-offline="5"></div>
+                    <div class="pin-box" data-offline="6"></div>
+                </div>
+
+                <!-- 權限說明 -->
+                <div class="space-y-2 mb-5">
+                    <div class="flex items-center text-xs text-amber-400">
+                        <i data-lucide="alert-triangle" class="w-4 h-4 mr-2"></i>
+                        僅可設定與瀏覽
+                    </div>
+                    <div class="flex items-center text-xs text-red-400">
+                        <i data-lucide="x" class="w-4 h-4 mr-2"></i>
+                        開分/洗分功能已鎖定
+                    </div>
+                    <div class="flex items-center text-xs text-gray-500">
+                        <i data-lucide="info" class="w-4 h-4 mr-2"></i>
+                        用於機台離線維護
+                    </div>
+                </div>
+
+                <button class="w-full py-3.5 bg-gray-700 rounded-xl text-white font-semibold btn-touch">
+                    登入
+                </button>
+            </div>
         </div>
 
         <!-- 數字鍵盤 -->
-        <div class="w-full max-w-sm">
-            <div class="grid grid-cols-3 gap-3">
+        <div class="w-full max-w-xs mt-6">
+            <div class="grid grid-cols-3 gap-2">
                 <button class="keypad-btn btn-touch" onclick="inputDigit('1')">1</button>
                 <button class="keypad-btn btn-touch" onclick="inputDigit('2')">2</button>
                 <button class="keypad-btn btn-touch" onclick="inputDigit('3')">3</button>
@@ -129,220 +169,93 @@
                 <button class="keypad-btn btn-touch" onclick="inputDigit('7')">7</button>
                 <button class="keypad-btn btn-touch" onclick="inputDigit('8')">8</button>
                 <button class="keypad-btn btn-touch" onclick="inputDigit('9')">9</button>
-                <button class="keypad-btn action btn-touch" onclick="clearPin()">
-                    <i data-lucide="x" class="w-6 h-6"></i>
+                <button class="keypad-btn btn-touch bg-gray-800" onclick="clearPin()">
+                    <i data-lucide="x" class="w-5 h-5"></i>
                 </button>
                 <button class="keypad-btn btn-touch" onclick="inputDigit('0')">0</button>
-                <button class="keypad-btn danger btn-touch" onclick="deleteDigit()">
-                    <i data-lucide="delete" class="w-6 h-6"></i>
+                <button class="keypad-btn btn-touch bg-red-900/30 border-red-700/50" onclick="deleteDigit()">
+                    <i data-lucide="delete" class="w-5 h-5"></i>
                 </button>
             </div>
         </div>
 
-        <!-- 底部連結 -->
-        <div class="mt-8 text-center">
-            <button onclick="showHelp()" class="text-sm text-gray-500 hover:text-emerald-400 transition-colors">
-                <i data-lucide="help-circle" class="w-4 h-4 inline mr-1"></i>
-                忘記 PIN 碼？
-            </button>
+        <!-- 底部 -->
+        <div class="mt-6 text-center">
+            <p class="text-xs text-gray-500">值班 PIN 由集中式後台產生，12hr 有效</p>
         </div>
     </main>
 
-    <!-- 幫助對話框 -->
-    <div id="helpModal" class="fixed inset-0 bg-black/70 hidden z-50 flex items-center justify-center p-4">
-        <div class="glass-card rounded-2xl p-6 max-w-sm w-full">
-            <div class="flex items-center mb-4">
-                <div class="w-10 h-10 rounded-xl bg-emerald-500/20 flex items-center justify-center mr-3">
-                    <i data-lucide="help-circle" class="w-5 h-5 text-emerald-400"></i>
-                </div>
-                <h3 class="text-lg font-semibold text-white">忘記 PIN 碼</h3>
-            </div>
-            <p class="text-sm text-gray-400 mb-4">
-                若忘記 PIN 碼，請聯繫管理員在集中式後台執行「重設本地 PIN」功能。
-            </p>
-            <button onclick="hideHelp()" class="w-full py-3 bg-dark-bg rounded-xl text-white font-medium hover:bg-dark-hover transition-colors">
-                知道了
-            </button>
-        </div>
-    </div>
-
     <script>
-        // PIN 碼管理
-        let pin = '';
-        const maxPinLength = 8;
-        let isFirstBoot = true; // 模擬首次開機狀態
-        let isOnline = true; // 模擬連線狀態
+        let currentMode = 'online';
+        let onlinePin = '';
+        let offlinePin = '';
 
-        // 初始化
-        document.addEventListener('DOMContentLoaded', function() {
-            lucide.createIcons();
-            updatePinDisplay();
+        function switchMode(mode) {
+            currentMode = mode;
+            document.getElementById('modeOnline').classList.toggle('active', mode === 'online');
+            document.getElementById('modeOnline').classList.toggle('border-emerald-500', mode === 'online');
+            document.getElementById('modeOnline').classList.toggle('border-transparent', mode !== 'online');
+            document.getElementById('modeOnline').classList.toggle('text-white', mode === 'online');
+            document.getElementById('modeOnline').classList.toggle('text-gray-400', mode !== 'online');
             
-            // 檢查是否首次開機
-            if (isFirstBoot) {
-                document.getElementById('firstBootHint').classList.remove('hidden');
-            }
+            document.getElementById('modeOffline').classList.toggle('active', mode === 'offline');
+            document.getElementById('modeOffline').classList.toggle('border-emerald-500', mode === 'offline');
+            document.getElementById('modeOffline').classList.toggle('border-transparent', mode !== 'offline');
+            document.getElementById('modeOffline').classList.toggle('text-white', mode === 'offline');
+            document.getElementById('modeOffline').classList.toggle('text-gray-400', mode !== 'offline');
             
-            // 模擬連線狀態切換（每 10 秒）
-            setInterval(() => {
-                isOnline = Math.random() > 0.3;
-                updateConnectionStatus();
-            }, 10000);
-            
-            // 鍵盤支援
-            document.addEventListener('keydown', handleKeyPress);
-        });
+            document.getElementById('contentOnline').classList.toggle('hidden', mode !== 'online');
+            document.getElementById('contentOffline').classList.toggle('hidden', mode !== 'offline');
+        }
 
-        // 輸入數字
         function inputDigit(digit) {
-            if (pin.length < maxPinLength) {
-                pin += digit;
-                updatePinDisplay();
-                clearError();
+            if (currentMode === 'online' && onlinePin.length < 8) {
+                onlinePin += digit;
+                updatePinDisplay('online');
+            } else if (currentMode === 'offline' && offlinePin.length < 7) {
+                offlinePin += digit;
+                updatePinDisplay('offline');
             }
         }
 
-        // 刪除最後一位
         function deleteDigit() {
-            if (pin.length > 0) {
-                pin = pin.slice(0, -1);
-                updatePinDisplay();
-                clearError();
-            }
-        }
-
-        // 清除全部
-        function clearPin() {
-            pin = '';
-            updatePinDisplay();
-            clearError();
-        }
-
-        // 更新 PIN 顯示
-        function updatePinDisplay() {
-            const boxes = document.querySelectorAll('.pin-input-box');
-            boxes.forEach((box, index) => {
-                box.classList.remove('active', 'filled');
-                box.textContent = '';
-                
-                if (index < pin.length) {
-                    box.classList.add('filled');
-                    box.textContent = '●';
-                } else if (index === pin.length) {
-                    box.classList.add('active');
-                }
-            });
-            
-            // 更新登入按鈕狀態
-            const loginBtn = document.getElementById('loginBtn');
-            loginBtn.disabled = pin.length !== maxPinLength;
-        }
-
-        // 處理登入
-        function handleLogin() {
-            if (pin.length !== maxPinLength) return;
-            
-            const loginBtn = document.getElementById('loginBtn');
-            const loginBtnText = document.getElementById('loginBtnText');
-            const loginSpinner = document.getElementById('loginSpinner');
-            
-            // 顯示載入狀態
-            loginBtn.disabled = true;
-            loginBtnText.textContent = '驗證中...';
-            loginSpinner.classList.remove('hidden');
-            lucide.createIcons();
-            
-            // 模擬驗證過程
-            setTimeout(() => {
-                // 模擬驗證邏輯
-                if (isFirstBoot && pin === '00000000') {
-                    // 首次開機，進入設定頁面
-                    window.location.href = 'mockup_mvp_local_setup.html';
-                } else if (!isFirstBoot && pin === '12345678') {
-                    // 正常登入成功（假設正確 PIN 是 12345678）
-                    window.location.href = 'mockup_local_dashboard.html';
-                } else {
-                    // 驗證失敗
-                    showError(isFirstBoot ? '預設 PIN 碼錯誤，請輸入 00000000' : 'PIN 碼錯誤，請重試');
-                    pin = '';
-                    updatePinDisplay();
-                    
-                    // 震動效果
-                    const pinContainer = document.getElementById('pinContainer');
-                    pinContainer.classList.add('shake');
-                    setTimeout(() => pinContainer.classList.remove('shake'), 500);
-                }
-                
-                // 恢復按鈕狀態
-                loginBtn.disabled = false;
-                loginBtnText.textContent = '登入';
-                loginSpinner.classList.add('hidden');
-            }, 1000);
-        }
-
-        // 顯示錯誤
-        function showError(message) {
-            const errorMessage = document.getElementById('errorMessage');
-            const errorText = document.getElementById('errorText');
-            errorText.textContent = message;
-            errorMessage.classList.remove('hidden');
-        }
-
-        // 清除錯誤
-        function clearError() {
-            document.getElementById('errorMessage').classList.add('hidden');
-        }
-
-        // 更新連線狀態
-        function updateConnectionStatus() {
-            const statusDot = document.getElementById('statusDot');
-            const statusText = document.getElementById('statusText');
-            const connectionStatus = document.getElementById('connectionStatus');
-            
-            if (isOnline) {
-                statusDot.className = 'w-2 h-2 rounded-full bg-emerald-400 status-online';
-                statusText.textContent = '已連線';
-                statusText.className = 'text-xs font-medium text-emerald-400';
-                connectionStatus.classList.remove('border-red-500/30');
+            if (currentMode === 'online') {
+                onlinePin = onlinePin.slice(0, -1);
+                updatePinDisplay('online');
             } else {
-                statusDot.className = 'w-2 h-2 rounded-full bg-red-400';
-                statusText.textContent = '離線';
-                statusText.className = 'text-xs font-medium text-red-400';
-                connectionStatus.classList.add('border-red-500/30');
+                offlinePin = offlinePin.slice(0, -1);
+                updatePinDisplay('offline');
             }
         }
 
-        // 鍵盤輸入支援
-        function handleKeyPress(e) {
-            if (e.key >= '0' && e.key <= '9') {
-                inputDigit(e.key);
-            } else if (e.key === 'Backspace') {
-                deleteDigit();
-            } else if (e.key === 'Enter') {
-                if (pin.length === maxPinLength) {
-                    handleLogin();
+        function clearPin() {
+            if (currentMode === 'online') {
+                onlinePin = '';
+                updatePinDisplay('online');
+            } else {
+                offlinePin = '';
+                updatePinDisplay('offline');
+            }
+        }
+
+        function updatePinDisplay(mode) {
+            const pin = mode === 'online' ? onlinePin : offlinePin;
+            const length = mode === 'online' ? 8 : 7;
+            const boxes = document.querySelectorAll(`[data-${mode}]`);
+            
+            boxes.forEach((box, index) => {
+                if (index < pin.length) {
+                    box.textContent = '●';
+                    box.classList.add('filled');
+                } else {
+                    box.textContent = '';
+                    box.classList.remove('filled');
                 }
-            } else if (e.key === 'Escape') {
-                clearPin();
-            }
+                box.classList.toggle('active', index === pin.length);
+            });
         }
 
-        // 顯示幫助
-        function showHelp() {
-            document.getElementById('helpModal').classList.remove('hidden');
-        }
-
-        // 隱藏幫助
-        function hideHelp() {
-            document.getElementById('helpModal').classList.add('hidden');
-        }
-
-        // 點擊模態框背景關閉
-        document.getElementById('helpModal').addEventListener('click', function(e) {
-            if (e.target === this) {
-                hideHelp();
-            }
-        });
+        lucide.createIcons();
     </script>
 </body>
 </html>
