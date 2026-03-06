@@ -46,28 +46,21 @@
     <div id="sidebar-container"></div>
 
     <!-- 頂部導航 -->
-    <header class="glass fixed top-0 left-0 right-0 z-30 h-16 flex items-center justify-between px-4 border-b border-dark-border">
-        <button onclick="toggleMenu()" class="btn-touch p-3 rounded-xl hover:bg-dark-hover">
-            <i data-lucide="menu" class="w-7 h-7 text-white"></i>
-        </button>
-        <div class="flex items-center space-x-3">
-            <div class="flex items-center px-3 py-1.5 bg-emerald-500/20 text-emerald-400 rounded-full border border-emerald-500/30">
-                <div class="w-2 h-2 rounded-full bg-emerald-400 mr-2 animate-pulse"></div>
-                <span class="text-xs font-medium">已連線</span>
+    <header class="glass fixed top-0 left-0 right-0 z-30 h-16 flex items-center justify-center px-4 border-b border-dark-border">
+        <div class="text-center">
+            <h1 class="text-xl font-bold text-white">機台狀態</h1>
+            <div class="flex items-center justify-center space-x-2 mt-1">
+                <div class="flex items-center px-2 py-0.5 bg-emerald-500/20 text-emerald-400 rounded-full border border-emerald-500/30">
+                    <div class="w-1.5 h-1.5 rounded-full bg-emerald-400 mr-1.5 animate-pulse"></div>
+                    <span class="text-xs font-medium">已連線</span>
+                </div>
+                <span class="text-xs font-mono text-gray-400">A-01</span>
             </div>
-            <div class="text-sm font-mono text-gray-400">A-01</div>
         </div>
-        <div class="w-12"></div>
     </header>
 
     <!-- 主要內容 -->
     <main class="pt-20 pb-4 px-4 space-y-4">
-        <!-- 頁面標題 -->
-        <div class="text-center">
-            <h1 class="text-xl font-bold text-white">機台狀態</h1>
-            <p class="text-xs text-gray-500">本機硬體監控</p>
-        </div>
-
         <!-- 機台資訊 -->
         <div class="glass-card rounded-2xl p-4">
             <div class="flex items-center justify-between mb-4">
@@ -221,5 +214,6 @@
     <script>
         lucide.createIcons();
     </script>
+    <script src="../js/sidebar.js"></script>
 </body>
 </html>

@@ -53,23 +53,22 @@
     <main class="flex flex-col min-h-screen" id="main-content">
         <!-- 頂部 Header -->
         <header class="glass sticky top-0 z-30 border-b border-dark-border">
-            <div class="flex items-center justify-between px-4 py-3">
-                <div class="flex items-center">
-                    <button onclick="toggleMenu()" class="btn-touch p-3 rounded-xl bg-dark-bg/50 text-white mr-3">
-                        <i data-lucide="menu" class="w-7 h-7"></i>
+            <div class="flex items-center justify-center px-4 py-3">
+                <div class="absolute left-4">
+                    <button class="btn-touch p-2 rounded-xl bg-dark-bg/50 text-white">
+                        <i data-lucide="bell" class="w-5 h-5"></i>
                     </button>
-                    <div>
-                        <h1 class="text-lg font-bold text-white">本地後台</h1>
-                        <div class="flex items-center text-xs text-emerald-400">
-                            <span class="w-2 h-2 rounded-full bg-emerald-400 mr-1.5 animate-pulse"></span>
-                            已連線
-                        </div>
+                </div>
+                <div class="text-center">
+                    <h1 class="text-lg font-bold text-white">本地後台</h1>
+                    <div class="flex items-center justify-center text-xs text-emerald-400 mt-1">
+                        <span class="w-2 h-2 rounded-full bg-emerald-400 mr-1.5 animate-pulse"></span>
+                        已連線
                     </div>
                 </div>
-                <button class="btn-touch p-3 rounded-xl bg-dark-bg/50 text-white relative">
-                    <i data-lucide="bell" class="w-6 h-6"></i>
-                    <span class="absolute top-1 right-1 w-2.5 h-2.5 bg-emerald-500 rounded-full border-2 border-dark-bg"></span>
-                </button>
+                <div class="absolute right-4">
+                    <span class="badge-local">本地</span>
+                </div>
             </div>
         </header>
 
@@ -250,5 +249,6 @@
     <style>
         .pb-safe { padding-bottom: env(safe-area-inset-bottom, 0); }
     </style>
+    <script src="../js/sidebar.js"></script>
 </body>
 </html>
