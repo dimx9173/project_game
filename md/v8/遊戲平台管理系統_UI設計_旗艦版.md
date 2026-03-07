@@ -10,7 +10,7 @@
 | **文件類型** | UI 設計規格                   |
 | **版本說明** | Premium Dark + Cyber Purple   |
 | **風格**     | Glassmorphism + Neon Glow     |
-| **技術**     | Blazor Server + Radzen Blazor |
+| **技術**     | Angular 17+ + Angular Material |
 
 ---
 

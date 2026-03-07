@@ -91,9 +91,9 @@
 
 系統包含以下主要組件：
 
-- 集中式後台前端（Blazor Server + Radzen Blazor + Bootstrap 5）
+- 集中式後台前端（Angular 17+ + Angular Material + Bootstrap 5）
 - 集中式後台後端（ASP.NET Core 8 Web API）
-- 單機本地後台前端（Blazor Server + Radzen Blazor + Bootstrap 5）
+- 單機本地後台前端（Angular 17+ + Angular Material + Bootstrap 5）
 - 單機本地後台後端（ASP.NET Core 8）
 - 集中式資料庫（PostgreSQL 15+）
 - 單機本地資料庫（SQLite）
@@ -155,7 +155,7 @@
 
 ### 3.1 前端架構
 
-集中式後台前端採用 **Blazor Server + Radzen Blazor + Bootstrap 5**。使用 Blazor Router 進行路由管理，Radzen Blazor 提供豐富的 UI 元件，Chart.js 用於資料視覺化，Blazor State 進行狀態管理。支援響應式設計，適配桌面、平板、手機等多種裝置。
+集中式後台前端採用 **Angular 17+ + Angular Material + Bootstrap 5**。使用 Angular Router 進行路由管理，Angular Material 提供豐富的 UI 元件，Chart.js 用於資料視覺化，NgRx 進行狀態管理。支援響應式設計，適配桌面、平板、手機等多種裝置。
 
 ### 3.2 後端架構
 
@@ -166,7 +166,7 @@
 ```
 ┌─────────────────────────────────────────────────────────┐
 │                   Presentation Layer                    │
-│              (Blazor Server + Radzen)                   │
+│              (Angular 17+ + Radzen)                   │
 └─────────────────────────┬───────────────────────────────┘
                           │
 ┌─────────────────────────▼───────────────────────────────┐
@@ -247,7 +247,7 @@
 
 3. **告警與展示層 (Alerting & Visualization)**
    - **規則引擎**：設定多種維度閾值（如 CPU > 90% 持續 5 分鐘，或網路斷線 3 分鐘），觸發管理員即時告警 (Alert)。
-   - **戰情室面板**：前端 Blazor 大盤，包含機台地圖、高風險設備列表、效能歷史折線圖等。
+   - **戰情室面板**：前端 Angular 大盤，包含機台地圖、高風險設備列表、效能歷史折線圖等。
 
 ---
 
@@ -257,7 +257,7 @@
 
 ### 4.1 前端架構
 
-單機本地後台前端採用與集中式後台相同的（**Blazor Server + Radzen Blazor + Bootstrap 5**），確保設計風格與使用體驗的一致性。支援本地化部署，可在機台上直接運行。
+單機本地後台前端採用與集中式後台相同的（**Angular 17+ + Angular Material + Bootstrap 5**），確保設計風格與使用體驗的一致性。支援本地化部署，可在機台上直接運行。
 
 ### 4.2 後端架構
 
@@ -434,7 +434,7 @@
 
 | 層次                     | 技術                                 | 說明            |
 | ------------------------ | ------------------------------------ | --------------- |
-| **前端**           | Blazor Server + Radzen + Bootstrap 5 | 統一的前端技術  |
+| **前端**           | Angular 17+ + Radzen + Bootstrap 5 | 統一的前端技術  |
 | **後端**           | ASP.NET Core 8                       | .NET 8 後端框架 |
 | **集中式資料庫**   | PostgreSQL 15+                       | 關聯式資料庫    |
 | **單機本地資料庫** | SQLite                               | 本地資料儲存    |
