@@ -4,8 +4,70 @@ info:
   description: |
     遊戲平台管理系統 V8.1 API 文檔
     - 支援 MVP / 標準版 / 旗艦版
-    - Version: 1.1.0
-  version: 1.1.0
+    - Version: 1.2.0
+    
+    ## 功能代碼索引
+    
+    本 API 文檔中的每個端點都標註了對應的功能代碼，方便追蹤與文件對照。
+    
+    ### 集中式後台功能碼 (Cxx)
+    
+    | 功能碼 | 功能名稱 | 主要端點 |
+    |--------|---------|---------|
+    | [C11] | 開分/洗分 | POST /machines/{id}/cash-in, /cash-out |
+    | [C12] | 遠端指令 | POST /machines/{id}/command |
+    | [C14] | 機台設定 | PUT /machines/{id}/config |
+    | [C16] | 遊戲新增/編輯/刪除 | POST/PUT/DELETE /games |
+    | [C45] | 交易對帳 | GET /discrepancies, POST /discrepancies/{id}/resolve |
+    | [C47] | 營收報表 | GET /reports/revenue |
+    | [C53] | 遊戲商列表檢視 | GET /providers |
+    | [C54] | API 連線狀態監控 | GET /providers/{id}/status |
+    | [C55] | 遊戲同步管理 | POST /providers/{id}/sync |
+    | [C57] | 牌桌列表檢視 | GET /multiplayer/rooms |
+    | [C59] | 牌桌配置管理 | POST /multiplayer/rooms |
+    | [C60] | 牌局歷史查詢 | GET /multiplayer/games |
+    | [C70] | 帳號新增/編輯/刪除 | POST/PUT/DELETE /users, /users/{id}/pin |
+    | [C71] | 角色權限設定 | POST/PUT/DELETE /roles, /permissions |
+    | [C73] | 版本列表管理 | GET /ota/versions |
+    | [C74] | 更新任務下發 | POST /ota/tasks |
+    | [C75] | 更新進度監控 | GET /ota/tasks/{id}/status |
+    | [C90] | 系統參數設定 | GET/PUT /system/config |
+    | [C101] | 機台新增/編輯/刪除 | POST/PUT/DELETE /machines |
+    | [C103] | 遊戲商新增/編輯/刪除 | POST/PUT/DELETE /providers |
+    | [C104] | 遊戲商餘額歸集與轉帳 | GET /wallet/balances, POST /wallet/transfer |
+    | [C105] | 版本包上傳/控制 | POST /ota/versions |
+    | [C107] | 機台標籤管理 | PUT /machines/{id} (tags 屬性) |
+    
+    ### 本地後台功能碼 (Lxx)
+    
+    | 功能碼 | 功能名稱 | 主要端點 |
+    |--------|---------|---------|
+    | [L05] | 機台列表檢視 | GET /machines |
+    | [L07] | 機台配置接收 | POST /machines/{id}/config/status |
+    | [L11] | 遊戲列表檢視 | GET /games |
+    | [L14] | 遊戲詳情 | GET /games/{id} |
+    | [L15] | 交易紀錄 | GET /transactions |
+    | [L17] | 日/週/月/年報表 | GET /reports/revenue |
+    | [L20] | 爭議對帳處理專區 | GET/POST /disputes |
+    | [L34] | 同步狀態檢視 | GET /machines/{id}/config/status |
+    | [L35] | 雙向佇列與交易補償 | POST /sync/upload, GET /sync/download |
+    | [L38] | 心跳檢測與離線告警 | POST /machines/{id}/heartbeat |
+    | [L43] | 虛擬下注 | POST /games/{id}/test/* |
+    | [L47] | 基本設定 | GET/PUT /machines/{id}/config |
+    
+    ### 不適用 API 端點的功能
+    
+    以下功能為前端計算、UI 元件或 WebSocket 推播，無對應 REST API：
+    
+    | 功能碼 | 功能名稱 | 說明 |
+    |--------|---------|------|
+    | [C01] | KPI 監控 | 前端計算，資料來自多個 API |
+    | [C05] | 系統通知 | WebSocket 推播 |
+    | [C79] | 系統監控 | 前端儀表板 |
+    | [L01-L04] | 儀表板相關 | 前端視覺化 |
+    | [L36] | 指數退避重試機制 | 客戶端邏輯 |
+    
+  version: 1.2.0
 
 servers:
   - url: https://api.gameplatform.com/api/v1
@@ -361,7 +423,7 @@ paths:
         "200": { description: 成功 }
     post:
       tags: [遊戲管理 (Games)]
-      summary: "[C102] 新增遊戲"
+      summary: "[C16] 新增遊戲"
       security: [{ BearerAuth: [] }]
       responses:
         "201": { description: 建立成功 }
@@ -376,19 +438,19 @@ paths:
         }
     get:
       tags: [遊戲管理 (Games)]
-      summary: "[L11] 取得遊戲詳情"
+      summary: "[L14] 取得遊戲詳情"
       security: [{ BearerAuth: [] }]
       responses:
         "200": { description: 成功 }
     put:
       tags: [遊戲管理 (Games)]
-      summary: "[C102] 更新遊戲"
+      summary: "[C16] 更新遊戲"
       security: [{ BearerAuth: [] }]
       responses:
         "200": { description: 更新成功 }
     delete:
       tags: [遊戲管理 (Games)]
-      summary: "[C102] 刪除遊戲"
+      summary: "[C16] 刪除遊戲"
       security: [{ BearerAuth: [] }]
       responses:
         "204": { description: 刪除成功 }
@@ -553,7 +615,7 @@ paths:
   /providers:
     get:
       tags: [遊戲商管理 (Providers)]
-      summary: "[L17] 取得遊戲商列表"
+      summary: "[C53] 取得遊戲商列表"
       security: [{ BearerAuth: [] }]
       responses:
         "200": { description: 成功 }
@@ -574,7 +636,7 @@ paths:
         }
     get:
       tags: [遊戲商管理 (Providers)]
-      summary: "[L17] 取得遊戲商餘額"
+      summary: "[C104] 取得遊戲商餘額"
       security: [{ BearerAuth: [] }]
       responses:
         "200": { description: 成功 }
@@ -638,7 +700,7 @@ paths:
   /multiplayer/rooms:
     get:
       tags: [多人遊戲 (Multiplayer)]
-      summary: "[L14] 取得遊戲房間列表"
+      summary: "[C57] 取得遊戲房間列表"
       security: [{ BearerAuth: [] }]
       parameters:
         - {
@@ -650,7 +712,7 @@ paths:
         "200": { description: 成功 }
     post:
       tags: [多人遊戲 (Multiplayer)]
-      summary: "[C55] 建立遊戲房間"
+      summary: "[C59] 建立遊戲房間"
       security: [{ BearerAuth: [] }]
       requestBody:
         required: true
@@ -675,7 +737,7 @@ paths:
         }
     get:
       tags: [多人遊戲 (Multiplayer)]
-      summary: "[L14] 取得房間詳情"
+      summary: "[C57] 取得房間詳情"
       security: [{ BearerAuth: [] }]
       parameters:
         - {
@@ -688,7 +750,7 @@ paths:
         "200": { description: 成功 }
     put:
       tags: [多人遊戲 (Multiplayer)]
-      summary: "[C55] 更新房間狀態"
+      summary: "[C59] 更新房間狀態"
       security: [{ BearerAuth: [] }]
       parameters:
         - {
@@ -718,7 +780,7 @@ paths:
         }
     post:
       tags: [多人遊戲 (Multiplayer)]
-      summary: "[L14] 加入遊戲房間"
+      summary: "[C57] 加入遊戲房間"
       security: [{ BearerAuth: [] }]
       parameters:
         - {
@@ -749,7 +811,7 @@ paths:
         }
     post:
       tags: [多人遊戲 (Multiplayer)]
-      summary: "[L14] 離開遊戲房間"
+      summary: "[C57] 離開遊戲房間"
       security: [{ BearerAuth: [] }]
       parameters:
         - {
@@ -773,13 +835,13 @@ paths:
   /ota/versions:
     get:
       tags: [OTA 更新 (OTA)]
-      summary: "[L21] 取得版本列表"
+      summary: "[C73] 取得版本列表"
       security: [{ BearerAuth: [] }]
       responses:
         "200": { description: 成功 }
     post:
       tags: [OTA 更新 (OTA)]
-      summary: "[C61] 上傳新版本"
+      summary: "[C105] 上傳新版本"
       security: [{ BearerAuth: [] }]
       responses:
         "201": { description: 上傳成功 }
@@ -794,7 +856,7 @@ paths:
         }
     post:
       tags: [OTA 更新 (OTA)]
-      summary: "[C61] 發布版本"
+      summary: "[C74] 發布版本"
       security: [{ BearerAuth: [] }]
       responses:
         "200": { description: 發布成功 }
@@ -809,7 +871,7 @@ paths:
         }
     get:
       tags: [OTA 更新 (OTA)]
-      summary: "[L21] 取得版本發布狀態"
+      summary: "[C75] 取得版本發布狀態"
       security: [{ BearerAuth: [] }]
       parameters:
         - {
@@ -834,13 +896,13 @@ paths:
   /roles:
     get:
       tags: [使用者權限 (RBAC)]
-      summary: "[L25] 取得角色列表"
+      summary: "[C71] 取得角色列表"
       security: [{ BearerAuth: [] }]
       responses:
         "200": { description: 成功 }
     post:
       tags: [使用者權限 (RBAC)]
-      summary: "[C65] 新增角色"
+      summary: "[C71] 新增角色"
       security: [{ BearerAuth: [] }]
       requestBody:
         required: true
@@ -866,7 +928,7 @@ paths:
         }
     get:
       tags: [使用者權限 (RBAC)]
-      summary: "[L25] 取得角色詳情"
+      summary: "[C71] 取得角色詳情"
       security: [{ BearerAuth: [] }]
       parameters:
         - {
@@ -880,13 +942,13 @@ paths:
         "404": { description: 不存在 }
     put:
       tags: [使用者權限 (RBAC)]
-      summary: "[C65] 更新角色"
+      summary: "[C71] 更新角色"
       security: [{ BearerAuth: [] }]
       responses:
         "200": { description: 更新成功 }
     delete:
       tags: [使用者權限 (RBAC)]
-      summary: "[C65] 刪除角色"
+      summary: "[C71] 刪除角色"
       security: [{ BearerAuth: [] }]
       responses:
         "204": { description: 刪除成功 }
@@ -894,13 +956,13 @@ paths:
   /permissions:
     get:
       tags: [使用者權限 (RBAC)]
-      summary: "[L25] 取得權限列表"
+      summary: "[C71] 取得權限列表"
       security: [{ BearerAuth: [] }]
       responses:
         "200": { description: 成功 }
     post:
       tags: [使用者權限 (RBAC)]
-      summary: "[C65] 新增權限"
+      summary: "[C71] 新增權限"
       security: [{ BearerAuth: [] }]
       requestBody:
         required: true
@@ -926,7 +988,7 @@ paths:
         }
     get:
       tags: [使用者權限 (RBAC)]
-      summary: "[L25] 取得權限詳情"
+      summary: "[C71] 取得權限詳情"
       security: [{ BearerAuth: [] }]
       parameters:
         - {
@@ -939,13 +1001,13 @@ paths:
         "200": { description: 成功 }
     put:
       tags: [使用者權限 (RBAC)]
-      summary: "[C65] 更新權限"
+      summary: "[C71] 更新權限"
       security: [{ BearerAuth: [] }]
       responses:
         "200": { description: 更新成功 }
     delete:
       tags: [使用者權限 (RBAC)]
-      summary: "[C65] 刪除權限"
+      summary: "[C71] 刪除權限"
       security: [{ BearerAuth: [] }]
       responses:
         "204": { description: 刪除成功 }
@@ -960,7 +1022,7 @@ paths:
         }
     put:
       tags: [使用者權限 (RBAC)]
-      summary: "[C65] 分配角色給使用者"
+      summary: "[C70] 分配角色給使用者"
       security: [{ BearerAuth: [] }]
       requestBody:
         required: true
@@ -984,7 +1046,7 @@ paths:
         }
     put:
       tags: [使用者權限 (RBAC)]
-      summary: "[C106] 設定或重置使用者的本地端 PIN 碼"
+      summary: "[C70] 設定或重置使用者的本地端 PIN 碼"
       security: [{ BearerAuth: [] }]
       requestBody:
         required: true
@@ -1008,7 +1070,7 @@ paths:
         }
     post:
       tags: [使用者權限 (RBAC)]
-      summary: "[C106] 解鎖被鎖定的 PIN 碼"
+      summary: "[C70] 解鎖被鎖定的 PIN 碼"
       description: 當使用者 PIN 錯誤 5 次被鎖定後，由管理員執行解鎖
       security: [{ BearerAuth: [] }]
       parameters:
@@ -1041,7 +1103,7 @@ paths:
   /discrepancies:
     get:
       tags: [錯帳管理 (Discrepancies)]
-      summary: "[L31] 取得錯帳列表"
+      summary: "[C45] 取得錯帳列表"
       security: [{ BearerAuth: [] }]
       responses:
         "200": { description: 成功 }
@@ -1056,7 +1118,7 @@ paths:
         }
     post:
       tags: [錯帳管理 (Discrepancies)]
-      summary: "[C31] 處理錯帳"
+      summary: "[C45] 處理錯帳"
       security: [{ BearerAuth: [] }]
       requestBody:
         required: true
@@ -1074,7 +1136,7 @@ paths:
   /disputes:
     get:
       tags: [爭議處理 (Disputes)]
-      summary: "[L28] 取得爭議單列表"
+      summary: "[L20] 取得爭議單列表"
       security: [{ BearerAuth: [] }]
       parameters:
         - { name: status, in: query, schema: { type: string } }
@@ -1083,7 +1145,7 @@ paths:
         "200": { description: 成功 }
     post:
       tags: [爭議處理 (Disputes)]
-      summary: "[C28] 建立爭議單"
+      summary: "[L20] 建立爭議單"
       security: [{ BearerAuth: [] }]
       requestBody:
         required: true
@@ -1125,7 +1187,7 @@ paths:
         }
     get:
       tags: [爭議處理 (Disputes)]
-      summary: "[L28] 取得爭議單詳情"
+      summary: "[L20] 取得爭議單詳情"
       security: [{ BearerAuth: [] }]
       parameters:
         - { name: id, in: path, required: true, schema: { type: string } }
@@ -1133,7 +1195,7 @@ paths:
         "200": { description: 成功 }
     patch:
       tags: [爭議處理 (Disputes)]
-      summary: "[C28] 更新爭議單狀態/裁決"
+      summary: "[L20] 更新爭議單狀態/裁決"
       description: 用於調查進度更新、裁決、結案
       security: [{ BearerAuth: [] }]
       parameters:
@@ -1340,7 +1402,7 @@ paths:
   /system/config:
     get:
       tags: [系統設定 (System Configs)]
-      summary: "[L101] 取得系統設定"
+      summary: "[C90] 取得系統設定"
       description: 取得全站營運參數與管理員後台設定
       security: [{ BearerAuth: [] }]
       responses:
@@ -1357,7 +1419,7 @@ paths:
                   frontendConfig: { type: object }
     put:
       tags: [系統設定 (System Configs)]
-      summary: "[C101] 更新系統設定"
+      summary: "[C90] 更新系統設定"
       description: 包含前端遊系大廳外觀與系統基礎配置
       security: [{ BearerAuth: [] }]
       requestBody:
@@ -1377,7 +1439,7 @@ paths:
   /system/config/frontend:
     get:
       tags: [系統設定 (System Configs)]
-      summary: "[L101] 取得前端大廳 UI 設定"
+      summary: "[C78] 取得前端大廳 UI 設定"
       description: 公開介面，供機台端設備載入預設的視覺、Theme、熱門遊戲推薦等
       responses:
         "200":
