@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>異常交易處理 - 遊戲平台管理中心</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="../css/mockup-common.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        cyber: { 50: '#f5f3ff', 100: '#ede9fe', 200: '#ddd6fe', 300: '#c4b5fd', 400: '#a78bfa', 500: '#8b5cf6', 600: '#7c3aed', 700: '#6d28d9', 800: '#5b21b6', 900: '#4c1d95', 950: '#2e1065' },
+                        dark: { bg: '#0a0a0f', card: '#12121a', sidebar: '#0d0d14', border: '#1e1e2e', hover: '#1a1a28' }
+                    },
+                    fontFamily: { sans: ['"Noto Sans TC"', 'sans-serif'], mono: ['"JetBrains Mono"', 'monospace'] },
+                    boxShadow: { glow: '0 0 30px rgba(168, 85, 247, 0.3)', 'glow-sm': '0 0 15px rgba(168, 85, 247, 0.2)' }
+                }
+            }
+        }
+    </script>
+    <style>
+        * { scrollbar-width: thin; scrollbar-color: #6d28d9 #0a0a0f; }
+        *::-webkit-scrollbar { width: 8px; height: 8px; }
+        *::-webkit-scrollbar-track { background: #0a0a0f; }
+        *::-webkit-scrollbar-thumb { background: linear-gradient(180deg, #7c3aed, #a855f7); border-radius: 4px; }
+        body { font-family: 'Noto Sans TC', sans-serif; background: #0a0a0f; }
+        .glass { background: rgba(18, 18, 26, 0.7); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border: 1px solid rgba(255, 255, 255, 0.08); }
+        .glass-card { background: linear-gradient(135deg, rgba(18, 18, 26, 0.9) 0%, rgba(30, 30, 46, 0.6) 100%); backdrop-filter: blur(20px); border: 1px solid rgba(168, 85, 247, 0.15); box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4); }
+        .glass-card:hover { border-color: rgba(168, 85, 247, 0.4); }
+        .gradient-bg { background: linear-gradient(135deg, #0a0a0f 0%, #1a0a2e 50%, #0a0a0f 100%); }
+        .gradient-purple { background: linear-gradient(135deg, #7c3aed 0%, #a855f7 50%, #c084fc 100%); }
+        
+        
+        
+        
+        .table-row-hover:hover { background: linear-gradient(90deg, rgba(124, 58, 237, 0.1), transparent); }
+        .input-focus:focus { box-shadow: 0 0 0 3px rgba(168, 85, 247, 0.3); outline: none; }
+        .badge-local { background: #10b981; color: white; font-size: 10px; padding: 2px 6px; border-radius: 4px; }
+        
+        
+        
+        
+    </style>
+</head>
+<body class="gradient-bg min-h-screen flex">
+    <div id="sidebar-container"></div>
+    <main class="flex-1 flex flex-col overflow-hidden">
+        <header class="h-16 glass border-b border-dark-border flex items-center justify-between px-6">
+            <div class="flex items-center">
+                <a href="mockup_std_wallet.html" class="text-gray-400 hover:text-white mr-4"><i data-lucide="arrow-left" class="w-5 h-5"></i></a>
+                <h2 class="text-lg font-semibold text-white">異常交易處理</h2>
+            </div>
+            <div class="flex items-center gap-3">
+                <span class="text-sm text-gray-400">異常總數: <span class="text-red-400 font-semibold">12</span></span>
+            </div>
+        </header>
+        <div class="flex-1 overflow-y-auto p-6">
+            <!-- 篩選條件 -->
+            <div class="glass-card rounded-xl p-5 mb-6">
+                <h3 class="text-sm font-semibold text-white mb-4 flex items-center">
+                    <i data-lucide="filter" class="w-4 h-4 mr-2 text-purple-400"></i>篩選條件
+                </h3>
+                <div class="grid grid-cols-5 gap-4">
+                    <div>
+                        <label class="block text-xs text-gray-400 mb-1.5">異常類型</label>
+                        <select class="w-full px-3 py-2 bg-dark-bg border border-dark-border rounded-lg text-white text-sm input-focus">
+                            <option>全部類型</option>
+                            <option>金額異常</option>
+                            <option>重複交易</option>
+                            <option>超時未處理</option>
+                            <option>風控攔截</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-xs text-gray-400 mb-1.5">時間範圍</label>
+                        <select class="w-full px-3 py-2 bg-dark-bg border border-dark-border rounded-lg text-white text-sm input-focus">
+                            <option>今天</option>
+                            <option>最近 7 天</option>
+                            <option>最近 30 天</option>
+                            <option>自訂範圍</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-xs text-gray-400 mb-1.5">狀態</label>
+                        <select class="w-full px-3 py-2 bg-dark-bg border border-dark-border rounded-lg text-white text-sm input-focus">
+                            <option>全部</option>
+                            <option>待處理</option>
+                            <option>處理中</option>
+                            <option>已解決</option>
+                            <option>已忽略</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-xs text-gray-400 mb-1.5">金額範圍</label>
+                        <input type="text" placeholder="如: 10000-50000" class="w-full px-3 py-2 bg-dark-bg border border-dark-border rounded-lg text-white text-sm input-focus">
+                    </div>
+                    <div class="flex items-end">
+                        <button class="w-full px-4 py-2 gradient-purple rounded-lg text-sm text-white font-medium">
+                            <i data-lucide="search" class="w-4 h-4 mr-1.5 inline"></i>搜尋
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 異常交易列表 -->
+            <div class="glass-card rounded-xl overflow-hidden">
+                <div class="p-4 border-b border-dark-border flex items-center justify-between">
+                    <h3 class="text-sm font-semibold text-white flex items-center">
+                        <i data-lucide="alert-triangle" class="w-4 h-4 mr-2 text-red-400"></i>異常交易列表
+                    </h3>
+                    <div class="flex gap-2">
+                        <button class="px-3 py-1.5 bg-red-500/20 text-red-400 rounded-lg text-xs hover:bg-red-500/30">
+                            <i data-lucide="check-circle" class="w-3.5 h-3.5 mr-1 inline"></i>批量處理
+                        </button>
+                    </div>
+                </div>
+                <table class="w-full">
+                    <thead>
+                        <tr class="text-left text-xs text-gray-400 border-b border-dark-border">
+                            <th class="p-4 font-medium"><input type="checkbox" class="rounded border-dark-border"></th>
+                            <th class="p-4 font-medium">交易編號</th>
+                            <th class="p-4 font-medium">異常類型</th>
+                            <th class="p-4 font-medium">玩家帳號</th>
+                            <th class="p-4 font-medium">金額</th>
+                            <th class="p-4 font-medium">遊戲</th>
+                            <th class="p-4 font-medium">發生時間</th>
+                            <th class="p-4 font-medium">狀態</th>
+                            <th class="p-4 font-medium">操作</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr class="table-row-hover border-b border-dark-border/50">
+                            <td class="p-4"><input type="checkbox" class="rounded border-dark-border"></td>
+                            <td class="p-4">
+                                <span class="text-purple-400 font-mono text-sm">TXN-20240304123001</span>
+                            </td>
+                            <td class="p-4">
+                                <span class="px-2 py-1 bg-red-500/20 text-red-400 rounded text-xs">金額異常</span>
+                            </td>
+                            <td class="p-4 text-white">player888</td>
+                            <td class="p-4 text-red-400 font-semibold">+NT$150,000</td>
+                            <td class="p-4 text-gray-300">百家樂 VIP</td>
+                            <td class="p-4 text-gray-400 text-sm">2024-03-04 12:30:15</td>
+                            <td class="p-4">
+                                <span class="px-2 py-1 bg-yellow-500/20 text-yellow-400 rounded text-xs">待處理</span>
+                            </td>
+                            <td class="p-4">
+                                <button class="text-purple-400 hover:text-purple-300 mr-2"><i data-lucide="eye" class="w-4 h-4"></i></button>
+="text-green-400 hover:text-green-300">                                <button class<i data-lucide="check" class="w-4 h-4"></i></button>
+                            </td>
+                        </tr>
+                        <tr class="table-row-hover border-b border-dark-border/50">
+                            <td class="p-4"><input type="checkbox" class="rounded border-dark-border"></td>
+                            <td class="p-4">
+                                <span class="text-purple-400 font-mono text-sm">TXN-20240304114533</span>
+                            </td>
+                            <td class="p-4">
+                                <span class="px-2 py-1 bg-orange-500/20 text-orange-400 rounded text-xs">重複交易</span>
+                            </td>
+                            <td class="p-4 text-white">user001</td>
+                            <td class="p-4 text-red-400 font-semibold">+NT$50,000</td>
+                            <td class="p-4 text-gray-300">老虎機</td>
+                            <td class="p-4 text-gray-400 text-sm">2024-03-04 11:45:22</td>
+                            <td class="p-4">
+                                <span class="px-2 py-1 bg-blue-500/20 text-blue-400 rounded text-xs">處理中</span>
+                            </td>
+                            <td class="p-4">
+                                <button class="text-purple-400 hover:text-purple-300 mr-2"><i data-lucide="eye" class="w-4 h-4"></i></button>
+                                <button class="text-green-400 hover:text-green-300"><i data-lucide="check" class="w-4 h-4"></i></button>
+                            </td>
+                        </tr>
+                        <tr class="table-row-hover border-b border-dark-border/50">
+                            <td class="p-4"><input type="checkbox" class="rounded border-dark-border"></td>
+                            <td class="p-4">
+                                <span class="text-purple-400 font-mono text-sm">TXN-20240304100247</span>
+                            </td>
+                            <td class="p-4">
+                                <span class="px-2 py-1 bg-purple-500/20 text-purple-400 rounded text-xs">風控攔截</span>
+                            </td>
+                            <td class="p-4 text-white">vip999</td>
+                            <td class="p-4 text-red-400 font-semibold">+NT$500,000</td>
+                            <td class="p-4 text-gray-300">21 點</td>
+                            <td class="p-4 text-gray-400 text-sm">2024-03-04 10:02:47</td>
+                            <td class="p-4">
+                                <span class="px-2 py-1 bg-green-500/20 text-green-400 rounded text-xs">已解決</span>
+                            </td>
+                            <td class="p-4">
+                                <button class="text-purple-400 hover:text-purple-300 mr-2"><i data-lucide="eye" class="w-4 h-4"></i></button>
+                                <button class="text-gray-400 hover:text-gray-300"><i data-lucide="rotate-ccw" class="w-4 h-4"></i></button>
+                            </td>
+                        </tr>
+                        <tr class="table-row-hover border-b border-dark-border/50">
+                            <td class="p-4"><input type="checkbox" class="rounded border-dark-border"></td>
+                            <td class="p-4">
+                                <span class="text-purple-400 font-mono text-sm">TXN-20240304091512</span>
+                            </td>
+                            <td class="p-4">
+                                <span class="px-2 py-1 bg-red-500/20 text-red-400 rounded text-xs">金額異常</span>
+                            </td>
+                            <td class="p-4 text-white">mark123</td>
+                            <td class="p-4 text-red-400 font-semibold">-NT$80,000</td>
+                            <td class="p-4 text-gray-300">輪盤</td>
+                            <td class="p-4 text-gray-400 text-sm">2024-03-04 09:15:33</td>
+                            <td class="p-4">
+                                <span class="px-2 py-1 bg-gray-500/20 text-gray-400 rounded text-xs">已忽略</span>
+                            </td>
+                            <td class="p-4">
+                                <button class="text-purple-400 hover:text-purple-300"><i data-lucide="eye" class="w-4 h-4"></i></button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <div class="p-4 border-t border-dark-border flex items-center justify-between">
+                    <span class="text-sm text-gray-400">顯示 1-4 筆，共 12 筆</span>
+                    <div class="flex gap-1">
+                        <button class="px-3 py-1.5 bg-dark-bg border border-dark-border rounded-lg text-gray-400 text-sm hover:text-white">上一頁</button>
+                        <button class="px-3 py-1.5 bg-purple-600 rounded-lg text-white text-sm">1</button>
+                        <button class="px-3 py-1.5 bg-dark-bg border border-dark-border rounded-lg text-gray-400 text-sm hover:text-white">2</button>
+                        <button class="px-3 py-1.5 bg-dark-bg border border-dark-border rounded-lg text-gray-400 text-sm hover:text-white">3</button>
+                        <button class="px-3 py-1.5 bg-dark-bg border border-dark-border rounded-lg text-gray-400 text-sm hover:text-white">下一頁</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+    <script>
+        lucide.createIcons();
+
+        function toggleSidebarGroup(header) {
+            const group = header.parentElement;
+            const submenu = group.querySelector('.sidebar-submenu');
+            if (group.classList.contains('open')) {
+                group.classList.remove('open');
+                submenu.classList.remove('open');
+            } else {
+                group.classList.add('open');
+                submenu.classList.add('open');
+            }
+        }
+    </script>
+<script src="../js/sidebar.js"></script>
+    <script>
+        MockupSidebar.render('mockup_transaction_exception.html');
+    </script>
+</body>
+</html>

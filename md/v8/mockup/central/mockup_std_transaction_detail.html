@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>交易詳情 - 遊戲平台管理中心</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="../css/mockup-common.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        cyber: { 50: '#f5f3ff', 100: '#ede9fe', 200: '#ddd6fe', 300: '#c4b5fd', 400: '#a78bfa', 500: '#8b5cf6', 600: '#7c3aed', 700: '#6d28d9', 800: '#5b21b6', 900: '#4c1d95', 950: '#2e1065' },
+                        dark: { bg: '#0a0a0f', card: '#12121a', sidebar: '#0d0d14', border: '#1e1e2e', hover: '#1a1a28' }
+                    },
+                    fontFamily: { sans: ['"Noto Sans TC"', 'sans-serif'], mono: ['"JetBrains Mono"', 'monospace'] },
+                    boxShadow: { glow: '0 0 30px rgba(168, 85, 247, 0.3)', 'glow-sm': '0 0 15px rgba(168, 85, 247, 0.2)' }
+                }
+            }
+        }
+    </script>
+    <style>
+        * {
+            scrollbar-width: thin;
+            scrollbar-color: #6d28d9 #0a0a0f;
+        }
+
+        *::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+
+        *::-webkit-scrollbar-track {
+            background: #0a0a0f;
+        }
+
+        *::-webkit-scrollbar-thumb {
+            background: linear-gradient(180deg, #7c3aed, #a855f7);
+            border-radius: 4px;
+        }
+
+        body {
+            font-family: 'Noto Sans TC', sans-serif;
+            background: #0a0a0f;
+        }
+
+        .glass {
+            background: rgba(18, 18, 26, 0.7);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .glass-card {
+            background: linear-gradient(135deg, rgba(18, 18, 26, 0.9) 0%, rgba(30, 30, 46, 0.6) 100%);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(168, 85, 247, 0.15);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+        }
+
+
+
+
+        .input-focus:focus {
+            box-shadow: 0 0 0 3px rgba(168, 85, 247, 0.3), 0 0 20px rgba(168, 85, 247, 0.2);
+        }
+
+
+
+
+
+
+        /* 側邊欄折疊樣式 */
+
+        .sidebar-collapsed .sidebar-text,
+        .sidebar-collapsed .sidebar-group-header span {
+            display: none;
+        }
+
+        .sidebar-collapsed .sidebar-collapsed .sidebar-link i {
+            margin-right: 0;
+        }
+    </style>
+</head>
+
+<body class="gradient-bg min-h-screen flex">
+    <div id="sidebar-container"></div>
+    <main class="flex-1 flex flex-col overflow-hidden">
+        <header class="h-16 glass border-b border-dark-border flex items-center justify-between px-6">
+            <div class="flex items-center space-x-4">
+                <a href="mockup_mvp_data_list.html" class="text-gray-400 hover:text-white"><i data-lucide="arrow-left"
+                        class="w-5 h-5"></i></a>
+                <h2 class="text-lg font-semibold text-white">交易詳情</h2>
+            </div>
+            <div class="flex items-center space-x-3">
+                <button
+                    class="px-4 py-2 glass border border-dark-border rounded-lg text-sm text-gray-300 hover:text-white"><i
+                        data-lucide="printer" class="w-4 h-4 inline mr-2"></i>列印</button>
+                <button
+                    class="px-4 py-2 glass border border-dark-border rounded-lg text-sm text-gray-300 hover:text-white"><i
+                        data-lucide="download" class="w-4 h-4 inline mr-2"></i>匯出</button>
+                <button
+                    class="px-4 py-2 bg-red-500/20 border border-red-500/50 rounded-lg text-sm text-red-400 hover:bg-red-500/30"><i
+                        data-lucide="rotate-ccw" class="w-4 h-4 inline mr-2"></i>沖銷</button>
+            </div>
+        </header>
+        <div class="flex-1 overflow-y-auto p-6">
+            <div class="glass-card rounded-xl p-6 mb-6">
+                <div class="flex items-center justify-between mb-6">
+                    <div class="flex items-center">
+                        <div class="w-12 h-12 rounded-xl bg-emerald-500/20 flex items-center justify-center mr-4">
+                            <i data-lucide="arrow-down-left" class="w-6 h-6 text-emerald-400"></i>
+                        </div>
+                        <div>
+                            <p class="text-2xl font-bold text-emerald-400 font-mono">+$1,000</p>
+                            <p class="text-sm text-gray-400">充值 (開分)</p>
+                        </div>
+                    </div>
+                    <span
+                        class="px-3 py-1 rounded-full text-xs font-medium bg-emerald-500/20 text-emerald-400">交易成功</span>
+                </div>
+                <div class="grid grid-cols-2 gap-6">
+                    <div>
+                        <p class="text-xs text-gray-500 mb-1">交易 ID</p>
+                        <p class="text-sm text-white font-mono">TRX-20260225-8842</p>
+                    </div>
+                    <div>
+                        <p class="text-xs text-gray-500 mb-1">創建時間</p>
+                        <p class="text-sm text-white">2026-02-25 14:35:22</p>
+                    </div>
+                    <div>
+                        <p class="text-xs text-gray-500 mb-1">機台標籤</p>
+                        <p class="text-sm text-white font-mono">A-001 (VIP 區)</p>
+                    </div>
+                    <div>
+                        <p class="text-xs text-gray-500 mb-1">機台編號</p>
+                        <p class="text-sm text-white font-mono">A-001</p>
+                    </div>
+                    <div>
+                        <p class="text-xs text-gray-500 mb-1">遊戲商</p>
+                        <p class="text-sm text-white">PG 電子</p>
+                    </div>
+                    <div>
+                        <p class="text-xs text-gray-500 mb-1">交易類別</p>
+                        <p class="text-sm text-white">現場現金 (Cash)</p>
+                    </div>
+                </div>
+            </div>
+            <div class="glass-card rounded-xl p-6">
+                <h3 class="font-semibold text-white mb-4">交易流水</h3>
+                <div class="space-y-3">
+                    <div class="flex items-center justify-between py-2 border-b border-dark-border">
+                        <span class="text-sm text-gray-400">建立訂單</span>
+                        <span class="text-sm text-white">14:35:22</span>
+                    </div>
+                    <div class="flex items-center justify-between py-2 border-b border-dark-border">
+                        <span class="text-sm text-gray-400">現場收現確認</span>
+                        <span class="text-sm text-white">14:35:45</span>
+                    </div>
+                    <div class="flex items-center justify-between py-2 border-b border-dark-border">
+                        <span class="text-sm text-gray-400">風控驗證</span>
+                        <span class="text-sm text-emerald-400">通過</span>
+                    </div>
+                    <div class="flex items-center justify-between py-2 border-b border-dark-border">
+                        <span class="text-sm text-gray-400">更新餘額</span>
+                        <span class="text-sm text-white">14:35:46</span>
+                    </div>
+                    <div class="flex items-center justify-between py-2">
+                        <span class="text-sm text-gray-400">通知玩家</span>
+                        <span class="text-sm text-white">14:35:47</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+    <script src="../js/sidebar.js"></script>
+    <script>
+        MockupSidebar.render('mockup_std_transaction_detail.html');
+    </script>
+</body>
+
+</html>

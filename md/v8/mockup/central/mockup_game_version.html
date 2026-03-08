@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>遊戲版本管理 - 遊戲平台管理中心</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="../css/mockup-common.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        cyber: { 50: '#f5f3ff', 100: '#ede9fe', 200: '#ddd6fe', 300: '#c4b5fd', 400: '#a78bfa', 500: '#8b5cf6', 600: '#7c3aed', 700: '#6d28d9', 800: '#5b21b6', 900: '#4c1d95', 950: '#2e1065' },
+                        dark: { bg: '#0a0a0f', card: '#12121a', sidebar: '#0d0d14', border: '#1e1e2e', hover: '#1a1a28' }
+                    },
+                    fontFamily: { sans: ['"Noto Sans TC"', 'sans-serif'], mono: ['"JetBrains Mono"', 'monospace'] },
+                    boxShadow: { glow: '0 0 30px rgba(168, 85, 247, 0.3)', 'glow-sm': '0 0 15px rgba(168, 85, 247, 0.2)' }
+                }
+            }
+        }
+    </script>
+    <style>
+        * { scrollbar-width: thin; scrollbar-color: #6d28d9 #0a0a0f; }
+        *::-webkit-scrollbar { width: 8px; height: 8px; }
+        *::-webkit-scrollbar-track { background: #0a0a0f; }
+        *::-webkit-scrollbar-thumb { background: linear-gradient(180deg, #7c3aed, #a855f7); border-radius: 4px; }
+        body { font-family: 'Noto Sans TC', sans-serif; background: #0a0a0f; }
+        .glass { background: rgba(18, 18, 26, 0.7); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border: 1px solid rgba(255, 255, 255, 0.08); }
+        .glass-card { background: linear-gradient(135deg, rgba(18, 18, 26, 0.9) 0%, rgba(30, 30, 46, 0.6) 100%); backdrop-filter: blur(20px); border: 1px solid rgba(168, 85, 247, 0.15); box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4); }
+        .gradient-bg { background: linear-gradient(135deg, #0a0a0f 0%, #1a0a2e 50%, #0a0a0f 100%); }
+        .gradient-purple { background: linear-gradient(135deg, #7c3aed 0%, #a855f7 50%, #c084fc 100%); }
+        .version-item { transition: all 0.2s ease; }
+        .version-item:hover { background: rgba(124, 58, 237, 0.1); }
+        .current-version { border-left: 3px solid #10b981; }
+    </style>
+</head>
+<body class="gradient-bg min-h-screen flex">
+    <div id="sidebar-container"></div>
+    
+    <main class="flex-1 flex flex-col overflow-hidden">
+        <!-- Header -->
+        <header class="h-16 glass border-b border-dark-border flex items-center justify-between px-6">
+            <h2 class="text-lg font-semibold text-white">遊戲版本管理</h2>
+            <div class="flex items-center space-x-3">
+                <button class="px-4 py-2 gradient-purple rounded-lg text-white font-medium text-sm">
+                    <i data-lucide="upload" class="w-4 h-4 inline mr-1"></i>上傳新版本
+                </button>
+            </div>
+        </header>
+
+        <div class="flex-1 flex overflow-hidden">
+            
+            <!-- Left: Games List -->
+            <aside class="w-80 glass border-r border-dark-border flex flex-col">
+                <div class="p-4 border-b border-dark-border">
+                    <div class="relative">
+                        <input type="text" placeholder="搜尋遊戲..." class="w-full bg-dark-bg border border-dark-border rounded-lg py-2 px-4 pl-10 text-sm text-white">
+                        <i data-lucide="search" class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500"></i>
+                    </div>
+                </div>
+
+                <div class="flex-1 overflow-y-auto">
+                    <div class="p-2">
+                        
+                        <!-- Game Item 1 -->
+                        <div class="version-item current-version glass-card rounded-lg p-3 mb-2 cursor-pointer">
+                            <div class="flex items-center">
+                                <div class="w-10 h-10 rounded-lg bg-purple-500/20 flex items-center justify-center mr-3">
+                                    <i data-lucide="gamepad-2" class="w-5 h-5 text-purple-400"></i>
+                                </div>
+                                <div class="flex-1">
+                                    <div class="font-medium text-white">經典拉霸王</div>
+                                    <div class="text-xs text-emerald-400">目前: v2.5.1</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Game Item 2 -->
+                        <div class="version-item glass-card rounded-lg p-3 mb-2 cursor-pointer opacity-60">
+                            <div class="flex items-center">
+                                <div class="w-10 h-10 rounded-lg bg-cyan-500/20 flex items-center justify-center mr-3">
+                                    <i data-lucide="dice-5" class="w-5 h-5 text-cyan-400"></i>
+                                </div>
+                                <div class="flex-1">
+                                    <div class="font-medium text-white">決戰百家樂</div>
+                                    <div class="text-xs text-gray-400">v3.2.0</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Game Item 3 -->
+                        <div class="version-item glass-card rounded-lg p-3 mb-2 cursor-pointer opacity-60">
+                            <div class="flex items-center">
+                                <div class="w-10 h-10 rounded-lg bg-rose-500/20 flex items-center justify-center mr-3">
+                                    <i data-lucide="diamond" class="w-5 h-5 text-rose-400"></i>
+                                </div>
+                                <div class="flex-1">
+                                    <div class="font-medium text-white">鑽石大亨</div>
+                                    <div class="text-xs text-gray-400">v1.8.5</div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </aside>
+
+            <!-- Right: Version Details -->
+            <div class="flex-1 overflow-y-auto p-6">
+                
+                <!-- Current Version Info -->
+                <div class="glass-card rounded-2xl p-6 mb-6">
+                    <div class="flex items-start justify-between">
+                        <div>
+                            <div class="flex items-center mb-2">
+                                <h3 class="text-2xl font-bold text-white">v2.5.1</h3>
+                                <span class="ml-3 px-3 py-1 bg-emerald-500/20 text-emerald-400 text-sm rounded-full">目前版本</span>
+                            </div>
+                            <div class="text-sm text-gray-400 mb-4">發布時間: 2024-03-01 14:30:25</div>
+                            
+                            <div class="flex items-center space-x-4 text-sm">
+                                <span class="text-gray-400">檔案大小: <span class="text-white">245 MB</span></span>
+                                <span class="text-gray-400">部署機台: <span class="text-white">45/50</span></span>
+                                <span class="text-gray-400">部署狀態: <span class="text-emerald-400">完成</span></span>
+                            </div>
+                        </div>
+                        
+                        <div class="flex space-x-2">
+                            <button class="px-4 py-2 bg-dark-bg border border-dark-border rounded-lg text-gray-300 text-sm hover:bg-dark-hover">
+                                <i data-lucide="download" class="w-4 h-4 inline mr-1"></i>下載
+                            </button>
+                            <button class="px-4 py-2 bg-dark-bg border border-dark-border rounded-lg text-gray-300 text-sm hover:bg-dark-hover">
+                                <i data-lucide="send" class="w-4 h-4 inline mr-1"></i>重新部署
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Version History -->
+                <h3 class="text-lg font-semibold text-white mb-4">版本歷史</h3>
+
+                <div class="space-y-4">
+                    
+                    <!-- Version 2.5.0 -->
+                    <div class="glass-card rounded-xl p-5">
+                        <div class="flex items-start justify-between mb-3">
+                            <div>
+                                <div class="flex items-center">
+                                    <span class="text-lg font-semibold text-white">v2.5.0</span>
+                                    <span class="ml-2 px-2 py-0.5 bg-gray-500/20 text-gray-400 text-xs rounded">已停用</span>
+                                </div>
+                                <div class="text-sm text-gray-500 mt-1">2024-02-15 10:20:18</div>
+                            </div>
+                            
+                            <button class="p-2 text-gray-500 hover:text-white">
+                                <i data-lucide="more-vertical" class="w-5 h-5"></i>
+                            </button>
+                        </div>
+
+                        <div class="text-sm text-gray-300 mb-3">優化遊戲效能，修復部分機台閃退問題</div>
+
+                        <div class="flex items-center space-x-4 text-sm">
+                            <span class="text-gray-500">檔案大小: 242 MB</span>
+                            <span class="text-gray-500">部署機台: 50</span>
+                        </div>
+                    </div>
+
+                    <!-- Version 2.4.8 -->
+                    <div class="glass-card rounded-xl p-5">
+                        <div class="flex items-start justify-between mb-3">
+                            <div>
+                                <div class="flex items-center">
+                                    <span class="text-lg font-semibold text-white">v2.4.8</span>
+                                    <span class="ml-2 px-2 py-0.5 bg-gray-500/20 text-gray-400 text-xs rounded">已停用</span>
+                                </div>
+                                <div class="text-sm text-gray-500 mt-1">2024-01-28 09:15:33</div>
+                            </div>
+                            
+                            <button class="p-2 text-gray-500 hover:text-white">
+                                <i data-lucide="more-vertical" class="w-5 h-5"></i>
+                            </button>
+                        </div>
+
+                        <div class="text-sm text-gray-300 mb-3">新增春節主題活動，優化 UI 介面</div>
+
+                        <div class="flex items-center space-x-4 text-sm">
+                            <span class="text-gray-500">檔案大小: 238 MB</span>
+                            <span class="text-gray-500">部署機台: 50</span>
+                        </div>
+                    </div>
+
+                    <!-- Version 2.4.5 -->
+                    <div class="glass-card rounded-xl p-5 opacity-60">
+                        <div class="flex items-start justify-between mb-3">
+                            <div>
+                                <div class="flex items-center">
+                                    <span class="text-lg font-semibold text-white">v2.4.5</span>
+                                    <span class="ml-2 px-2 py-0.5 bg-red-500/20 text-red-400 text-xs rounded">已刪除</span>
+                                </div>
+                                <div class="text-sm text-gray-500 mt-1">2024-01-10 16:45:22</div>
+                            </div>
+                        </div>
+
+                        <div class="text-sm text-gray-300 mb-3">初始穩定版本</div>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+    </main>
+
+    <script src="../js/sidebar.js"></script>
+    <script>
+        MockupSidebar.render('mockup_game_version.html');
+        lucide.createIcons();
+    </script>
+</body>
+</html>
