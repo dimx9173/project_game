@@ -1,58 +1,58 @@
-# Agent Onboarding: 遊戲平台管理系統 (V8 旗艦版)
+# Agent Onboarding: Game Platform Management System (V8 Flagship Edition)
 
-作為新加入的 AI Agent，請先行閱讀此指引以快速進入開發狀態。本指南包含文件的閱讀路徑與開發必須遵守的「鐵律」。
+As a newly onboarded AI Agent, please read this guide first to quickly get up to speed with the development process. This guide contains reading paths for documents and the "Iron Rules" that must be followed during development.
 
 ---
 
-## 🗺️ 核心文件導讀 (Reading Guide)
+## 🗺️ Core Document Reading Guide
 
-為了快速理解系統，請依序閱讀以下文件：
+To quickly understand the system, please read the following documents in order:
 
-### 1. 系統全貌與流程碼
-- **[功能矩陣與流程圖](file:///Users/carlos/Library/CloudStorage/GoogleDrive-dimx9173@gmail.com/My%20Drive/%E8%80%81%E5%85%AC%E8%88%87%E8%80%81%E5%A9%86%E5%88%86%E4%BA%AB/%E5%B0%88%E6%A1%88/%E9%81%8A%E6%88%B2%E5%B9%B3%E5%8F%B0%E7%AE%A1%E7%90%86/md/v8/%E9%81%8A%E6%88%B2%E5%B9%B3%E5%8F%B0%E7%AE%A1%E7%90%86%E7%B3%BB%E7%B5%B1_%E5%8A%9F%E8%83%BD%E7%9F%A9%E9%99%A3%E8%88%87%E6%B5%81%E7%A8%8B%E5%9C%96_%E6%97%97%E8%89%A6%E7%89%88.md)**
-  - **用途**：定義了所有功能代碼（如 `[L45]`, `[C12]`）。在修改任何代碼或文件前，務必確認代碼對應的功能範圍與最新定義。
-  - **重點**：Mermaid 流程圖揭示了 Central 與 Local 的交互邏輯。
+### 1. System Overview and Feature Codes
+- **[Functional Matrix and Flowcharts](file:///Users/carlos/Library/CloudStorage/GoogleDrive-dimx9173@gmail.com/My%20Drive/%E8%80%81%E5%85%AC%E8%88%87%E8%80%81%E5%A9%86%E5%88%86%E4%BA%AB/%E5%B0%88%E6%A1%88/%E9%81%8A%E6%88%B2%E5%B9%B3%E5%8F%B0%E7%AE%A1%E7%90%86/md/v8/%E9%81%8A%E6%88%B2%E5%B9%B3%E5%8F%B0%E7%AE%A1%E7%90%86%E7%B3%BB%E7%B5%B1_%E5%8A%9F%E8%83%BD%E7%9F%A9%E9%99%A3%E8%88%87%E6%B5%81%E7%A8%8B%E5%9C%96_%E6%97%97%E8%89%A6%E7%89%88.md)**
+  - **Purpose**: Defines all feature codes (e.g., `[L45]`, `[C12]`). Before modifying any code or document, make sure to confirm the feature scope and latest definitions corresponding to the code.
+  - **Key Point**: Mermaid flowcharts reveal the interaction logic between Central and Local backends.
 
-### 2. 資料結構與介面契約
-- **[資料庫設計文件](file:///Users/carlos/Library/CloudStorage/GoogleDrive-dimx9173@gmail.com/My%20Drive/%E8%80%81%E5%85%AC%E8%88%87%E8%80%81%E5%A9%86%E5%88%86%E4%BA%AB/%E5%B0%88%E6%A1%88/%E9%81%8A%E6%88%B2%E5%B9%B3%E5%8F%B0%E7%AE%A1%E7%90%86/md/v8/%E9%81%8A%E6%88%B2%E5%B9%B3%E5%8F%B0%E7%AE%A1%E7%90%86%E7%B3%BB%E7%B5%B1_%E8%B3%87%E6%96%99%E5%BA%AB%E8%A8%AD%E8%A8%88%E6%96%87%E4%BB%B6_%E6%97%97%E8%89%A6%E7%89%88.md)**
-  - **用途**：定義表結構。
-  - **重點**：注意 `instanceId` 的識別機制。
-- **[API OpenAPI 規範](file:///Users/carlos/Library/CloudStorage/GoogleDrive-dimx9173@gmail.com/My%20Drive/%E8%80%81%E5%85%AC%E8%88%87%E8%80%81%E5%A9%86%E5%88%86%E4%BA%AB/%E5%B0%88%E6%A1%88/%E9%81%8A%E6%88%B2%E5%B9%B3%E5%8F%B0%E7%AE%A1%E7%90%86/md/v8/API_openapi.yaml)**
-  - **用途**：介面開發的唯一真相。所有 RESTful 調用必須符合此規範。
+### 2. Data Structure and Interface Contracts
+- **[Database Design Document](file:///Users/carlos/Library/CloudStorage/GoogleDrive-dimx9173@gmail.com/My%20Drive/%E8%80%81%E5%85%AC%E8%88%87%E8%80%81%E5%A9%86%E5%88%86%E4%BA%AB/%E5%B0%88%E6%A1%88/%E9%81%8A%E6%88%B2%E5%B9%B3%E5%8F%B0%E7%AE%A1%E7%90%86/md/v8/%E9%81%8A%E6%88%B2%E5%B9%B3%E5%8F%B0%E7%AE%A1%E7%90%86%E7%B3%BB%E7%B5%B1_%E8%B3%87%E6%96%99%E5%BA%AB%E8%A8%AD%E8%A8%88%E6%96%87%E4%BB%B6_%E6%97%97%E8%89%A6%E7%89%88.md)**
+  - **Purpose**: Defines database table structures.
+  - **Key Point**: Pay attention to the identification mechanism of `instanceId`.
+- **[API OpenAPI Specification](file:///Users/carlos/Library/CloudStorage/GoogleDrive-dimx9173@gmail.com/My%20Drive/%E8%80%81%E5%85%AC%E8%88%87%E8%80%81%E5%A9%86%E5%88%86%E4%BA%AB/%E5%B0%88%E6%A1%88/%E9%81%8A%E6%88%B2%E5%B9%B3%E5%8F%B0%E7%AE%A1%E7%90%86/md/v8/API_openapi.yaml)**
+  - **Purpose**: The single source of truth for interface development. All RESTful calls must comply with this specification.
 
-### 3. 功能細部邏輯與 UI
+### 3. Detailed Feature Logic and UI
 - **[feature_docs/](file:///Users/carlos/Library/CloudStorage/GoogleDrive-dimx9173@gmail.com/My%20Drive/%E8%80%81%E5%85%AC%E8%88%87%E8%80%81%E5%A9%86%E5%88%86%E4%BA%AB/%E5%B0%88%E6%A1%88/%E9%81%8A%E6%88%B2%E5%B9%B3%E5%8F%B0%E7%AE%A1%E7%90%86/md/v8/feature_docs)**
-  - **用途**：深入了解具體模組（如 [L34] 同步對帳）的詳細商務邏輯與異常處理。
+  - **Purpose**: Deep dive into the detailed business logic and exception handling of specific modules (e.g., `[L34]` Synchronized Reconciliation).
 - **[mockup/](file:///Users/carlos/Library/CloudStorage/GoogleDrive-dimx9173@gmail.com/My%20Drive/%E8%80%81%E5%85%AC%E8%88%87%E8%80%81%E5%A9%86%E5%88%86%E4%BA%AB/%E5%B0%88%E6%A1%88/%E9%81%8A%E6%88%B2%E5%B9%B3%E5%8F%B0%E7%AE%A1%E7%90%86/md/v8/mockup)**
-  - **用途**：UI 開發的參考。分為 `central/` 與 `local/` 兩端。
+  - **Purpose**: References for UI development. Separated into `central/` and `local/` sides.
 
 ---
 
-## ⚖️ 開發鐵律 (Iron Rules)
+## ⚖️ Iron Rules for Development
 
-任何 Agent 進行開發時，必須遵守以下不可逾越的準則：
+Any Agent conducting development must strictly adhere to the following inviolable principles:
 
-### 1. 權責劃分原則 (Separation of Concerns)
-- **Central 決定論**：凡涉及「系統配置」、「權限控管」、「遊戲列表」，Central 擁有絕對權威，為 Single Source of Truth。
-- **禁止本地篡改**：Local 端對於來自 Central 的資料（如機台設定、遊戲庫）採取「唯讀快取」原則，嚴禁直接修改本地資料庫，所有變更必須透過 Cloud API 同步。
-- **本地操作獨立性**：凡涉及現場營運任務（如 `[L45]` 開分/洗分、機台重啟等操作），為確保現場效率與容錯，以單機本地端操作為準，**無需**經過集中式後台 (Central) 授權。
+### 1. Separation of Concerns
+- **Central Determinism**: For anything involving "System Configuration," "Permission Control," or the "Game List," Central has absolute authority and acts as the Single Source of Truth.
+- **No Local Tampering**: The Local end must treat data from Central (e.g., machine settings, game library) with a "Read-Only Cache" principle. Modifying the local database directly is strictly forbidden; all changes must be synchronized via Cloud APIs.
+- **Local Operational Independence**: Operations related to on-site tasks (e.g., `[L45]` Cash in/out, machine restart) should rely primarily on standalone local operations to ensure on-site efficiency and fault tolerance. They **DO NOT** require real-time authorization from the centralized backend (Central).
 
-### 2. 通訊同步協定 (Push-Pull-Status Flow)
-- **SignalR 為主**：實時通知使用 WebSocket (SignalR)，嚴禁引入新的通訊組件（如 MQTT）。
-- **標準三步驟**：`CONFIG_UPDATE` (推送) -> `GET /configs/{id}` (抓取) -> `POST /config/status` (回報)。
+### 2. Communication and Synchronization Protocol (Push-Pull-Status Flow)
+- **SignalR First**: Use WebSocket (SignalR) for real-time notifications. Introducing new communication components (like MQTT) is strictly prohibited.
+- **Standard 3-Step Flow**: `CONFIG_UPDATE` (Push) -> `GET /configs/{id}` (Pull) -> `POST /config/status` (Report).
 
-### 3. 機台識別與註冊 (Hardware Anchor)
-- **MAC 綁定**：機台首次註冊時，Central 根據 MAC 位址分配唯一的 `instanceId`。
-- **離線保護**：系統必須偵測連線狀態。機台離線時禁止開始新遊戲，僅能查看快取的歷史紀錄。
+### 3. Machine Identification and Registration (Hardware Anchor)
+- **MAC Address Binding**: Upon initial machine registration, Central assigns a unique `instanceId` based on the MAC address.
+- **Offline Protection**: The system must detect connection status. When a machine is offline, starting new games is prohibited, and only cached historical records can be viewed.
 
-### 4. 介面與安全性 (Security & API)
-- **版本化 API**：一律使用 `/api/v1/...` 前綴。
-- **資料完整性**：關鍵配置傳輸必須包含 HMAC-SHA256 簽名校驗。
-- **敏感資訊**：所有 API Key 或密碼必須使用 AES-256-GCM 進行加密存儲/傳輸。
+### 4. Interface and Security
+- **Versioned API**: Always use the `/api/v1/...` prefix.
+- **Data Integrity**: Transmission of critical configurations must include HMAC-SHA256 signature verification.
+- **Sensitive Information**: All API Keys or passwords must be stored/transmitted with AES-256-GCM encryption.
 
-### 5. 文件一致性
-- **禁止冗餘**：不隨意新增獨立技術文件，所有協議細節應整合進對應的 `feature_docs` (如 [C113])。
-- **代碼映射**：代碼註釋或 PR 說明必須提及對應的功能代碼（如 `[L07]`）。
+### 5. Document Consistency
+- **No Redundancy**: Do not arbitrarily create independent technical documents. All protocol details should be integrated into the corresponding `feature_docs` (e.g., `[C113]`).
+- **Code Mapping**: Code comments or PR descriptions must explicitly mention the corresponding feature codes (e.g., `[L07]`).
 
 ---
-*違反上述鐵律將導致系統架構崩塌，修改前請三思。*
+*Violating the above iron rules will lead to the collapse of the system architecture. Please think twice before making changes.*
