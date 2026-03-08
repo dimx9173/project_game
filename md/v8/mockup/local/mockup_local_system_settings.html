@@ -75,8 +75,8 @@
     </style>
 </head>
 
-<body class="gradient-bg min-h-screen pb-24">
-    <div id="sidebar-container"></div>
+<body class="gradient-bg min-h-screen pb-20">
+    <div id="bottom-nav-container"></div>
 
     <!-- 頂部導航 -->
     <header
@@ -300,11 +300,10 @@
         </div>
     </main>
 
-    <script src="../js/sidebar.js"></script>
+    <!-- 底部導航由 bottom_nav_local.js 動態渲染 -->
+    <script src="../js/bottom_nav_local.js"></script>
     <script>
-        if (typeof MockupSidebar !== 'undefined') {
-            MockupSidebar.render('mockup_local_system_settings.html');
-        }
+        MockupBottomNav.render('mockup_local_system_settings.html');
         lucide.createIcons();
 
         function switchTab(btn, tabId) {
