@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>機台狀態 - 本地後台</title>
+    <title>機台管理 - 本地後台</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
     <script src="https://unpkg.com/lucide@latest"></script>
@@ -34,39 +34,38 @@
         .btn-touch { min-height: 56px; min-width: 56px; touch-action: manipulation; }
         .btn-touch:active { transform: scale(0.95); opacity: 0.9; }
         .badge-local { background: #10b981; color: white; font-size: 10px; padding: 2px 8px; border-radius: 4px; font-weight: 500; }
-        .menu-slide { transform: translateX(-100%); transition: transform 0.3s ease; }
-        .menu-slide.active { transform: translateX(0); }
-        .overlay { opacity: 0; visibility: hidden; transition: opacity 0.3s ease; }
-        .overlay.active { opacity: 1; visibility: visible; }
-        @keyframes pulse-glow { 0%, 100% { box-shadow: 0 0 15px rgba(16, 185, 129, 0.3); } 50% { box-shadow: 0 0 25px rgba(16, 185, 129, 0.5); } }
-        .status-online { animation: pulse-glow 2s infinite; }
+        .progress-bar { background: linear-gradient(90deg, #10b981 0%, #34d399 100%); }
     </style>
 </head>
 <body class="gradient-bg min-h-screen pb-24">
-    <div id="sidebar-container"></div>
-
-    <!-- 頂部導航 -->
-    <header class="glass fixed top-0 left-0 right-0 z-30 h-16 flex items-center justify-center px-4 border-b border-dark-border">
-        <div class="text-center">
-            <h1 class="text-xl font-bold text-white">機台狀態</h1>
-            <div class="flex items-center justify-center space-x-2 mt-1">
-                <div class="flex items-center px-2 py-0.5 bg-emerald-500/20 text-emerald-400 rounded-full border border-emerald-500/30">
-                    <div class="w-1.5 h-1.5 rounded-full bg-emerald-400 mr-1.5 animate-pulse"></div>
-                    <span class="text-xs font-medium">已連線</span>
+    <!-- 頂部 Header -->
+    <header class="glass sticky top-0 z-30 border-b border-dark-border">
+        <div class="flex items-center justify-center px-4 py-3">
+            <div class="text-center">
+                <h1 class="text-lg font-bold text-white">機台管理</h1>
+                <div class="flex items-center justify-center text-xs text-emerald-400 mt-1">
+                    <span class="w-2 h-2 rounded-full bg-emerald-400 mr-1.5 animate-pulse"></span>
+                    A-01 旗艦店
                 </div>
-                <span class="text-xs font-mono text-gray-400">A-01</span>
             </div>
         </div>
     </header>
 
-    <!-- 主要內容 -->
-    <main class="pt-20 pb-4 px-4 space-y-4">
-        <!-- 機台資訊 -->
+    <!-- 內容區 -->
+    <div class="flex-1 p-4 space-y-4">
+
+        <!-- ========== L05 本機資訊 ========== -->
         <div class="glass-card rounded-2xl p-4">
+            <h2 class="text-sm font-semibold text-white flex items-center mb-4">
+                <i data-lucide="monitor" class="w-4 h-4 mr-2 text-emerald-400"></i>
+                L05 本機資訊
+                <span class="ml-2 text-xs text-gray-500">⚠️ 本地快取（僅本機）</span>
+            </h2>
+            
             <div class="flex items-center justify-between mb-4">
                 <div class="flex items-center">
-                    <div class="w-12 h-12 rounded-xl gradient-local flex items-center justify-center mr-3">
-                        <i data-lucide="monitor" class="w-6 h-6 text-white"></i>
+                    <div class="w-14 h-14 rounded-xl gradient-local flex items-center justify-center mr-3">
+                        <i data-lucide="monitor" class="w-7 h-7 text-white"></i>
                     </div>
                     <div>
                         <div class="text-lg font-bold text-white">旗艦店 A-01</div>
@@ -74,146 +73,296 @@
                     </div>
                 </div>
                 <div class="px-3 py-1.5 bg-emerald-500/20 text-emerald-400 rounded-full border border-emerald-500/30 text-xs font-medium">
-                    正常運作
+                    營運中
+                </div>
+            </div>
+
+            <!-- 機台標籤（僅顯示） -->
+            <div class="mb-4">
+                <div class="text-xs text-gray-500 mb-2">機台標籤</div>
+                <div class="flex flex-wrap gap-2">
+                    <span class="px-2 py-1 bg-emerald-500/20 text-emerald-400 rounded text-xs">旗艦店</span>
+                    <span class="px-2 py-1 bg-blue-500/20 text-blue-400 rounded text-xs">A區</span>
+                    <span class="px-2 py-1 bg-purple-500/20 text-purple-400 rounded text-xs">VIP</span>
+                </div>
+            </div>
+
+            <!-- 基本資訊 -->
+            <div class="space-y-3 border-t border-dark-border pt-4">
+                <div class="flex justify-between">
+                    <span class="text-sm text-gray-400">IP 位址</span>
+                    <span class="text-sm text-white font-mono">192.168.1.100</span>
+                </div>
+                <div class="flex justify-between">
+                    <span class="text-sm text-gray-400">MAC 位址</span>
+                    <span class="text-sm text-white font-mono">AA:BB:CC:DD:EE:FF</span>
+                </div>
+                <div class="flex justify-between">
+                    <span class="text-sm text-gray-400">硬體型號</span>
+                    <span class="text-sm text-white">旗艦版 Pro</span>
+                </div>
+                <div class="flex justify-between">
+                    <span class="text-sm text-gray-400">系統版本</span>
+                    <span class="text-sm text-white font-mono">v2.1.0</span>
+                </div>
+                <div class="flex justify-between">
+                    <span class="text-sm text-gray-400">運行時間</span>
+                    <span class="text-sm text-white font-mono">15 天 4 小時</span>
                 </div>
             </div>
         </div>
 
-        <!-- 硬體狀態 -->
+        <!-- ========== L06 本機狀態 ========== -->
         <div class="glass-card rounded-2xl p-4">
-            <h2 class="text-base font-semibold text-white mb-4 pb-2 border-b border-dark-border flex items-center">
-                <i data-lucide="cpu" class="w-5 h-5 mr-2 text-emerald-400"></i>硬體狀態
+            <h2 class="text-sm font-semibold text-white flex items-center mb-4">
+                <i data-lucide="activity" class="w-4 h-4 mr-2 text-emerald-400"></i>
+                L06 本機狀態
+                <span class="ml-2 text-xs text-gray-500">⚠️ 本機狀態</span>
             </h2>
-            <div class="space-y-4">
-                <!-- CPU -->
-                <div>
-                    <div class="flex justify-between items-center mb-2">
+
+            <!-- CPU 使用率 -->
+            <div class="mb-4">
+                <div class="flex justify-between items-center mb-2">
+                    <div class="flex items-center">
+                        <i data-lucide="cpu" class="w-4 h-4 text-emerald-400 mr-2"></i>
                         <span class="text-sm text-gray-400">CPU 使用率</span>
-                        <span class="text-sm font-mono text-emerald-400">45%</span>
                     </div>
-                    <div class="h-2 bg-dark-bg rounded-full overflow-hidden">
-                        <div class="h-full bg-gradient-to-r from-emerald-500 to-emerald-400 rounded-full" style="width: 45%"></div>
-                    </div>
+                    <span class="text-sm font-mono text-emerald-400">45%</span>
                 </div>
-                <!-- 記憶體 -->
-                <div>
-                    <div class="flex justify-between items-center mb-2">
-                        <span class="text-sm text-gray-400">記憶體使用</span>
-                        <span class="text-sm font-mono text-emerald-400">62%</span>
-                    </div>
-                    <div class="h-2 bg-dark-bg rounded-full overflow-hidden">
-                        <div class="h-full bg-gradient-to-r from-emerald-500 to-emerald-400 rounded-full" style="width: 62%"></div>
-                    </div>
-                </div>
-                <!-- 硬碟 -->
-                <div>
-                    <div class="flex justify-between items-center mb-2">
-                        <span class="text-sm text-gray-400">硬碟空間</span>
-                        <span class="text-sm font-mono text-yellow-400">78%</span>
-                    </div>
-                    <div class="h-2 bg-dark-bg rounded-full overflow-hidden">
-                        <div class="h-full bg-gradient-to-r from-yellow-500 to-yellow-400 rounded-full" style="width: 78%"></div>
-                    </div>
+                <div class="h-2 bg-dark-bg rounded-full overflow-hidden">
+                    <div class="progress-bar h-full rounded-full" style="width: 45%"></div>
                 </div>
             </div>
-        </div>
 
-        <!-- 網路狀態 -->
-        <div class="glass-card rounded-2xl p-4">
-            <h2 class="text-base font-semibold text-white mb-4 pb-2 border-b border-dark-border flex items-center">
-                <i data-lucide="wifi" class="w-5 h-5 mr-2 text-emerald-400"></i>網路狀態
-            </h2>
-            <div class="space-y-3">
-                <div class="flex justify-between items-center">
-                    <span class="text-sm text-gray-400">連線狀態</span>
+            <!-- 記憶體 -->
+            <div class="mb-4">
+                <div class="flex justify-between items-center mb-2">
+                    <div class="flex items-center">
+                        <i data-lucide="memory-stick" class="w-4 h-4 text-emerald-400 mr-2"></i>
+                        <span class="text-sm text-gray-400">記憶體</span>
+                    </div>
+                    <span class="text-sm font-mono text-white">6.2 / 16 GB</span>
+                </div>
+                <div class="h-2 bg-dark-bg rounded-full overflow-hidden">
+                    <div class="progress-bar h-full rounded-full" style="width: 39%"></div>
+                </div>
+            </div>
+
+            <!-- 磁碟空間 -->
+            <div class="mb-4">
+                <div class="flex justify-between items-center mb-2">
+                    <div class="flex items-center">
+                        <i data-lucide="hard-drive" class="w-4 h-4 text-emerald-400 mr-2"></i>
+                        <span class="text-sm text-gray-400">磁碟空間</span>
+                    </div>
+                    <span class="text-sm font-mono text-white">128 / 512 GB</span>
+                </div>
+                <div class="h-2 bg-dark-bg rounded-full overflow-hidden">
+                    <div class="h-full rounded-full bg-gradient-to-r from-emerald-500 to-emerald-400" style="width: 25%"></div>
+                </div>
+            </div>
+
+            <!-- 網路狀態 -->
+            <div class="border-t border-dark-border pt-4">
+                <div class="flex items-center justify-between mb-3">
+                    <div class="flex items-center">
+                        <i data-lucide="wifi" class="w-4 h-4 text-emerald-400 mr-2"></i>
+                        <span class="text-sm text-gray-400">網路狀態</span>
+                    </div>
                     <div class="flex items-center text-emerald-400">
                         <div class="w-2 h-2 rounded-full bg-emerald-400 mr-2 animate-pulse"></div>
                         <span class="text-sm font-medium">已連線</span>
                     </div>
                 </div>
-                <div class="flex justify-between items-center">
-                    <span class="text-sm text-gray-400">延遲</span>
-                    <span class="text-sm font-mono text-white">12 ms</span>
-                </div>
-                <div class="flex justify-between items-center">
-                    <span class="text-sm text-gray-400">IP 位址</span>
-                    <span class="text-sm font-mono text-gray-500">192.168.1.100</span>
+                <div class="grid grid-cols-2 gap-3">
+                    <div class="p-3 bg-dark-bg/50 rounded-xl text-center">
+                        <div class="text-xl font-bold text-emerald-400 font-mono">12ms</div>
+                        <div class="text-xs text-gray-500">延遲</div>
+                    </div>
+                    <div class="p-3 bg-dark-bg/50 rounded-xl text-center">
+                        <div class="text-xl font-bold text-white font-mono">98.5%</div>
+                        <div class="text-xs text-gray-500">連線穩定度</div>
+                    </div>
                 </div>
             </div>
         </div>
 
-        <!-- 遊戲狀態 -->
+        <!-- ========== L07 機台配置下發 ========== -->
         <div class="glass-card rounded-2xl p-4">
-            <h2 class="text-base font-semibold text-white mb-4 pb-2 border-b border-dark-border flex items-center">
-                <i data-lucide="gamepad-2" class="w-5 h-5 mr-2 text-emerald-400"></i>遊戲狀態
+            <h2 class="text-sm font-semibold text-white flex items-center mb-4">
+                <i data-lucide="download-cloud" class="w-4 h-4 mr-2 text-emerald-400"></i>
+                L07 機台配置下發
+                <span class="ml-2 text-xs text-amber-400">❌ 集中式統一管理</span>
             </h2>
+
+            <!-- 唯讀提示 -->
+            <div class="p-3 bg-amber-500/10 border border-amber-500/20 rounded-xl mb-4">
+                <div class="flex items-center text-xs text-amber-400">
+                    <i data-lucide="info" class="w-4 h-4 mr-2"></i>
+                    <span>配置由中央後台統一下發，本地僅能檢視</span>
+                </div>
+            </div>
+
+            <!-- 配置狀態 -->
             <div class="space-y-3">
-                <div class="flex justify-between items-center">
-                    <span class="text-sm text-gray-400">目前遊戲</span>
-                    <span class="text-sm font-medium text-white">幸運拉霸</span>
+                <div class="flex items-center justify-between p-3 bg-dark-bg/50 rounded-xl">
+                    <div class="flex items-center">
+                        <div class="w-8 h-8 rounded-lg bg-emerald-500/20 flex items-center justify-center mr-3">
+                            <i data-lucide="check" class="w-4 h-4 text-emerald-400"></i>
+                        </div>
+                        <div>
+                            <div class="text-sm text-white">遊戲列表</div>
+                            <div class="text-xs text-gray-500">已同步</div>
+                        </div>
+                    </div>
+                    <span class="text-xs text-gray-500">2024-03-08 14:30</span>
                 </div>
-                <div class="flex justify-between items-center">
-                    <span class="text-sm text-gray-400">遊戲版本</span>
-                    <span class="text-sm font-mono text-gray-500">v2.5.1</span>
+
+                <div class="flex items-center justify-between p-3 bg-dark-bg/50 rounded-xl">
+                    <div class="flex items-center">
+                        <div class="w-8 h-8 rounded-lg bg-emerald-500/20 flex items-center justify-center mr-3">
+                            <i data-lucide="check" class="w-4 h-4 text-emerald-400"></i>
+                        </div>
+                        <div>
+                            <div class="text-sm text-white">系統參數</div>
+                            <div class="text-xs text-gray-500">已同步</div>
+                        </div>
+                    </div>
+                    <span class="text-xs text-gray-500">2024-03-08 14:30</span>
                 </div>
-                <div class="flex justify-between items-center">
-                    <span class="text-sm text-gray-400">機台餘額</span>
-                    <span class="text-sm font-mono text-white">$3,500</span>
+
+                <div class="flex items-center justify-between p-3 bg-dark-bg/50 rounded-xl">
+                    <div class="flex items-center">
+                        <div class="w-8 h-8 rounded-lg bg-emerald-500/20 flex items-center justify-center mr-3">
+                            <i data-lucide="check" class="w-4 h-4 text-emerald-400"></i>
+                        </div>
+                        <div>
+                            <div class="text-sm text-white">營業時間</div>
+                            <div class="text-xs text-gray-500">已同步</div>
+                        </div>
+                    </div>
+                    <span class="text-xs text-gray-500">2024-03-08 14:30</span>
+                </div>
+
+                <div class="flex items-center justify-between p-3 bg-dark-bg/50 rounded-xl">
+                    <div class="flex items-center">
+                        <div class="w-8 h-8 rounded-lg bg-blue-500/20 flex items-center justify-center mr-3">
+                            <i data-lucide="clock" class="w-4 h-4 text-blue-400"></i>
+                        </div>
+                        <div>
+                            <div class="text-sm text-white">遊戲參數</div>
+                            <div class="text-xs text-blue-400">待接收</div>
+                        </div>
+                    </div>
+                    <span class="text-xs text-blue-400">等待下發</span>
+                </div>
+            </div>
+
+            <!-- 最後同步時間 -->
+            <div class="mt-4 pt-4 border-t border-dark-border">
+                <div class="flex justify-between text-sm">
+                    <span class="text-gray-500">最後配置更新</span>
+                    <span class="text-white">2024-03-08 14:30:00</span>
                 </div>
             </div>
         </div>
 
-        <!-- 系統資訊 -->
+        <!-- 快速連結到遊戲管理 -->
         <div class="glass-card rounded-2xl p-4">
-            <h2 class="text-base font-semibold text-white mb-4 pb-2 border-b border-dark-border flex items-center">
-                <i data-lucide="info" class="w-5 h-5 mr-2 text-emerald-400"></i>系統資訊
+            <h2 class="text-sm font-semibold text-white flex items-center mb-4">
+                <i data-lucide="gamepad-2" class="w-4 h-4 mr-2 text-emerald-400"></i>
+                遊戲管理 (L09-L46)
             </h2>
-            <div class="space-y-3">
-                <div class="flex justify-between items-center">
-                    <span class="text-sm text-gray-400">系統版本</span>
-                    <span class="text-sm font-mono text-white">v8.0.1</span>
-                </div>
-                <div class="flex justify-between items-center">
-                    <span class="text-sm text-gray-400">運行時間</span>
-                    <span class="text-sm font-mono text-white">7 天 3 小時</span>
-                </div>
-                <div class="flex justify-between items-center">
-                    <span class="text-sm text-gray-400">最後同步</span>
-                    <span class="text-sm font-mono text-white">2 分鐘前</span>
-                </div>
+            
+            <div class="grid grid-cols-2 gap-3">
+                <a href="mockup_local_game.html" class="p-4 bg-dark-bg/50 rounded-xl hover:bg-dark-hover transition-colors">
+                    <div class="flex items-center mb-2">
+                        <i data-lucide="list" class="w-4 h-4 text-emerald-400 mr-2"></i>
+                        <span class="text-sm text-white">遊戲列表</span>
+                    </div>
+                    <div class="text-xs text-gray-500">L11 檢視 / L12 篩選 / L13 搜尋</div>
+                </a>
+                <a href="mockup_local_game.html" class="p-4 bg-dark-bg/50 rounded-xl hover:bg-dark-hover transition-colors">
+                    <div class="flex items-center mb-2">
+                        <i data-lucide="toggle-left" class="w-4 h-4 text-emerald-400 mr-2"></i>
+                        <span class="text-sm text-white">遊戲控制</span>
+                    </div>
+                    <div class="text-xs text-gray-500">L09 啟用/停用 (雲端遙控)</div>
+                </a>
+                <a href="mockup_local_game.html" class="p-4 bg-dark-bg/50 rounded-xl hover:bg-dark-hover transition-colors">
+                    <div class="flex items-center mb-2">
+                        <i data-lucide="flask-conical" class="w-4 h-4 text-emerald-400 mr-2"></i>
+                        <span class="text-sm text-white">遊戲測試</span>
+                    </div>
+                    <div class="text-xs text-gray-500">L43-L46 測試功能</div>
+                </a>
+                <a href="mockup_local_game.html" class="p-4 bg-dark-bg/50 rounded-xl hover:bg-dark-hover transition-colors">
+                    <div class="flex items-center mb-2">
+                        <i data-lucide="info" class="w-4 h-4 text-emerald-400 mr-2"></i>
+                        <span class="text-sm text-white">遊戲詳情</span>
+                    </div>
+                    <div class="text-xs text-gray-500">L10 版本 / L14 詳情</div>
+                </a>
             </div>
         </div>
-    </main>
 
-    <!-- 底部導航 -->
-    <nav class="glass fixed bottom-0 left-0 right-0 z-30 h-20 flex items-center justify-around border-t border-dark-border px-2 pb-2">
-        <a href="mockup_local_dashboard.html" class="flex flex-col items-center justify-center flex-1 py-2">
-            <i data-lucide="layout-dashboard" class="w-6 h-6 mb-1 text-gray-500"></i>
-            <span class="text-xs text-gray-500">儀表板</span>
-        </a>
-        <a href="#" class="flex flex-col items-center justify-center flex-1 py-2">
-            <div class="w-12 h-12 -mt-6 rounded-full gradient-local flex items-center justify-center shadow-glow">
-                <i data-lucide="monitor" class="w-6 h-6 text-white"></i>
+        <!-- 機台操作（唯讀） -->
+        <div class="glass-card rounded-2xl p-4">
+            <h2 class="text-sm font-semibold text-white flex items-center mb-4">
+                <i data-lucide="settings" class="w-4 h-4 mr-2 text-emerald-400"></i>
+                機台操作
+            </h2>
+            <div class="grid grid-cols-2 gap-3">
+                <button disabled class="p-4 bg-dark-bg/30 rounded-xl text-center opacity-50 cursor-not-allowed">
+                    <div class="w-10 h-10 rounded-full bg-gray-500/20 flex items-center justify-center mx-auto mb-2">
+                        <i data-lucide="power" class="w-5 h-5 text-gray-400"></i>
+                    </div>
+                    <div class="text-xs text-gray-500">遠端重啟</div>
+                    <div class="text-xs text-amber-400 mt-1">❌ 需中央授權</div>
+                </button>
+                <button disabled class="p-4 bg-dark-bg/30 rounded-xl text-center opacity-50 cursor-not-allowed">
+                    <div class="w-10 h-10 rounded-full bg-gray-500/20 flex items-center justify-center mx-auto mb-2">
+                        <i data-lucide="rotate-ccw" class="w-5 h-5 text-gray-400"></i>
+                    </div>
+                    <div class="text-xs text-gray-500">恢復原廠</div>
+                    <div class="text-xs text-amber-400 mt-1">❌ 需中央授權</div>
+                </button>
             </div>
-            <span class="text-xs text-emerald-500 mt-1 font-medium">機台</span>
-        </a>
-        <a href="mockup_local_cash.html" class="flex flex-col items-center justify-center flex-1 py-2">
-            <i data-lucide="plus-circle" class="w-6 h-6 mb-1 text-gray-500"></i>
-            <span class="text-xs text-gray-500">開洗分</span>
-        </a>
-        <a href="mockup_local_sync.html" class="flex flex-col items-center justify-center flex-1 py-2">
-            <i data-lucide="refresh-cw" class="w-6 h-6 mb-1 text-gray-500"></i>
-            <span class="text-xs text-gray-500">同步</span>
-        </a>
-        <a href="mockup_mvp_local_setup.html" class="flex flex-col items-center justify-center flex-1 py-2">
-            <i data-lucide="settings" class="w-6 h-6 mb-1 text-gray-500"></i>
-            <span class="text-xs text-gray-500">設定</span>
-        </a>
+        </div>
+
+    </div>
+
+    <!-- 底部導航欄 -->
+    <nav class="fixed bottom-0 left-0 right-0 glass border-t border-dark-border z-40 pb-safe">
+        <div class="flex justify-around items-center py-2 px-2">
+            <a href="mockup_local_dashboard.html" class="flex flex-col items-center px-4 py-2 text-gray-400 touch-manipulation">
+                <i data-lucide="layout-dashboard" class="w-7 h-7"></i>
+                <span class="text-xs mt-1">儀表板</span>
+            </a>
+            <a href="mockup_local_machine.html" class="flex flex-col items-center px-4 py-2 text-emerald-400 touch-manipulation">
+                <i data-lucide="monitor" class="w-7 h-7"></i>
+                <span class="text-xs mt-1">機台</span>
+            </a>
+            <a href="mockup_local_game.html" class="flex flex-col items-center px-4 py-2 text-gray-400 touch-manipulation">
+                <i data-lucide="gamepad-2" class="w-7 h-7"></i>
+                <span class="text-xs mt-1">遊戲</span>
+            </a>
+            <a href="mockup_local_sync.html" class="flex flex-col items-center px-4 py-2 text-gray-400 touch-manipulation">
+                <i data-lucide="refresh-cw" class="w-7 h-7"></i>
+                <span class="text-xs mt-1">同步</span>
+            </a>
+            <a href="mockup_mvp_local_setup.html" class="flex flex-col items-center px-4 py-2 text-gray-400 touch-manipulation">
+                <i data-lucide="settings" class="w-7 h-7"></i>
+                <span class="text-xs mt-1">設定</span>
+            </a>
+        </div>
     </nav>
 
     <script>
         lucide.createIcons();
     </script>
-    <script src="../js/sidebar.js"></script>
+    <style>
+        .pb-safe { padding-bottom: env(safe-area-inset-bottom, 0); }
+    </style>
 </body>
 </html>
