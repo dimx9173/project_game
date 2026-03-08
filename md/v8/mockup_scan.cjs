@@ -49,6 +49,8 @@ const FUNCTION_MATRIX = {
   C47: { name: '營收報表', module: '交易紀錄管理', type: 'central' },
   C48: { name: '遊戲排行', module: '交易紀錄管理', type: 'central' },
   L18: { name: '交易操作（回滾/確認）', module: '交易紀錄管理', type: 'central' },
+  L45: { name: '遊戲開分/洗分', module: '交易紀錄管理', type: 'local' },
+  L46: { name: '遊戲派彩', module: '交易紀錄管理', type: 'local' },
   C51: { name: '交易導出', module: '交易紀錄管理', type: 'central' },
   L20: { name: '爭議對帳處理專區', module: '交易紀錄管理', type: 'central' },
 
@@ -226,7 +228,7 @@ const MOCKUP_MAPPING = {
   // 本地端
   'mockup_local_dashboard.html': ['C01', 'L01', 'L02'],
   'mockup_local_machine.html': ['L05', 'L06'],
-  'mockup_local_cash.html': ['C11'],
+  'mockup_local_cash.html': ['L45', 'L46'],
   'mockup_local_sync.html': ['L34'],
   'mockup_mvp_local_setup.html': ['L47'],
 

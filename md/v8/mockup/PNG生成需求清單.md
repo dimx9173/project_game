@@ -12,7 +12,6 @@
 |---------|---------|----------|
 | C02 | 硬體網路狀態 | mockup_hardware_network.html |
 | C05 | 系統通知 | mockup_notifications.html |
-| C11 | 開分/洗分 | mockup_cash.html |
 | C14 | 機台設定 | mockup_machine_settings.html |
 | C15 | 測試模式 | mockup_test_mode.html |
 | C21 | 遊戲啟用停用 | mockup_game_toggle.html |

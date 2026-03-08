@@ -243,7 +243,7 @@ paths:
         }
     post:
       tags: [機台管理 (Machines)]
-      summary: "[C11/C12] 發送遠端指令"
+      summary: "[C12] 發送遠端指令"
       security: [{ BearerAuth: [] }]
       requestBody:
         required: true
@@ -252,8 +252,7 @@ paths:
             schema:
               type: object
               properties:
-                command:
-                  { type: string, enum: [restart, shutdown, cash_in, cash_out] }
+                command: { type: string, enum: [restart, shutdown, force_sync] }
                 params: { type: object }
       responses:
         "200": { description: 指令已發送 }
