@@ -97,7 +97,6 @@ const FUNCTION_MATRIX = {
 
   // 系統設定
   L47: { name: '基本設定', module: '系統設定', type: 'local' },
-  L48: { name: '網路設定', module: '系統設定', type: 'local' },
   C90: { name: '系統參數設定', module: '系統設定', type: 'central' },
   L28: { name: '備份與恢復', module: '系統設定', type: 'central' },
 
@@ -193,7 +192,6 @@ const MOCKUP_MAPPING = {
   'mockup_log_query.html': ['C86'],
 
   // 系統設定
-  'mockup_local_network_settings.html': ['L48'],
   'mockup_std_system_settings.html': ['C90'],
   'mockup_network_settings.html': ['C88'],
   'mockup_std_backup.html': ['L28'],
@@ -222,7 +220,7 @@ const MOCKUP_MAPPING = {
 
   // 報表
   'mockup_std_reports.html': ['L17', 'C47'],
-  'mockup_local_system_settings.html': ['L47', 'L48'],
+  'mockup_local_system_settings.html': ['L47'],
   'mockup_std_category_add.html': ['C77'],
 
   // 本地端
