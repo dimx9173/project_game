@@ -2,8 +2,8 @@ const puppeteer = require('puppeteer');
 const path = require('path');
 
 const mockups = [
-  { name: '[M02]機台管理(含監控中心)', file: 'mockup_local_machine.html', dir: '[M02]機台管理' },
-  { name: '[M04]開洗分與交易', file: 'mockup_local_cash.html', dir: '[M04]交易紀錄管理' }
+  { name: '[LM02]機台管理(含監控中心)', file: 'mockup_local_machine.html', dir: '[LM02]機台管理' },
+  { name: '[LM04]開洗分與交易', file: 'mockup_local_cash.html', dir: '[LM04]交易紀錄管理' }
 ];
 
 const OUTPUT_DIR = '/home/brian/project/game/md/v8/feature_docs/local';
