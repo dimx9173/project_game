@@ -22,7 +22,7 @@ const FUNCTION_MATRIX = {
   L06: { name: '機台狀態監控', module: '機台管理', type: 'both' },
   C11: { name: '開分/洗分', module: '機台管理', type: 'central' },
   C12: { name: '遠端指令', module: '機台管理', type: 'central' },
-  L07: { name: '機台配置接收', module: '機台管理', type: 'central' },
+  L07: { name: '機台配置接收', module: '系統', type: 'central' },
   C14: { name: '機台設定', module: '機台管理', type: 'both' },
   C15: { name: '測試模式', module: '機台管理', type: 'central' },
 
