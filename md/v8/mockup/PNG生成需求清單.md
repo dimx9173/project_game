@@ -44,7 +44,7 @@
 | L04 | 今日營收 | mockup_local_dashboard.html |
 | L05 | 機台列表檢視 | mockup_local_machine.html |
 | L06 | 機台狀態監控 | mockup_local_machine.html |
-| L07 | 機台配置下發 | mockup_local_machine.html |
+| L07 | 機台配置接收 | mockup_local_machine.html |
 | L08 | 快速操作按鈕 | mockup_local_dashboard.html |
 | L09-L46 | 其他功能 | 需從對應頁面截圖 |
 
