@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>開分/洗分與交易查詢 - 本地後台</title>
+    <title>開分/洗分/交易 - 本地後台</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
     <script src="https://unpkg.com/lucide@latest"></script>
@@ -61,7 +61,7 @@
     <!-- 頂部導航 -->
     <header class="glass fixed top-0 left-0 right-0 z-30 h-16 flex items-center justify-center px-4 border-b border-dark-border">
         <div class="flex flex-col items-center">
-            <h1 class="text-lg font-bold text-white">開分/洗分</h1>
+            <h1 class="text-lg font-bold text-white">開分/洗分/交易</h1>
             <div class="flex items-center space-x-2">
                 <span class="badge-queue"><i data-lucide="database" class="w-3 h-3 inline mr-1"></i>📝 佇列</span>
                 <span id="syncStatus" class="badge-syncing hidden"><i data-lucide="cloud-upload" class="w-3 h-3 inline mr-1"></i>⚠️ 同步中</span>
@@ -151,79 +151,85 @@
             </div>
         </div>
 
-        <!-- 頁籤切換 -->
-        <div class="flex space-x-2 bg-dark-bg rounded-xl p-1 border border-dark-border">
-            <button id="tab-cash" class="flex-1 py-3 rounded-lg text-base font-medium tab-active transition-all" onclick="switchTab('cash')">
-                <i data-lucide="dollar-sign" class="w-4 h-4 inline mr-1"></i>開分/洗分
-            
-            <button id="tab-query" class="flex-1 py-3 rounded-lg text-base font-medium tab-inactive transition-all" onclick="switchTab('query')">
-                <i data-lucide="list" class="w-4 h-4 inline mr-1"></i>交易查詢
-            
+        <!-- 頁籤切換：開分 | 洗分 | 派彩 | 交易紀錄 | 交易查詢 -->
+        <div class="flex space-x-1 bg-dark-bg rounded-xl p-1 border border-dark-border overflow-x-auto">
+            <button id="tab-cash-in" class="flex-1 py-2.5 rounded-lg text-xs font-medium tab-active whitespace-nowrap" onclick="switchCashTab('cash-in')">
+                <i data-lucide="arrow-down-circle" class="w-3 h-3 inline mr-1"></i>開分
+            </button>
+            <button id="tab-cash-out" class="flex-1 py-2.5 rounded-lg text-xs font-medium tab-inactive whitespace-nowrap" onclick="switchCashTab('cash-out')">
+                <i data-lucide="arrow-up-circle" class="w-3 h-3 inline mr-1"></i>洗分
+            </button>
+            <button id="tab-payout" class="flex-1 py-2.5 rounded-lg text-xs font-medium tab-inactive whitespace-nowrap" onclick="switchCashTab('payout')">
+                <i data-lucide="gift" class="w-3 h-3 inline mr-1"></i>派彩
+            </button>
+            <button id="tab-records" class="flex-1 py-2.5 rounded-lg text-xs font-medium tab-inactive whitespace-nowrap" onclick="switchCashTab('records')">
+                <i data-lucide="history" class="w-3 h-3 inline mr-1"></i>交易紀錄
+            </button>
+            <button id="tab-query" class="flex-1 py-2.5 rounded-lg text-xs font-medium tab-inactive whitespace-nowrap" onclick="switchCashTab('query')">
+                <i data-lucide="search" class="w-3 h-3 inline mr-1"></i>交易查詢
+            </button>
         </div>
 
-        <!-- ========== 區塊1: 開分/洗分操作 ========== -->
-        <div id="section-cash" class="section-transition">
+        <!-- ========== 區塊1: 開分 (L11) ========== -->
+        <div id="section-cash-in" class="cash-section">
             
             <!-- 今日摘要 -->
             <div class="glass-card rounded-2xl p-4">
                 <div class="flex justify-between items-center mb-3">
-                    <h2 class="text-base font-semibold text-white">今日摘要</h2>
+                    <h2 class="text-base font-semibold text-white">今日開分摘要</h2>
                     <span class="text-xs text-gray-500"><i data-lucide="clock" class="w-3 h-3 inline mr-1"></i>即時更新</span>
                 </div>
                 <div class="grid grid-cols-3 gap-3">
                     <div class="text-center">
-                        <div class="text-xs text-gray-500 mb-1">總淨收</div>
-                        <div class="text-xl font-mono font-bold text-emerald-400">$12,500</div>
+                        <div class="text-xs text-gray-500 mb-1">今日開分總額</div>
+                        <div class="text-xl font-mono font-bold text-emerald-400">$25,000</div>
                     </div>
                     <div class="text-center">
-                        <div class="text-xs text-gray-500 mb-1">下注</div>
-                        <div class="text-lg font-mono font-bold text-gray-400">$45K</div>
+                        <div class="text-xs text-gray-500 mb-1">開分次數</div>
+                        <div class="text-lg font-mono font-bold text-gray-400">18次</div>
                     </div>
                     <div class="text-center">
-                        <div class="text-xs text-gray-500 mb-1">派彩</div>
-                        <div class="text-lg font-mono font-bold text-gray-400">$32.5K</div>
+                        <div class="text-xs text-gray-500 mb-1">待同步</div>
+                        <div class="text-lg font-mono font-bold text-amber-400">2筆</div>
                     </div>
                 </div>
             </div>
 
-            <!-- 模式切換 -->
-            <div class="flex space-x-2 bg-dark-bg rounded-xl p-1 border border-dark-border">
-                <button id="mode-in" class="flex-1 py-3 rounded-lg text-sm font-medium tab-active" onclick="switchMode('in')">
-                    <i data-lucide="arrow-down-circle" class="w-4 h-4 inline mr-1"></i>開分 (注資)
-                
-                <button id="mode-out" class="flex-1 py-3 rounded-lg text-sm font-medium tab-inactive" onclick="switchMode('out')">
-                    <i data-lucide="arrow-up-circle" class="w-4 h-4 inline mr-1"></i>洗分 (結算)
-                
-            </div>
-
-            <!-- 開分/洗分面板 -->
+            <!-- 開分麵板 -->
             <div class="glass-card rounded-2xl p-4 space-y-4">
                 <!-- 金額顯示 -->
                 <div class="bg-dark-bg rounded-xl p-4 text-center border border-dark-border">
-                    <div class="text-sm text-gray-500 mb-2">輸入金額</div>
-                    <div id="amount-display" class="text-4xl font-mono font-bold text-white tracking-wider">$0</div>
+                    <div class="text-sm text-gray-500 mb-2">輸入開分金額</div>
+                    <div id="amount-display-in" class="text-4xl font-mono font-bold text-white tracking-wider">$0</div>
                 </div>
 
                 <!-- 數字鍵盤 -->
                 <div class="grid grid-cols-3 gap-2">
-                    <button class="keypad-btn" onclick="addDigit('1')">1
-                    <button class="keypad-btn" onclick="addDigit('2')">2
-                    <button class="keypad-btn" onclick="addDigit('3')">3
-                    <button class="keypad-btn" onclick="addDigit('4')">4
-                    <button class="keypad-btn" onclick="addDigit('5')">5
-                    <button class="keypad-btn" onclick="addDigit('6')">6
-                    <button class="keypad-btn" onclick="addDigit('7')">7
-                    <button class="keypad-btn" onclick="addDigit('8')">8
-                    <button class="keypad-btn" onclick="addDigit('9')">9
-                    <button class="keypad-btn" onclick="clearAmount()">C
-                    <button class="keypad-btn" onclick="addDigit('0')">0
-                    <button class="keypad-btn" onclick="backspace()"><i data-lucide="delete" class="w-6 h-6"></i>
+                    <button class="keypad-btn" onclick="addDigitIn('1')">1</button>
+                    <button class="keypad-btn" onclick="addDigitIn('2')">2</button>
+                    <button class="keypad-btn" onclick="addDigitIn('3')">3</button>
+                    <button class="keypad-btn" onclick="addDigitIn('4')">4</button>
+                    <button class="keypad-btn" onclick="addDigitIn('5')">5</button>
+                    <button class="keypad-btn" onclick="addDigitIn('6')">6</button>
+                    <button class="keypad-btn" onclick="addDigitIn('7')">7</button>
+                    <button class="keypad-btn" onclick="addDigitIn('8')">8</button>
+                    <button class="keypad-btn" onclick="addDigitIn('9')">9</button>
+                    <button class="keypad-btn" onclick="clearAmountIn()">C</button>
+                    <button class="keypad-btn" onclick="addDigitIn('0')">0</button>
+                    <button class="keypad-btn" onclick="backspaceIn()"><i data-lucide="delete" class="w-6 h-6"></i></button>
+                </div>
+
+                <!-- 快捷金額 -->
+                <div class="flex space-x-2">
+                    <button onclick="setQuickAmountIn(1000)" class="flex-1 py-2 bg-dark-bg rounded-lg text-sm text-emerald-400 border border-emerald-500/30">+$1,000</button>
+                    <button onclick="setQuickAmountIn(5000)" class="flex-1 py-2 bg-dark-bg rounded-lg text-sm text-emerald-400 border border-emerald-500/30">+$5,000</button>
+                    <button onclick="setQuickAmountIn(10000)" class="flex-1 py-2 bg-dark-bg rounded-lg text-sm text-emerald-400 border border-emerald-500/30">+$10,000</button>
                 </div>
 
                 <!-- 確認按鈕 -->
-                <button id="btn-confirm" onclick="confirmTransaction()" class="w-full py-4 gradient-local rounded-xl text-white font-bold text-lg btn-touch">
+                <button onclick="confirmCashIn()" class="w-full py-4 gradient-local rounded-xl text-white font-bold text-lg btn-touch">
                     <i data-lucide="check-circle" class="w-5 h-5 inline mr-2"></i>確認開分
-                
+                </button>
 
                 <!-- 佇列提示 -->
                 <div class="flex items-center justify-center text-xs text-gray-500">
@@ -233,22 +239,279 @@
             </div>
         </div>
 
-        <!-- ========== 區塊2: 交易查詢 (唯讀) ========== -->
-        <div id="section-query" class="section-transition hidden">
+        <!-- ========== 區塊2: 洗分 (L12) ========== -->
+        <div id="section-cash-out" class="cash-section hidden">
             
-            <!-- 篩選 -->
-            <div class="glass-card rounded-2xl p-3">
+            <!-- 今日洗分摘要 -->
+            <div class="glass-card rounded-2xl p-4">
+                <div class="flex justify-between items-center mb-3">
+                    <h2 class="text-base font-semibold text-white">今日洗分摘要</h2>
+                    <span class="text-xs text-gray-500"><i data-lucide="clock" class="w-3 h-3 inline mr-1"></i>即時更新</span>
+                </div>
+                <div class="grid grid-cols-3 gap-3">
+                    <div class="text-center">
+                        <div class="text-xs text-gray-500 mb-1">今日洗分總額</div>
+                        <div class="text-xl font-mono font-bold text-red-400">$18,500</div>
+                    </div>
+                    <div class="text-center">
+                        <div class="text-xs text-gray-500 mb-1">洗分次數</div>
+                        <div class="text-lg font-mono font-bold text-gray-400">15次</div>
+                    </div>
+                    <div class="text-center">
+                        <div class="text-xs text-gray-500 mb-1">淨收</div>
+                        <div class="text-lg font-mono font-bold text-emerald-400">$6,500</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 洗分麵板 -->
+            <div class="glass-card rounded-2xl p-4 space-y-4">
+                <!-- 金額顯示 -->
+                <div class="bg-dark-bg rounded-xl p-4 text-center border border-dark-border">
+                    <div class="text-sm text-gray-500 mb-2">輸入洗分金額</div>
+                    <div id="amount-display-out" class="text-4xl font-mono font-bold text-white tracking-wider">$0</div>
+                </div>
+
+                <!-- 數字鍵盤 -->
+                <div class="grid grid-cols-3 gap-2">
+                    <button class="keypad-btn" onclick="addDigitOut('1')">1</button>
+                    <button class="keypad-btn" onclick="addDigitOut('2')">2</button>
+                    <button class="keypad-btn" onclick="addDigitOut('3')">3</button>
+                    <button class="keypad-btn" onclick="addDigitOut('4')">4</button>
+                    <button class="keypad-btn" onclick="addDigitOut('5')">5</button>
+                    <button class="keypad-btn" onclick="addDigitOut('6')">6</button>
+                    <button class="keypad-btn" onclick="addDigitOut('7')">7</button>
+                    <button class="keypad-btn" onclick="addDigitOut('8')">8</button>
+                    <button class="keypad-btn" onclick="addDigitOut('9')">9</button>
+                    <button class="keypad-btn" onclick="clearAmountOut()">C</button>
+                    <button class="keypad-btn" onclick="addDigitOut('0')">0</button>
+                    <button class="keypad-btn" onclick="backspaceOut()"><i data-lucide="delete" class="w-6 h-6"></i></button>
+                </div>
+
+                <!-- 快捷金額 -->
                 <div class="flex space-x-2">
-                    <select class="flex-1 bg-dark-bg border border-dark-border rounded-lg py-2 px-3 text-sm text-white">
+                    <button onclick="setQuickAmountOut(1000)" class="flex-1 py-2 bg-dark-bg rounded-lg text-sm text-red-400 border border-red-500/30">-$1,000</button>
+                    <button onclick="setQuickAmountOut(5000)" class="flex-1 py-2 bg-dark-bg rounded-lg text-sm text-red-400 border border-red-500/30">-$5,000</button>
+                    <button onclick="setQuickAmountOut(10000)" class="flex-1 py-2 bg-dark-bg rounded-lg text-sm text-red-400 border border-red-500/30">-$10,000</button>
+                </div>
+
+                <!-- 確認按鈕 -->
+                <button onclick="confirmCashOut()" class="w-full py-4 bg-red-500 rounded-xl text-white font-bold text-lg btn-touch">
+                    <i data-lucide="check-circle" class="w-5 h-5 inline mr-2"></i>確認洗分
+                </button>
+
+                <!-- 佇列提示 -->
+                <div class="flex items-center justify-center text-xs text-gray-500">
+                    <i data-lucide="info" class="w-3 h-3 mr-1"></i>
+                    交易將寫入本地佇列，連線後自動同步至雲端
+                </div>
+            </div>
+        </div>
+
+        <!-- ========== 區塊3: 派彩 (L13-L14) ========== -->
+        <div id="section-payout" class="cash-section hidden">
+            
+            <!-- 派彩摘要 -->
+            <div class="glass-card rounded-2xl p-4">
+                <div class="flex justify-between items-center mb-3">
+                    <h2 class="text-base font-semibold text-white">遊戲派彩</h2>
+                    <span class="badge-local">L13-L14</span>
+                </div>
+                <div class="grid grid-cols-2 gap-3">
+                    <div class="text-center">
+                        <div class="text-xs text-gray-500 mb-1">今日派彩總額</div>
+                        <div class="text-xl font-mono font-bold text-purple-400">$32,500</div>
+                    </div>
+                    <div class="text-center">
+                        <div class="text-xs text-gray-500 mb-1">派彩次數</div>
+                        <div class="text-lg font-mono font-bold text-gray-400">127次</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 遊戲派彩記錄 -->
+            <div class="glass-card rounded-2xl p-4">
+                <h3 class="text-sm font-medium text-white mb-3">近期派彩記錄</h3>
+                <div class="space-y-2">
+                    <div class="flex items-center justify-between p-3 bg-dark-bg/50 rounded-xl">
+                        <div class="flex items-center">
+                            <div class="w-8 h-8 rounded-lg bg-purple-500/20 flex items-center justify-center mr-3">
+                                <i data-lucide="gamepad-2" class="w-4 h-4 text-purple-400"></i>
+                            </div>
+                            <div>
+                                <div class="text-sm text-white">幸運拉霸</div>
+                                <div class="text-xs text-gray-500">14:28:15</div>
+                            </div>
+                        </div>
+                        <div class="text-right">
+                            <div class="text-sm font-mono font-bold text-purple-400">+$500</div>
+                            <span class="badge-syncing text-xs">已同步</span>
+                        </div>
+                    </div>
+                    <div class="flex items-center justify-between p-3 bg-dark-bg/50 rounded-xl">
+                        <div class="flex items-center">
+                            <div class="w-8 h-8 rounded-lg bg-purple-500/20 flex items-center justify-center mr-3">
+                                <i data-lucide="gamepad-2" class="w-4 h-4 text-purple-400"></i>
+                            </div>
+                            <div>
+                                <div class="text-sm text-white">百家樂</div>
+                                <div class="text-xs text-gray-500">14:25:32</div>
+                            </div>
+                        </div>
+                        <div class="text-right">
+                            <div class="text-sm font-mono font-bold text-purple-400">+$1,200</div>
+                            <span class="badge-syncing text-xs">已同步</span>
+                        </div>
+                    </div>
+                    <div class="flex items-center justify-between p-3 bg-dark-bg/50 rounded-xl">
+                        <div class="flex items-center">
+                            <div class="w-8 h-8 rounded-lg bg-purple-500/20 flex items-center justify-center mr-3">
+                                <i data-lucide="gamepad-2" class="w-4 h-4 text-purple-400"></i>
+                            </div>
+                            <div>
+                                <div class="text-sm text-white">幸運拉霸</div>
+                                <div class="text-xs text-gray-500">14:20:45</div>
+                            </div>
+                        </div>
+                        <div class="text-right">
+                            <div class="text-sm font-mono font-bold text-purple-400">+$300</div>
+                            <span class="badge-queue text-xs">待同步</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ========== 區塊4: 交易紀錄 (L43-L44) ========== -->
+        <div id="section-records" class="cash-section hidden">
+            
+            <!-- 交易紀錄摘要 -->
+            <div class="glass-card rounded-2xl p-4">
+                <div class="flex justify-between items-center mb-3">
+                    <h2 class="text-base font-semibold text-white">交易紀錄</h2>
+                    <span class="badge-local">L43-L44</span>
+                </div>
+                <div class="grid grid-cols-4 gap-2">
+                    <div class="text-center p-2 bg-dark-bg/50 rounded-lg">
+                        <div class="text-lg font-mono font-bold text-emerald-400">25</div>
+                        <div class="text-xs text-gray-500">開分</div>
+                    </div>
+                    <div class="text-center p-2 bg-dark-bg/50 rounded-lg">
+                        <div class="text-lg font-mono font-bold text-red-400">20</div>
+                        <div class="text-xs text-gray-500">洗分</div>
+                    </div>
+                    <div class="text-center p-2 bg-dark-bg/50 rounded-lg">
+                        <div class="text-lg font-mono font-bold text-purple-400">127</div>
+                        <div class="text-xs text-gray-500">派彩</div>
+                    </div>
+                    <div class="text-center p-2 bg-dark-bg/50 rounded-lg">
+                        <div class="text-lg font-mono font-bold text-amber-400">3</div>
+                        <div class="text-xs text-gray-500">待同步</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 交易列表 -->
+            <div class="space-y-2">
+                <div class="glass-card rounded-xl p-3">
+                    <div class="flex justify-between items-start">
+                        <div class="flex items-center">
+                            <div class="w-8 h-8 rounded-lg bg-emerald-500/20 flex items-center justify-center mr-2">
+                                <i data-lucide="arrow-down" class="w-4 h-4 text-emerald-400"></i>
+                            </div>
+                            <div>
+                                <div class="text-sm text-white font-medium">開分</div>
+                                <div class="text-xs text-gray-500">14:32:18</div>
+                            </div>
+                        </div>
+                        <div class="text-right">
+                            <div class="text-sm font-mono font-bold text-emerald-400">+$1,000</div>
+                            <span class="badge-syncing text-xs">已同步</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="glass-card rounded-xl p-3">
+                    <div class="flex justify-between items-start">
+                        <div class="flex items-center">
+                            <div class="w-8 h-8 rounded-lg bg-red-500/20 flex items-center justify-center mr-2">
+                                <i data-lucide="arrow-up" class="w-4 h-4 text-red-400"></i>
+                            </div>
+                            <div>
+                                <div class="text-sm text-white font-medium">洗分</div>
+                                <div class="text-xs text-gray-500">14:15:42</div>
+                            </div>
+                        </div>
+                        <div class="text-right">
+                            <div class="text-sm font-mono font-bold text-red-400">-$500</div>
+                            <span class="badge-syncing text-xs">已同步</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="glass-card rounded-xl p-3">
+                    <div class="flex justify-between items-start">
+                        <div class="flex items-center">
+                            <div class="w-8 h-8 rounded-lg bg-purple-500/20 flex items-center justify-center mr-2">
+                                <i data-lucide="gift" class="w-4 h-4 text-purple-400"></i>
+                            </div>
+                            <div>
+                                <div class="text-sm text-white font-medium">派彩 - 幸運拉霸</div>
+                                <div class="text-xs text-gray-500">14:10:22</div>
+                            </div>
+                        </div>
+                        <div class="text-right">
+                            <div class="text-sm font-mono font-bold text-purple-400">+$800</div>
+                            <span class="badge-syncing text-xs">已同步</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="glass-card rounded-xl p-3">
+                    <div class="flex justify-between items-start">
+                        <div class="flex items-center">
+                            <div class="w-8 h-8 rounded-lg bg-emerald-500/20 flex items-center justify-center mr-2">
+                                <i data-lucide="arrow-down" class="w-4 h-4 text-emerald-400"></i>
+                            </div>
+                            <div>
+                                <div class="text-sm text-white font-medium">開分</div>
+                                <div class="text-xs text-gray-500">13:58:07</div>
+                            </div>
+                        </div>
+                        <div class="text-right">
+                            <div class="text-sm font-mono font-bold text-emerald-400">+$2,000</div>
+                            <span class="badge-queue text-xs">待同步</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <button class="w-full mt-3 py-2.5 glass border border-dark-border rounded-xl text-gray-400 text-sm">
+                <i data-lucide="chevron-down" class="w-4 h-4 inline mr-1"></i>載入更多
+            </button>
+        </div>
+
+        <!-- ========== 區塊5: 交易查詢 (L45-L46) ========== -->
+        <div id="section-query" class="cash-section hidden">
+            
+            <!-- 篩選器 -->
+            <div class="glass-card rounded-2xl p-3">
+                <div class="grid grid-cols-2 gap-2">
+                    <select class="bg-dark-bg border border-dark-border rounded-lg py-2 px-3 text-sm text-white">
                         <option>全部類型</option>
                         <option>開分</option>
                         <option>洗分</option>
+                        <option>派彩</option>
                     </select>
-                    <select class="flex-1 bg-dark-bg border border-dark-border rounded-lg py-2 px-3 text-sm text-white">
+                    <select class="bg-dark-bg border border-dark-border rounded-lg py-2 px-3 text-sm text-white">
                         <option>今日</option>
                         <option>昨日</option>
                         <option>近7天</option>
+                        <option>自訂範圍</option>
                     </select>
+                </div>
+                <div class="mt-2 flex space-x-2">
+                    <input type="text" placeholder="交易 ID / 會員帳號" class="flex-1 bg-dark-bg border border-dark-border rounded-lg py-2 px-3 text-sm text-white">
+                    <button class="px-4 py-2 bg-emerald-500 rounded-lg text-white">
+                        <i data-lucide="search" class="w-4 h-4"></i>
+                    </button>
                 </div>
             </div>
 
@@ -258,79 +521,69 @@
                 ⚠️ 唯讀 - 資料來自本地快取
             </div>
 
-            <!-- 交易列表 -->
-            <div class="space-y-3">
-                <!-- 交易項目 1 -->
-                <div class="glass-card rounded-xl p-4">
+            <!-- 查詢結果 -->
+            <div class="space-y-2">
+                <div class="glass-card rounded-xl p-3">
                     <div class="flex justify-between items-start mb-2">
                         <div class="flex items-center">
-                            <div class="w-10 h-10 rounded-lg bg-emerald-500/20 flex items-center justify-center mr-3">
-                                <i data-lucide="arrow-down" class="w-5 h-5 text-emerald-400"></i>
+                            <div class="w-8 h-8 rounded-lg bg-emerald-500/20 flex items-center justify-center mr-2">
+                                <i data-lucide="arrow-down" class="w-4 h-4 text-emerald-400"></i>
                             </div>
                             <div>
-                                <div class="text-white font-medium">開分</div>
-                                <div class="text-xs text-gray-500">14:32:18</div>
+                                <div class="text-sm text-white font-medium">開分</div>
+                                <div class="text-xs text-gray-500">TXN-20240308-001</div>
                             </div>
                         </div>
-                        <div class="text-right">
-                            <div class="text-xl font-mono font-bold text-emerald-400">+$1,000</div>
-                            <span class="badge-syncing text-xs"><i data-lucide="check" class="w-3 h-3 inline"></i>已同步</span>
-                        </div>
+                        <span class="badge-syncing text-xs">已同步</span>
                     </div>
-                    <div class="text-xs text-gray-500 pt-2 border-t border-dark-border">
-                        交易 ID: TXN-20240305-001
+                    <div class="text-xl font-mono font-bold text-emerald-400">+$1,000</div>
+                    <div class="text-xs text-gray-500 mt-2 pt-2 border-t border-dark-border">
+                        2024-03-08 14:32:18 · 操作員: 王小明 (EMP-001)
                     </div>
                 </div>
 
-                <!-- 交易項目 2 -->
-                <div class="glass-card rounded-xl p-4">
+                <div class="glass-card rounded-xl p-3">
                     <div class="flex justify-between items-start mb-2">
                         <div class="flex items-center">
-                            <div class="w-10 h-10 rounded-lg bg-red-500/20 flex items-center justify-center mr-3">
-                                <i data-lucide="arrow-up" class="w-5 h-5 text-red-400"></i>
+                            <div class="w-8 h-8 rounded-lg bg-red-500/20 flex items-center justify-center mr-2">
+                                <i data-lucide="arrow-up" class="w-4 h-4 text-red-400"></i>
                             </div>
                             <div>
-                                <div class="text-white font-medium">洗分</div>
-                                <div class="text-xs text-gray-500">14:15:42</div>
+                                <div class="text-sm text-white font-medium">洗分</div>
+                                <div class="text-xs text-gray-500">TXN-20240308-002</div>
                             </div>
                         </div>
-                        <div class="text-right">
-                            <div class="text-xl font-mono font-bold text-red-400">-$500</div>
-                            <span class="badge-queue text-xs">📝 待同步</span>
-                        </div>
+                        <span class="badge-queue text-xs">待同步</span>
                     </div>
-                    <div class="text-xs text-gray-500 pt-2 border-t border-dark-border">
-                        交易 ID: TXN-20240305-002
+                    <div class="text-xl font-mono font-bold text-red-400">-$500</div>
+                    <div class="text-xs text-gray-500 mt-2 pt-2 border-t border-dark-border">
+                        2024-03-08 14:15:42 · 操作員: 王小明 (EMP-001)
                     </div>
                 </div>
 
-                <!-- 交易項目 3 -->
-                <div class="glass-card rounded-xl p-4">
+                <div class="glass-card rounded-xl p-3">
                     <div class="flex justify-between items-start mb-2">
                         <div class="flex items-center">
-                            <div class="w-10 h-10 rounded-lg bg-emerald-500/20 flex items-center justify-center mr-3">
-                                <i data-lucide="arrow-down" class="w-5 h-5 text-emerald-400"></i>
+                            <div class="w-8 h-8 rounded-lg bg-purple-500/20 flex items-center justify-center mr-2">
+                                <i data-lucide="gift" class="w-4 h-4 text-purple-400"></i>
                             </div>
                             <div>
-                                <div class="text-white font-medium">開分</div>
-                                <div class="text-xs text-gray-500">13:58:07</div>
+                                <div class="text-sm text-white font-medium">派彩 - 幸運拉霸</div>
+                                <div class="text-xs text-gray-500">TXN-20240308-003</div>
                             </div>
                         </div>
-                        <div class="text-right">
-                            <div class="text-xl font-mono font-bold text-emerald-400">+$2,000</div>
-                            <span class="badge-syncing text-xs"><i data-lucide="check" class="w-3 h-3 inline"></i>已同步</span>
-                        </div>
+                        <span class="badge-syncing text-xs">已同步</span>
                     </div>
-                    <div class="text-xs text-gray-500 pt-2 border-t border-dark-border">
-                        交易 ID: TXN-20240305-003
+                    <div class="text-xl font-mono font-bold text-purple-400">+$500</div>
+                    <div class="text-xs text-gray-500 mt-2 pt-2 border-t border-dark-border">
+                        2024-03-08 14:10:15 · 遊戲ID: GAME-001
                     </div>
                 </div>
             </div>
 
-            <!-- 載入更多 -->
-            <button class="w-full py-3 glass border border-dark-border rounded-xl text-gray-400 text-sm">
+            <button class="w-full mt-3 py-2.5 glass border border-dark-border rounded-xl text-gray-400 text-sm">
                 載入更多...
-            
+            </button>
         </div>
 
     </main>
@@ -340,87 +593,87 @@
         // MockupSidebar.render('mockup_local_cash.html');
         lucide.createIcons();
 
-        let currentAmount = 0;
-        let currentMode = 'in'; // 'in' = 開分, 'out' = 洗分
-        let currentTab = 'cash'; // 'cash' = 開分/洗分, 'query' = 交易查詢
+        let amountIn = 0;
+        let amountOut = 0;
 
-        function switchTab(tab) {
-            currentTab = tab;
-            const cashSection = document.getElementById('section-cash');
-            const querySection = document.getElementById('section-query');
-            const cashTab = document.getElementById('tab-cash');
-            const queryTab = document.getElementById('tab-query');
-
-            if (tab === 'cash') {
-                cashSection.classList.remove('hidden');
-                querySection.classList.add('hidden');
-                cashTab.className = 'flex-1 py-3 rounded-lg text-base font-medium tab-active transition-all';
-                queryTab.className = 'flex-1 py-3 rounded-lg text-base font-medium tab-inactive transition-all';
-            } else {
-                cashSection.classList.add('hidden');
-                querySection.classList.remove('hidden');
-                cashTab.className = 'flex-1 py-3 rounded-lg text-base font-medium tab-inactive transition-all';
-                queryTab.className = 'flex-1 py-3 rounded-lg text-base font-medium tab-active transition-all';
-            }
+        // 切換主要 Tab: 開分 | 洗分 | 派彩 | 交易紀錄 | 交易查詢
+        function switchCashTab(tab) {
+            const tabs = ['cash-in', 'cash-out', 'payout', 'records', 'query'];
+            tabs.forEach(t => {
+                document.getElementById('section-' + t).classList.add('hidden');
+                document.getElementById('tab-' + t).className = 'flex-1 py-2.5 rounded-lg text-xs font-medium tab-inactive whitespace-nowrap';
+            });
+            document.getElementById('section-' + tab).classList.remove('hidden');
+            document.getElementById('tab-' + tab).className = 'flex-1 py-2.5 rounded-lg text-xs font-medium tab-active whitespace-nowrap';
             lucide.createIcons();
         }
 
-        function switchMode(mode) {
-            currentMode = mode;
-            const inBtn = document.getElementById('mode-in');
-            const outBtn = document.getElementById('mode-out');
-            const confirmBtn = document.getElementById('btn-confirm');
-
-            if (mode === 'in') {
-                inBtn.className = 'flex-1 py-3 rounded-lg text-sm font-medium tab-active';
-                outBtn.className = 'flex-1 py-3 rounded-lg text-sm font-medium tab-inactive';
-                confirmBtn.innerHTML = '<i data-lucide="check-circle" class="w-5 h-5 inline mr-2"></i>確認開分';
-                confirmBtn.className = 'w-full py-4 gradient-local rounded-xl text-white font-bold text-lg btn-touch';
-            } else {
-                inBtn.className = 'flex-1 py-3 rounded-lg text-sm font-medium tab-inactive';
-                outBtn.className = 'flex-1 py-3 rounded-lg text-sm font-medium tab-active';
-                confirmBtn.innerHTML = '<i data-lucide="check-circle" class="w-5 h-5 inline mr-2"></i>確認洗分';
-                confirmBtn.className = 'w-full py-4 bg-red-500 rounded-xl text-white font-bold text-lg btn-touch';
+        // 開分相關函數
+        function addDigitIn(digit) {
+            if (amountIn === 0 && digit !== '0') {
+                amountIn = parseInt(digit);
+            } else if (amountIn > 0 || digit !== '0') {
+                amountIn = parseInt(amountIn.toString() + digit);
             }
-            lucide.createIcons();
+            document.getElementById('amount-display-in').textContent = '$' + amountIn.toLocaleString();
         }
 
-        function addDigit(digit) {
-            if (currentAmount === 0 && digit !== '0') {
-                currentAmount = parseInt(digit);
-            } else if (currentAmount > 0 || digit !== '0') {
-                currentAmount = parseInt(currentAmount.toString() + digit);
-            }
-            updateDisplay();
+        function clearAmountIn() {
+            amountIn = 0;
+            document.getElementById('amount-display-in').textContent = '$0';
         }
 
-        function clearAmount() {
-            currentAmount = 0;
-            updateDisplay();
+        function backspaceIn() {
+            amountIn = Math.floor(amountIn / 10);
+            document.getElementById('amount-display-in').textContent = '$' + amountIn.toLocaleString();
         }
 
-        function backspace() {
-            currentAmount = Math.floor(currentAmount / 10);
-            updateDisplay();
+        function setQuickAmountIn(val) {
+            amountIn = val;
+            document.getElementById('amount-display-in').textContent = '$' + amountIn.toLocaleString();
         }
 
-        function updateDisplay() {
-            document.getElementById('amount-display').textContent = '$' + currentAmount.toLocaleString();
-        }
-
-        function confirmTransaction() {
-            if (currentAmount === 0) {
+        function confirmCashIn() {
+            if (amountIn === 0) {
                 alert('請輸入金額');
                 return;
             }
-            const modeText = currentMode === 'in' ? '開分' : '洗分';
-            alert(`${modeText} $${currentAmount.toLocaleString()} 已暫存至佇列`);
-            clearAmount();
+            alert(`開分 $${amountIn.toLocaleString()} 已暫存至佇列`);
+            clearAmountIn();
         }
 
-        function toggleMenu() {
-            // Placeholder for menu toggle
-            console.log('Toggle menu');
+        // 洗分相關函數
+        function addDigitOut(digit) {
+            if (amountOut === 0 && digit !== '0') {
+                amountOut = parseInt(digit);
+            } else if (amountOut > 0 || digit !== '0') {
+                amountOut = parseInt(amountOut.toString() + digit);
+            }
+            document.getElementById('amount-display-out').textContent = '$' + amountOut.toLocaleString();
+        }
+
+        function clearAmountOut() {
+            amountOut = 0;
+            document.getElementById('amount-display-out').textContent = '$0';
+        }
+
+        function backspaceOut() {
+            amountOut = Math.floor(amountOut / 10);
+            document.getElementById('amount-display-out').textContent = '$' + amountOut.toLocaleString();
+        }
+
+        function setQuickAmountOut(val) {
+            amountOut = val;
+            document.getElementById('amount-display-out').textContent = '$' + amountOut.toLocaleString();
+        }
+
+        function confirmCashOut() {
+            if (amountOut === 0) {
+                alert('請輸入金額');
+                return;
+            }
+            alert(`洗分 $${amountOut.toLocaleString()} 已暫存至佇列`);
+            clearAmountOut();
         }
 
         // Demo mode toggle
@@ -430,18 +683,21 @@
             const onlineInfo = document.getElementById('onlineOperatorInfo');
             const offlineInfo = document.getElementById('offlineLockInfo');
             const queueAlert = document.getElementById('queueAlert');
-            const cashSection = document.getElementById('section-cash');
+            const cashInSection = document.getElementById('section-cash-in');
+            const cashOutSection = document.getElementById('section-cash-out');
             
             if (isOnlineMode) {
                 onlineInfo.classList.remove('hidden');
                 offlineInfo.classList.add('hidden');
                 queueAlert.classList.add('hidden');
-                cashSection.classList.remove('hidden');
+                cashInSection.classList.remove('hidden');
+                cashOutSection.classList.add('hidden');
             } else {
                 onlineInfo.classList.add('hidden');
                 offlineInfo.classList.remove('hidden');
                 queueAlert.classList.remove('hidden');
-                cashSection.classList.add('hidden');
+                cashInSection.classList.add('hidden');
+                cashOutSection.classList.add('hidden');
             }
         }
 
@@ -467,7 +723,7 @@
             </a>
             <a href="mockup_local_cash.html" class="flex flex-col items-center px-4 py-2 text-emerald-400 touch-manipulation">
                 <i data-lucide="plus-circle" class="w-7 h-7"></i>
-                <span class="text-xs mt-1">開分</span>
+                <span class="text-xs mt-1">交易</span>
             </a>
             <a href="mockup_local_sync.html" class="flex flex-col items-center px-4 py-2 text-gray-400 touch-manipulation">
                 <i data-lucide="refresh-cw" class="w-7 h-7"></i>
