@@ -99,10 +99,6 @@
                 <i data-lucide="info" class="w-4 h-4 inline mr-2"></i>基本設定
             </button>
             <button class="px-6 py-4 flex-shrink-0 text-gray-400 font-medium transition-colors"
-                onclick="switchTab(this, 'network')">
-                <i data-lucide="wifi" class="w-4 h-4 inline mr-2"></i>網路設定
-            </button>
-            <button class="px-6 py-4 flex-shrink-0 text-gray-400 font-medium transition-colors"
                 onclick="switchTab(this, 'sync')">
                 <i data-lucide="refresh-cw" class="w-4 h-4 inline mr-2"></i>對帳與同步
             </button>
@@ -206,64 +202,6 @@
                 </div>
             </div>
 
-            <!-- [L48] 網路設定 -->
-            <div id="tab-network" class="tab-content hidden space-y-4">
-                <div class="glass-card rounded-2xl p-6">
-                    <h3 class="text-lg font-semibold text-white mb-6 flex items-center">
-                        <i data-lucide="wifi" class="w-5 h-5 mr-2 text-emerald-400"></i>連線設定
-                    </h3>
-                    <!-- Wi-Fi 內容 (簡化) -->
-                    <div class="space-y-4">
-                        <div
-                            class="p-4 bg-emerald-500/10 border border-emerald-500/20 rounded-xl relative overflow-hidden">
-                            <div class="flex justify-between items-center relative z-10">
-                                <div class="flex items-center">
-                                    <div
-                                        class="w-10 h-10 bg-emerald-500/20 rounded-lg flex items-center justify-center mr-3">
-                                        <i data-lucide="wifi" class="w-6 h-6 text-emerald-400"></i>
-                                    </div>
-                                    <div>
-                                        <p class="text-white font-medium">GameCenter_Local_5G</p>
-                                        <p class="text-xs text-emerald-400">已連線</p>
-                                    </div>
-                                </div>
-                                <button
-                                    class="text-gray-400 hover:text-white px-3 py-1 border border-dark-border rounded-lg text-sm">變更</button>
-                            </div>
-                        </div>
-
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                            <div>
-                                <label class="block text-sm text-gray-400 mb-2">IP 位址</label>
-                                <input type="text" value="192.168.1.100"
-                                    class="w-full bg-dark-bg border border-dark-border rounded-lg py-3 px-4 text-white font-mono input-focus">
-                            </div>
-                            <div>
-                                <label class="block text-sm text-gray-400 mb-2">預設閘道</label>
-                                <input type="text" value="192.168.1.1"
-                                    class="w-full bg-dark-bg border border-dark-border rounded-lg py-3 px-4 text-white font-mono input-focus">
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="glass-card rounded-2xl p-6">
-                    <h3 class="text-lg font-semibold text-white mb-6 flex items-center">
-                        <i data-lucide="activity" class="w-5 h-5 mr-2 text-emerald-400"></i>連線狀態檢測
-                    </h3>
-                    <div
-                        class="bg-dark-bg/50 rounded-xl p-4 font-mono text-sm text-emerald-400 h-40 overflow-y-auto mb-4 border border-dark-border">
-                        <p>> ping 8.8.8.8...</p>
-                        <p>> 64 bytes from 8.8.8.8: icmp_seq=1 ttl=116 time=28.4 ms</p>
-                        <p>> 64 bytes from 8.8.8.8: icmp_seq=2 ttl=116 time=27.9 ms</p>
-                        <p class="text-white animate-pulse">_</p>
-                    </div>
-                    <button
-                        class="w-full py-4 glass border border-dark-border text-emerald-400 rounded-xl font-semibold flex items-center justify-center btn-touch">
-                        <i data-lucide="play" class="w-4 h-4 mr-2"></i>重新執行 Ping 測試
-                    </button>
-                </div>
-            </div>
 
             <!-- [L34] 對帳與同步 -->
             <div id="tab-sync" class="tab-content hidden space-y-4">
