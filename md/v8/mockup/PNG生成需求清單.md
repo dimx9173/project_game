@@ -29,7 +29,6 @@
 | C81 | 前端版面廣播 | mockup_broadcast.html |
 | C82 | 告警通知 | mockup_alert_notify.html |
 | C86 | 日誌查詢 | mockup_log_query.html |
-| C88 | 網路設定 | mockup_network.html |
 | C93 | 手動同步 | mockup_manual_sync.html |
 | C94 | 對帳檢查 | mockup_check.html |
 | C95 | 同步日誌 | mockup_sync_log.html |
@@ -46,6 +45,7 @@
 | L06 | 機台狀態監控 | mockup_local_machine.html |
 | L07 | 機台配置接收 | mockup_local_machine.html |
 | L08 | 快速操作按鈕 | mockup_local_dashboard.html |
+| L48 | 網路設定 | mockup_network.html |
 | L09-L46 | 其他功能 | 需從對應頁面截圖 |
 
 ## 生成方式

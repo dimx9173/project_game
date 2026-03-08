@@ -96,8 +96,8 @@ const FUNCTION_MATRIX = {
   C86: { name: '日誌查詢', module: '監控中心', type: 'central' },
 
   // 系統設定
-  C87: { name: '基本設定', module: '系統設定', type: 'local' },
-  C88: { name: '網路設定', module: '系統設定', type: 'local' },
+  L47: { name: '基本設定', module: '系統設定', type: 'local' },
+  L48: { name: '網路設定', module: '系統設定', type: 'local' },
   C90: { name: '系統參數設定', module: '系統設定', type: 'central' },
   L28: { name: '備份與恢復', module: '系統設定', type: 'central' },
 
@@ -193,8 +193,8 @@ const MOCKUP_MAPPING = {
   'mockup_log_query.html': ['C86'],
 
   // 系統設定
-  'mockup_std_system_settings.html': ['C87', 'C88', 'C90'],
-  'mockup_network_settings.html': ['C88'],
+  'mockup_std_system_settings.html': ['L47', 'L48', 'C90'],
+  'mockup_network_settings.html': ['L48'],
   'mockup_std_backup.html': ['L28'],
   'mockup_security_settings.html': ['C90'],
 
@@ -228,7 +228,7 @@ const MOCKUP_MAPPING = {
   'mockup_local_machine.html': ['L05', 'L06'],
   'mockup_local_cash.html': ['C11'],
   'mockup_local_sync.html': ['L34'],
-  'mockup_mvp_local_setup.html': ['C87'],
+  'mockup_mvp_local_setup.html': ['L47'],
 
   // 數據管理
   'mockup_mvp_data_list.html': ['L11'],
