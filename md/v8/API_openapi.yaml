@@ -14,29 +14,47 @@ info:
     
     | 功能碼 | 功能名稱 | 主要端點 |
     |--------|---------|---------|
+    | [C02] | 硬體/網路狀態 | GET /machines/{id}/status |
     | [C11] | 開分/洗分 | POST /machines/{id}/cash-in, /cash-out |
     | [C12] | 遠端指令 | POST /machines/{id}/command |
     | [C14] | 機台設定 | PUT /machines/{id}/config |
+    | [C15] | 測試模式 | POST /machines/{id}/test-mode |
     | [C16] | 遊戲新增/編輯/刪除 | POST/PUT/DELETE /games |
+    | [C44] | 交易統計 | GET /transactions/stats |
     | [C45] | 交易對帳 | GET /discrepancies, POST /discrepancies/{id}/resolve |
     | [C47] | 營收報表 | GET /reports/revenue |
+    | [C48] | 遊戲排行 | GET /games/ranking |
+    | [C51] | 交易導出 | GET /transactions/export |
     | [C53] | 遊戲商列表檢視 | GET /providers |
     | [C54] | API 連線狀態監控 | GET /providers/{id}/status |
     | [C55] | 遊戲同步管理 | POST /providers/{id}/sync |
+    | [C56] | API 日誌查詢 | GET /providers/{id}/logs |
     | [C57] | 牌桌列表檢視 | GET /multiplayer/rooms |
+    | [C58] | 牌桌狀態監控 | GET /multiplayer/tables/{id}/status |
     | [C59] | 牌桌配置管理 | POST /multiplayer/rooms |
     | [C60] | 牌局歷史查詢 | GET /multiplayer/games |
+    | [C62] | 牌靴管理 | GET/PUT /multiplayer/tables/{id}/shoe |
+    | [C63] | 投注額設定 | GET/PUT /multiplayer/tables/{id}/bet-limits |
+    | [C64] | 莊家抽水設定 | GET/PUT /multiplayer/tables/{id}/commission |
+    | [C65] | 異常狀態告警 | GET /multiplayer/alerts |
+    | [C66] | 荷官操作紀錄 | GET /multiplayer/dealers, /multiplayer/dealers/{id}/actions |
+    | [C67] | 牌局歷史匯出 | GET /multiplayer/games/export |
     | [C70] | 帳號新增/編輯/刪除 | POST/PUT/DELETE /users, /users/{id}/pin |
     | [C71] | 角色權限設定 | POST/PUT/DELETE /roles, /permissions |
+    | [C72] | 操作日誌審計 | GET /audit-logs, /audit-logs/export |
     | [C73] | 版本列表管理 | GET /ota/versions |
     | [C74] | 更新任務下發 | POST /ota/tasks |
     | [C75] | 更新進度監控 | GET /ota/tasks/{id}/status |
+    | [C82] | 告警通知 | GET /monitor/alerts |
+    | [C83] | 告警閾值設定 | GET/PUT /monitor/alerts/thresholds |
     | [C90] | 系統參數設定 | GET/PUT /system/config |
     | [C101] | 機台新增/編輯/刪除 | POST/PUT/DELETE /machines |
     | [C103] | 遊戲商新增/編輯/刪除 | POST/PUT/DELETE /providers |
     | [C104] | 遊戲商餘額歸集與轉帳 | GET /wallet/balances, POST /wallet/transfer |
     | [C105] | 版本包上傳/控制 | POST /ota/versions |
+    | [C106] | 代理錢包管理 | GET/PUT /wallet/auto-collect, /wallet/limits, GET /wallet/transactions |
     | [C107] | 機台標籤管理 | PUT /machines/{id} (tags 屬性) |
+    | [C108] | 遊戲機台註冊 | POST /machines/register |
     
     ### 本地後台功能碼 (Lxx)
     
@@ -63,9 +81,10 @@ info:
     |--------|---------|------|
     | [C01] | KPI 監控 | 前端計算，資料來自多個 API |
     | [C05] | 系統通知 | WebSocket 推播 |
-    | [C79] | 系統監控 | 前端儀表板 |
-    | [L01-L04] | 儀表板相關 | 前端視覺化 |
+    | [C79] | 系統監控 | 前端儀表板，資料來自多個 API |
+    | [L01-L04] | 儀表板相關 | 前端視覺化，資料來自多個 API |
     | [L36] | 指數退避重試機制 | 客戶端邏輯 |
+    | [L42] | 底層通訊與金鑰加密 | 基礎設施層 |
     
   version: 1.2.0
 
@@ -329,7 +348,7 @@ paths:
         }
     post:
       tags: [機台管理 (Machines)]
-      summary: "[L33] 機台心跳"
+      summary: "[L38] 機台心跳"
       description: 機台定期發送心跳以報告狀態
       security: [{ BearerAuth: [] }, { PinAuth: [] }]
       parameters:
@@ -351,6 +370,93 @@ paths:
                 status: { type: string, enum: [online, offline, maintenance] }
       responses:
         "200": { description: 心跳收到 }
+
+  /machines/{id}/status:
+    parameters:
+      - {
+          name: id,
+          in: path,
+          required: true,
+          schema: { type: string, format: uuid },
+        }
+    get:
+      tags: [機台管理 (Machines)]
+      summary: "[C02] 取得機台硬體/網路狀態"
+      description: 取得機台的硬體資源使用率、網路延遲、連線狀態等
+      security: [{ BearerAuth: [] }]
+      responses:
+        "200":
+          description: 成功
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  cpuUsage: { type: number, description: CPU 使用率 (%) }
+                  memoryUsage: { type: number, description: 記憶體使用率 (%) }
+                  diskUsage: { type: number, description: 磁碟使用率 (%) }
+                  networkLatency: { type: number, description: 網路延遲 (ms) }
+                  connectionStatus: { type: string, enum: [online, offline, unstable] }
+                  lastHeartbeat: { type: string, format: date-time }
+                  uptime: { type: integer, description: 運行時間 (秒) }
+
+  /machines/{id}/test-mode:
+    parameters:
+      - {
+          name: id,
+          in: path,
+          required: true,
+          schema: { type: string, format: uuid },
+        }
+    post:
+      tags: [機台管理 (Machines)]
+      summary: "[C15] 啟用/停用測試模式"
+      description: 啟用或停用機台的測試模式（僅授權人員可操作）
+      security: [{ BearerAuth: [] }]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [enabled]
+              properties:
+                enabled: { type: boolean }
+                reason: { type: string }
+      responses:
+        "200": { description: 測試模式狀態已更新 }
+        "403": { description: 權限不足 }
+
+  /machines/register:
+    post:
+      tags: [機台管理 (Machines)]
+      summary: "[C108] 遊戲機台註冊"
+      description: 新機台向集中式註冊，綁定 MAC 地址並取得 instanceId
+      security: [{ BearerAuth: [] }]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [mac, name, authKey]
+              properties:
+                mac: { type: string, description: 網卡 MAC 地址 }
+                name: { type: string, description: 機台名稱 }
+                authKey: { type: string, description: 12碼驗證金鑰 }
+                ip: { type: string }
+                hostName: { type: string }
+      responses:
+        "201":
+          description: 註冊成功
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  instanceId: { type: string, format: uuid }
+                  registeredAt: { type: string, format: date-time }
+        "400": { description: 驗證金鑰無效或 MAC 已註冊 }
 
   /machines/{id}/config:
     parameters:
@@ -577,7 +683,7 @@ paths:
   /transactions:
     get:
       tags: [交易管理 (Transactions)]
-      summary: "[L04] 取得交易列表"
+      summary: "[L15] 取得交易列表"
       security: [{ BearerAuth: [] }]
       parameters:
         - { name: page, in: query, schema: { type: integer } }
@@ -587,6 +693,50 @@ paths:
         - { name: operatorId, in: query, schema: { type: string } }
       responses:
         "200": { description: 成功 }
+
+  /transactions/stats:
+    get:
+      tags: [交易管理 (Transactions)]
+      summary: "[C44] 取得交易統計"
+      description: 取得今日/本週/本月的交易統計數據
+      security: [{ BearerAuth: [] }]
+      parameters:
+        - { name: period, in: query, schema: { type: string, enum: [today, week, month] } }
+        - { name: machineId, in: query, schema: { type: string, format: uuid } }
+      responses:
+        "200":
+          description: 成功
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  totalBets: { type: number }
+                  totalPayouts: { type: number }
+                  netRevenue: { type: number }
+                  transactionCount: { type: integer }
+                  avgBetAmount: { type: number }
+
+  /transactions/export:
+    get:
+      tags: [交易管理 (Transactions)]
+      summary: "[C51] 匯出交易紀錄"
+      description: 匯出交易紀錄為 CSV 或 Excel 格式
+      security: [{ BearerAuth: [] }]
+      parameters:
+        - { name: startDate, in: query, schema: { type: string, format: date } }
+        - { name: endDate, in: query, schema: { type: string, format: date } }
+        - { name: machineId, in: query, schema: { type: string, format: uuid } }
+        - { name: type, in: query, schema: { type: string } }
+        - { name: format, in: query, schema: { type: string, enum: [csv, excel], default: csv } }
+      responses:
+        "200":
+          description: 成功匯出
+          content:
+            application/octet-stream:
+              schema:
+                type: string
+                format: binary
 
   /transactions/{id}/reverse:
     parameters:
@@ -598,7 +748,7 @@ paths:
         }
     post:
       tags: [交易管理 (Transactions)]
-      summary: "[C38] 沖銷交易"
+      summary: "[C45] 沖銷交易"
       security: [{ BearerAuth: [] }]
       requestBody:
         required: true
@@ -626,6 +776,33 @@ paths:
       responses:
         "201": { description: 建立成功 }
 
+  /providers/{id}:
+    parameters:
+      - {
+          name: id,
+          in: path,
+          required: true,
+          schema: { type: string, format: uuid },
+        }
+    get:
+      tags: [遊戲商管理 (Providers)]
+      summary: "[C53] 取得遊戲商詳情"
+      security: [{ BearerAuth: [] }]
+      responses:
+        "200": { description: 成功 }
+    put:
+      tags: [遊戲商管理 (Providers)]
+      summary: "[C103] 更新遊戲商"
+      security: [{ BearerAuth: [] }]
+      responses:
+        "200": { description: 更新成功 }
+    delete:
+      tags: [遊戲商管理 (Providers)]
+      summary: "[C103] 刪除遊戲商"
+      security: [{ BearerAuth: [] }]
+      responses:
+        "204": { description: 刪除成功 }
+
   /providers/{id}/balance:
     parameters:
       - {
@@ -640,6 +817,118 @@ paths:
       security: [{ BearerAuth: [] }]
       responses:
         "200": { description: 成功 }
+
+  /providers/{id}/status:
+    parameters:
+      - {
+          name: id,
+          in: path,
+          required: true,
+          schema: { type: string, format: uuid },
+        }
+    get:
+      tags: [遊戲商管理 (Providers)]
+      summary: "[C54] 取得 API 連線狀態"
+      description: 取得遊戲商 API 的連線狀態、最後心跳時間、失敗次數等
+      security: [{ BearerAuth: [] }]
+      responses:
+        "200":
+          description: 成功
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status: { type: string, enum: [online, offline, degraded] }
+                  lastHeartbeat: { type: string, format: date-time }
+                  failCount: { type: integer }
+                  latency: { type: number, description: "延遲 (ms)" }
+
+  /providers/{id}/sync:
+    parameters:
+      - {
+          name: id,
+          in: path,
+          required: true,
+          schema: { type: string, format: uuid },
+        }
+    post:
+      tags: [遊戲商管理 (Providers)]
+      summary: "[C55] 觸發遊戲同步"
+      description: 手動觸發遊戲商的遊戲列表同步
+      security: [{ BearerAuth: [] }]
+      responses:
+        "200": { description: 同步任務已啟動 }
+
+  /providers/{id}/logs:
+    parameters:
+      - {
+          name: id,
+          in: path,
+          required: true,
+          schema: { type: string, format: uuid },
+        }
+    get:
+      tags: [遊戲商管理 (Providers)]
+      summary: "[C56] API 日誌查詢"
+      description: 查詢遊戲商 API 的呼叫紀錄與錯誤日誌
+      security: [{ BearerAuth: [] }]
+      parameters:
+        - { name: startDate, in: query, schema: { type: string, format: date } }
+        - { name: endDate, in: query, schema: { type: string, format: date } }
+        - { name: type, in: query, schema: { type: string, enum: [all, success, error] } }
+        - { name: page, in: query, schema: { type: integer } }
+        - { name: pageSize, in: query, schema: { type: integer } }
+      responses:
+        "200":
+          description: 成功
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id: { type: string }
+                        endpoint: { type: string }
+                        method: { type: string }
+                        statusCode: { type: integer }
+                        duration: { type: number }
+                        error: { type: string }
+                        timestamp: { type: string, format: date-time }
+
+  /games/ranking:
+    get:
+      tags: [遊戲管理 (Games)]
+      summary: "[C48] 取得遊戲排行"
+      description: 取得熱門遊戲排行榜，依下注量或營收排序
+      security: [{ BearerAuth: [] }]
+      parameters:
+        - { name: period, in: query, schema: { type: string, enum: [today, week, month] } }
+        - { name: sortBy, in: query, schema: { type: string, enum: [bets, revenue, players] } }
+        - { name: limit, in: query, schema: { type: integer, default: 10 } }
+      responses:
+        "200":
+          description: 成功
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        gameId: { type: string }
+                        gameName: { type: string }
+                        totalBets: { type: number }
+                        totalRevenue: { type: number }
+                        playerCount: { type: integer }
+                        rank: { type: integer }
 
   # Wallet Management (旗艦版)
   /wallet/balances:
@@ -695,6 +984,68 @@ paths:
       responses:
         "200": { description: 轉帳成功 }
         "400": { description: 餘額不足或參數錯誤 }
+
+  /wallet/auto-collect:
+    get:
+      tags: [錢包管理 (Wallet)]
+      summary: "[C106] 取得自動歸集設定"
+      security: [{ BearerAuth: [] }]
+      responses:
+        "200": { description: 成功 }
+    put:
+      tags: [錢包管理 (Wallet)]
+      summary: "[C106] 更新自動歸集設定"
+      security: [{ BearerAuth: [] }]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                enabled: { type: boolean }
+                threshold: { type: number, description: "觸發歸集的餘額閾值" }
+                schedule: { type: string, description: "Cron 表達式" }
+      responses:
+        "200": { description: 更新成功 }
+
+  /wallet/limits:
+    get:
+      tags: [錢包管理 (Wallet)]
+      summary: "[C106] 取得轉帳限額設定"
+      security: [{ BearerAuth: [] }]
+      responses:
+        "200": { description: 成功 }
+    put:
+      tags: [錢包管理 (Wallet)]
+      summary: "[C106] 更新轉帳限額設定"
+      security: [{ BearerAuth: [] }]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                singleMin: { type: number }
+                singleMax: { type: number }
+                dailyMax: { type: number }
+                monthlyMax: { type: number }
+      responses:
+        "200": { description: 更新成功 }
+
+  /wallet/transactions:
+    get:
+      tags: [錢包管理 (Wallet)]
+      summary: "[C106] 取得錢包交易紀錄"
+      security: [{ BearerAuth: [] }]
+      parameters:
+        - { name: providerId, in: query, schema: { type: string } }
+        - { name: type, in: query, schema: { type: string, enum: [transfer_in, transfer_out] } }
+        - { name: startDate, in: query, schema: { type: string, format: date } }
+        - { name: endDate, in: query, schema: { type: string, format: date } }
+      responses:
+        "200": { description: 成功 }
 
   # Multiplayer (旗艦版)
   /multiplayer/rooms:
@@ -831,6 +1182,197 @@ paths:
       responses:
         "200": { description: 離開成功 }
 
+  /multiplayer/tables/{id}/status:
+    parameters:
+      - {
+          name: id,
+          in: path,
+          required: true,
+          schema: { type: string, format: uuid },
+        }
+    get:
+      tags: [多人遊戲 (Multiplayer)]
+      summary: "[C58] 取得牌桌狀態監控"
+      description: 取得牌桌即時狀態、連線機台數、當前牌局等
+      security: [{ BearerAuth: [] }]
+      responses:
+        "200":
+          description: 成功
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  tableId: { type: string }
+                  status: { type: string, enum: [idle, playing, closed, maintenance] }
+                  currentGameId: { type: string }
+                  connectedMachines: { type: integer }
+                  dealerId: { type: string }
+                  shoeNumber: { type: integer }
+                  remainingCards: { type: integer }
+
+  /multiplayer/tables/{id}/shoe:
+    parameters:
+      - {
+          name: id,
+          in: path,
+          required: true,
+          schema: { type: string, format: uuid },
+        }
+    get:
+      tags: [多人遊戲 (Multiplayer)]
+      summary: "[C62] 取得牌靴資訊"
+      security: [{ BearerAuth: [] }]
+      responses:
+        "200": { description: 成功 }
+    put:
+      tags: [多人遊戲 (Multiplayer)]
+      summary: "[C62] 更新牌靴設定"
+      security: [{ BearerAuth: [] }]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                shoeNumber: { type: integer }
+                totalDecks: { type: integer }
+                shufflePoint: { type: number }
+      responses:
+        "200": { description: 更新成功 }
+
+  /multiplayer/tables/{id}/bet-limits:
+    parameters:
+      - {
+          name: id,
+          in: path,
+          required: true,
+          schema: { type: string, format: uuid },
+        }
+    get:
+      tags: [多人遊戲 (Multiplayer)]
+      summary: "[C63] 取得投注額設定"
+      security: [{ BearerAuth: [] }]
+      responses:
+        "200": { description: 成功 }
+    put:
+      tags: [多人遊戲 (Multiplayer)]
+      summary: "[C63] 更新投注額設定"
+      security: [{ BearerAuth: [] }]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                minBet: { type: number }
+                maxBet: { type: number }
+                maxTotalBet: { type: number }
+      responses:
+        "200": { description: 更新成功 }
+
+  /multiplayer/tables/{id}/commission:
+    parameters:
+      - {
+          name: id,
+          in: path,
+          required: true,
+          schema: { type: string, format: uuid },
+        }
+    get:
+      tags: [多人遊戲 (Multiplayer)]
+      summary: "[C64] 取得莊家抽水設定"
+      security: [{ BearerAuth: [] }]
+      responses:
+        "200": { description: 成功 }
+    put:
+      tags: [多人遊戲 (Multiplayer)]
+      summary: "[C64] 更新莊家抽水設定"
+      security: [{ BearerAuth: [] }]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                commissionRate: { type: number, description: "抽水比例 (%)" }
+      responses:
+        "200": { description: 更新成功 }
+
+  /multiplayer/alerts:
+    get:
+      tags: [多人遊戲 (Multiplayer)]
+      summary: "[C65] 取得異常狀態告警列表"
+      description: 取得多人遊戲的異常告警紀錄
+      security: [{ BearerAuth: [] }]
+      parameters:
+        - { name: status, in: query, schema: { type: string, enum: [active, resolved, all] } }
+        - { name: severity, in: query, schema: { type: string, enum: [low, medium, high, critical] } }
+      responses:
+        "200": { description: 成功 }
+
+  /multiplayer/dealers:
+    get:
+      tags: [多人遊戲 (Multiplayer)]
+      summary: "[C66] 取得荷官列表"
+      security: [{ BearerAuth: [] }]
+      responses:
+        "200": { description: 成功 }
+
+  /multiplayer/dealers/{id}/actions:
+    parameters:
+      - {
+          name: id,
+          in: path,
+          required: true,
+          schema: { type: string, format: uuid },
+        }
+    get:
+      tags: [多人遊戲 (Multiplayer)]
+      summary: "[C66] 取得荷官操作紀錄"
+      security: [{ BearerAuth: [] }]
+      parameters:
+        - { name: startDate, in: query, schema: { type: string, format: date } }
+        - { name: endDate, in: query, schema: { type: string, format: date } }
+      responses:
+        "200": { description: 成功 }
+
+  /multiplayer/games:
+    get:
+      tags: [多人遊戲 (Multiplayer)]
+      summary: "[C60] 取得牌局歷史列表"
+      security: [{ BearerAuth: [] }]
+      parameters:
+        - { name: tableId, in: query, schema: { type: string, format: uuid } }
+        - { name: startDate, in: query, schema: { type: string, format: date } }
+        - { name: endDate, in: query, schema: { type: string, format: date } }
+        - { name: page, in: query, schema: { type: integer } }
+        - { name: pageSize, in: query, schema: { type: integer } }
+      responses:
+        "200": { description: 成功 }
+
+  /multiplayer/games/export:
+    get:
+      tags: [多人遊戲 (Multiplayer)]
+      summary: "[C67] 匯出牌局歷史"
+      security: [{ BearerAuth: [] }]
+      parameters:
+        - { name: tableId, in: query, schema: { type: string, format: uuid } }
+        - { name: startDate, in: query, schema: { type: string, format: date } }
+        - { name: endDate, in: query, schema: { type: string, format: date } }
+        - { name: format, in: query, schema: { type: string, enum: [csv, excel], default: csv } }
+      responses:
+        "200":
+          description: 成功匯出
+          content:
+            application/octet-stream:
+              schema:
+                type: string
+                format: binary
+
   # OTA (旗艦版)
   /ota/versions:
     get:
@@ -891,6 +1433,98 @@ paths:
       security: [{ BearerAuth: [] }]
       responses:
         "200": { description: 成功 }
+
+  /monitor/alerts:
+    get:
+      tags: [監控中心 (Monitor)]
+      summary: "[C82] 取得告警通知列表"
+      security: [{ BearerAuth: [] }]
+      parameters:
+        - { name: status, in: query, schema: { type: string, enum: [active, resolved, all] } }
+        - { name: severity, in: query, schema: { type: string, enum: [low, medium, high, critical] } }
+      responses:
+        "200": { description: 成功 }
+
+  /monitor/alerts/thresholds:
+    get:
+      tags: [監控中心 (Monitor)]
+      summary: "[C83] 取得告警閾值設定"
+      security: [{ BearerAuth: [] }]
+      responses:
+        "200": { description: 成功 }
+    put:
+      tags: [監控中心 (Monitor)]
+      summary: "[C83] 更新告警閾值設定"
+      security: [{ BearerAuth: [] }]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                cpuThreshold: { type: number, description: "CPU 使用率閾值 (%)" }
+                memoryThreshold: { type: number, description: "記憶體使用率閾值 (%)" }
+                diskThreshold: { type: number, description: "磁碟使用率閾值 (%)" }
+                latencyThreshold: { type: number, description: "網路延遲閾值 (ms)" }
+      responses:
+        "200": { description: 更新成功 }
+
+  /audit-logs:
+    get:
+      tags: [監控中心 (Monitor)]
+      summary: "[C72] 取得操作日誌審計"
+      description: 查詢系統操作日誌，用於安全審計
+      security: [{ BearerAuth: [] }]
+      parameters:
+        - { name: userId, in: query, schema: { type: string } }
+        - { name: action, in: query, schema: { type: string } }
+        - { name: resource, in: query, schema: { type: string } }
+        - { name: startDate, in: query, schema: { type: string, format: date } }
+        - { name: endDate, in: query, schema: { type: string, format: date } }
+        - { name: page, in: query, schema: { type: integer } }
+        - { name: pageSize, in: query, schema: { type: integer } }
+      responses:
+        "200":
+          description: 成功
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id: { type: string }
+                        userId: { type: string }
+                        userName: { type: string }
+                        action: { type: string }
+                        resource: { type: string }
+                        resourceId: { type: string }
+                        details: { type: object }
+                        ipAddress: { type: string }
+                        userAgent: { type: string }
+                        timestamp: { type: string, format: date-time }
+
+  /audit-logs/export:
+    get:
+      tags: [監控中心 (Monitor)]
+      summary: "[C72] 匯出操作日誌"
+      security: [{ BearerAuth: [] }]
+      parameters:
+        - { name: startDate, in: query, schema: { type: string, format: date } }
+        - { name: endDate, in: query, schema: { type: string, format: date } }
+        - { name: format, in: query, schema: { type: string, enum: [csv, excel], default: csv } }
+      responses:
+        "200":
+          description: 成功匯出
+          content:
+            application/octet-stream:
+              schema:
+                type: string
+                format: binary
 
   # RBAC (Roles & Permissions)
   /roles:
