@@ -96,12 +96,6 @@
         .progress-bar {
             background: linear-gradient(90deg, #10b981 0%, #34d399 100%);
         }
-
-        /* Modal Styles */
-        .modal-backdrop {
-            background: rgba(0, 0, 0, 0.8);
-            backdrop-filter: blur(8px);
-        }
     </style>
 </head>
 
@@ -388,21 +382,19 @@
                 機台操作
             </h2>
             <div class="grid grid-cols-2 gap-3">
-                <button onclick="requestAuth('reboot')"
+                <button onclick="executeOp('reboot')"
                     class="p-4 bg-dark-bg/50 rounded-xl text-center hover:bg-dark-hover transition-all btn-touch border border-dark-border/50">
                     <div class="w-10 h-10 rounded-full bg-emerald-500/10 flex items-center justify-center mx-auto mb-2">
                         <i data-lucide="power" class="w-5 h-5 text-emerald-400"></i>
                     </div>
-                    <div class="text-xs text-white">遠端重啟</div>
-                    <div class="text-[10px] text-emerald-500/70 mt-1">需中央授權</div>
+                    <div class="text-xs text-white">重啟</div>
                 </button>
-                <button onclick="requestAuth('reset')"
+                <button onclick="executeOp('reset')"
                     class="p-4 bg-dark-bg/50 rounded-xl text-center hover:bg-dark-hover transition-all btn-touch border border-dark-border/50">
                     <div class="w-10 h-10 rounded-full bg-amber-500/10 flex items-center justify-center mx-auto mb-2">
                         <i data-lucide="rotate-ccw" class="w-5 h-5 text-amber-400"></i>
                     </div>
                     <div class="text-xs text-white">恢復原廠</div>
-                    <div class="text-[10px] text-amber-500/70 mt-1">需中央授權</div>
                 </button>
             </div>
         </div>
@@ -585,36 +577,6 @@
 
     </div>
 
-    <!-- 授權權限 Modal -->
-    <div id="auth-modal" class="fixed inset-0 z-50 hidden flex items-center justify-center p-4">
-        <div class="modal-backdrop absolute inset-0"></div>
-        <div class="glass-card w-full max-w-sm rounded-3xl p-8 relative z-10 text-center space-y-6">
-            <div id="auth-icon-container"
-                class="w-20 h-20 mx-auto bg-emerald-500/20 rounded-full flex items-center justify-center">
-                <i data-lucide="shield-check" class="w-10 h-10 text-emerald-400"></i>
-            </div>
-
-            <div class="space-y-2">
-                <h3 id="auth-title" class="text-xl font-bold text-white">請求遠端授權</h3>
-                <p id="auth-desc" class="text-sm text-gray-400">正在向中央控制台發送操作請求...</p>
-            </div>
-
-            <div id="auth-loading" class="flex justify-center py-4">
-                <div class="w-12 h-12 border-4 border-emerald-500/20 border-t-emerald-500 rounded-full animate-spin">
-                </div>
-            </div>
-
-            <div id="auth-status" class="hidden py-4 text-emerald-400 font-bold text-lg">
-                授權核准
-            </div>
-
-            <button onclick="closeAuthModal()"
-                class="w-full py-3 bg-dark-bg/50 border border-dark-border text-gray-400 rounded-xl hover:text-white transition-colors">
-                取消請求
-            </button>
-        </div>
-    </div>
-
     <script src="../js/bottom_nav_local.js"></script>
     <script>
         MockupBottomNav.render('mockup_local_machine.html');
@@ -622,36 +584,11 @@
 
         let currentOp = '';
 
-        function requestAuth(op) {
-            currentOp = op;
-            const modal = document.getElementById('auth-modal');
-            const title = document.getElementById('auth-title');
-            const desc = document.getElementById('auth-desc');
-            const iconContainer = document.getElementById('auth-icon-container');
-            const loading = document.getElementById('auth-loading');
-            const status = document.getElementById('auth-status');
-
-            title.innerText = op === 'reboot' ? '請求遠端重啟授權' : '請求恢復原廠授權';
-            desc.innerText = '正在向中央控制台發送操作請求，請稍候...';
-            loading.classList.remove('hidden');
-            status.classList.add('hidden');
-            modal.classList.remove('hidden');
-
-            // 模擬授權流程
-            setTimeout(() => {
-                loading.classList.add('hidden');
-                status.classList.remove('hidden');
-                status.innerText = '授權核准：正在執行...';
-
-                setTimeout(() => {
-                    alert(op === 'reboot' ? '系統重啟中...' : '原廠恢復中...');
-                    closeAuthModal();
-                }, 1500);
-            }, 2500);
-        }
-
-        function closeAuthModal() {
-            document.getElementById('auth-modal').classList.add('hidden');
+        function executeOp(op) {
+            const msg = op === 'reboot' ? '確認要重啟機台嗎？' : '確認要恢復原廠設定嗎？此操作將清除所有本地快取資料。';
+            if (confirm(msg)) {
+                alert(op === 'reboot' ? '系統重啟中...' : '原廠恢復中...');
+            }
         }
 
         // 監控中心 Tab 切換
