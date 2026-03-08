@@ -45,7 +45,8 @@
 | L06 | 機台狀態監控 | mockup_local_machine.html |
 | L07 | 機台配置接收 | mockup_local_machine.html |
 | L08 | 快速操作按鈕 | mockup_local_dashboard.html |
-| L48 | 網路設定 | mockup_network.html |
+ | L48 | 網路設定 | mockup_local_system_settings.html |
+ | L47 | 基本設定 | mockup_local_system_settings.html |
 | L09-L46 | 其他功能 | 需從對應頁面截圖 |
 
 ## 生成方式

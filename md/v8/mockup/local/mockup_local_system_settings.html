@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>系統設定 - 本地後台</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;600;700&family=JetBrains+Mono&display=swap"
+        rel="stylesheet">
+    <link href="../css/mockup-common.css" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        emerald: { 50: '#f0fdf4', 100: '#dcfce7', 200: '#bbf7d0', 300: '#86efac', 400: '#4ade80', 500: '#22c55e', 600: '#16a34a', 700: '#15803d', 800: '#166534', 900: '#14532d', 950: '#052e16' },
+                        dark: { bg: '#0a0a0f', card: '#12121a', sidebar: '#0d0d14', border: '#1e1e2e' }
+                    },
+                    fontFamily: { sans: ['"Noto Sans TC"', 'sans-serif'], mono: ['"JetBrains Mono"', 'monospace'] }
+                }
+            }
+        }
+    </script>
+    <style>
+        * {
+            scrollbar-width: thin;
+            scrollbar-color: #10b981 #0a0a0f;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            font-family: 'Noto Sans TC', sans-serif;
+            background: #0a0a0f;
+            touch-action: manipulation;
+        }
+
+        .glass {
+            background: rgba(18, 18, 26, 0.7);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .glass-card {
+            background: linear-gradient(135deg, rgba(18, 18, 26, 0.9) 0%, rgba(30, 30, 46, 0.6) 100%);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(16, 185, 129, 0.15);
+        }
+
+        .gradient-emerald {
+            background: linear-gradient(135deg, #10b981 0%, #059669 50%, #047857 100%);
+        }
+
+        .input-focus:focus {
+            box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.3), 0 0 20px rgba(16, 185, 129, 0.2);
+            outline: none;
+        }
+
+        .tab-active {
+            border-bottom: 3px solid #10b981;
+            color: #10b981;
+        }
+
+        .btn-touch {
+            min-height: 48px;
+            touch-action: manipulation;
+        }
+
+        .btn-touch:active {
+            transform: scale(0.98);
+            opacity: 0.9;
+        }
+    </style>
+</head>
+
+<body class="gradient-bg min-h-screen pb-24">
+    <div id="sidebar-container"></div>
+
+    <!-- 頂部導航 -->
+    <header
+        class="glass fixed top-0 left-0 right-0 z-30 h-16 flex items-center justify-between px-4 border-b border-dark-border">
+        <div class="flex items-center">
+            <h1 class="text-xl font-bold text-white">系統設定</h1>
+            <span class="badge-local ml-2 bg-emerald-500 text-white text-[10px] px-2 py-0.5 rounded">本地端</span>
+        </div>
+        <button
+            class="px-6 py-2 gradient-emerald rounded-lg font-medium flex items-center text-white btn-touch shadow-lg shadow-emerald-900/20">
+            <i data-lucide="save" class="w-4 h-4 mr-2"></i>儲存變更
+        </button>
+    </header>
+
+    <main class="pt-16 pb-4">
+        <!-- 標籤頁籤 -->
+        <div class="glass sticky top-16 z-20 flex border-b border-dark-border overflow-x-auto no-scrollbar">
+            <button class="tab-active px-6 py-4 flex-shrink-0 font-medium transition-colors"
+                onclick="switchTab(this, 'basic')">
+                <i data-lucide="info" class="w-4 h-4 inline mr-2"></i>基本設定
+            </button>
+            <button class="px-6 py-4 flex-shrink-0 text-gray-400 font-medium transition-colors"
+                onclick="switchTab(this, 'network')">
+                <i data-lucide="wifi" class="w-4 h-4 inline mr-2"></i>網路設定
+            </button>
+            <button class="px-6 py-4 flex-shrink-0 text-gray-400 font-medium transition-colors"
+                onclick="switchTab(this, 'sync')">
+                <i data-lucide="refresh-cw" class="w-4 h-4 inline mr-2"></i>對帳與同步
+            </button>
+        </div>
+
+        <div class="p-4 space-y-6">
+            <!-- [L47] 基本設定 -->
+            <div id="tab-basic" class="tab-content space-y-4">
+                <div class="glass-card rounded-2xl p-6">
+                    <h3 class="text-lg font-semibold text-white mb-6 flex items-center">
+                        <i data-lucide="info" class="w-5 h-5 mr-2 text-emerald-400"></i>基本資訊
+                    </h3>
+                    <div class="space-y-6">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-sm text-gray-400 mb-2">機台 ID</label>
+                                <div class="flex">
+                                    <input type="text" value="MAC-001" readonly
+                                        class="w-full bg-dark-bg/50 border border-dark-border rounded-l-lg py-3 px-4 text-gray-500 font-mono">
+                                    <button
+                                        class="bg-dark-border px-3 rounded-r-lg text-emerald-400 hover:text-emerald-300">
+                                        <i data-lucide="copy" class="w-4 h-4"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <div>
+                                <label class="block text-sm text-gray-400 mb-2">機台名稱</label>
+                                <input type="text" value="門市 A-01 號機"
+                                    class="w-full bg-dark-bg border border-dark-border rounded-lg py-3 px-4 input-focus text-white">
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-sm text-gray-400 mb-2">所在位置</label>
+                                <input type="text" value="台北市大安區忠孝門市"
+                                    class="w-full bg-dark-bg border border-dark-border rounded-lg py-3 px-4 input-focus text-white">
+                            </div>
+                            <div>
+                                <label class="block text-sm text-gray-400 mb-2">機台類型</label>
+                                <select
+                                    class="w-full bg-dark-bg border border-dark-border rounded-lg py-3 px-4 text-white appearance-none input-focus">
+                                    <option selected>旗艦機</option>
+                                    <option>標準機</option>
+                                    <option>掌上型</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-sm text-gray-400 mb-2">系統語言</label>
+                                <select
+                                    class="w-full bg-dark-bg border border-dark-border rounded-lg py-3 px-4 text-white appearance-none input-focus">
+                                    <option selected>繁體中文</option>
+                                    <option>English</option>
+                                    <option>日本語</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="block text-sm text-gray-400 mb-2">時區設定</label>
+                                <select
+                                    class="w-full bg-dark-bg border border-dark-border rounded-lg py-3 px-4 text-white appearance-none input-focus">
+                                    <option selected>UTC+8 (Taipei)</option>
+                                    <option>UTC+0 (GMT)</option>
+                                    <option>UTC+9 (Tokyo)</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="glass-card rounded-2xl p-6">
+                    <h3 class="text-lg font-semibold text-white mb-6 flex items-center">
+                        <i data-lucide="cpu" class="w-5 h-5 mr-2 text-emerald-400"></i>運行參數
+                    </h3>
+                    <div class="space-y-4">
+                        <div
+                            class="flex items-center justify-between p-4 bg-dark-bg/30 rounded-xl border border-dark-border">
+                            <div>
+                                <p class="text-white font-medium">Debug 模式</p>
+                                <p class="text-xs text-gray-500">啟用詳細日誌記錄</p>
+                            </div>
+                            <div class="relative inline-flex items-center cursor-pointer">
+                                <input type="checkbox" class="sr-only peer">
+                                <div
+                                    class="w-11 h-6 bg-gray-700 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-emerald-500">
+                                </div>
+                            </div>
+                        </div>
+                        <div
+                            class="flex items-center justify-between p-4 bg-dark-bg/30 rounded-xl border border-dark-border">
+                            <div>
+                                <p class="text-white font-medium">心跳頻率 (秒)</p>
+                                <p class="text-xs text-gray-500">機台與雲端通訊間隔</p>
+                            </div>
+                            <input type="number" value="30"
+                                class="w-20 bg-dark-bg border border-dark-border rounded-lg py-2 px-3 text-center text-white focus:border-emerald-500 outline-none">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- [L48] 網路設定 -->
+            <div id="tab-network" class="tab-content hidden space-y-4">
+                <div class="glass-card rounded-2xl p-6">
+                    <h3 class="text-lg font-semibold text-white mb-6 flex items-center">
+                        <i data-lucide="wifi" class="w-5 h-5 mr-2 text-emerald-400"></i>連線設定
+                    </h3>
+                    <!-- Wi-Fi 內容 (簡化) -->
+                    <div class="space-y-4">
+                        <div
+                            class="p-4 bg-emerald-500/10 border border-emerald-500/20 rounded-xl relative overflow-hidden">
+                            <div class="flex justify-between items-center relative z-10">
+                                <div class="flex items-center">
+                                    <div
+                                        class="w-10 h-10 bg-emerald-500/20 rounded-lg flex items-center justify-center mr-3">
+                                        <i data-lucide="wifi" class="w-6 h-6 text-emerald-400"></i>
+                                    </div>
+                                    <div>
+                                        <p class="text-white font-medium">GameCenter_Local_5G</p>
+                                        <p class="text-xs text-emerald-400">已連線</p>
+                                    </div>
+                                </div>
+                                <button
+                                    class="text-gray-400 hover:text-white px-3 py-1 border border-dark-border rounded-lg text-sm">變更</button>
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-sm text-gray-400 mb-2">IP 位址</label>
+                                <input type="text" value="192.168.1.100"
+                                    class="w-full bg-dark-bg border border-dark-border rounded-lg py-3 px-4 text-white font-mono input-focus">
+                            </div>
+                            <div>
+                                <label class="block text-sm text-gray-400 mb-2">預設閘道</label>
+                                <input type="text" value="192.168.1.1"
+                                    class="w-full bg-dark-bg border border-dark-border rounded-lg py-3 px-4 text-white font-mono input-focus">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="glass-card rounded-2xl p-6">
+                    <h3 class="text-lg font-semibold text-white mb-6 flex items-center">
+                        <i data-lucide="activity" class="w-5 h-5 mr-2 text-emerald-400"></i>連線狀態檢測
+                    </h3>
+                    <div
+                        class="bg-dark-bg/50 rounded-xl p-4 font-mono text-sm text-emerald-400 h-40 overflow-y-auto mb-4 border border-dark-border">
+                        <p>> ping 8.8.8.8...</p>
+                        <p>> 64 bytes from 8.8.8.8: icmp_seq=1 ttl=116 time=28.4 ms</p>
+                        <p>> 64 bytes from 8.8.8.8: icmp_seq=2 ttl=116 time=27.9 ms</p>
+                        <p class="text-white animate-pulse">_</p>
+                    </div>
+                    <button
+                        class="w-full py-4 glass border border-dark-border text-emerald-400 rounded-xl font-semibold flex items-center justify-center btn-touch">
+                        <i data-lucide="play" class="w-4 h-4 mr-2"></i>重新執行 Ping 測試
+                    </button>
+                </div>
+            </div>
+
+            <!-- [L34] 對帳與同步 -->
+            <div id="tab-sync" class="tab-content hidden space-y-4">
+                <div class="glass-card rounded-2xl p-6">
+                    <h3 class="text-lg font-semibold text-white mb-6 flex items-center">
+                        <i data-lucide="refresh-cw" class="w-5 h-5 mr-2 text-emerald-400"></i>資料同步狀態
+                    </h3>
+                    <div class="grid grid-cols-2 gap-4 mb-6">
+                        <div class="bg-dark-bg/30 p-4 rounded-xl border border-dark-border text-center">
+                            <p class="text-xs text-gray-500 mb-1">待上傳佇列</p>
+                            <p class="text-2xl font-bold text-emerald-400">0</p>
+                        </div>
+                        <div class="bg-dark-bg/30 p-4 rounded-xl border border-dark-border text-center">
+                            <p class="text-xs text-gray-500 mb-1">同步延遲</p>
+                            <p class="text-2xl font-bold text-white">45ms</p>
+                        </div>
+                    </div>
+                    <div class="space-y-3">
+                        <div class="flex justify-between text-sm py-2 border-b border-dark-border/50">
+                            <span class="text-gray-400">上次同步時間</span>
+                            <span class="text-white">2026-03-08 14:05:22</span>
+                        </div>
+                        <div class="flex justify-between text-sm py-2 border-b border-dark-border/50">
+                            <span class="text-gray-400">機台版本</span>
+                            <span class="text-white">v2.1.0-release</span>
+                        </div>
+                        <div class="flex justify-between text-sm py-2 border-b border-dark-border/50">
+                            <span class="text-gray-400">金鑰狀態</span>
+                            <span class="text-emerald-400 font-medium">有效 (AES-256)</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script src="../js/sidebar.js"></script>
+    <script>
+        if (typeof MockupSidebar !== 'undefined') {
+            MockupSidebar.render('mockup_local_system_settings.html');
+        }
+        lucide.createIcons();
+
+        function switchTab(btn, tabId) {
+            // 更新按鈕樣式
+            document.querySelectorAll('.tab-active').forEach(el => {
+                el.classList.remove('tab-active');
+                el.classList.add('text-gray-400');
+            });
+            btn.classList.add('tab-active');
+            btn.classList.remove('text-gray-400');
+
+            // 顯示對應內容
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
+            document.getElementById('tab-' + tabId).classList.remove('hidden');
+        }
+    </script>
+</body>
+
+</html>

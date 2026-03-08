@@ -193,8 +193,9 @@ const MOCKUP_MAPPING = {
   'mockup_log_query.html': ['C86'],
 
   // 系統設定
-  'mockup_std_system_settings.html': ['L47', 'L48', 'C90'],
-  'mockup_network_settings.html': ['L48'],
+  'mockup_local_network_settings.html': ['L48'],
+  'mockup_std_system_settings.html': ['C90'],
+  'mockup_network_settings.html': ['C88'],
   'mockup_std_backup.html': ['L28'],
   'mockup_security_settings.html': ['C90'],
 
@@ -221,6 +222,7 @@ const MOCKUP_MAPPING = {
 
   // 報表
   'mockup_std_reports.html': ['L17', 'C47'],
+  'mockup_local_system_settings.html': ['L47', 'L48'],
   'mockup_std_category_add.html': ['C77'],
 
   // 本地端
