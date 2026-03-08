@@ -4,7 +4,7 @@ info:
   description: |
     遊戲平台管理系統 V8.1 API 文檔
     - 支援 MVP / 標準版 / 旗艦版
-    - Version: 1.2.0
+    - Version: 1.3.0
     
     ## 功能代碼索引
     
@@ -61,16 +61,27 @@ info:
     | 功能碼 | 功能名稱 | 主要端點 |
     |--------|---------|---------|
     | [L05] | 機台列表檢視 | GET /machines |
+    | [L06] | 本機狀態 | GET /machines/{id}/status |
     | [L07] | 機台配置接收 | POST /machines/{id}/config/status |
+    | [L09] | 遊戲啟用/停用 | PUT /games/{id}/status |
+    | [L10] | 遊戲版本管理 | GET /games/{id}/versions |
     | [L11] | 遊戲列表檢視 | GET /games |
     | [L14] | 遊戲詳情 | GET /games/{id} |
     | [L15] | 交易紀錄 | GET /transactions |
     | [L17] | 日/週/月/年報表 | GET /reports/revenue |
     | [L20] | 爭議對帳處理專區 | GET/POST /disputes |
+    | [L31] | 遊戲參數設定 | PUT /games/{id}/config |
+    | [L32] | 遊戲顯示順序 | PUT /games/{id}/display-order |
+    | [L33] | 遊戲狀態查詢 | GET /games/{id}/status |
     | [L34] | 同步狀態檢視 | GET /machines/{id}/config/status |
     | [L35] | 雙向佇列與交易補償 | POST /sync/upload, GET /sync/download |
     | [L38] | 心跳檢測與離線告警 | POST /machines/{id}/heartbeat |
+    | [L39] | 設備健康度儀表板 | GET /machines/{id}/health |
+    | [L40] | 網路延遲監控 | GET /machines/{id}/network |
+    | [L41] | 硬體/軟體監控 | GET /machines/{id}/hardware |
     | [L43] | 虛擬下注 | POST /games/{id}/test/* |
+    | [L44] | 遊戲餘額查詢 | GET /games/{id}/balance |
+    | [L45] | 遊戲開分/洗分 | POST /machines/{id}/cash-in, /cash-out |
     | [L47] | 基本設定 | GET/PUT /machines/{id}/config |
     
     ### 不適用 API 端點的功能
@@ -371,7 +382,7 @@ paths:
       responses:
         "200": { description: 心跳收到 }
 
-  /machines/{id}/status:
+  /machines/{id}/hardware:
     parameters:
       - {
           name: id,
@@ -381,8 +392,8 @@ paths:
         }
     get:
       tags: [機台管理 (Machines)]
-      summary: "[C02] 取得機台硬體/網路狀態"
-      description: 取得機台的硬體資源使用率、網路延遲、連線狀態等
+      summary: "[L41] 取得硬體/軟體監控數據"
+      description: 取得機台的硬體規格、軟體版本、運行狀態等
       security: [{ BearerAuth: [] }]
       responses:
         "200":
@@ -392,13 +403,282 @@ paths:
               schema:
                 type: object
                 properties:
-                  cpuUsage: { type: number, description: CPU 使用率 (%) }
-                  memoryUsage: { type: number, description: 記憶體使用率 (%) }
-                  diskUsage: { type: number, description: 磁碟使用率 (%) }
-                  networkLatency: { type: number, description: 網路延遲 (ms) }
-                  connectionStatus: { type: string, enum: [online, offline, unstable] }
-                  lastHeartbeat: { type: string, format: date-time }
-                  uptime: { type: integer, description: 運行時間 (秒) }
+                  cpuModel: { type: string }
+                  cpuCores: { type: integer }
+                  totalMemory: { type: integer, description: "總記憶體 (bytes)" }
+                  diskTotal: { type: integer, description: "總磁碟空間 (bytes)" }
+                  osVersion: { type: string }
+                  softwareVersion: { type: string }
+                  uptime: { type: integer, description: "運行時間 (秒)" }
+
+  /machines/{id}/health:
+    parameters:
+      - {
+          name: id,
+          in: path,
+          required: true,
+          schema: { type: string, format: uuid },
+        }
+    get:
+      tags: [機台管理 (Machines)]
+      summary: "[L39] 取得設備健康度儀表板"
+      description: 取得機台的綜合健康評分與各項指標
+      security: [{ BearerAuth: [] }]
+      responses:
+        "200":
+          description: 成功
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  healthScore: { type: number, description: "健康評分 (0-100)" }
+                  cpuHealth: { type: string, enum: [good, warning, critical] }
+                  memoryHealth: { type: string, enum: [good, warning, critical] }
+                  diskHealth: { type: string, enum: [good, warning, critical] }
+                  networkHealth: { type: string, enum: [good, warning, critical] }
+                  lastCheck: { type: string, format: date-time }
+
+  /machines/{id}/network:
+    parameters:
+      - {
+          name: id,
+          in: path,
+          required: true,
+          schema: { type: string, format: uuid },
+        }
+    get:
+      tags: [機台管理 (Machines)]
+      summary: "[L40] 取得網路延遲監控"
+      description: 取得機台的網路連線品質與延遲數據
+      security: [{ BearerAuth: [] }]
+      responses:
+        "200":
+          description: 成功
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  latency: { type: number, description: "當前延遲 (ms)" }
+                  avgLatency: { type: number, description: "平均延遲 (ms)" }
+                  packetLoss: { type: number, description: "封包遺失率 (%)" }
+                  connectionQuality: { type: string, enum: [excellent, good, fair, poor] }
+                  lastPingTime: { type: string, format: date-time }
+
+  /machines/{id}/cash-in:
+    parameters:
+      - {
+          name: id,
+          in: path,
+          required: true,
+          schema: { type: string, format: uuid },
+        }
+    post:
+      tags: [機台管理 (Machines)]
+      summary: "[L45] 遊戲開分"
+      description: 為機台進行開分（充值）操作
+      security: [{ BearerAuth: [] }, { PinAuth: [] }]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [amount, operatorPin]
+              properties:
+                amount: { type: number, minimum: 100 }
+                operatorPin: { type: string, description: "操作員 PIN 碼" }
+                remark: { type: string }
+      responses:
+        "200": { description: 開分成功 }
+        "400": { description: 金額無效或餘額不足 }
+        "401": { description: PIN 碼錯誤 }
+
+  /machines/{id}/cash-out:
+    parameters:
+      - {
+          name: id,
+          in: path,
+          required: true,
+          schema: { type: string, format: uuid },
+        }
+    post:
+      tags: [機台管理 (Machines)]
+      summary: "[L45] 遊戲洗分"
+      description: 為機台進行洗分（兌換）操作
+      security: [{ BearerAuth: [] }, { PinAuth: [] }]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [amount, operatorPin]
+              properties:
+                amount: { type: number, minimum: 100 }
+                operatorPin: { type: string, description: "操作員 PIN 碼" }
+                remark: { type: string }
+      responses:
+        "200": { description: 洗分成功 }
+        "400": { description: 金額無效或餘額不足 }
+        "401": { description: PIN 碼錯誤 }
+
+  /games/{id}/status:
+    parameters:
+      - {
+          name: id,
+          in: path,
+          required: true,
+          schema: { type: string, format: uuid },
+        }
+    get:
+      tags: [遊戲管理 (Games)]
+      summary: "[L33] 取得遊戲狀態"
+      description: 查詢遊戲的開放/維護中/停用狀態
+      security: [{ BearerAuth: [] }]
+      responses:
+        "200":
+          description: 成功
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  gameId: { type: string }
+                  status: { type: string, enum: [active, maintenance, inactive] }
+                  lastStatusChange: { type: string, format: date-time }
+                  maintenanceMessage: { type: string }
+    put:
+      tags: [遊戲管理 (Games)]
+      summary: "[L09] 遊戲啟用/停用"
+      description: 啟用或停用遊戲（本地端僅影響本機）
+      security: [{ BearerAuth: [] }]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [status]
+              properties:
+                status: { type: string, enum: [active, inactive] }
+                reason: { type: string }
+      responses:
+        "200": { description: 狀態已更新 }
+
+  /games/{id}/versions:
+    parameters:
+      - {
+          name: id,
+          in: path,
+          required: true,
+          schema: { type: string, format: uuid },
+        }
+    get:
+      tags: [遊戲管理 (Games)]
+      summary: "[L10] 取得遊戲版本管理"
+      description: 查詢遊戲的版本歷史
+      security: [{ BearerAuth: [] }]
+      responses:
+        "200":
+          description: 成功
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  currentVersion: { type: string }
+                  versions:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        version: { type: string }
+                        releaseDate: { type: string, format: date }
+                        changes: { type: string }
+
+  /games/{id}/config:
+    parameters:
+      - {
+          name: id,
+          in: path,
+          required: true,
+          schema: { type: string, format: uuid },
+        }
+    get:
+      tags: [遊戲管理 (Games)]
+      summary: "[L31] 取得遊戲參數設定"
+      security: [{ BearerAuth: [] }]
+      responses:
+        "200": { description: 成功 }
+    put:
+      tags: [遊戲管理 (Games)]
+      summary: "[L31] 更新遊戲參數設定"
+      description: 更新遊戲在本機的配置參數
+      security: [{ BearerAuth: [] }]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                betLimits: { type: object }
+                rtp: { type: number }
+                customConfig: { type: object }
+      responses:
+        "200": { description: 更新成功 }
+
+  /games/{id}/display-order:
+    parameters:
+      - {
+          name: id,
+          in: path,
+          required: true,
+          schema: { type: string, format: uuid },
+        }
+    put:
+      tags: [遊戲管理 (Games)]
+      summary: "[L32] 更新遊戲顯示順序"
+      security: [{ BearerAuth: [] }]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [displayOrder]
+              properties:
+                displayOrder: { type: integer }
+      responses:
+        "200": { description: 更新成功 }
+
+  /games/{id}/balance:
+    parameters:
+      - {
+          name: id,
+          in: path,
+          required: true,
+          schema: { type: string, format: uuid },
+        }
+    get:
+      tags: [遊戲管理 (Games)]
+      summary: "[L44] 取得遊戲餘額查詢"
+      description: 查詢遊戲的錢包或測試帳號餘額
+      security: [{ BearerAuth: [] }]
+      responses:
+        "200":
+          description: 成功
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  gameId: { type: string }
+                  balance: { type: number }
+                  currency: { type: string }
+                  lastUpdated: { type: string, format: date-time }
 
   /machines/{id}/test-mode:
     parameters:
