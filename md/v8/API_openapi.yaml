@@ -303,26 +303,12 @@ paths:
       tags: [機台管理 (Machines)]
       summary: "[L05] 取得機台配置"
       security: [{ BearerAuth: [] }]
-      parameters:
-        - {
-            name: id,
-            in: path,
-            required: true,
-            schema: { type: string, format: uuid },
-          }
       responses:
         "200": { description: 成功 }
     put:
       tags: [機台管理 (Machines)]
       summary: "[C101] 更新機台配置"
       security: [{ BearerAuth: [] }]
-      parameters:
-        - {
-            name: id,
-            in: path,
-            required: true,
-            schema: { type: string, format: uuid },
-          }
       requestBody:
         required: true
         content:
@@ -333,6 +319,38 @@ paths:
                 config: { type: object }
       responses:
         "200": { description: 更新成功 }
+
+  /machines/{id}/config/status:
+    parameters:
+      - {
+          name: id,
+          in: path,
+          required: true,
+          schema: { type: string, format: uuid },
+        }
+    get:
+      tags: [機台管理 (Machines)]
+      summary: "[L34] 取得機台配置同步狀態"
+      security: [{ BearerAuth: [] }]
+      responses:
+        "200": { description: 成功 }
+    post:
+      tags: [機台管理 (Machines)]
+      summary: "[L07] 回報機台配置套用結果"
+      security: [{ BearerAuth: [] }]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                config_id: { type: string }
+                applied_version: { type: integer }
+                status: { type: string, enum: [APPLIED, FAILED] }
+                result_message: { type: string }
+      responses:
+        "200": { description: 回報成功 }
 
   # Games
   /games:
@@ -1176,6 +1194,16 @@ paths:
       tags: [同步管理 (Sync)]
       summary: "[L35] 下載中央資料"
       security: [{ BearerAuth: [] }, { PinAuth: [] }]
+      responses:
+        "200": { description: 成功 }
+
+  /configs/{id}:
+    parameters:
+      - { name: id, in: path, required: true, schema: { type: string } }
+    get:
+      tags: [同步管理 (Sync)]
+      summary: "[L07] 獲取特定配置內容"
+      security: [{ BearerAuth: [] }]
       responses:
         "200": { description: 成功 }
 

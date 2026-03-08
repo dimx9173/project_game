@@ -566,17 +566,17 @@ CREATE INDEX idx_audit_logs_created ON audit_logs(created_at DESC);
    │     { success: true, stored_at }              │
 ```
 
-#### 遠端複寫 API 規格
+#### 遠端複寫 API 規格 (WebSocket 推送)
 
 | API | 方法 | 說明 |
 | ---- | ---- | ---- |
-| `/api/v1/config/remote-push` | POST | 發起遠端設定複寫 |
-| `/api/v1/config/apply-result` | POST | 回傳套用結果 |
-| `/api/v1/config/sync` | POST | 本地主動同步設定 |
+| `[WebSocket] CONFIG_UPDATE` | Event | 透過 SignalR 推送更新通知 |
+| `/api/v1/machines/{id}/config/status` | POST | 回傳套用結果 ([L07]) |
+| `/api/v1/configs/{id}` | GET | 本地主動獲取配置內容 ([L07]) |
 
 #### 遠端複寫限制
 
-- 單機本地後台需在線才能接受遠端複寫
+- 單機本地後台需在線並建立 WebSocket (SignalR) 連線才能接受即時推送
 - 每次複寫需記錄完整操作日誌
 - 失敗需回傳錯誤訊息供集中端記錄
 - 遊戲供應商、串接遊戲、多人遊戲不支援遠端複寫
