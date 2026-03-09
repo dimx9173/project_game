@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>硬體/網路狀態 - 遊戲平台管理中心</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="../css/mockup-common.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        cyber: { 50: '#f5f3ff', 100: '#ede9fe', 200: '#ddd6fe', 300: '#c4b5fd', 400: '#a78bfa', 500: '#8b5cf6', 600: '#7c3aed', 700: '#6d28d9', 800: '#5b21b6', 900: '#4c1d95', 950: '#2e1065' },
+                        dark: { bg: '#0a0a0f', card: '#12121a', sidebar: '#0d0d14', border: '#1e1e2e', hover: '#1a1a28' }
+                    },
+                    fontFamily: { sans: ['"Noto Sans TC"', 'sans-serif'], mono: ['"JetBrains Mono"', 'monospace'] },
+                    boxShadow: { glow: '0 0 30px rgba(168, 85, 247, 0.3)', 'glow-sm': '0 0 15px rgba(168, 85, 247, 0.2)' }
+                }
+            }
+        }
+    </script>
+    <style>
+        * { scrollbar-width: thin; scrollbar-color: #6d28d9 #0a0a0f; }
+        *::-webkit-scrollbar { width: 8px; height: 8px; }
+        *::-webkit-scrollbar-track { background: #0a0a0f; }
+        *::-webkit-scrollbar-thumb { background: linear-gradient(180deg, #7c3aed, #a855f7); border-radius: 4px; }
+        body { font-family: 'Noto Sans TC', sans-serif; background: #0a0a0f; }
+        .glass { background: rgba(18, 18, 26, 0.7); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border: 1px solid rgba(255, 255, 255, 0.08); }
+        .glass-card { background: linear-gradient(135deg, rgba(18, 18, 26, 0.9) 0%, rgba(30, 30, 46, 0.6) 100%); backdrop-filter: blur(20px); border: 1px solid rgba(168, 85, 247, 0.15); box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4); }
+        .gradient-bg { background: linear-gradient(135deg, #0a0a0f 0%, #1a0a2e 50%, #0a0a0f 100%); }
+        .gradient-purple { background: linear-gradient(135deg, #7c3aed 0%, #a855f7 50%, #c084fc 100%); }
+        .input-focus:focus { box-shadow: 0 0 0 3px rgba(168, 85, 247, 0.3); outline: none; }
+        .status-good { color: #10b981; }
+        .status-warning { color: #f59e0b; }
+        .status-danger { color: #ef4444; }
+        @keyframes pulse-dot { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }
+        .pulse-dot { animation: pulse-dot 2s infinite; }
+    </style>
+</head>
+<body class="gradient-bg min-h-screen flex">
+    <div id="sidebar-container"></div>
+    
+    <main class="flex-1 flex flex-col overflow-hidden">
+        <!-- Header -->
+        <header class="h-16 glass border-b border-dark-border flex items-center justify-between px-6">
+            <div class="flex items-center">
+                <h2 class="text-lg font-semibold text-white">硬體/網路狀態</h2>
+                <span class="ml-3 px-2 py-0.5 bg-emerald-500/20 text-emerald-400 text-xs rounded-full flex items-center">
+                    <span class="w-2 h-2 rounded-full bg-emerald-400 mr-1.5 pulse-dot"></span>
+                    運作正常
+                </span>
+            </div>
+            <div class="flex items-center space-x-3">
+                <button class="px-4 py-2 bg-dark-bg border border-dark-border rounded-lg text-gray-300 text-sm hover:bg-dark-hover">
+                    <i data-lucide="refresh-cw" class="w-4 h-4 inline mr-1"></i>重新整理
+                </button>
+            </div>
+        </header>
+
+        <div class="flex-1 overflow-y-auto p-6">
+            <div class="max-w-6xl mx-auto space-y-6">
+
+                <!-- Overview Cards -->
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+                    <div class="glass-card rounded-xl p-4">
+                        <div class="flex items-center justify-between mb-2">
+                            <span class="text-sm text-gray-400">CPU 使用率</span>
+                            <span class="text-sm font-mono status-good">42%</span>
+                        </div>
+                        <div class="w-full bg-dark-bg rounded-full h-2">
+                            <div class="bg-emerald-500 h-2 rounded-full" style="width: 42%"></div>
+                        </div>
+                    </div>
+
+                    <div class="glass-card rounded-xl p-4">
+                        <div class="flex items-center justify-between mb-2">
+                            <span class="text-sm text-gray-400">記憶體使用率</span>
+                            <span class="text-sm font-mono status-warning">68%</span>
+                        </div>
+                        <div class="w-full bg-dark-bg rounded-full h-2">
+                            <div class="bg-amber-500 h-2 rounded-full" style="width: 68%"></div>
+                        </div>
+                    </div>
+
+                    <div class="glass-card rounded-xl p-4">
+                        <div class="flex items-center justify-between mb-2">
+                            <span class="text-sm text-gray-400">磁碟使用率</span>
+                            <span class="text-sm font-mono status-good">35%</span>
+                        </div>
+                        <div class="w-full bg-dark-bg rounded-full h-2">
+                            <div class="bg-emerald-500 h-2 rounded-full" style="width: 35%"></div>
+                        </div>
+                    </div>
+
+                    <div class="glass-card rounded-xl p-4">
+                        <div class="flex items-center justify-between mb-2">
+                            <span class="text-sm text-gray-400">網路延遲</span>
+                            <span class="text-sm font-mono status-good">12ms</span>
+                        </div>
+                        <div class="flex items-center space-x-1">
+                            <span class="text-xs text-gray-500">下載: 85 Mbps</span>
+                            <span class="text-gray-600">|</span>
+                            <span class="text-xs text-gray-500">上傳: 42 Mbps</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Hardware Status -->
+                <div class="glass-card rounded-2xl p-6">
+                    <h3 class="text-lg font-semibold text-white mb-4 flex items-center">
+                        <i data-lucide="cpu" class="w-5 h-5 mr-2 text-cyber-400"></i>硬體狀態
+                    </h3>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <!-- CPU Details -->
+                        <div class="space-y-4">
+                            <div class="flex items-center justify-between p-3 bg-dark-bg rounded-lg">
+                                <div class="flex items-center">
+                                    <i data-lucide="cpu" class="w-5 h-5 text-cyber-400 mr-3"></i>
+                                    <div>
+                                        <div class="text-sm font-medium text-white">CPU</div>
+                                        <div class="text-xs text-gray-500">Intel Core i7-12700K</div>
+                                    </div>
+                                </div>
+                                <span class="px-2 py-1 bg-emerald-500/20 text-emerald-400 text-xs rounded">正常</span>
+                            </div>
+
+                            <div class="flex items-center justify-between p-3 bg-dark-bg rounded-lg">
+                                <div class="flex items-center">
+                                    <i data-lucide="hard-drive" class="w-5 h-5 text-cyber-400 mr-3"></i>
+                                    <div>
+                                        <div class="text-sm font-medium text-white">SSD</div>
+                                        <div class="text-xs text-gray-500">Samsung 980 Pro 1TB</div>
+                                    </div>
+                                </div>
+                                <span class="px-2 py-1 bg-emerald-500/20 text-emerald-400 text-xs rounded">正常</span>
+                            </div>
+
+                            <div class="flex items-center justify-between p-3 bg-dark-bg rounded-lg">
+                                <div class="flex items-center">
+                                    <i data-lucide="thermometer" class="w-5 h-5 text-cyber-400 mr-3"></i>
+                                    <div>
+                                        <div class="text-sm font-medium text-white">CPU 溫度</div>
+                                        <div class="text-xs text-gray-500">散熱正常</div>
+                                    </div>
+                                </div>
+                                <span class="text-sm font-mono text-emerald-400">45°C</span>
+                            </div>
+                        </div>
+
+                        <!-- Memory Details -->
+                        <div class="space-y-4">
+                            <div class="flex items-center justify-between p-3 bg-dark-bg rounded-lg">
+                                <div class="flex items-center">
+                                    <i data-lucide="memory-stick" class="w-5 h-5 text-cyber-400 mr-3"></i>
+                                    <div>
+                                        <div class="text-sm font-medium text-white">記憶體</div>
+                                        <div class="text-xs text-gray-500">DDR4 32GB (2x16GB)</div>
+                                    </div>
+                                </div>
+                                <span class="px-2 py-1 bg-amber-500/20 text-amber-400 text-xs rounded">較高</span>
+                            </div>
+
+                            <div class="p-3 bg-dark-bg rounded-lg">
+                                <div class="flex justify-between text-sm mb-2">
+                                    <span class="text-gray-400">已使用</span>
+                                    <span class="text-white font-mono">21.8 GB / 32 GB</span>
+                                </div>
+                                <div class="w-full bg-dark-bg rounded-full h-2 border border-dark-border">
+                                    <div class="bg-amber-500 h-2 rounded-full" style="width: 68%"></div>
+                                </div>
+                            </div>
+
+                            <div class="grid grid-cols-3 gap-2">
+                                <div class="p-2 bg-dark-bg rounded-lg text-center">
+                                    <div class="text-xs text-gray-500">可用</div>
+                                    <div class="text-sm font-mono text-emerald-400">10.2GB</div>
+                                </div>
+                                <div class="p-2 bg-dark-bg rounded-lg text-center">
+                                    <div class="text-xs text-gray-500">快取</div>
+                                    <div class="text-sm font-mono text-cyber-400">4.1GB</div>
+                                </div>
+                                <div class="p-2 bg-dark-bg rounded-lg text-center">
+                                    <div class="text-xs text-gray-500">緩衝</div>
+                                    <div class="text-sm font-mono text-gray-400">2.3GB</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Network Status -->
+                <div class="glass-card rounded-2xl p-6">
+                    <h3 class="text-lg font-semibold text-white mb-4 flex items-center">
+                        <i data-lucide="wifi" class="w-5 h-5 mr-2 text-cyber-400"></i>網路狀態
+                    </h3>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <!-- Connection Status -->
+                        <div class="space-y-4">
+                            <div class="p-4 bg-dark-bg rounded-xl border border-emerald-500/30">
+                                <div class="flex items-center justify-between mb-3">
+                                    <div class="flex items-center">
+                                        <div class="w-10 h-10 rounded-lg bg-emerald-500/20 flex items-center justify-center mr-3">
+                                            <i data-lucide="cloud" class="w-5 h-5 text-emerald-400"></i>
+                                        </div>
+                                        <div>
+                                            <div class="text-sm font-medium text-white">中央伺服器</div>
+                                            <div class="text-xs text-gray-500">api.gameplatform.com</div>
+                                        </div>
+                                    </div>
+                                    <span class="px-2 py-1 bg-emerald-500/20 text-emerald-400 text-xs rounded flex items-center">
+                                        <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 mr-1.5 pulse-dot"></span>
+                                        連線中
+                                    </span>
+                                </div>
+
+                                <div class="grid grid-cols-2 gap-3">
+                                    <div class="p-2 bg-dark-bg/50 rounded-lg">
+                                        <div class="text-xs text-gray-500">延遲</div>
+                                        <div class="text-lg font-mono text-emerald-400">12ms</div>
+                                    </div>
+                                    <div class="p-2 bg-dark-bg/50 rounded-lg">
+                                        <div class="text-xs text-gray-500">封包遺失</div>
+                                        <div class="text-lg font-mono text-emerald-400">0%</div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="flex items-center justify-between p-3 bg-dark-bg rounded-lg">
+                                <div class="flex items-center">
+                                    <i data-lucide="network" class="w-5 h-5 text-cyber-400 mr-3"></i>
+                                    <div>
+                                        <div class="text-sm font-medium text-white">本機 IP</div>
+                                        <div class="text-xs text-gray-500 font-mono">192.168.1.100</div>
+                                    </div>
+                                </div>
+                                <span class="text-xs text-gray-400">DHCP</span>
+                            </div>
+
+                            <div class="flex items-center justify-between p-3 bg-dark-bg rounded-lg">
+                                <div class="flex items-center">
+                                    <i data-lucide="globe" class="w-5 h-5 text-cyber-400 mr-3"></i>
+                                    <div>
+                                        <div class="text-sm font-medium text-white">閘道器</div>
+                                        <div class="text-xs text-gray-500 font-mono">192.168.1.1</div>
+                                    </div>
+                                </div>
+                                <span class="px-2 py-1 bg-emerald-500/20 text-emerald-400 text-xs rounded">正常</span>
+                            </div>
+                        </div>
+
+                        <!-- Network Traffic -->
+                        <div class="space-y-4">
+                            <div class="p-4 bg-dark-bg rounded-xl">
+                                <h4 class="text-sm font-medium text-white mb-3">網路流量</h4>
+                                
+                                <div class="space-y-3">
+                                    <div>
+                                        <div class="flex justify-between text-sm mb-1">
+                                            <span class="text-gray-400">下載速度</span>
+                                            <span class="text-white font-mono">85 Mbps</span>
+                                        </div>
+                                        <div class="w-full bg-dark-bg rounded-full h-2 border border-dark-border">
+                                            <div class="bg-cyber-500 h-2 rounded-full" style="width: 85%"></div>
+                                        </div>
+                                    </div>
+
+                                    <div>
+                                        <div class="flex justify-between text-sm mb-1">
+                                            <span class="text-gray-400">上傳速度</span>
+                                            <span class="text-white font-mono">42 Mbps</span>
+                                        </div>
+                                        <div class="w-full bg-dark-bg rounded-full h-2 border border-dark-border">
+                                            <div class="bg-purple-500 h-2 rounded-full" style="width: 42%"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="grid grid-cols-2 gap-3">
+                                <div class="p-3 bg-dark-bg rounded-lg">
+                                    <div class="text-xs text-gray-500 mb-1">今日下載</div>
+                                    <div class="text-lg font-mono text-cyber-400">2.4 GB</div>
+                                </div>
+                                <div class="p-3 bg-dark-bg rounded-lg">
+                                    <div class="text-xs text-gray-500 mb-1">今日上傳</div>
+                                    <div class="text-lg font-mono text-purple-400">856 MB</div>
+                                </div>
+                            </div>
+
+                            <div class="p-3 bg-dark-bg rounded-lg">
+                                <div class="flex items-center justify-between">
+                                    <span class="text-sm text-gray-400">連線穩定性</span>
+                                    <span class="text-sm font-mono text-emerald-400">99.9%</span>
+                                </div>
+                                <div class="text-xs text-gray-500 mt-1">過去 24 小時無斷線</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Last Updated -->
+                <div class="text-center text-xs text-gray-500">
+                    最後更新: 2024-03-06 14:32:18 | 自動重新整理: 30秒
+                </div>
+
+            </div>
+        </div>
+    </main>
+
+    <script src="../js/sidebar.js"></script>
+    <script>
+        MockupSidebar.render('mockup_hardware_status.html');
+        lucide.createIcons();
+    </script>
+</body>
+</html>

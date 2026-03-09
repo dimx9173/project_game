@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>手動同步 - 遊戲平台管理中心</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="../css/mockup-common.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        cyber: { 50: '#f5f3ff', 100: '#ede9fe', 200: '#ddd6fe', 300: '#c4b5fd', 400: '#a78bfa', 500: '#8b5cf6', 600: '#7c3aed', 700: '#6d28d9', 800: '#5b21b6', 900: '#4c1d95', 950: '#2e1065' },
+                        dark: { bg: '#0a0a0f', card: '#12121a', sidebar: '#0d0d14', border: '#1e1e2e', hover: '#1a1a28' }
+                    },
+                    fontFamily: { sans: ['"Noto Sans TC"', 'sans-serif'], mono: ['"JetBrains Mono"', 'monospace'] },
+                    boxShadow: { glow: '0 0 30px rgba(168, 85, 247, 0.3)', 'glow-sm': '0 0 15px rgba(168, 85, 247, 0.2)' }
+                }
+            }
+        }
+    </script>
+    <style>
+        * { scrollbar-width: thin; scrollbar-color: #6d28d9 #0a0a0f; }
+        *::-webkit-scrollbar { width: 8px; height: 8px; }
+        *::-webkit-scrollbar-track { background: #0a0a0f; }
+        *::-webkit-scrollbar-thumb { background: linear-gradient(180deg, #7c3aed, #a855f7); border-radius: 4px; }
+        body { font-family: 'Noto Sans TC', sans-serif; background: #0a0a0f; }
+        .glass { background: rgba(18, 18, 26, 0.7); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border: 1px solid rgba(255, 255, 255, 0.08); }
+        .glass-card { background: linear-gradient(135deg, rgba(18, 18, 26, 0.9) 0%, rgba(30, 30, 46, 0.6) 100%); backdrop-filter: blur(20px); border: 1px solid rgba(168, 85, 247, 0.15); box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4); }
+        .gradient-bg { background: linear-gradient(135deg, #0a0a0f 0%, #1a0a2e 50%, #0a0a0f 100%); }
+        .gradient-purple { background: linear-gradient(135deg, #7c3aed 0%, #a855f7 50%, #c084fc 100%); }
+        @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+        .animate-spin { animation: spin 1s linear infinite; }
+    </style>
+</head>
+<body class="gradient-bg min-h-screen flex">
+    <div id="sidebar-container"></div>
+    
+    <main class="flex-1 flex flex-col overflow-hidden">
+        <!-- Header -->
+        <header class="h-16 glass border-b border-dark-border flex items-center justify-between px-6">
+            <div class="flex items-center">
+                <h2 class="text-lg font-semibold text-white">手動同步</h2>
+            </div>
+        </header>
+
+        <div class="flex-1 overflow-y-auto p-6">
+            <div class="max-w-4xl mx-auto space-y-6">
+
+                <!-- Status Card -->
+                <div class="glass-card rounded-2xl p-6">
+                    <div class="flex items-center justify-between mb-6">
+                        <div class="flex items-center">
+                            <div class="w-16 h-16 rounded-2xl bg-emerald-500/20 flex items-center justify-center mr-4">
+                                <i data-lucide="check-circle" class="w-8 h-8 text-emerald-400"></i>
+                            </div>
+                            <div>
+                                <div class="text-xl font-semibold text-white">同步完成</div>
+                                <div class="text-gray-400">上次同步: 2024-03-06 14:30:25</div>
+                            </div>
+                        </div>
+                        
+                        <button onclick="startSync()" id="syncBtn" class="px-6 py-3 gradient-purple rounded-xl text-white font-semibold flex items-center">
+                            <i data-lucide="refresh-cw" class="w-5 h-5 mr-2"></i>
+                            立即同步
+                        </button>
+                    </div>
+
+                    <div class="grid grid-cols-3 gap-4">
+                        <div class="p-4 bg-dark-bg rounded-xl text-center">
+                            <div class="text-sm text-gray-400 mb-1">待同步資料</div>
+                            <div class="text-2xl font-bold text-white">0</div>
+                        </div>
+                        
+                        <div class="p-4 bg-dark-bg rounded-xl text-center">
+                            <div class="text-sm text-gray-400 mb-1">同步成功</div>
+                            <div class="text-2xl font-bold text-emerald-400">1,245</div>
+                        </div>
+                        
+                        <div class="p-4 bg-dark-bg rounded-xl text-center">
+                            <div class="text-sm text-gray-400 mb-1">同步失敗</div>
+                            <div class="text-2xl font-bold text-red-400">0</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Sync Options -->
+                <div class="glass-card rounded-2xl p-6">
+                    <h3 class="text-lg font-semibold text-white mb-4">同步選項</h3>
+                    
+                    <div class="space-y-4">
+                        <div class="flex items-center justify-between p-4 bg-dark-bg rounded-xl">
+                            <div class="flex items-center">
+                                <div class="w-10 h-10 rounded-lg bg-cyber-500/20 flex items-center justify-center mr-3">
+                                    <i data-lucide="database" class="w-5 h-5 text-cyber-400"></i>
+                                </div>
+                                <div>
+                                    <div class="text-white">交易資料</div>
+                                    <div class="text-sm text-gray-500">同步所有交易紀錄</div>
+                                </div>
+                            </div>
+                            <input type="checkbox" checked class="w-5 h-5 rounded border-dark-border bg-dark-bg text-cyber-500">
+                        </div>
+
+                        <div class="flex items-center justify-between p-4 bg-dark-bg rounded-xl">
+                            <div class="flex items-center">
+                                <div class="w-10 h-10 rounded-lg bg-cyber-500/20 flex items-center justify-center mr-3">
+                                    <i data-lucide="gamepad-2" class="w-5 h-5 text-cyber-400"></i>
+                                </div>
+                                <div>
+                                    <div class="text-white">遊戲資料</div>
+                                    <div class="text-sm text-gray-500">同步遊戲配置與狀態</div>
+                                </div>
+                            </div>
+                            <input type="checkbox" checked class="w-5 h-5 rounded border-dark-border bg-dark-bg text-cyber-500">
+                        </div>
+
+                        <div class="flex items-center justify-between p-4 bg-dark-bg rounded-xl">
+                            <div class="flex items-center">
+                                <div class="w-10 h-10 rounded-lg bg-cyber-500/20 flex items-center justify-center mr-3">
+                                    <i data-lucide="monitor" class="w-5 h-5 text-cyber-400"></i>
+                                </div>
+                                <div>
+                                    <div class="text-white">機台資料</div>
+                                    <div class="text-sm text-gray-500">同步機台狀態與設定</div>
+                                </div>
+                            </div>
+                            <input type="checkbox" checked class="w-5 h-5 rounded border-dark-border bg-dark-bg text-cyber-500">
+                        </div>
+
+                        <div class="flex items-center justify-between p-4 bg-dark-bg rounded-xl">
+                            <div class="flex items-center">
+                                <div class="w-10 h-10 rounded-lg bg-cyber-500/20 flex items-center justify-center mr-3">
+                                    <i data-lucide="users" class="w-5 h-5 text-cyber-400"></i>
+                                </div>
+                                <div>
+                                    <div class="text-white">使用者資料</div>
+                                    <div class="text-sm text-gray-500">同步帳號與權限設定</div>
+                                </div>
+                            </div>
+                            <input type="checkbox" class="w-5 h-5 rounded border-dark-border bg-dark-bg text-cyber-500">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Sync History -->
+                <div class="glass-card rounded-2xl p-6">
+                    <div class="flex items-center justify-between mb-4">
+                        <h3 class="text-lg font-semibold text-white">同步歷史</h3>
+                        <button class="text-sm text-gray-400 hover:text-white">清除記錄</button>
+                    </div>
+
+                    <div class="space-y-3">
+                        <div class="flex items-center justify-between p-3 bg-dark-bg rounded-lg">
+                            <div class="flex items-center">
+                                <div class="w-8 h-8 rounded-lg bg-emerald-500/20 flex items-center justify-center mr-3">
+                                    <i data-lucide="check" class="w-4 h-4 text-emerald-400"></i>
+                                </div>
+                                <div>
+                                    <div class="text-sm text-white">自動同步</div>
+                                    <div class="text-xs text-gray-500">交易資料, 遊戲資料, 機台資料 | 1,245 筆</div>
+                                </div>
+                            </div>
+                            <span class="text-sm text-gray-400">14:30:25</span>
+                        </div>
+
+                        <div class="flex items-center justify-between p-3 bg-dark-bg rounded-lg">
+                            <div class="flex items-center">
+                                <div class="w-8 h-8 rounded-lg bg-emerald-500/20 flex items-center justify-center mr-3">
+                                    <i data-lucide="check" class="w-4 h-4 text-emerald-400"></i>
+                                </div>
+                                <div>
+                                    <div class="text-sm text-white">手動同步</div>
+                                    <div class="text-xs text-gray-500">全部資料 | 2,890 筆</div>
+                                </div>
+                            </div>
+                            <span class="text-sm text-gray-400">昨天 18:45:12</span>
+                        </div>
+
+                        <div class="flex items-center justify-between p-3 bg-dark-bg rounded-lg">
+                            <div class="flex items-center">
+                                <div class="w-8 h-8 rounded-lg bg-red-500/20 flex items-center justify-center mr-3">
+                                    <i data-lucide="x" class="w-4 h-4 text-red-400"></i>
+                                </div>
+                                <div>
+                                    <div class="text-sm text-white">自動同步</div>
+                                    <div class="text-xs text-red-400">連線逾時 | 失敗</div>
+                                </div>
+                            </div>
+                            <span class="text-sm text-gray-400">昨天 12:30:05</span>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </main>
+
+    <script src="../js/sidebar.js"></script>
+    <script>
+        MockupSidebar.render('mockup_manual_sync.html');
+        lucide.createIcons();
+
+        function startSync() {
+            const btn = document.getElementById('syncBtn');
+            const icon = btn.querySelector('i');
+            
+            // Add spinning animation
+            icon.classList.add('animate-spin');
+            btn.disabled = true;
+            btn.classList.add('opacity-75');
+            btn.innerHTML = '<i data-lucide="refresh-cw" class="w-5 h-5 mr-2 animate-spin"></i>同步中...';
+            lucide.createIcons();
+            
+            // Simulate sync completion after 3 seconds
+            setTimeout(() => {
+                icon.classList.remove('animate-spin');
+                btn.disabled = false;
+                btn.classList.remove('opacity-75');
+                btn.innerHTML = '<i data-lucide="check" class="w-5 h-5 mr-2"></i>同步完成';
+                lucide.createIcons();
+                
+                setTimeout(() => {
+                    btn.innerHTML = '<i data-lucide="refresh-cw" class="w-5 h-5 mr-2"></i>立即同步';
+                    lucide.createIcons();
+                }, 2000);
+            }, 3000);
+        }
+    </script>
+</body>
+</html>

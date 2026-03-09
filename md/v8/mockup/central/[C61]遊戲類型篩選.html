@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>遊戲類型篩選 - 遊戲平台管理中心</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="../css/mockup-common.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        cyber: { 50: '#f5f3ff', 100: '#ede9fe', 200: '#ddd6fe', 300: '#c4b5fd', 400: '#a78bfa', 500: '#8b5cf6', 600: '#7c3aed', 700: '#6d28d9', 800: '#5b21b6', 900: '#4c1d95', 950: '#2e1065' },
+                        dark: { bg: '#0a0a0f', card: '#12121a', sidebar: '#0d0d14', border: '#1e1e2e', hover: '#1a1a28' }
+                    },
+                    fontFamily: { sans: ['"Noto Sans TC"', 'sans-serif'], mono: ['"JetBrains Mono"', 'monospace'] },
+                    boxShadow: { glow: '0 0 30px rgba(168, 85, 247, 0.3)', 'glow-sm': '0 0 15px rgba(168, 85, 247, 0.2)' }
+                }
+            }
+        }
+    </script>
+    <style>
+        * { scrollbar-width: thin; scrollbar-color: #6d28d9 #0a0a0f; }
+        *::-webkit-scrollbar { width: 8px; height: 8px; }
+        *::-webkit-scrollbar-track { background: #0a0a0f; }
+        *::-webkit-scrollbar-thumb { background: linear-gradient(180deg, #7c3aed, #a855f7); border-radius: 4px; }
+        body { font-family: 'Noto Sans TC', sans-serif; background: #0a0a0f; }
+        .glass { background: rgba(18, 18, 26, 0.7); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border: 1px solid rgba(255, 255, 255, 0.08); }
+        .glass-card { background: linear-gradient(135deg, rgba(18, 18, 26, 0.9) 0%, rgba(30, 30, 46, 0.6) 100%); backdrop-filter: blur(20px); border: 1px solid rgba(168, 85, 247, 0.15); box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4); }
+        .filter-chip { background: rgba(168, 85, 247, 0.2); border: 1px solid rgba(168, 85, 247, 0.3); color: #a78bfa; }
+        .filter-chip:hover { background: rgba(168, 85, 247, 0.3); border-color: rgba(168, 85, 247, 0.5); }
+        .filter-chip.active { background: rgba(168, 85, 247, 0.4); border-color: #8b5cf6; color: #fff; }
+    </style>
+</head>
+<body class="min-h-screen flex">
+    <div id="sidebar-container"></div>
+    <main class="flex-1 flex flex-col overflow-hidden">
+        <div class="flex-1 overflow-y-auto p-6">
+            <div class="max-w-7xl mx-auto">
+                <!-- 頁面標題 -->
+                <div class="flex items-center justify-between mb-6">
+                    <div>
+                        <h1 class="text-2xl font-bold text-white">遊戲類型篩選</h1>
+                        <p class="text-gray-400 mt-1">篩選多人遊戲類型</p>
+                    </div>
+                    <button class="px-4 py-2 bg-purple-600 hover:bg-purple-700 text-white rounded-lg transition-colors">
+                        <i data-lucide="save" class="w-4 h-4 inline mr-2"></i>儲存篩選設定
+                    </button>
+                </div>
+
+                <!-- 類型篩選區 -->
+                <div class="glass-card rounded-2xl p-6 mb-6">
+                    <h3 class="text-lg font-semibold text-white mb-4 flex items-center">
+                        <i data-lucide="filter" class="w-5 h-5 mr-2 text-purple-400"></i>遊戲類型
+                    </h3>
+                    <div class="flex flex-wrap gap-3">
+                        <button class="filter-chip active px-4 py-2 rounded-lg text-sm font-medium transition-all">全部</button>
+                        <button class="filter-chip px-4 py-2 rounded-lg text-sm font-medium transition-all">百家樂</button>
+                        <button class="filter-chip px-4 py-2 rounded-lg text-sm font-medium transition-all">龍虎</button>
+                        <button class="filter-chip px-4 py-2 rounded-lg text-sm font-medium transition-all">骰寶</button>
+                        <button class="filter-chip px-4 py-2 rounded-lg text-sm font-medium transition-all">輪盤</button>
+                        <button class="filter-chip px-4 py-2 rounded-lg text-sm font-medium transition-all">二十一點</button>
+                        <button class="filter-chip px-4 py-2 rounded-lg text-sm font-medium transition-all">扑克</button>
+                        <button class="filter-chip px-4 py-2 rounded-lg text-sm font-medium transition-all">麻將</button>
+                    </div>
+                </div>
+
+                <!-- 進階篩選 -->
+                <div class="glass-card rounded-2xl p-6 mb-6">
+                    <h3 class="text-lg font-semibold text-white mb-4 flex items-center">
+                        <i data-lucide="sliders-horizontal" class="w-5 h-5 mr-2 text-purple-400"></i>進階篩選
+                    </h3>
+                    <div class="grid grid-cols-4 gap-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-300 mb-2">最低投注</label>
+                            <select class="w-full bg-dark-bg border border-dark-border rounded-lg px-4 py-3 text-white">
+                                <option>不限</option>
+                                <option>$10</option>
+                                <option>$50</option>
+                                <option>$100</option>
+                                <option>$500</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-300 mb-2">最高投注</label>
+                            <select class="w-full bg-dark-bg border border-dark-border rounded-lg px-4 py-3 text-white">
+                                <option>不限</option>
+                                <option>$1,000</option>
+                                <option>$5,000</option>
+                                <option>$10,000</option>
+                                <option>$50,000</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-300 mb-2">桌檯狀態</label>
+                            <select class="w-full bg-dark-bg border border-dark-border rounded-lg px-4 py-3 text-white">
+                                <option>全部</option>
+                                <option>在線</option>
+                                <option>進行中</option>
+                                <option>維護中</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-300 mb-2">語言</label>
+                            <select class="w-full bg-dark-bg border border-dark-border rounded-lg px-4 py-3 text-white">
+                                <option>全部</option>
+                                <option>中文</option>
+                                <option>English</option>
+                                <option>日本語</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 篩選結果 -->
+                <div class="glass-card rounded-2xl p-6">
+                    <div class="flex items-center justify-between mb-4">
+                        <h3 class="text-lg font-semibold text-white">篩選結果</h3>
+                        <span class="text-gray-400">共 12 個牌桌</span>
+                    </div>
+                    <div class="overflow-x-auto">
+                        <table class="w-full">
+                            <thead>
+                                <tr class="border-b border-dark-border">
+                                    <th class="text-left py-3 px-4 text-gray-400 font-medium">桌號</th>
+                                    <th class="text-left py-3 px-4 text-gray-400 font-medium">類型</th>
+                                    <th class="text-left py-3 px-4 text-gray-400 font-medium">名稱</th>
+                                    <th class="text-left py-3 px-4 text-gray-400 font-medium">投注範圍</th>
+                                    <th class="text-left py-3 px-4 text-gray-400 font-medium">狀態</th>
+                                    <th class="text-left py-3 px-4 text-gray-400 font-medium">操作</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr class="border-b border-dark-border hover:bg-dark-hover/50">
+                                    <td class="py-3 px-4 text-white">BACC-001</td>
+                                    <td class="py-3 px-4"><span class="px-2 py-1 bg-purple-600/20 text-purple-400 rounded text-xs">百家樂</span></td>
+                                    <td class="py-3 px-4 text-white">百家樂 A桌</td>
+                                    <td class="py-3 px-4 text-gray-300">$100 - $10,000</td>
+                                    <td class="py-3 px-4"><span class="px-2 py-1 bg-green-500/20 text-green-400 rounded text-xs">在線</span></td>
+                                    <td class="py-3 px-4"><button class="text-purple-400 hover:text-purple-300 text-sm">查看</button></td>
+                                </tr>
+                                <tr class="border-b border-dark-border hover:bg-dark-hover/50">
+                                    <td class="py-3 px-4 text-white">DRG-002</td>
+                                    <td class="py-3 px-4"><span class="px-2 py-1 bg-blue-600/20 text-blue-400 rounded text-xs">龍虎</span></td>
+                                    <td class="py-3 px-4 text-white">龍虎 B桌</td>
+                                    <td class="py-3 px-4 text-gray-300">$50 - $5,000</td>
+                                    <td class="py-3 px-4"><span class="px-2 py-1 bg-green-500/20 text-green-400 rounded text-xs">在線</span></td>
+                                    <td class="py-3 px-4"><button class="text-purple-400 hover:text-purple-300 text-sm">查看</button></td>
+                                </tr>
+                                <tr class="hover:bg-dark-hover/50">
+                                    <td class="py-3 px-4 text-white">SIC-003</td>
+                                    <td class="py-3 px-4"><span class="px-2 py-1 bg-yellow-600/20 text-yellow-400 rounded text-xs">骰寶</span></td>
+                                    <td class="py-3 px-4 text-white">骰寶 C桌</td>
+                                    <td class="py-3 px-4 text-gray-300">$10 - $1,000</td>
+                                    <td class="py-3 px-4"><span class="px-2 py-1 bg-yellow-500/20 text-yellow-400 rounded text-xs">維護中</span></td>
+                                    <td class="py-3 px-4"><button class="text-purple-400 hover:text-purple-300 text-sm">查看</button></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+    <script src="../js/sidebar.js"></script>
+    <script>lucide.createIcons();</script>
+</body>
+</html>

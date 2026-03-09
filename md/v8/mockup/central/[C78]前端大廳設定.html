@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>遊戲大廳設定 - 遊戲平台管理中心</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="../css/mockup-common.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        cyber: { 50: '#f5f3ff', 100: '#ede9fe', 200: '#ddd6fe', 300: '#c4b5fd', 400: '#a78bfa', 500: '#8b5cf6', 600: '#7c3aed', 700: '#6d28d9', 800: '#5b21b6', 900: '#4c1d95', 950: '#2e1065' },
+                        dark: { bg: '#0a0a0f', card: '#12121a', sidebar: '#0d0d14', border: '#1e1e2e', hover: '#1a1a28' }
+                    },
+                    fontFamily: { sans: ['"Noto Sans TC"', 'sans-serif'], mono: ['"JetBrains Mono"', 'monospace'] },
+                    boxShadow: { glow: '0 0 30px rgba(168, 85, 247, 0.3)', 'glow-sm': '0 0 15px rgba(168, 85, 247, 0.2)' }
+                }
+            }
+        }
+    </script>
+    <style>
+        * { scrollbar-width: thin; scrollbar-color: #6d28d9 #0a0a0f; }
+        *::-webkit-scrollbar { width: 8px; height: 8px; }
+        *::-webkit-scrollbar-track { background: #0a0a0f; }
+        *::-webkit-scrollbar-thumb { background: linear-gradient(180deg, #7c3aed, #a855f7); border-radius: 4px; }
+        body { font-family: 'Noto Sans TC', sans-serif; background: #0a0a0f; }
+        .glass { background: rgba(18, 18, 26, 0.7); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border: 1px solid rgba(255, 255, 255, 0.08); }
+        .glass-card { background: linear-gradient(135deg, rgba(18, 18, 26, 0.9) 0%, rgba(30, 30, 46, 0.6) 100%); backdrop-filter: blur(20px); border: 1px solid rgba(168, 85, 247, 0.15); box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4); }
+        .gradient-bg { background: linear-gradient(135deg, #0a0a0f 0%, #1a0a2e 50%, #0a0a0f 100%); }
+        .gradient-purple { background: linear-gradient(135deg, #7c3aed 0%, #a855f7 50%, #c084fc 100%); }
+        .category-item { transition: all 0.2s ease; cursor: move; }
+        .category-item:hover { background: rgba(124, 58, 237, 0.1); }
+        .preview-container { aspect-ratio: 16/9; }
+    </style>
+</head>
+<body class="gradient-bg min-h-screen flex">
+    <div id="sidebar-container"></div>
+    
+    <main class="flex-1 flex flex-col overflow-hidden">
+        <!-- Header -->
+        <header class="h-16 glass border-b border-dark-border flex items-center justify-between px-6">
+            <h2 class="text-lg font-semibold text-white">遊戲大廳設定</h2>
+            <div class="flex items-center space-x-3">
+                <button class="px-4 py-2 bg-dark-bg border border-dark-border rounded-lg text-gray-300 text-sm hover:bg-dark-hover">
+                    <i data-lucide="eye" class="w-4 h-4 inline mr-1"></i>預覽
+                </button>
+                <button class="px-4 py-2 gradient-purple rounded-lg text-white font-medium text-sm">
+                    <i data-lucide="save" class="w-4 h-4 inline mr-1"></i>儲存變更
+                </button>
+            </div>
+        </header>
+
+        <div class="flex-1 flex overflow-hidden">
+            
+            <!-- Left: Configuration -->
+            <aside class="w-96 glass border-r border-dark-border flex flex-col overflow-y-auto">
+                
+                <div class="p-4 border-b border-dark-border">
+                    <h3 class="font-semibold text-white mb-4">分類管理</h3>
+                    
+                    <div class="space-y-2">
+                        
+                        <!-- Category 1 -->
+                        <div class="category-item glass-card rounded-lg p-3 flex items-center">
+                            <i data-lucide="grip-vertical" class="w-4 h-4 text-gray-500 mr-2 cursor-move"></i>
+                            <div class="flex-1">
+                                <div class="text-sm text-white">熱門遊戲</div>
+                                <div class="text-xs text-gray-500">顯示 8 款遊戲</div>
+                            </div>
+                            <button class="p-1.5 text-gray-400 hover:text-white"><i data-lucide="settings" class="w-4 h-4"></i></button>
+                        </div>
+
+                        <!-- Category 2 -->
+                        <div class="category-item glass-card rounded-lg p-3 flex items-center">
+                            <i data-lucide="grip-vertical" class="w-4 h-4 text-gray-500 mr-2 cursor-move"></i>
+                            <div class="flex-1">
+                                <div class="text-sm text-white">最新上架</div>
+                                <div class="text-xs text-gray-500">顯示 6 款遊戲</div>
+                            </div>
+                            <button class="p-1.5 text-gray-400 hover:text-white"><i data-lucide="settings" class="w-4 h-4"></i></button>
+                        </div>
+
+                        <!-- Category 3 -->
+                        <div class="category-item glass-card rounded-lg p-3 flex items-center">
+                            <i data-lucide="grip-vertical" class="w-4 h-4 text-gray-500 mr-2 cursor-move"></i>
+                            <div class="flex-1">
+                                <div class="text-sm text-white">拉霸機</div>
+                                <div class="text-xs text-gray-500">顯示全部 24 款</div>
+                            </div>
+                            <button class="p-1.5 text-gray-400 hover:text-white"><i data-lucide="settings" class="w-4 h-4"></i></button>
+                        </div>
+
+                        <!-- Category 4 -->
+                        <div class="category-item glass-card rounded-lg p-3 flex items-center">
+                            <i data-lucide="grip-vertical" class="w-4 h-4 text-gray-500 mr-2 cursor-move"></i>
+                            <div class="flex-1">
+                                <div class="text-sm text-white">真人視訊</div>
+                                <div class="text-xs text-gray-500">顯示全部 12 款</div>
+                            </div>
+                            <button class="p-1.5 text-gray-400 hover:text-white"><i data-lucide="settings" class="w-4 h-4"></i></button>
+                        </div>
+
+                    </div>
+                    
+                    <button class="w-full mt-3 py-2 border border-dashed border-dark-border rounded-lg text-gray-500 text-sm hover:border-cyber-500 hover:text-cyber-400">
+                        <i data-lucide="plus" class="w-4 h-4 inline mr-1"></i>新增分類
+                    </button>
+                </div>
+
+                <div class="p-4">
+                    <h3 class="font-semibold text-white mb-4">大廳設定</h3>
+                    
+                    <div class="space-y-4">
+                        <div>
+                            <label class="block text-sm text-gray-400 mb-2">每行顯示數量</label>
+                            <select class="w-full bg-dark-bg border border-dark-border rounded-lg py-2 px-4 text-white">
+                                <option>3 款</option>
+                                <option selected>4 款</option>
+                                <option>5 款</option>
+                            </select>
+                        </div>
+
+                        <div class="flex items-center justify-between">
+                            <span class="text-sm text-gray-300">顯示遊戲 RTP</span>
+                            <button class="w-12 h-6 rounded-full bg-cyber-500 relative">
+                                <span class="absolute right-1 top-1 w-4 h-4 bg-white rounded-full"></span>
+                            </button>
+                        </div>
+
+                        <div class="flex items-center justify-between">
+                            <span class="text-sm text-gray-300">顯示熱門標記</span>
+                            <button class="w-12 h-6 rounded-full bg-cyber-500 relative">
+                                <span class="absolute right-1 top-1 w-4 h-4 bg-white rounded-full"></span>
+                            </button>
+                        </div>
+
+                        <div class="flex items-center justify-between">
+                            <span class="text-sm text-gray-300">允許搜尋</span>
+                            <button class="w-12 h-6 rounded-full bg-cyber-500 relative">
+                                <span class="absolute right-1 top-1 w-4 h-4 bg-white rounded-full"></span>
+                            </button>
+                        </div>
+
+                        <div class="flex items-center justify-between">
+                            <span class="text-sm text-gray-300">允許篩選</span>
+                            <button class="w-12 h-6 rounded-full bg-dark-bg border border-dark-border relative">
+                                <span class="absolute left-1 top-1 w-4 h-4 bg-gray-400 rounded-full"></span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </aside>
+
+            <!-- Right: Preview -->
+            <div class="flex-1 p-6 overflow-y-auto">
+                
+                <h3 class="text-lg font-semibold text-white mb-4">即時預覽</h3>
+
+                <div class="glass-card rounded-2xl p-6 preview-container">
+                    <!-- Mock Lobby Preview -->
+                    <div class="space-y-6">
+                        <!-- Section 1 -->
+                        <div>
+                            <div class="flex items-center justify-between mb-3">
+                                <h4 class="text-white font-medium">熱門遊戲</h4>
+                                <button class="text-sm text-cyber-400">查看更多 →</button>
+                            </div>
+                            
+                            <div class="grid grid-cols-4 gap-3">
+                                <div class="aspect-[3/4] bg-gradient-to-br from-purple-900 to-indigo-900 rounded-lg"></div>
+                                <div class="aspect-[3/4] bg-gradient-to-br from-cyan-900 to-blue-900 rounded-lg"></div>
+                                <div class="aspect-[3/4] bg-gradient-to-br from-amber-900 to-orange-900 rounded-lg"></div>
+                                <div class="aspect-[3/4] bg-gradient-to-br from-rose-900 to-pink-900 rounded-lg"></div>
+                            </div>
+                        </div>
+
+                        <!-- Section 2 -->
+                        <div>
+                            <div class="flex items-center justify-between mb-3">
+                                <h4 class="text-white font-medium">拉霸機</h4>
+                                <button class="text-sm text-cyber-400">查看更多 →</button>
+                            </div>
+                            
+                            <div class="grid grid-cols-4 gap-3">
+                                <div class="aspect-[3/4] bg-gradient-to-br from-emerald-900 to-green-900 rounded-lg"></div>
+                                <div class="aspect-[3/4] bg-gradient-to-br from-violet-900 to-purple-900 rounded-lg"></div>
+                                <div class="aspect-[3/4] bg-gradient-to-br from-blue-900 to-indigo-900 rounded-lg"></div>
+                                <div class="aspect-[3/4] bg-gradient-to-br from-orange-900 to-red-900 rounded-lg"></div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+                <div class="mt-4 text-center text-sm text-gray-500">
+                    此為示意預覽，實際效果以客戶端為準
+                </div>
+
+            </div>
+        </div>
+    </main>
+
+    <script src="../js/sidebar.js"></script>
+    <script>
+        MockupSidebar.render('mockup_lobby_config.html');
+        lucide.createIcons();
+    </script>
+</body>
+</html>

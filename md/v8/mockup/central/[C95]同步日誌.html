@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>同步日誌 - 遊戲平台管理中心</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="../css/mockup-common.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        cyber: { 50: '#f5f3ff', 100: '#ede9fe', 200: '#ddd6fe', 300: '#c4b5fd', 400: '#a78bfa', 500: '#8b5cf6', 600: '#7c3aed', 700: '#6d28d9', 800: '#5b21b6', 900: '#4c1d95', 950: '#2e1065' },
+                        dark: { bg: '#0a0a0f', card: '#12121a', sidebar: '#0d0d14', border: '#1e1e2e', hover: '#1a1a28' }
+                    },
+                    fontFamily: { sans: ['"Noto Sans TC"', 'sans-serif'], mono: ['"JetBrains Mono"', 'monospace'] },
+                    boxShadow: { glow: '0 0 30px rgba(168, 85, 247, 0.3)', 'glow-sm': '0 0 15px rgba(168, 85, 247, 0.2)' }
+                }
+            }
+        }
+    </script>
+    <style>
+        * { scrollbar-width: thin; scrollbar-color: #6d28d9 #0a0a0f; }
+        *::-webkit-scrollbar { width: 8px; height: 8px; }
+        *::-webkit-scrollbar-track { background: #0a0a0f; }
+        *::-webkit-scrollbar-thumb { background: linear-gradient(180deg, #7c3aed, #a855f7); border-radius: 4px; }
+        body { font-family: 'Noto Sans TC', sans-serif; background: #0a0a0f; }
+        .glass { background: rgba(18, 18, 26, 0.7); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border: 1px solid rgba(255, 255, 255, 0.08); }
+        .glass-card { background: linear-gradient(135deg, rgba(18, 18, 26, 0.9) 0%, rgba(30, 30, 46, 0.6) 100%); backdrop-filter: blur(20px); border: 1px solid rgba(168, 85, 247, 0.15); box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4); }
+        .log-success { border-left: 3px solid #10b981; }
+        .log-error { border-left: 3px solid #ef4444; }
+        .log-warning { border-left: 3px solid #f59e0b; }
+        .log-info { border-left: 3px solid #3b82f6; }
+    </style>
+</head>
+<body class="min-h-screen flex">
+    <div id="sidebar-container"></div>
+    <main class="flex-1 flex flex-col overflow-hidden">
+        <div class="flex-1 overflow-y-auto p-6">
+            <div class="max-w-7xl mx-auto">
+                <!-- 頁面標題 -->
+                <div class="flex items-center justify-between mb-6">
+                    <div>
+                        <h1 class="text-2xl font-bold text-white">同步日誌</h1>
+                        <p class="text-gray-400 mt-1">查看資料同步日誌記錄</p>
+                    </div>
+                    <div class="flex items-center space-x-3">
+                        <button class="px-4 py-2 bg-dark-bg border border-dark-border text-white rounded-lg hover:bg-dark-hover transition-colors">
+                            <i data-lucide="download" class="w-4 h-4 inline mr-2"></i>匯出日誌
+                        </button>
+                        <button class="px-4 py-2 bg-purple-600 hover:bg-purple-700 text-white rounded-lg transition-colors">
+                            <i data-lucide="refresh-cw" class="w-4 h-4 inline mr-2"></i>重新整理
+                        </button>
+                    </div>
+                </div>
+
+                <!-- 日誌統計 -->
+                <div class="grid grid-cols-4 gap-4 mb-6">
+                    <div class="glass-card rounded-xl p-4">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <p class="text-gray-400 text-sm">今日同步</p>
+                                <p class="text-2xl font-bold text-white">1,245</p>
+                            </div>
+                            <div class="w-10 h-10 rounded-lg bg-blue-500/20 flex items-center justify-center">
+                                <i data-lucide="sync" class="w-5 h-5 text-blue-400"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="glass-card rounded-xl p-4">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <p class="text-gray-400 text-sm">成功</p>
+                                <p class="text-2xl font-bold text-green-400">1,238</p>
+                            </div>
+                            <div class="w-10 h-10 rounded-lg bg-green-500/20 flex items-center justify-center">
+                                <i data-lucide="check-circle" class="w-5 h-5 text-green-400"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="glass-card rounded-xl p-4">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <p class="text-gray-400 text-sm">失敗</p>
+                                <p class="text-2xl font-bold text-red-400">5</p>
+                            </div>
+                            <div class="w-10 h-10 rounded-lg bg-red-500/20 flex items-center justify-center">
+                                <i data-lucide="x-circle" class="w-5 h-5 text-red-400"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="glass-card rounded-xl p-4">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <p class="text-gray-400 text-sm">成功率</p>
+                                <p class="text-2xl font-bold text-purple-400">99.4%</p>
+                            </div>
+                            <div class="w-10 h-10 rounded-lg bg-purple-500/20 flex items-center justify-center">
+                                <i data-lucide="percent" class="w-5 h-5 text-purple-400"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 篩選器 -->
+                <div class="glass-card rounded-2xl p-4 mb-6">
+                    <div class="flex items-center space-x-4">
+                        <div class="flex-1">
+                            <input type="text" placeholder="搜尋日誌..." class="w-full bg-dark-bg border border-dark-border rounded-lg px-4 py-2 text-white placeholder-gray-500">
+                        </div>
+                        <select class="bg-dark-bg border border-dark-border rounded-lg px-4 py-2 text-white">
+                            <option>全部類型</option>
+                            <option>交易同步</option>
+                            <option>設定同步</option>
+                            <option>遊戲同步</option>
+                        </select>
+                        <select class="bg-dark-bg border border-dark-border rounded-lg px-4 py-2 text-white">
+                            <option>全部狀態</option>
+                            <option>成功</option>
+                            <option>失敗</option>
+                            <option>警告</option>
+                        </select>
+                        <input type="date" class="bg-dark-bg border border-dark-border rounded-lg px-4 py-2 text-white">
+                    </div>
+                </div>
+
+                <!-- 日誌列表 -->
+                <div class="glass-card rounded-2xl p-6">
+                    <div class="flex items-center justify-between mb-4">
+                        <h3 class="text-lg font-semibold text-white">同步日誌</h3>
+                        <span class="text-gray-400">顯示最近 100 條</span>
+                    </div>
+                    <div class="space-y-3">
+                        <!-- 日誌項目 1 -->
+                        <div class="glass rounded-xl p-4 log-success">
+                            <div class="flex items-start justify-between">
+                                <div class="flex items-start">
+                                    <div class="w-8 h-8 rounded-lg bg-green-500/20 flex items-center justify-center mr-3 mt-1">
+                                        <i data-lucide="check" class="w-4 h-4 text-green-400"></i>
+                                    </div>
+                                    <div>
+                                        <div class="flex items-center space-x-2">
+                                            <span class="text-white font-medium">交易同步成功</span>
+                                            <span class="px-2 py-0.5 bg-blue-500/20 text-blue-400 rounded text-xs">交易同步</span>
+                                        </div>
+                                        <p class="text-sm text-gray-400 mt-1">機台: A-01 | 同步 15 筆交易 | 耗時: 0.8s</p>
+                                        <p class="text-xs text-gray-500 mt-1">2026-03-09 11:35:42</p>
+                                    </div>
+                                </div>
+                                <button class="text-purple-400 hover:text-purple-300 text-sm">詳情</button>
+                            </div>
+                        </div>
+
+                        <!-- 日誌項目 2 -->
+                        <div class="glass rounded-xl p-4 log-success">
+                            <div class="flex items-start justify-between">
+                                <div class="flex items-start">
+                                    <div class="w-8 h-8 rounded-lg bg-green-500/20 flex items-center justify-center mr-3 mt-1">
+                                        <i data-lucide="check" class="w-4 h-4 text-green-400"></i>
+                                    </div>
+                                    <div>
+                                        <div class="flex items-center space-x-2">
+                                            <span class="text-white font-medium">設定同步成功</span>
+                                            <span class="px-2 py-0.5 bg-purple-500/20 text-purple-400 rounded text-xs">設定同步</span>
+                                        </div>
+                                        <p class="text-sm text-gray-400 mt-1">機台: B-03 | 更新系統設定 | 耗時: 1.2s</p>
+                                        <p class="text-xs text-gray-500 mt-1">2026-03-09 11:34:18</p>
+                                    </div>
+                                </div>
+                                <button class="text-purple-400 hover:text-purple-300 text-sm">詳情</button>
+                            </div>
+                        </div>
+
+                        <!-- 日誌項目 3 -->
+                        <div class="glass rounded-xl p-4 log-error">
+                            <div class="flex items-start justify-between">
+                                <div class="flex items-start">
+                                    <div class="w-8 h-8 rounded-lg bg-red-500/20 flex items-center justify-center mr-3 mt-1">
+                                        <i data-lucide="x" class="w-4 h-4 text-red-400"></i>
+                                    </div>
+                                    <div>
+                                        <div class="flex items-center space-x-2">
+                                            <span class="text-white font-medium">交易同步失敗</span>
+                                            <span class="px-2 py-0.5 bg-blue-500/20 text-blue-400 rounded text-xs">交易同步</span>
+                                        </div>
+                                        <p class="text-sm text-gray-400 mt-1">機台: C-02 | 網路連線超時 | 錯誤碼: NET_TIMEOUT</p>
+                                        <p class="text-xs text-gray-500 mt-1">2026-03-09 11:33:05</p>
+                                    </div>
+                                </div>
+                                <button class="text-purple-400 hover:text-purple-300 text-sm">詳情</button>
+                            </div>
+                        </div>
+
+                        <!-- 日誌項目 4 -->
+                        <div class="glass rounded-xl p-4 log-warning">
+                            <div class="flex items-start justify-between">
+                                <div class="flex items-start">
+                                    <div class="w-8 h-8 rounded-lg bg-yellow-500/20 flex items-center justify-center mr-3 mt-1">
+                                        <i data-lucide="alert-triangle" class="w-4 h-4 text-yellow-400"></i>
+                                    </div>
+                                    <div>
+                                        <div class="flex items-center space-x-2">
+                                            <span class="text-white font-medium">同步延遲警告</span>
+                                            <span class="px-2 py-0.5 bg-blue-500/20 text-blue-400 rounded text-xs">交易同步</span>
+                                        </div>
+                                        <p class="text-sm text-gray-400 mt-1">機台: A-05 | 同步耗時過長 (5.2s) | 建議檢查網路</p>
+                                        <p class="text-xs text-gray-500 mt-1">2026-03-09 11:32:47</p>
+                                    </div>
+                                </div>
+                                <button class="text-purple-400 hover:text-purple-300 text-sm">詳情</button>
+                            </div>
+                        </div>
+
+                        <!-- 日誌項目 5 -->
+                        <div class="glass rounded-xl p-4 log-info">
+                            <div class="flex items-start justify-between">
+                                <div class="flex items-start">
+                                    <div class="w-8 h-8 rounded-lg bg-blue-500/20 flex items-center justify-center mr-3 mt-1">
+                                        <i data-lucide="info" class="w-4 h-4 text-blue-400"></i>
+                                    </div>
+                                    <div>
+                                        <div class="flex items-center space-x-2">
+                                            <span class="text-white font-medium">開始同步</span>
+                                            <span class="px-2 py-0.5 bg-green-500/20 text-green-400 rounded text-xs">遊戲同步</span>
+                                        </div>
+                                        <p class="text-sm text-gray-400 mt-1">機台: B-01 | 開始同步遊戲列表 | 共 50 個遊戲</p>
+                                        <p class="text-xs text-gray-500 mt-1">2026-03-09 11:31:22</p>
+                                    </div>
+                                </div>
+                                <button class="text-purple-400 hover:text-purple-300 text-sm">詳情</button>
+                            </div>
+                        </div>
+
+                        <!-- 日誌項目 6 -->
+                        <div class="glass rounded-xl p-4 log-success">
+                            <div class="flex items-start justify-between">
+                                <div class="flex items-start">
+                                    <div class="w-8 h-8 rounded-lg bg-green-500/20 flex items-center justify-center mr-3 mt-1">
+                                        <i data-lucide="check" class="w-4 h-4 text-green-400"></i>
+                                    </div>
+                                    <div>
+                                        <div class="flex items-center space-x-2">
+                                            <span class="text-white font-medium">遊戲同步成功</span>
+                                            <span class="px-2 py-0.5 bg-green-500/20 text-green-400 rounded text-xs">遊戲同步</span>
+                                        </div>
+                                        <p class="text-sm text-gray-400 mt-1">機台: B-01 | 同步 50 個遊戲 | 耗時: 3.5s</p>
+                                        <p class="text-xs text-gray-500 mt-1">2026-03-09 11:30:55</p>
+                                    </div>
+                                </div>
+                                <button class="text-purple-400 hover:text-purple-300 text-sm">詳情</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 分頁 -->
+                    <div class="flex items-center justify-between mt-6 pt-4 border-t border-dark-border">
+                        <span class="text-gray-400 text-sm">顯示 1-6 條，共 1,245 條</span>
+                        <div class="flex items-center space-x-2">
+                            <button class="px-3 py-1 bg-dark-bg border border-dark-border rounded text-gray-400 hover:text-white">上一頁</button>
+                            <button class="px-3 py-1 bg-purple-600 text-white rounded">1</button>
+                            <button class="px-3 py-1 bg-dark-bg border border-dark-border rounded text-gray-400 hover:text-white">2</button>
+                            <button class="px-3 py-1 bg-dark-bg border border-dark-border rounded text-gray-400 hover:text-white">3</button>
+                            <span class="text-gray-400">...</span>
+                            <button class="px-3 py-1 bg-dark-bg border border-dark-border rounded text-gray-400 hover:text-white">208</button>
+                            <button class="px-3 py-1 bg-dark-bg border border-dark-border rounded text-gray-400 hover:text-white">下一頁</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+    <script src="../js/sidebar.js"></script>
+    <script>lucide.createIcons();</script>
+</body>
+</html>

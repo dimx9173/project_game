@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>機台設定 - 遊戲平台管理中心</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;600;700&family=JetBrains+Mono&display=swap" rel="stylesheet">
+    <link href="../css/mockup-common.css" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        cyber: { 600: '#7c3aed', 400: '#a78bfa', 500: '#8b5cf6' },
+                        dark: { bg: '#0a0a0f', card: '#12121a', sidebar: '#0d0d14', border: '#1e1e2e' }
+                    },
+                    fontFamily: { sans: ['"Noto Sans TC"', 'sans-serif'], mono: ['"JetBrains Mono"', 'monospace'] }
+                }
+            }
+        }
+    </script>
+    <style>
+        body { font-family: 'Noto Sans TC', sans-serif; background: linear-gradient(135deg, #0a0a0f 0%, #1a0a2e 50%, #0a0a0f 100%); }
+        .glass { background: rgba(18, 18, 26, 0.7); backdrop-filter: blur(20px); border: 1px solid rgba(255, 255, 255, 0.08); }
+        .glass-card { background: linear-gradient(135deg, rgba(18, 18, 26, 0.9) 0%, rgba(30, 30, 46, 0.6) 100%); backdrop-filter: blur(20px); border: 1px solid rgba(168, 85, 247, 0.15); }
+        .gradient-purple { background: linear-gradient(135deg, #7c3aed 0%, #a855f7 50%, #c084fc 100%); }
+        .input-focus:focus { box-shadow: 0 0 0 3px rgba(168, 85, 247, 0.3), 0 0 20px rgba(168, 85, 247, 0.2); }
+    </style>
+</head>
+<body class="gradient-bg min-h-screen flex">
+    <div id="sidebar-container"></div>
+    
+    <main class="flex-1 p-6">
+        <div class="flex items-center justify-between mb-6">
+            <div>
+                <h1 class="text-2xl font-bold">機台設定</h1>
+                <p class="text-gray-400">遠端機台基本設定（集中管理）</p>
+            </div>
+            <div class="flex items-center space-x-3">
+                <span class="badge-central">集中管理</span>
+                <button class="px-4 py-2 gradient-purple rounded-lg font-medium flex items-center">
+                    <i data-lucide="save" class="w-4 h-4 mr-2"></i>儲存設定
+                </button>
+            </div>
+        </div>
+        
+        <!-- 機台選擇 -->
+        <div class="glass-card rounded-2xl p-4 mb-6">
+            <div class="flex items-center space-x-4">
+                <div class="flex items-center">
+                    <i data-lucide="server" class="w-5 h-5 text-cyber-400 mr-2"></i>
+                    <span class="text-gray-300">選擇機台：</span>
+                </div>
+                <select class="bg-dark-bg border border-dark-border rounded-lg py-2 px-4 text-white input-focus">
+                    <option>A-001 (台北門市A)</option>
+                    <option>A-002 (台北門市A)</option>
+                    <option>B-001 (台中門市)</option>
+                    <option>C-001 (高雄門市)</option>
+                </select>
+                <span class="px-2 py-1 rounded text-xs bg-emerald-500/20 text-emerald-400"><i data-lucide="wifi" class="w-3 h-3 inline mr-1"></i>線上</span>
+            </div>
+        </div>
+        
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <!-- 基本設定 -->
+            <div class="glass-card rounded-2xl p-6">
+                <h3 class="font-semibold mb-4 flex items-center">
+                    <i data-lucide="settings" class="w-5 h-5 mr-2 text-cyber-400"></i>基本設定
+                </h3>
+                <div class="space-y-4">
+                    <div>
+                        <label class="block text-sm text-gray-300 mb-2">機台名稱</label>
+                        <input type="text" value="A-001 旗艦機台" class="w-full bg-dark-bg border border-dark-border rounded-lg py-2.5 px-4 input-focus text-white">
+                    </div>
+                    <div>
+                        <label class="block text-sm text-gray-300 mb-2">機台位置</label>
+                        <input type="text" value="台北門市A區" class="w-full bg-dark-bg border border-dark-border rounded-lg py-2.5 px-4 input-focus text-white">
+                    </div>
+                    <div>
+                        <label class="block text-sm text-gray-300 mb-2">店鋪編號</label>
+                        <input type="text" value="STORE-001" class="w-full bg-dark-bg border border-dark-border rounded-lg py-2.5 px-4 input-focus text-white">
+                    </div>
+                    <div>
+                        <label class="block text-sm text-gray-300 mb-2">備註</label>
+                        <textarea class="w-full bg-dark-bg border border-dark-border rounded-lg py-2.5 px-4 input-focus text-white h-20"></textarea>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 運作設定 -->
+            <div class="glass-card rounded-2xl p-6">
+                <h3 class="font-semibold mb-4 flex items-center">
+                    <i data-lucide="activity" class="w-5 h-5 mr-2 text-cyber-400"></i>運作設定
+                </h3>
+                <div class="space-y-4">
+                    <div>
+                        <label class="block text-sm text-gray-300 mb-2">營業時段開始</label>
+                        <input type="time" value="09:00" class="w-full bg-dark-bg border border-dark-border rounded-lg py-2.5 px-4 input-focus text-white">
+                    </div>
+                    <div>
+                        <label class="block text-sm text-gray-300 mb-2">營業時段結束</label>
+                        <input type="time" value="22:00" class="w-full bg-dark-bg border border-dark-border rounded-lg py-2.5 px-4 input-focus text-white">
+                    </div>
+                    <div class="flex items-center justify-between py-2">
+                        <span class="text-sm text-gray-300">啟用營業時間限制</span>
+                        <button class="w-12 h-6 rounded-full bg-cyber-500 relative"><span class="absolute right-1 top-1 w-4 h-4 bg-white rounded-full"></span></button>
+                    </div>
+                    <div class="flex items-center justify-between py-2">
+                        <span class="text-sm text-gray-300">允許遠端控制</span>
+                        <button class="w-12 h-6 rounded-full bg-cyber-500 relative"><span class="absolute right-1 top-1 w-4 h-4 bg-white rounded-full"></span></button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 網路設定 -->
+            <div class="glass-card rounded-2xl p-6">
+                <h3 class="font-semibold mb-4 flex items-center">
+                    <i data-lucide="wifi" class="w-5 h-5 mr-2 text-cyber-400"></i>網路設定
+                </h3>
+                <div class="space-y-4">
+                    <div>
+                        <label class="block text-sm text-gray-300 mb-2">伺服器位址</label>
+                        <input type="text" value="api.game-platform.com" class="w-full bg-dark-bg border border-dark-border rounded-lg py-2.5 px-4 input-focus text-white">
+                    </div>
+                    <div>
+                        <label class="block text-sm text-gray-300 mb-2">連接埠</label>
+                        <input type="number" value="443" class="w-full bg-dark-bg border border-dark-border rounded-lg py-2.5 px-4 input-focus text-white">
+                    </div>
+                    <div class="flex items-center justify-between py-2">
+                        <span class="text-sm text-gray-300">自動重新連線</span>
+                        <button class="w-12 h-6 rounded-full bg-cyber-500 relative"><span class="absolute right-1 top-1 w-4 h-4 bg-white rounded-full"></span></button>
+                    </div>
+                    <div class="pt-2">
+                        <button class="w-full py-2 bg-dark-bg border border-dark-border rounded-lg text-gray-300 hover:bg-dark-hover transition-colors">
+                            <i data-lucide="refresh-cw" class="w-4 h-4 inline mr-2"></i>測試連線
+                        </button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 維護設定 -->
+            <div class="glass-card rounded-2xl p-6">
+                <h3 class="font-semibold mb-4 flex items-center">
+                    <i data-lucide="wrench" class="w-5 h-5 mr-2 text-cyber-400"></i>維護設定
+                </h3>
+                <div class="space-y-4">
+                    <div class="flex items-center justify-between py-2">
+                        <div>
+                            <span class="text-sm text-gray-300">自動更新</span>
+                            <p class="text-xs text-gray-500">有新版本時自動下載並安裝</p>
+                        </div>
+                        <button class="w-12 h-6 rounded-full bg-cyber-500 relative"><span class="absolute right-1 top-1 w-4 h-4 bg-white rounded-full"></span></button>
+                    </div>
+                    <div class="flex items-center justify-between py-2">
+                        <div>
+                            <span class="text-sm text-gray-300">詳細日誌模式</span>
+                            <p class="text-xs text-gray-500">記錄更多除錯資訊</p>
+                        </div>
+                        <button class="w-12 h-6 rounded-full bg-dark-bg border border-dark-border relative"><span class="absolute left-1 top-1 w-4 h-4 bg-gray-400 rounded-full"></span></button>
+                    </div>
+                    <div class="pt-4 border-t border-dark-border space-y-2">
+                        <button class="w-full py-2 bg-dark-bg border border-dark-border rounded-lg text-gray-300 hover:bg-dark-hover transition-colors">
+                            <i data-lucide="rotate-ccw" class="w-4 h-4 inline mr-2"></i>重啟機台
+                        </button>
+                        <button class="w-full py-2 bg-red-500/20 text-red-400 rounded-lg hover:bg-red-500/30 transition-colors">
+                            <i data-lucide="power" class="w-4 h-4 inline mr-2"></i>關閉機台
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+    
+    <script src="../js/sidebar.js"></script>
+    <script>
+        MockupSidebar.render('mockup_mvp_machine_list.html');
+        lucide.createIcons();
+    </script>
+</body>
+</html>
