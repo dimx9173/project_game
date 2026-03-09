@@ -60,6 +60,10 @@ info:
 
     | 功能碼 | 功能名稱 | 主要端點 |
     |--------|---------|---------|
+    | [L01] | 營收趨勢圖 | GET /api/local/dashboard/revenue-trend |
+    | [L02] | 機台狀態圖 | GET /api/local/dashboard/machine-status |
+    | [L03] | 熱門遊戲排行 | GET /api/local/dashboard/game-ranking |
+    | [L04] | 今日營收/下注/派彩 | GET /api/local/dashboard/summary |
     | [L05] | 機台列表檢視 | GET /machines |
     | [L06] | 本機狀態 | GET /machines/{id}/status |
     | [L07] | 機台配置接收 | POST /machines/{id}/config/status |
@@ -92,7 +96,6 @@ info:
     | [C01] | KPI 監控 | 前端計算，資料來自多個 API |
     | [C05] | 系統通知 | WebSocket 推播 |
     | [C79] | 系統監控 | 前端儀表板，資料來自多個 API |
-    | [L01-L04] | 儀表板相關 | 前端視覺化，資料來自多個 API |
     | [L36] | 指數退避重試機制 | 客戶端邏輯 |
     | [L42] | 底層通訊與金鑰加密 | 基礎設施層 |
 
@@ -737,6 +740,94 @@ paths:
                 authCode: { type: string, description: "主管授權碼" }
       responses:
         "200": { description: 更新成功 }
+
+  # Dashboard (Local)
+  /api/local/dashboard/revenue-trend:
+    get:
+      tags: [儀表板 (Dashboard)]
+      summary: "[L01] 獲取營收趨勢數據"
+      description: 獲取今日、本週或本月的營收趨勢（快取數據）
+      security: [{ BearerAuth: [] }]
+      responses:
+        "200":
+          description: 成功
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  trends:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        timestamp: { type: string, format: date-time }
+                        revenue: { type: number }
+
+  /api/local/dashboard/machine-status:
+    get:
+      tags: [儀表板 (Dashboard)]
+      summary: "[L02] 獲取機台狀態分佈數據"
+      description: 獲取本地機台的健康狀況與運行狀態（快取數據）
+      security: [{ BearerAuth: [] }]
+      responses:
+        "200":
+          description: 成功
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: object
+                    properties:
+                      cpuUsage: { type: number }
+                      memoryUsage: { type: number }
+                      diskUsage: { type: number }
+                      networkLatency: { type: number }
+
+  /api/local/dashboard/game-ranking:
+    get:
+      tags: [儀表板 (Dashboard)]
+      summary: "[L03] 獲取熱門遊戲排行數據"
+      description: 獲取本機台熱門遊戲排行（快取數據）
+      security: [{ BearerAuth: [] }]
+      responses:
+        "200":
+          description: 成功
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  rankings:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        gameId: { type: string }
+                        gameName: { type: string }
+                        totalBet: { type: number }
+                        ratio: { type: number }
+
+  /api/local/dashboard/summary:
+    get:
+      tags: [儀表板 (Dashboard)]
+      summary: "[L04] 獲取今日營收概況"
+      description: 獲取今日總下注、總派彩與淨流水（快取數據）
+      security: [{ BearerAuth: [] }]
+      responses:
+        "200":
+          description: 成功
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  totalBet: { type: number }
+                  totalPayout: { type: number }
+                  netRevenue: { type: number }
+                  growthRate: { type: number }
 
   # Sync
   /sync/upload:
