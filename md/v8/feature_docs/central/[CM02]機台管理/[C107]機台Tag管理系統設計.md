@@ -51,7 +51,7 @@ CREATE INDEX idx_machine_tags_tag ON machine_tags(tag_id);
 
 ## 📊 ERD 關係圖
 
-```
+```text
 ┌─────────────┐       ┌─────────────────┐       ┌─────────────┐
 │    tags     │       │  machine_tags   │       │   machines  │
 ├─────────────┤       ├─────────────────┤       ├─────────────┤
@@ -68,7 +68,7 @@ CREATE INDEX idx_machine_tags_tag ON machine_tags(tag_id);
 
 ### 1. 新增 Tag 到機台
 
-```
+```text
 管理員選擇機台
     ↓
 點擊「編輯 Tag」
@@ -87,7 +87,7 @@ CREATE INDEX idx_machine_tags_tag ON machine_tags(tag_id);
 
 ### 2. 從機台移除 Tag
 
-```
+```text
 管理員選擇機台
     ↓
 點擊「編輯 Tag」
@@ -102,16 +102,22 @@ CREATE INDEX idx_machine_tags_tag ON machine_tags(tag_id);
     └─ 無機台使用 → 從 tags 表刪除
 ```
 
-### 3. 自動清理機制
 
-```sql
--- 定期執行（或由應用程式處理）
--- 刪除沒有任何機台使用的 Tag
-DELETE FROM tags 
-WHERE id NOT IN (
-    SELECT DISTINCT tag_id FROM machine_tags
-);
-```
+---
+
+## 📈 批量派發流程 (Bulk Distribution)
+
+### 1. 流程圖
+1.  **選取機台**: 在機台列表中勾選目標機台。
+2.  **輸入標籤**: 在輸入框中搜尋或直接輸入新標籤（採隨打隨選機制）。
+3.  **執行套用**: 點擊「確認套用」將標籤更新至所有選中機台。
+
+### 2. 操作介面示意
+![批量派發介面](/Users/carlos/.gemini/antigravity/brain/69512ab2-4325-4d17-aa0b-cefdddbd4814/initial_tag_assignment_area_1773043288369.png)
+*圖：三步流程導引式介面*
+
+![標籤隨打隨選](/Users/carlos/.gemini/antigravity/brain/69512ab2-4325-4d17-aa0b-cefdddbd4814/tag_dropdown_open_1773043319778.png)
+*圖：支援即時過濾與建議的標籤輸入框*
 
 ---
 
@@ -119,7 +125,7 @@ WHERE id NOT IN (
 
 ### 機台列表顯示
 
-```
+```text
 ┌─────────────────────────────────────────────────────────────┐
 │  機台列表                                                    │
 ├─────────────────────────────────────────────────────────────┤
@@ -145,7 +151,7 @@ WHERE id NOT IN (
 
 ### 本地機台顯示（機台端）
 
-```
+```text
 ┌─────────────────────────────────────────────────────────────┐
 │                    本地後台                                  │
 │                                                             │
@@ -164,7 +170,7 @@ WHERE id NOT IN (
 ### 顏色配置
 
 | Tag 類型 | 預設顏色 | 用途 |
-|---------|---------|------|
+| :--- | :--- | :--- |
 | 門店類型 | `#8b5cf6` (紫) | 旗艦店、標準店 |
 | 營運狀態 | `#10b981` (綠) | 熱門、新機台 |
 | 客戶類型 | `#f59e0b` (橙) | VIP 客戶、新手區 |
@@ -262,9 +268,9 @@ Response:
 ```
 
 **業務邏輯**:
-- 刪除 machine_tags 關聯
-- 檢查該 Tag 是否還有其他機台使用
-- 若無機台使用，自動刪除 tags 表記錄
+
+- 刪除 `machine_tags` 關聯
+- 標籤本身不會自動刪除，需至標籤管理列表手動清理
 
 ### 5. 建立新 Tag
 
@@ -321,7 +327,7 @@ EXECUTE FUNCTION cleanup_unused_tags();
 
 ### Tag 編輯介面
 
-```
+```text
 ┌─────────────────────────────────────────────────────────────┐
 │  編輯機台 Tag                                                │
 ├─────────────────────────────────────────────────────────────┤
