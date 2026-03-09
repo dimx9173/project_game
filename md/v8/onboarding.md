@@ -9,25 +9,27 @@
 為了快速掌握系統，請依序閱讀以下文件：
 
 ### 1. 系統總覽與功能矩陣
-- **[功能矩陣與流程圖](file:///Users/carlos/Library/CloudStorage/GoogleDrive-dimx9173@gmail.com/My%20Drive/%E8%80%81%E5%85%AC%E8%88%87%E8%80%81%E5%A9%86%E5%88%86%E4%BA%AB/%E5%B0%88%E6%A1%88/%E9%81%8A%E6%88%B2%E5%B9%B3%E5%8F%B0%E7%AE%A1%E7%90%86/md/v8/%E9%81%8A%E6%88%B2%E5%B9%B3%E5%8F%B0%E7%AE%A1%E7%90%86%E7%B3%BB%E7%B5%B1_%E5%8A%9F%E8%83%BD%E7%9F%A9%E9%99%A3%E8%88%87%E6%B5%81%E7%A8%8B%E5%9C%96_%E6%97%97%E8%89%A6%E7%89%88.md)**
+- **[功能矩陣與流程圖](遊戲平台管理系統_功能矩陣與流程圖_旗艦版.md)**
   - **目的**：定義所有功能代碼（例如 `[L45]`、`[C12]`）。在修改任何程式碼或文件之前，**必須**先確認這些代碼所對應的功能範圍與最新定義。
   - **重點**：請留意揭示 Central 與 Local 系統互動邏輯的 Mermaid 流程圖。
 
 ### 2. 架構與技術規範
-- **[技術架構與設計規範](file:///Users/carlos/Library/CloudStorage/GoogleDrive-dimx9173@gmail.com/My%20Drive/%E8%80%81%E5%85%AC%E8%88%87%E8%80%81%E5%A9%86%E5%88%86%E4%BA%AB/%E5%B0%88%E6%A1%88/%E9%81%8A%E6%88%B2%E5%B9%B3%E5%8F%B0%E7%AE%A1%E7%90%86/md/v8/%E9%81%8A%E6%88%B2%E5%B9%B3%E5%8F%B0%E7%AE%A1%E7%90%86%E7%B3%BB%E7%B5%B1_%E6%8A%80%E8%A1%93%E6%9E%B6%E6%A7%8B%E8%88%87%E8%A8%AD%E8%A8%88%E8%A6%8F%E7%AF%84_%E6%97%97%E8%89%A6%E7%89%88.md)**
+- **[技術架構與設計規範](遊戲平台管理系統_技術架構與設計規範_旗艦版.md)**
   - **目的**：建立核心技術基礎、技術堆疊、安全協議、API 規範以及資料庫標準。此文檔前身為 SD 文件。
 
 ### 3. 資料結構與 API 規格
-- **[資料庫設計文件](file:///Users/carlos/Library/CloudStorage/GoogleDrive-dimx9173@gmail.com/My%20Drive/%E8%80%81%E5%85%AC%E8%88%87%E8%80%81%E5%A9%86%E5%88%86%E4%BA%AB/%E5%B0%88%E6%A1%88/%E9%81%8A%E6%88%B2%E5%B9%B3%E5%8F%B0%E7%AE%A1%E7%90%86/md/v8/%E9%81%8A%E6%88%B2%E5%B9%B3%E5%8F%B0%E7%AE%A1%E7%90%86%E7%B3%BB%E7%B5%B1_%E8%B3%87%E6%96%99%E5%BA%AB%E8%A8%AD%E8%A8%88%E6%96%87%E4%BB%B6_%E6%97%97%E8%89%A6%E7%89%88.md)**
+- **[資料庫設計文件](遊戲平台管理系統_資料庫設計文件_旗艦版.md)**
   - **目的**：定義資料庫表結構。
   - **重點**：請特別注意 `instanceId` 的索引與識別機制。
-- **[API OpenAPI 規格](file:///Users/carlos/Library/CloudStorage/GoogleDrive-dimx9173@gmail.com/My%20Drive/%E8%80%81%E5%85%AC%E8%88%87%E8%80%81%E5%A9%86%E5%88%86%E4%BA%AB/%E5%B0%88%E6%A1%88/%E9%81%8A%E6%88%B2%E5%B9%B3%E5%8F%B0%E7%AE%A1%E7%90%86/md/v8/API_openapi.yaml)**
-  - **目的**：介面開發的單一真實來源 (Single Source of Truth)。所有的 RESTful 呼叫**必須**遵循此規格。
+- **[Central API OpenAPI 規格](feature_docs/central/C_API_openapi.yaml)**
+  - **目的**：Central 系統介面開發的單一真實來源 (Single Source of Truth)。所有的 Central RESTful 呼叫**必須**遵循此規格。
+- **[Local API OpenAPI 規格](feature_docs/local/L_API_openapi.yaml)**
+  - **目的**：Local 系統介面開發的單一真實來源 (Single Source of Truth)。所有的 Local RESTful 呼叫**必須**遵循此規格。
 
 ### 4. 詳細功能邏輯與 UI
-- **[feature_docs/](file:///Users/carlos/Library/CloudStorage/GoogleDrive-dimx9173@gmail.com/My%20Drive/%E8%80%81%E5%85%AC%E8%88%87%E8%80%81%E5%A9%86%E5%88%86%E4%BA%AB/%E5%B0%88%E6%A1%88/%E9%81%8A%E6%88%B2%E5%B9%B3%E5%8F%B0%E7%AE%A1%E7%90%86/md/v8/feature_docs/)**
+- **[feature_docs/](feature_docs/)**
   - **目的**：具體業務邏輯的主要來源。請深入特定模組（例如 `[L34] 同步對帳`）以了解詳細的邏輯流程、錯誤處理以及 API/DB 對應。
-- **[mockup/](file:///Users/carlos/Library/CloudStorage/GoogleDrive-dimx9173@gmail.com/My%20Drive/%E8%80%81%E5%85%AC%E8%88%87%E8%80%81%E5%A9%86%E5%88%86%E4%BA%AB/%E5%B0%88%E6%A1%88/%E9%81%8A%E6%88%B2%E5%B9%B3%E5%8F%B0%E7%AE%A1%E7%90%86/md/v8/mockup/)**
+- **[mockup/](mockup/)**
   - **目的**：UI 實作參考，在邏輯上劃分為 `central/` 與 `local/` 介面。
 
 ---
