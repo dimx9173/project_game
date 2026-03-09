@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>更新任務下發 - 遊戲平台管理中心</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <link href="../css/mockup-common.css" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        cyber: { 50: '#f5f3ff', 100: '#ede9fe', 200: '#ddd6fe', 300: '#c4b5fd', 400: '#a78bfa', 500: '#8b5cf6', 600: '#7c3aed', 700: '#6d28d9', 800: '#5b21b6', 900: '#4c1d95', 950: '#2e1065' },
+                        dark: { bg: '#0a0a0f', card: '#12121a', sidebar: '#0d0d14', border: '#1e1e2e', hover: '#1a1a28' },
+                        amber: { 400: '#fbbf24', 500: '#f59e0b' }
+                    },
+                    fontFamily: { sans: ['"Noto Sans TC"', 'sans-serif'], mono: ['"JetBrains Mono"', 'monospace'] },
+                    boxShadow: { glow: '0 0 30px rgba(168, 85, 247, 0.3)', 'glow-sm': '0 0 15px rgba(168, 85, 247, 0.2)' }
+                }
+            }
+        }
+    </script>
+    <style>
+        .machine-checkbox:checked + .machine-label {
+            background: rgba(139, 92, 246, 0.1);
+            border-color: rgba(139, 92, 246, 0.5);
+        }
+        .deploy-mode-btn.active {
+            background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%);
+            color: white;
+            border-color: transparent;
+        }
+        .deploy-mode-btn:not(.active) {
+            background: rgba(30, 30, 46, 0.5);
+            color: #9ca3af;
+        }
+    </style>
+</head>
+<body class="gradient-bg min-h-screen flex">
+    <div id="sidebar-container"></div>
+    
+    <main class="flex-1 flex flex-col overflow-hidden">
+        <!-- 頂部 Header -->
+        <header class="h-16 glass border-b border-dark-border flex items-center justify-between px-6">
+            <div class="flex items-center">
+                <h2 class="text-lg font-semibold text-white">更新任務下發</h2>
+                <span class="ml-3 text-xs text-gray-400">C74</span>
+            </div>
+            <div class="flex items-center space-x-4">
+                <div class="text-sm text-gray-400">
+                    已選擇 <span class="text-purple-400 font-medium">3</span> 台機台
+                </div>
+                <button class="px-4 py-2 glass rounded-lg text-sm text-gray-300 border border-dark-border flex items-center hover:bg-dark-hover transition-colors">
+                    <i data-lucide="filter" class="w-4 h-4 mr-2"></i>篩選
+                </button>
+            </div>
+        </header>
+
+        <!-- 主要內容 -->
+        <div class="flex-1 overflow-y-auto p-6">
+            
+            <div class="grid grid-cols-12 gap-6">
+                <!-- 左側：機台選擇 -->
+                <div class="col-span-5">
+                    <div class="glass-card rounded-2xl p-6">
+                        <div class="flex items-center justify-between mb-4">
+                            <div class="flex items-center">
+                                <div class="w-10 h-10 rounded-xl bg-blue-500/20 flex items-center justify-center mr-3">
+                                    <i data-lucide="monitor" class="w-5 h-5 text-blue-400"></i>
+                                </div>
+                                <h3 class="text-lg font-semibold text-white">選擇目標機台</h3>
+                            </div>
+                            <div class="flex items-center space-x-2">
+                                <button onclick="selectAll()" class="text-xs text-purple-400 hover:text-purple-300 transition-colors">全選</button>
+                                <span class="text-gray-600">|</span>
+                                <button onclick="clearAll()" class="text-xs text-gray-400 hover:text-gray-300 transition-colors">清除</button>
+                            </div>
+                        </div>
+
+                        <!-- 搜尋 -->
+                        <div class="relative mb-4">
+                            <input type="text" placeholder="搜尋機台..." class="w-full bg-dark-bg border border-dark-border rounded-lg py-2 px-4 pl-10 text-sm text-white placeholder-gray-500 focus:outline-none input-focus">
+                            <i data-lucide="search" class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500"></i>
+                        </div>
+
+                        <!-- 機台列表 -->
+                        <div class="space-y-2 max-h-96 overflow-y-auto pr-2">
+                            <!-- 機台 1 -->
+                            <label class="block">
+                                <input type="checkbox" class="machine-checkbox hidden" checked>
+                                <div class="machine-label flex items-center p-3 bg-dark-bg/50 rounded-xl border border-transparent cursor-pointer hover:bg-dark-hover transition-colors">
+                                    <div class="w-8 h-8 rounded-lg bg-emerald-500/20 flex items-center justify-center mr-3">
+                                        <i data-lucide="monitor" class="w-4 h-4 text-emerald-400"></i>
+                                    </div>
+                                    <div class="flex-1">
+                                        <div class="text-sm text-white">旗艦店 A-01</div>
+                                        <div class="text-xs text-gray-500">v2.1.0 → v2.5.1</div>
+                                    </div>
+                                    <i data-lucide="check-circle" class="w-5 h-5 text-purple-400"></i>
+                                </div>
+                            </label>
+
+                            <!-- 機台 2 -->
+                            <label class="block">
+                                <input type="checkbox" class="machine-checkbox hidden" checked>
+                                <div class="machine-label flex items-center p-3 bg-dark-bg/50 rounded-xl border border-transparent cursor-pointer hover:bg-dark-hover transition-colors">
+                                    <div class="w-8 h-8 rounded-lg bg-emerald-500/20 flex items-center justify-center mr-3">
+                                        <i data-lucide="monitor" class="w-4 h-4 text-emerald-400"></i>
+                                    </div>
+                                    <div class="flex-1">
+                                        <div class="text-sm text-white">旗艦店 A-02</div>
+                                        <div class="text-xs text-gray-500">v2.1.0 → v2.5.1</div>
+                                    </div>
+                                    <i data-lucide="check-circle" class="w-5 h-5 text-purple-400"></i>
+                                </div>
+                            </label>
+
+                            <!-- 機台 3 -->
+                            <label class="block">
+                                <input type="checkbox" class="machine-checkbox hidden" checked>
+                                <div class="machine-label flex items-center p-3 bg-dark-bg/50 rounded-xl border border-transparent cursor-pointer hover:bg-dark-hover transition-colors">
+                                    <div class="w-8 h-8 rounded-lg bg-amber-500/20 flex items-center justify-center mr-3">
+                                        <i data-lucide="monitor" class="w-4 h-4 text-amber-400"></i>
+                                    </div>
+                                    <div class="flex-1">
+                                        <div class="text-sm text-white">標準店 B-01</div>
+                                        <div class="text-xs text-gray-500">v2.4.0 → v2.5.1</div>
+                                    </div>
+                                    <i data-lucide="check-circle" class="w-5 h-5 text-purple-400"></i>
+                                </div>
+                            </label>
+
+                            <!-- 機台 4 -->
+                            <label class="block">
+                                <input type="checkbox" class="machine-checkbox hidden">
+                                <div class="machine-label flex items-center p-3 bg-dark-bg/50 rounded-xl border border-transparent cursor-pointer hover:bg-dark-hover transition-colors">
+                                    <div class="w-8 h-8 rounded-lg bg-gray-500/20 flex items-center justify-center mr-3">
+                                        <i data-lucide="monitor" class="w-4 h-4 text-gray-400"></i>
+                                    </div>
+                                    <div class="flex-1">
+                                        <div class="text-sm text-white">標準店 B-02</div>
+                                        <div class="text-xs text-gray-500">v2.5.1 (最新)</div>
+                                    </div>
+                                    <i data-lucide="circle" class="w-5 h-5 text-gray-600"></i>
+                                </div>
+                            </label>
+
+                            <!-- 機台 5 -->
+                            <label class="block">
+                                <input type="checkbox" class="machine-checkbox hidden">
+                                <div class="machine-label flex items-center p-3 bg-dark-bg/50 rounded-xl border border-transparent cursor-pointer hover:bg-dark-hover transition-colors">
+                                    <div class="w-8 h-8 rounded-lg bg-gray-500/20 flex items-center justify-center mr-3">
+                                        <i data-lucide="monitor" class="w-4 h-4 text-gray-400"></i>
+                                    </div>
+                                    <div class="flex-1">
+                                        <div class="text-sm text-white">快速店 C-01</div>
+                                        <div class="text-xs text-gray-500">v2.5.1 (最新)</div>
+                                    </div>
+                                    <i data-lucide="circle" class="w-5 h-5 text-gray-600"></i>
+                                </div>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 右側：派發設定 -->
+                <div class="col-span-7">
+                    <!-- 派發模式選擇 -->
+                    <div class="glass-card rounded-2xl p-6 mb-6">
+                        <div class="flex items-center mb-4">
+                            <div class="w-10 h-10 rounded-xl bg-purple-500/20 flex items-center justify-center mr-3">
+                                <i data-lucide="send" class="w-5 h-5 text-purple-400"></i>
+                            </div>
+                            <h3 class="text-lg font-semibold text-white">派發模式</h3>
+                        </div>
+
+                        <div class="grid grid-cols-4 gap-3">
+                            <button class="deploy-mode-btn active px-4 py-3 rounded-xl text-sm font-medium border border-dark-border flex flex-col items-center transition-all" onclick="setDeployMode(this, 'test')">
+                                <i data-lucide="flask-conical" class="w-5 h-5 mb-2"></i>
+                                測試派發
+                            </button>
+                            <button class="deploy-mode-btn px-4 py-3 rounded-xl text-sm font-medium border border-dark-border flex flex-col items-center transition-all hover:bg-dark-hover" onclick="setDeployMode(this, 'all')">
+                                <i data-lucide="layers" class="w-5 h-5 mb-2"></i>
+                                全部派發
+                            </button>
+                            <button class="deploy-mode-btn px-4 py-3 rounded-xl text-sm font-medium border border-dark-border flex flex-col items-center transition-all hover:bg-dark-hover" onclick="setDeployMode(this, 'batch')">
+                                <i data-lucide="git-branch" class="w-5 h-5 mb-2"></i>
+                                分批派發
+                            </button>
+                            <button class="deploy-mode-btn px-4 py-3 rounded-xl text-sm font-medium border border-dark-border flex flex-col items-center transition-all hover:bg-dark-hover" onclick="setDeployMode(this, 'schedule')">
+                                <i data-lucide="clock" class="w-5 h-5 mb-2"></i>
+                                定時派發
+                            </button>
+                        </div>
+
+                        <!-- 測試派發說明 -->
+                        <div id="modeDescription" class="mt-4 p-3 bg-blue-500/10 border border-blue-500/20 rounded-xl">
+                            <div class="flex items-start">
+                                <i data-lucide="info" class="w-4 h-4 text-blue-400 mr-2 mt-0.5"></i>
+                                <div class="text-sm text-blue-400">
+                                    測試派發：先在選定的機台上進行小規模測試，確認無誤後再全面推送。
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 更新版本資訊 -->
+                    <div class="glass-card rounded-2xl p-6 mb-6">
+                        <div class="flex items-center mb-4">
+                            <div class="w-10 h-10 rounded-xl bg-amber-500/20 flex items-center justify-center mr-3">
+                                <i data-lucide="package" class="w-5 h-5 text-amber-400"></i>
+                            </div>
+                            <h3 class="text-lg font-semibold text-white">更新版本</h3>
+                        </div>
+
+                        <div class="grid grid-cols-2 gap-4">
+                            <div class="bg-dark-bg/50 rounded-xl p-4">
+                                <div class="text-xs text-gray-500 mb-1">目標版本</div>
+                                <div class="text-lg font-semibold text-white">v2.5.1</div>
+                                <div class="text-xs text-gray-400 mt-1">2026-03-01 發布</div>
+                            </div>
+                            <div class="bg-dark-bg/50 rounded-xl p-4">
+                                <div class="text-xs text-gray-500 mb-1">更新大小</div>
+                                <div class="text-lg font-semibold text-white">45.2 MB</div>
+                                <div class="text-xs text-gray-400 mt-1">預估 3-5 分鐘</div>
+                            </div>
+                        </div>
+
+                        <div class="mt-4 p-3 bg-emerald-500/10 border border-emerald-500/20 rounded-xl">
+                            <div class="flex items-start">
+                                <i data-lucide="file-text" class="w-4 h-4 text-emerald-400 mr-2 mt-0.5"></i>
+                                <div class="text-sm text-emerald-400">
+                                    更新內容：修復多項已知問題、優化遊戲載入速度、新增支付功能模組
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 操作按鈕 -->
+                    <div class="flex items-center justify-between">
+                        <button onclick="preview()" class="px-6 py-3 glass rounded-lg text-sm text-gray-300 border border-dark-border flex items-center hover:bg-dark-hover transition-colors">
+                            <i data-lucide="eye" class="w-4 h-4 mr-2"></i>
+                            預覽
+                        </button>
+                        <div class="flex items-center space-x-3">
+                            <button onclick="saveDraft()" class="px-6 py-3 bg-dark-bg border border-dark-border rounded-lg text-sm text-gray-300 hover:bg-dark-hover transition-colors">
+                                儲存草稿
+                            </button>
+                            <button onclick="executeDeploy()" class="px-6 py-3 gradient-purple text-white rounded-lg font-medium shadow-glow-sm hover:opacity-90 transition-opacity flex items-center">
+                                <i data-lucide="rocket" class="w-4 h-4 mr-2"></i>
+                                執行下發
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <script>
+        lucide.createIcons();
+
+        function selectAll() {
+            document.querySelectorAll('.machine-checkbox').forEach(cb => cb.checked = true);
+            alert('已全選所有機台');
+        }
+
+        function clearAll() {
+            document.querySelectorAll('.machine-checkbox').forEach(cb => cb.checked = false);
+            alert('已清除所有選擇');
+        }
+
+        function setDeployMode(btn, mode) {
+            document.querySelectorAll('.deploy-mode-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            
+            const descriptions = {
+                test: '測試派發：先在選定的機台上進行小規模測試，確認無誤後再全面推送。',
+                all: '全部派發：同時向所有選定機台推送更新，適合緊急更新或小規模部署。',
+                batch: '分批派發：將機台分批更新，每批次間隔可設定，降低風險。',
+                schedule: '定時派發：設定特定時間自動執行更新，適合營業時段外的維護窗口。'
+            };
+            
+            document.getElementById('modeDescription').innerHTML = `
+                <div class="flex items-start">
+                    <i data-lucide="info" class="w-4 h-4 text-blue-400 mr-2 mt-0.5"></i>
+                    <div class="text-sm text-blue-400">${descriptions[mode]}</div>
+                </div>
+            `;
+            lucide.createIcons();
+        }
+
+        function preview() {
+            alert('預覽更新任務：\n\n目標機台：3 台\n派發模式：測試派發\n版本：v2.5.1\n預估時間：約 15 分鐘');
+        }
+
+        function saveDraft() {
+            alert('草稿已儲存');
+        }
+
+        function executeDeploy() {
+            if (confirm('確定要執行更新任務下發嗎？\n\n將對 3 台機台進行更新')) {
+                alert('更新任務已開始執行\n\n您可以在「OTA版本更新」頁面查看進度');
+            }
+        }
+    </script>
+    <script src="../js/sidebar.js"></script>
+</body>
+</html>
