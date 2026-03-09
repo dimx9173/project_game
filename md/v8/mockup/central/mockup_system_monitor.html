@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>系統監控 - 遊戲平台管理中心</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="../css/mockup-common.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        cyber: { 500: '#8b5cf6', 600: '#7c3aed' },
+                        dark: { bg: '#0a0a0f', card: '#12121a', border: '#1e1e2e', hover: '#1a1a28' }
+                    },
+                    fontFamily: { sans: ['"Noto Sans TC"', 'sans-serif'] }
+                }
+            }
+        }
+    </script>
+    <style>
+        body { font-family: 'Noto Sans TC', sans-serif; background: #0a0a0f; }
+        .glass { background: rgba(18, 18, 26, 0.7); backdrop-filter: blur(20px); border: 1px solid rgba(255, 255, 255, 0.08); }
+        .glass-card { background: linear-gradient(135deg, rgba(18, 18, 26, 0.9), rgba(30, 30, 46, 0.6)); border: 1px solid rgba(168, 85, 247, 0.15); }
+    </style>
+</head>
+<body class="min-h-screen flex">
+    <div id="sidebar-container"></div>
+    <main class="flex-1 flex flex-col overflow-hidden">
+        <div class="flex-1 overflow-y-auto p-6">
+            <div class="max-w-7xl mx-auto">
+                <div class="flex items-center justify-between mb-6">
+                    <div>
+                        <h1 class="text-2xl font-bold text-white">系統監控</h1>
+                        <p class="text-gray-400 mt-1">即時系統狀態監控</p>
+                    </div>
+                    <div class="flex items-center space-x-2 text-sm text-green-400">
+                        <span class="w-2 h-2 rounded-full bg-green-400 animate-pulse"></span>
+                        <span>即時更新</span>
+                    </div>
+                </div>
+                <div class="grid grid-cols-4 gap-4 mb-6">
+                    <div class="glass-card rounded-xl p-4">
+                        <p class="text-gray-400 text-sm">CPU 使用率</p>
+                        <p class="text-2xl font-bold text-green-400">45%</p>
+                    </div>
+                    <div class="glass-card rounded-xl p-4">
+                        <p class="text-gray-400 text-sm">記憶體</p>
+                        <p class="text-2xl font-bold text-blue-400">62%</p>
+                    </div>
+                    <div class="glass-card rounded-xl p-4">
+                        <p class="text-gray-400 text-sm">磁碟</p>
+                        <p class="text-2xl font-bold text-yellow-400">78%</p>
+                    </div>
+                    <div class="glass-card rounded-xl p-4">
+                        <p class="text-gray-400 text-sm">網路</p>
+                        <p class="text-2xl font-bold text-purple-400">正常</p>
+                    </div>
+                </div>
+                <div class="glass-card rounded-2xl p-6">
+                    <h3 class="text-lg font-semibold text-white mb-4">系統服務</h3>
+                    <div class="space-y-3">
+                        <div class="glass rounded-xl p-3 flex items-center justify-between">
+                            <span class="text-white">API 服務</span>
+                            <span class="px-2 py-1 bg-green-500/20 text-green-400 rounded text-xs">執行中</span>
+                        </div>
+                        <div class="glass rounded-xl p-3 flex items-center justify-between">
+                            <span class="text-white">資料庫</span>
+                            <span class="px-2 py-1 bg-green-500/20 text-green-400 rounded text-xs">執行中</span>
+                        </div>
+                        <div class="glass rounded-xl p-3 flex items-center justify-between">
+                            <span class="text-white">快取服務</span>
+                            <span class="px-2 py-1 bg-green-500/20 text-green-400 rounded text-xs">執行中</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+    <script src="../js/sidebar.js"></script>
+    <script>lucide.createIcons();</script>
+</body>
+</html>

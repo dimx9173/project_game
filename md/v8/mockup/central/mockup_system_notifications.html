@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>系統通知 - 遊戲平台管理中心</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="../css/mockup-common.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        cyber: { 50: '#f5f3ff', 100: '#ede9fe', 200: '#ddd6fe', 300: '#c4b5fd', 400: '#a78bfa', 500: '#8b5cf6', 600: '#7c3aed', 700: '#6d28d9', 800: '#5b21b6', 900: '#4c1d95', 950: '#2e1065' },
+                        dark: { bg: '#0a0a0f', card: '#12121a', sidebar: '#0d0d14', border: '#1e1e2e', hover: '#1a1a28' }
+                    },
+                    fontFamily: { sans: ['"Noto Sans TC"', 'sans-serif'], mono: ['"JetBrains Mono"', 'monospace'] },
+                    boxShadow: { glow: '0 0 30px rgba(168, 85, 247, 0.3)', 'glow-sm': '0 0 15px rgba(168, 85, 247, 0.2)' }
+                }
+            }
+        }
+    </script>
+    <style>
+        * { scrollbar-width: thin; scrollbar-color: #6d28d9 #0a0a0f; }
+        *::-webkit-scrollbar { width: 8px; height: 8px; }
+        *::-webkit-scrollbar-track { background: #0a0a0f; }
+        *::-webkit-scrollbar-thumb { background: linear-gradient(180deg, #7c3aed, #a855f7); border-radius: 4px; }
+        body { font-family: 'Noto Sans TC', sans-serif; background: #0a0a0f; }
+        .glass { background: rgba(18, 18, 26, 0.7); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border: 1px solid rgba(255, 255, 255, 0.08); }
+        .glass-card { background: linear-gradient(135deg, rgba(18, 18, 26, 0.9) 0%, rgba(30, 30, 46, 0.6) 100%); backdrop-filter: blur(20px); border: 1px solid rgba(168, 85, 247, 0.15); box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4); }
+        .notification-unread { border-left: 3px solid #8b5cf6; }
+        .notification-read { border-left: 3px solid transparent; opacity: 0.7; }
+    </style>
+</head>
+<body class="min-h-screen flex">
+    <div id="sidebar-container"></div>
+    <main class="flex-1 flex flex-col overflow-hidden">
+        <div class="flex-1 overflow-y-auto p-6">
+            <div class="max-w-5xl mx-auto">
+                <!-- 頁面標題 -->
+                <div class="flex items-center justify-between mb-6">
+                    <div>
+                        <h1 class="text-2xl font-bold text-white">系統通知</h1>
+                        <p class="text-gray-400 mt-1">查看系統通知與訊息</p>
+                    </div>
+                    <div class="flex items-center space-x-3">
+                        <button class="px-4 py-2 bg-dark-bg border border-dark-border text-white rounded-lg hover:bg-dark-hover transition-colors">
+                            <i data-lucide="check-check" class="w-4 h-4 inline mr-2"></i>全部標為已讀
+                        </button>
+                        <button class="px-4 py-2 bg-purple-600 hover:bg-purple-700 text-white rounded-lg transition-colors">
+                            <i data-lucide="settings" class="w-4 h-4 inline mr-2"></i>通知設定
+                        </button>
+                    </div>
+                </div>
+
+                <!-- 通知統計 -->
+                <div class="grid grid-cols-3 gap-4 mb-6">
+                    <div class="glass-card rounded-xl p-4">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <p class="text-gray-400 text-sm">未讀通知</p>
+                                <p class="text-2xl font-bold text-purple-400">5</p>
+                            </div>
+                            <div class="w-10 h-10 rounded-lg bg-purple-500/20 flex items-center justify-center">
+                                <i data-lucide="bell" class="w-5 h-5 text-purple-400"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="glass-card rounded-xl p-4">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <p class="text-gray-400 text-sm">今日通知</p>
+                                <p class="text-2xl font-bold text-white">12</p>
+                            </div>
+                            <div class="w-10 h-10 rounded-lg bg-blue-500/20 flex items-center justify-center">
+                                <i data-lucide="calendar" class="w-5 h-5 text-blue-400"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="glass-card rounded-xl p-4">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <p class="text-gray-400 text-sm">總通知</p>
+                                <p class="text-2xl font-bold text-gray-400">156</p>
+                            </div>
+                            <div class="w-10 h-10 rounded-lg bg-gray-500/20 flex items-center justify-center">
+                                <i data-lucide="inbox" class="w-5 h-5 text-gray-400"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 通知篩選 -->
+                <div class="glass-card rounded-2xl p-4 mb-6">
+                    <div class="flex items-center space-x-4">
+                        <div class="flex space-x-2">
+                            <button class="px-4 py-2 bg-purple-600 text-white rounded-lg text-sm">全部</button>
+                            <button class="px-4 py-2 bg-dark-bg border border-dark-border text-gray-400 rounded-lg text-sm hover:text-white">未讀</button>
+                            <button class="px-4 py-2 bg-dark-bg border border-dark-border text-gray-400 rounded-lg text-sm hover:text-white">已讀</button>
+                        </div>
+                        <div class="flex-1"></div>
+                        <select class="bg-dark-bg border border-dark-border rounded-lg px-3 py-2 text-sm text-white">
+                            <option>全部類型</option>
+                            <option>系統</option>
+                            <option>告警</option>
+                            <option>更新</option>
+                            <option>安全</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- 通知列表 -->
+                <div class="glass-card rounded-2xl p-6">
+                    <h3 class="text-lg font-semibold text-white mb-4">通知列表</h3>
+                    <div class="space-y-3">
+                        <!-- 通知 1 - 未讀 -->
+                        <div class="glass rounded-xl p-4 notification-unread">
+                            <div class="flex items-start">
+                                <div class="w-10 h-10 rounded-lg bg-blue-600/20 flex items-center justify-center mr-4 flex-shrink-0">
+                                    <i data-lucide="info" class="w-5 h-5 text-blue-400"></i>
+                                </div>
+                                <div class="flex-1">
+                                    <div class="flex items-center justify-between">
+                                        <h4 class="font-medium text-white">系統更新完成</h4>
+                                        <span class="text-xs text-purple-400">10分鐘前</span>
+                                    </div>
+                                    <p class="text-sm text-gray-400 mt-1">系統已成功更新至 v2.6.0，所有功能正常運作。</p>
+                                    <div class="flex items-center space-x-3 mt-2">
+                                        <button class="text-xs text-purple-400 hover:text-purple-300">查看詳情</button>
+                                        <button class="text-xs text-gray-500 hover:text-gray-400">標為已讀</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 通知 2 - 未讀 -->
+                        <div class="glass rounded-xl p-4 notification-unread">
+                            <div class="flex items-start">
+                                <div class="w-10 h-10 rounded-lg bg-yellow-600/20 flex items-center justify-center mr-4 flex-shrink-0">
+                                    <i data-lucide="alert-triangle" class="w-5 h-5 text-yellow-400"></i>
+                                </div>
+                                <div class="flex-1">
+                                    <div class="flex items-center justify-between">
+                                        <h4 class="font-medium text-white">機台連線異常</h4>
+                                        <span class="text-xs text-purple-400">30分鐘前</span>
+                                    </div>
+                                    <p class="text-sm text-gray-400 mt-1">機台 A-03 連線異常，請檢查網路連線狀態。</p>
+                                    <div class="flex items-center space-x-3 mt-2">
+                                        <button class="text-xs text-purple-400 hover:text-purple-300">查看詳情</button>
+                                        <button class="text-xs text-gray-500 hover:text-gray-400">標為已讀</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 通知 3 - 未讀 -->
+                        <div class="glass rounded-xl p-4 notification-unread">
+                            <div class="flex items-start">
+                                <div class="w-10 h-10 rounded-lg bg-green-600/20 flex items-center justify-center mr-4 flex-shrink-0">
+                                    <i data-lucide="check-circle" class="w-5 h-5 text-green-400"></i>
+                                </div>
+                                <div class="flex-1">
+                                    <div class="flex items-center justify-between">
+                                        <h4 class="font-medium text-white">備份完成</h4>
+                                        <span class="text-xs text-purple-400">1小時前</span>
+                                    </div>
+                                    <p class="text-sm text-gray-400 mt-1">每日自動備份已完成，備份檔案大小: 2.3GB</p>
+                                    <div class="flex items-center space-x-3 mt-2">
+                                        <button class="text-xs text-purple-400 hover:text-purple-300">查看詳情</button>
+                                        <button class="text-xs text-gray-500 hover:text-gray-400">標為已讀</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 通知 4 - 已讀 -->
+                        <div class="glass rounded-xl p-4 notification-read">
+                            <div class="flex items-start">
+                                <div class="w-10 h-10 rounded-lg bg-purple-600/20 flex items-center justify-center mr-4 flex-shrink-0">
+                                    <i data-lucide="update" class="w-5 h-5 text-purple-400"></i>
+                                </div>
+                                <div class="flex-1">
+                                    <div class="flex items-center justify-between">
+                                        <h4 class="font-medium text-white">新版本可用</h4>
+                                        <span class="text-xs text-gray-500">2小時前</span>
+                                    </div>
+                                    <p class="text-sm text-gray-400 mt-1">新版本 v2.6.1 已發布，包含安全性更新。</p>
+                                    <div class="flex items-center space-x-3 mt-2">
+                                        <button class="text-xs text-purple-400 hover:text-purple-300">查看詳情</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 通知 5 - 已讀 -->
+                        <div class="glass rounded-xl p-4 notification-read">
+                            <div class="flex items-start">
+                                <div class="w-10 h-10 rounded-lg bg-red-600/20 flex items-center justify-center mr-4 flex-shrink-0">
+                                    <i data-lucide="shield-alert" class="w-5 h-5 text-red-400"></i>
+                                </div>
+                                <div class="flex-1">
+                                    <div class="flex items-center justify-between">
+                                        <h4 class="font-medium text-white">安全警告</h4>
+                                        <span class="text-xs text-gray-500">昨天</span>
+                                    </div>
+                                    <p class="text-sm text-gray-400 mt-1">偵測到多次登入失敗，請檢查帳號安全。</p>
+                                    <div class="flex items-center space-x-3 mt-2">
+                                        <button class="text-xs text-purple-400 hover:text-purple-300">查看詳情</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 分頁 -->
+                    <div class="flex items-center justify-between mt-6 pt-4 border-t border-dark-border">
+                        <span class="text-gray-400 text-sm">顯示 1-5 條，共 156 條</span>
+                        <div class="flex items-center space-x-2">
+                            <button class="px-3 py-1 bg-dark-bg border border-dark-border rounded text-gray-400 hover:text-white">上一頁</button>
+                            <button class="px-3 py-1 bg-purple-600 text-white rounded">1</button>
+                            <button class="px-3 py-1 bg-dark-bg border border-dark-border rounded text-gray-400 hover:text-white">2</button>
+                            <button class="px-3 py-1 bg-dark-bg border border-dark-border rounded text-gray-400 hover:text-white">3</button>
+                            <span class="text-gray-400">...</span>
+                            <button class="px-3 py-1 bg-dark-bg border border-dark-border rounded text-gray-400 hover:text-white">32</button>
+                            <button class="px-3 py-1 bg-dark-bg border border-dark-border rounded text-gray-400 hover:text-white">下一頁</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+    <script src="../js/sidebar.js"></script>
+    <script>lucide.createIcons();</script>
+</body>
+</html>
