@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>遊戲配置 - 遊戲平台管理中心</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="../css/mockup-common.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        cyber: { 50: '#f5f3ff', 100: '#ede9fe', 200: '#ddd6fe', 300: '#c4b5fd', 400: '#a78bfa', 500: '#8b5cf6', 600: '#7c3aed', 700: '#6d28d9', 800: '#5b21b6', 900: '#4c1d95', 950: '#2e1065' },
+                        dark: { bg: '#0a0a0f', card: '#12121a', sidebar: '#0d0d14', border: '#1e1e2e', hover: '#1a1a28' }
+                    },
+                    fontFamily: { sans: ['"Noto Sans TC"', 'sans-serif'], mono: ['"JetBrains Mono"', 'monospace'] },
+                    boxShadow: { glow: '0 0 30px rgba(168, 85, 247, 0.3)', 'glow-sm': '0 0 15px rgba(168, 85, 247, 0.2)' }
+                }
+            }
+        }
+    </script>
+    <style>
+        * { scrollbar-width: thin; scrollbar-color: #6d28d9 #0a0a0f; }
+        *::-webkit-scrollbar { width: 8px; height: 8px; }
+        *::-webkit-scrollbar-track { background: #0a0a0f; }
+        *::-webkit-scrollbar-thumb { background: linear-gradient(180deg, #7c3aed, #a855f7); border-radius: 4px; }
+        body { font-family: 'Noto Sans TC', sans-serif; background: #0a0a0f; }
+        .glass { background: rgba(18, 18, 26, 0.7); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border: 1px solid rgba(255, 255, 255, 0.08); }
+        .glass-card { background: linear-gradient(135deg, rgba(18, 18, 26, 0.9) 0%, rgba(30, 30, 46, 0.6) 100%); backdrop-filter: blur(20px); border: 1px solid rgba(168, 85, 247, 0.15); box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4); }
+        .input-focus:focus { box-shadow: 0 0 0 3px rgba(168, 85, 247, 0.3), 0 0 20px rgba(168, 85, 247, 0.2); }
+        .tab-active { border-bottom: 2px solid #8b5cf6; color: #8b5cf6; }
+        .tab-inactive { border-bottom: 2px solid transparent; color: #9ca3af; }
+    </style>
+</head>
+<body class="min-h-screen flex">
+    <div id="sidebar-container"></div>
+    <main class="flex-1 flex flex-col overflow-hidden">
+        <div class="flex-1 overflow-y-auto p-6">
+            <div class="max-w-4xl mx-auto">
+                <!-- 頁面標題 -->
+                <div class="flex items-center justify-between mb-6">
+                    <div>
+                        <h1 class="text-2xl font-bold text-white">遊戲配置</h1>
+                        <p class="text-gray-400 mt-1">配置遊戲參數與設定</p>
+                    </div>
+                    <div class="flex items-center space-x-3">
+                        <span class="px-3 py-1 bg-green-500/20 text-green-400 rounded-full text-sm">已啟用</span>
+                        <button class="px-4 py-2 bg-purple-600 hover:bg-purple-700 text-white rounded-lg transition-colors">
+                            <i data-lucide="save" class="w-4 h-4 inline mr-2"></i>儲存配置
+                        </button>
+                    </div>
+                </div>
+
+                <!-- 遊戲基本資訊 -->
+                <div class="glass-card rounded-2xl p-6 mb-6">
+                    <div class="flex items-center mb-4">
+                        <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-purple-600 to-indigo-600 flex items-center justify-center mr-4">
+                            <i data-lucide="gamepad-2" class="w-6 h-6 text-white"></i>
+                        </div>
+                        <div>
+                            <h2 class="text-xl font-semibold text-white">經典拉霸王</h2>
+                            <p class="text-gray-400 text-sm">遊戲代碼: SLOT_001 | 遊戲商: Pragmatic Play</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 頁籤導航 -->
+                <div class="flex space-x-6 border-b border-dark-border mb-6">
+                    <button class="pb-3 tab-active font-medium">基本配置</button>
+                    <button class="pb-3 tab-inactive font-medium hover:text-white transition-colors">遊戲參數</button>
+                    <button class="pb-3 tab-inactive font-medium hover:text-white transition-colors">押注設定</button>
+                    <button class="pb-3 tab-inactive font-medium hover:text-white transition-colors">RTP 設定</button>
+                    <button class="pb-3 tab-inactive font-medium hover:text-white transition-colors">進階設定</button>
+                </div>
+
+                <!-- 配置表單 -->
+                <div class="glass-card rounded-2xl p-8">
+                    <h3 class="text-lg font-semibold text-white mb-6 flex items-center">
+                        <i data-lucide="settings" class="w-5 h-5 mr-2 text-purple-400"></i>基本配置
+                    </h3>
+                    <form class="space-y-6">
+                        <div class="grid grid-cols-2 gap-6">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-300 mb-2">遊戲狀態</label>
+                                <select class="w-full bg-dark-bg border border-dark-border rounded-lg px-4 py-3 text-white focus:outline-none input-focus">
+                                    <option value="active" selected>啟用</option>
+                                    <option value="inactive">停用</option>
+                                    <option value="maintenance">維護中</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-300 mb-2">顯示順序</label>
+                                <input type="number" value="1" class="w-full bg-dark-bg border border-dark-border rounded-lg px-4 py-3 text-white focus:outline-none input-focus">
+                            </div>
+                        </div>
+                        <div class="grid grid-cols-2 gap-6">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-300 mb-2">最小押注</label>
+                                <div class="relative">
+                                    <span class="absolute left-4 top-1/2 -translate-y-1/2 text-gray-500">$</span>
+                                    <input type="number" value="10" class="w-full bg-dark-bg border border-dark-border rounded-lg pl-8 pr-4 py-3 text-white focus:outline-none input-focus">
+                                </div>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-300 mb-2">最大押注</label>
+                                <div class="relative">
+                                    <span class="absolute left-4 top-1/2 -translate-y-1/2 text-gray-500">$</span>
+                                    <input type="number" value="10000" class="w-full bg-dark-bg border border-dark-border rounded-lg pl-8 pr-4 py-3 text-white focus:outline-none input-focus">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="grid grid-cols-2 gap-6">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-300 mb-2">RTP 率 (%)</label>
+                                <input type="number" step="0.01" value="96.50" class="w-full bg-dark-bg border border-dark-border rounded-lg px-4 py-3 text-white focus:outline-none input-focus">
+                                <p class="text-xs text-gray-500 mt-1">預設 RTP: 96.50%</p>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-300 mb-2">波動性</label>
+                                <select class="w-full bg-dark-bg border border-dark-border rounded-lg px-4 py-3 text-white focus:outline-none input-focus">
+                                    <option value="low">低</option>
+                                    <option value="medium" selected>中</option>
+                                    <option value="high">高</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-300 mb-2">遊戲說明</label>
+                            <textarea rows="4" class="w-full bg-dark-bg border border-dark-border rounded-lg px-4 py-3 text-white placeholder-gray-500 focus:outline-none input-focus">經典拉霸王是一款傳統的拉霸機遊戲，具有 5 個轉輪和 20 條支付線...</textarea>
+                        </div>
+                        <div class="grid grid-cols-2 gap-6">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-300 mb-2">支援語言</label>
+                                <div class="flex flex-wrap gap-2">
+                                    <span class="px-3 py-1 bg-purple-600/20 text-purple-400 rounded-lg text-sm">中文</span>
+                                    <span class="px-3 py-1 bg-purple-600/20 text-purple-400 rounded-lg text-sm">English</span>
+                                    <span class="px-3 py-1 bg-dark-bg border border-dark-border text-gray-400 rounded-lg text-sm cursor-pointer hover:border-purple-500">+ 新增</span>
+                                </div>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-300 mb-2">適用地區</label>
+                                <div class="flex flex-wrap gap-2">
+                                    <span class="px-3 py-1 bg-purple-600/20 text-purple-400 rounded-lg text-sm">台灣</span>
+                                    <span class="px-3 py-1 bg-purple-600/20 text-purple-400 rounded-lg text-sm">香港</span>
+                                    <span class="px-3 py-1 bg-dark-bg border border-dark-border text-gray-400 rounded-lg text-sm cursor-pointer hover:border-purple-500">+ 新增</span>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </main>
+    <script src="../js/sidebar.js"></script>
+    <script>lucide.createIcons();</script>
+</body>
+</html>
