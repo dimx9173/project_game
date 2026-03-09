@@ -89,14 +89,22 @@ info:
 
     | 功能碼 | 功能名稱 | 說明 |
     |--------|---------|------|
-    | [C01] | KPI 監控 | 前端計算，資料來自多個 API |
-    | [C05] | 系統通知 | WebSocket 推播 |
-    | [C79] | 系統監控 | 前端儀表板，資料來自多個 API |
-    | [L01-L04] | 儀表板相關 | 前端視覺化，資料來自多個 API |
-    | [L36] | 指數退避重試機制 | 客戶端邏輯 |
-    | [L42] | 底層通訊與金鑰加密 | 基礎設施層 |
+    | [C01] | KPI 監控 | 前端計算，資料來自 /machines, /transactions, /reports |
+    | [C05] | 系統通知 | WebSocket 推播 (SignalR)，無 REST API |
+    | [C25] | 遊戲配置 | 合併至 [C16] 遊戲新增/編輯 (config 屬性) |
+    | [C61] | 遊戲類型篩選 | 前端篩選，使用 GET /games?type= 參數 |
+    | [C76] | 公告管理 | 合併至 [C81] 前端版面廣播模組 |
+    | [C77] | 遊戲分類排序 | 合併至 [C16] 遊戲新增/編輯 (category, displayOrder 屬性) |
+    | [C78] | 前端大廳配置 | 使用 GET /system/config/frontend |
+    | [C79] | 系統監控 | 前端儀表板，資料來自 /machines/{id}/status, /monitor/* |
+    | [C80] | 推薦遊戲設定 | 合併至 [C16] 遊戲新增/編輯 (featured 屬性) |
+    | [C86] | 日誌查詢 | 合併至 [C72] 操作日誌審計 |
+    | [C93] | 手動同步 | 合併至 [L35] POST /sync/upload |
+    | [C94] | 對帳檢查 | 計算結果，使用 GET /discrepancies 比對 |
+    | [C95] | 同步日誌 | 合併至 [C72] 操作日誌審計 (action=sync) |
+    | [C113] | 機台設定傳輸介面與格式 | 合併至 [C14] PUT /machines/{id}/config |
 
-  version: 1.2.0
+  version: 1.4.0
 
 servers:
   - url: https://api.gameplatform.com/api/v1

@@ -60,10 +60,10 @@ info:
 
     | 功能碼 | 功能名稱 | 主要端點 |
     |--------|---------|---------|
-    | [L01] | 營收趨勢圖 | GET /api/local/dashboard/revenue-trend |
-    | [L02] | 機台狀態圖 | GET /api/local/dashboard/machine-status |
-    | [L03] | 熱門遊戲排行 | GET /api/local/dashboard/game-ranking |
-    | [L04] | 今日營收/下注/派彩 | GET /api/local/dashboard/summary |
+    | [L01] | 營收趨勢圖 | GET /dashboard/revenue-trend |
+    | [L02] | 機台狀態圖 | GET /dashboard/machine-status |
+    | [L03] | 熱門遊戲排行 | GET /dashboard/game-ranking |
+    | [L04] | 今日營收/下注/派彩 | GET /dashboard/summary |
     | [L05] | 機台列表檢視 | GET /machines |
     | [L06] | 本機狀態 | GET /machines/{id}/status |
     | [L07] | 機台配置接收 | POST /machines/{id}/config/status |
@@ -72,11 +72,14 @@ info:
     | [L11] | 遊戲列表檢視 | GET /games |
     | [L14] | 遊戲詳情 | GET /games/{id} |
     | [L15] | 交易紀錄 | GET /transactions |
+    | [L16] | 交易詳情檢視 | GET /transactions/{id} |
+    | [L17] | 日/週/月/年報表 | GET /reports/revenue |
     | [L20] | 爭議對帳處理專區 | GET/POST /disputes |
+    | [L28] | 備份與恢復 | POST /system/backup, POST /system/restore |
     | [L31] | 遊戲參數設定 | PUT /games/{id}/config |
     | [L32] | 遊戲顯示順序 | PUT /games/{id}/display-order |
     | [L33] | 遊戲狀態查詢 | GET /games/{id}/status |
-    | [L34] | 同步狀態檢視 | GET /machines/{id}/config/status |
+    | [L34] | 同步狀態檢視 | GET /sync/status |
     | [L35] | 雙向佇列與交易補償 | POST /sync/upload, GET /sync/download |
     | [L38] | 心跳檢測與離線告警 | POST /machines/{id}/heartbeat |
     | [L39] | 設備健康度儀表板 | GET /machines/{id}/health |
@@ -85,21 +88,29 @@ info:
     | [L43] | 虛擬下注 | POST /games/{id}/test/* |
     | [L44] | 遊戲餘額查詢 | GET /games/{id}/balance |
     | [L45] | 遊戲開分/洗分 | POST /machines/{id}/cash-in, /cash-out |
+    | [L46] | 遊戲派彩 | POST /games/{id}/payout |
     | [L47] | 基本設定 | GET/PUT /machines/{id}/config |
 
     ### 不適用 API 端點的功能
 
-    以下功能為前端計算、UI 元件或 WebSocket 推播，無對應 REST API：
+    以下功能為前端計算、UI 元件或客戶端邏輯，無對應 REST API：
 
     | 功能碼 | 功能名稱 | 說明 |
     |--------|---------|------|
-    | [C01] | KPI 監控 | 前端計算，資料來自多個 API |
-    | [C05] | 系統通知 | WebSocket 推播 |
-    | [C79] | 系統監控 | 前端儀表板，資料來自多個 API |
-    | [L36] | 指數退避重試機制 | 客戶端邏輯 |
-    | [L42] | 底層通訊與金鑰加密 | 基礎設施層 |
+    | [L08] | 快速操作按鈕 | 前端 UI 元件，呼叫現有 API |
+    | [L12] | 遊戲篩選 | 前端篩選，使用 GET /games?category=,?status= 參數 |
+    | [L13] | 遊戲搜尋 | 前端搜尋，使用 GET /games?q= 參數 |
+    | [L18] | 交易操作（回滾/確認） | 合併至 [L35] POST /sync/upload (type=rollback) |
+    | [L19] | 異常交易處理 | 合併至 [L20] POST /disputes |
+    | [L29] | 遊戲供應商管理 | 本地唯讀，使用 GET /providers |
+    | [L30] | 遊戲大廳設定 | 本地唯讀，使用 GET /system/config/frontend |
+    | [L36] | 指數退避重試機制 | 客戶端邏輯，無需 API |
+    | [L37] | 衝突處理與人工審核 | 合併至 [L20] POST /disputes (type=conflict) |
+    | [L42] | 底層通訊與金鑰加密 | 基礎設施層，加密金鑰存於環境變數 |
+    | [L51] | 交易導出 | 合併至 GET /transactions?format=csv |
+    | [L52] | 報表匯出 | 合併至 GET /reports/revenue?format=excel |
 
-  version: 1.2.0
+  version: 1.4.0
 
 servers:
   - url: https://api.gameplatform.com/api/v1
