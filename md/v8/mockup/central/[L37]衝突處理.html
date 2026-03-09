@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>同步衝突解決 - 遊戲平台管理中心</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="../css/mockup-common.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        cyber: { 50: '#f5f3ff', 100: '#ede9fe', 200: '#ddd6fe', 300: '#c4b5fd', 400: '#a78bfa', 500: '#8b5cf6', 600: '#7c3aed', 700: '#6d28d9', 800: '#5b21b6', 900: '#4c1d95', 950: '#2e1065' },
+                        dark: { bg: '#0a0a0f', card: '#12121a', sidebar: '#0d0d14', border: '#1e1e2e', hover: '#1a1a28' }
+                    },
+                    fontFamily: { sans: ['"Noto Sans TC"', 'sans-serif'], mono: ['"JetBrains Mono"', 'monospace'] },
+                    boxShadow: { glow: '0 0 30px rgba(168, 85, 247, 0.3)', 'glow-sm': '0 0 15px rgba(168, 85, 247, 0.2)' }
+                }
+            }
+        }
+    </script>
+    <style>
+        * { scrollbar-width: thin; scrollbar-color: #6d28d9 #0a0a0f; }
+        *::-webkit-scrollbar { width: 8px; height: 8px; }
+        *::-webkit-scrollbar-track { background: #0a0a0f; }
+        *::-webkit-scrollbar-thumb { background: linear-gradient(180deg, #7c3aed, #a855f7); border-radius: 4px; }
+        body { font-family: 'Noto Sans TC', sans-serif; background: #0a0a0f; }
+        .glass { background: rgba(18, 18, 26, 0.7); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border: 1px solid rgba(255, 255, 255, 0.08); }
+        .glass-card { background: linear-gradient(135deg, rgba(18, 18, 26, 0.9) 0%, rgba(30, 30, 46, 0.6) 100%); backdrop-filter: blur(20px); border: 1px solid rgba(168, 85, 247, 0.15); box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4); }
+        .glass-card:hover { border-color: rgba(168, 85, 247, 0.4); box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4), 0 0 30px rgba(168, 85, 247, 0.2); }
+        .gradient-bg { background: linear-gradient(135deg, #0a0a0f 0%, #1a0a2e 50%, #0a0a0f 100%); }
+        .gradient-purple { background: linear-gradient(135deg, #7c3aed 0%, #a855f7 50%, #c084fc 100%); }
+        
+        
+        
+        
+        .input-focus:focus { box-shadow: 0 0 0 3px rgba(168, 85, 247, 0.3), 0 0 20px rgba(168, 85, 247, 0.2); }
+        
+        
+        
+        
+    </style>
+</head>
+<body class="gradient-bg min-h-screen flex">
+    <div id="sidebar-container"></div>
+    <main class="flex-1 flex flex-col overflow-hidden">
+        <header class="h-16 glass border-b border-dark-border flex items-center justify-between px-6">
+            <h2 class="text-lg font-semibold text-white">同步衝突解決</h2>
+            <div class="flex items-center space-x-3">
+                <button class="px-4 py-2 bg-dark-hover border border-dark-border text-gray-300 rounded-lg flex items-center">
+                    <i data-lucide="settings" class="w-4 h-4 mr-2"></i>自動解決規則
+                </button>
+                <button class="px-4 py-2 gradient-purple rounded-lg text-white font-medium shadow-glow-sm flex items-center">
+                    <i data-lucide="refresh-cw" class="w-4 h-4 mr-2"></i>重新同步
+                </button>
+            </div>
+        </header>
+        <div class="flex-1 overflow-y-auto p-6">
+            <!-- 同步狀態 -->
+            <div class="grid grid-cols-4 gap-4 mb-6">
+                <div class="glass-card rounded-xl p-4">
+                    <div class="flex items-center justify-between"><span class="text-gray-400 text-sm">待處理衝突</span><i data-lucide="alert-circle" class="w-5 h-5 text-yellow-400"></i></div>
+                    <p class="font-mono text-2xl text-white mt-2">3</p>
+                </div>
+                <div class="glass-card rounded-xl p-4">
+                    <div class="flex items-center justify-between"><span class="text-gray-400 text-sm">同步中</span><i data-lucide="loader" class="w-5 h-5 text-cyber-400"></i></div>
+                    <p class="font-mono text-2xl text-white mt-2">1</p>
+                </div>
+                <div class="glass-card rounded-xl p-4">
+                    <div class="flex items-center justify-between"><span class="text-gray-400 text-sm">最後同步</span><i data-lucide="check-circle" class="w-5 h-5 text-green-400"></i></div>
+                    <p class="text-sm text-white mt-2">14:32:15</p>
+                </div>
+                <div class="glass-card rounded-xl p-4">
+                    <div class="flex items-center justify-between"><span class="text-gray-400 text-sm">衝突解決率</span><i data-lucide="trending-up" class="w-5 h-5 text-green-400"></i></div>
+                    <p class="font-mono text-2xl text-green-400 mt-2">98.5%</p>
+                </div>
+            </div>
+            <!-- 衝突列表 -->
+            <div class="glass-card rounded-2xl overflow-hidden">
+                <div class="p-4 border-b border-dark-border">
+                    <h3 class="font-semibold text-white">衝突列表</h3>
+                </div>
+                <table class="w-full">
+                    <thead class="bg-dark-bg">
+                        <tr>
+                            <th class="text-left py-3 px-4 text-xs text-gray-400 font-medium">衝突 ID</th>
+                            <th class="text-left py-3 px-4 text-xs text-gray-400 font-medium">類型</th>
+                            <th class="text-left py-3 px-4 text-xs text-gray-400 font-medium">本地值</th>
+                            <th class="text-left py-3 px-4 text-xs text-gray-400 font-medium">雲端值</th>
+                            <th class="text-left py-3 px-4 text-xs text-gray-400 font-medium">操作</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr class="border-t border-dark-border">
+                            <td class="py-3 px-4 font-mono text-sm text-white">CONFLICT_001</td>
+                            <td class="py-3 px-4"><span class="px-2 py-1 bg-yellow-600/20 text-yellow-400 text-xs rounded">餘額不一致</span></td>
+                            <td class="py-3 px-4 font-mono text-red-400">$1,234.00</td>
+                            <td class="py-3 px-4 font-mono text-green-400">$1,456.00</td>
+                            <td class="py-3 px-4 space-x-2">
+                                <button class="px-3 py-1 bg-green-600/20 text-green-400 text-xs rounded hover:bg-green-600/30">採用雲端</button>
+                                <button class="px-3 py-1 bg-blue-600/20 text-blue-400 text-xs rounded hover:bg-blue-600/30">採用本地</button>
+                            </td>
+                        </tr>
+                        <tr class="border-t border-dark-border">
+                            <td class="py-3 px-4 font-mono text-sm text-white">CONFLICT_002</td>
+                            <td class="py-3 px-4"><span class="px-2 py-1 bg-orange-600/20 text-orange-400 text-xs rounded">交易記錄</span></td>
+                            <td class="py-3 px-4 font-mono text-white">12 筆</td>
+                            <td class="py-3 px-4 font-mono text-white">15 筆</td>
+                            <td class="py-3 px-4 space-x-2">
+                                <button class="px-3 py-1 bg-green-600/20 text-green-400 text-xs rounded hover:bg-green-600/30">採用雲端</button>
+                                <button class="px-3 py-1 bg-blue-600/20 text-blue-400 text-xs rounded hover:bg-blue-600/30">採用本地</button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <!-- 自動解決規則 -->
+            <div class="glass-card rounded-2xl p-6 mt-6">
+                <h3 class="font-semibold text-white mb-4 flex items-center"><i data-lucide="settings" class="w-5 h-5 mr-2 text-cyber-400"></i>自動解決規則</h3>
+                <div class="space-y-3">
+                    <div class="flex items-center justify-between p-3 bg-dark-bg rounded-lg">
+                        <div class="flex items-center"><i data-lucide="wallet" class="w-5 h-5 text-gray-400 mr-3"></i><span class="text-gray-300">餘額衝突</span></div>
+                        <select class="bg-dark-card border border-dark-border rounded px-3 py-1 text-sm text-white"><option selected>採用雲端</option><option>採用本地</option><option>手動處理</option></select>
+                    </div>
+                    <div class="flex items-center justify-between p-3 bg-dark-bg rounded-lg">
+                        <div class="flex items-center"><i data-lucide="file-text" class="w-5 h-5 text-gray-400 mr-3"></i><span class="text-gray-300">交易記錄</span></div>
+                        <select class="bg-dark-card border border-dark-border rounded px-3 py-1 text-sm text-white"><option>採用雲端</option><option selected>採用本地</option><option>手動處理</option></select>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+    <script>
+        lucide.createIcons();
+
+        function toggleSidebarGroup(header) {
+            const group = header.parentElement;
+            const submenu = group.querySelector('.sidebar-submenu');
+            if (group.classList.contains('open')) {
+                group.classList.remove('open');
+                submenu.classList.remove('open');
+            } else {
+                group.classList.add('open');
+                submenu.classList.add('open');
+            }
+        }
+    </script>
+<script src="../js/sidebar.js"></script>
+    <script>
+        MockupSidebar.render('mockup_sync_conflict.html');
+    </script>
+</body>
+</html>

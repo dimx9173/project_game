@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>系統通知 - 遊戲平台管理中心</title>
+    <title>告警通知 - 遊戲平台管理中心</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="../css/mockup-common.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
@@ -32,244 +32,176 @@
         .glass-card { background: linear-gradient(135deg, rgba(18, 18, 26, 0.9) 0%, rgba(30, 30, 46, 0.6) 100%); backdrop-filter: blur(20px); border: 1px solid rgba(168, 85, 247, 0.15); box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4); }
         .gradient-bg { background: linear-gradient(135deg, #0a0a0f 0%, #1a0a2e 50%, #0a0a0f 100%); }
         .gradient-purple { background: linear-gradient(135deg, #7c3aed 0%, #a855f7 50%, #c084fc 100%); }
-        .input-focus:focus { box-shadow: 0 0 0 3px rgba(168, 85, 247, 0.3); outline: none; }
-        .notification-item { transition: all 0.2s ease; }
-        .notification-item:hover { background: rgba(124, 58, 237, 0.1); border-left-color: #8b5cf6; }
-        .notification-unread { border-left: 3px solid #8b5cf6; }
-        .notification-read { border-left: 3px solid transparent; opacity: 0.7; }
     </style>
 </head>
 <body class="gradient-bg min-h-screen flex">
     <div id="sidebar-container"></div>
-    
     <main class="flex-1 flex flex-col overflow-hidden">
-        <!-- Header -->
         <header class="h-16 glass border-b border-dark-border flex items-center justify-between px-6">
-            <div class="flex items-center">
-                <h2 class="text-lg font-semibold text-white">系統通知</h2>
-                <span class="ml-3 px-2 py-0.5 bg-cyber-500/20 text-cyber-400 text-xs rounded-full">3 未讀</span>
-            </div>
+            <h2 class="text-lg font-semibold text-white">告警通知</h2>
             <div class="flex items-center space-x-3">
-                <button onclick="markAllRead()" class="px-4 py-2 bg-dark-bg border border-dark-border rounded-lg text-gray-300 text-sm hover:bg-dark-hover transition-colors">
-                    <i data-lucide="check-check" class="w-4 h-4 inline mr-1"></i>全部已讀
+                <button class="px-4 py-2 bg-gray-500/20 text-gray-400 rounded-lg hover:bg-gray-500/30 flex items-center">
+                    <i data-lucide="check-check" class="w-4 h-4 mr-2"></i>全部已讀
                 </button>
-                <button onclick="clearAll()" class="px-4 py-2 bg-dark-bg border border-dark-border rounded-lg text-gray-300 text-sm hover:bg-red-500/20 hover:text-red-400 hover:border-red-500/30 transition-colors">
-                    <i data-lucide="trash-2" class="w-4 h-4 inline mr-1"></i>清空
+                <button class="px-4 py-2 gradient-purple rounded-lg text-white font-medium shadow-glow-sm flex items-center">
+                    <i data-lucide="settings" class="w-4 h-4 mr-2"></i>通知設定
                 </button>
             </div>
         </header>
-
-        <!-- Filters -->
-        <div class="px-6 py-4 border-b border-dark-border">
-            <div class="flex flex-wrap items-center gap-4">
-                <div class="flex space-x-2">
-                    <button class="px-4 py-2 bg-cyber-500/20 text-cyber-400 rounded-lg text-sm border border-cyber-500/30">全部</button>
-                    <button class="px-4 py-2 bg-dark-bg border border-dark-border rounded-lg text-gray-400 text-sm hover:bg-dark-hover">未讀</button>
-                    <button class="px-4 py-2 bg-dark-bg border border-dark-border rounded-lg text-gray-400 text-sm hover:bg-dark-hover">已讀</button>
-                </div>
-                <select class="bg-dark-bg border border-dark-border rounded-lg py-2 px-4 text-sm text-white">
-                    <option>全部類型</option>
-                    <option>系統告警</option>
-                    <option>交易通知</option>
-                    <option>維護提醒</option>
-                    <option>版本更新</option>
-                </select>
-                <select class="bg-dark-bg border border-dark-border rounded-lg py-2 px-4 text-sm text-white">
-                    <option>最近7天</option>
-                    <option>今天</option>
-                    <option>昨天</option>
-                    <option>最近30天</option>
-                </select>
-            </div>
-        </div>
-
-        <!-- Notification List -->
         <div class="flex-1 overflow-y-auto p-6">
-            <div class="max-w-4xl mx-auto space-y-3">
-                
-                <!-- Notification 1 - Unread System Alert -->
-                <div class="glass-card rounded-xl p-4 notification-item notification-unread cursor-pointer">
-                    <div class="flex items-start space-x-4">
-                        <div class="flex-shrink-0">
-                            <div class="w-10 h-10 rounded-lg bg-red-500/20 flex items-center justify-center">
-                                <i data-lucide="alert-triangle" class="w-5 h-5 text-red-400"></i>
-                            </div>
+            <!-- 統計 -->
+            <div class="grid grid-cols-4 gap-4 mb-6">
+                <div class="glass-card rounded-xl p-4">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <div class="text-gray-400 text-sm">未讀通知</div>
+                            <div class="text-2xl font-bold text-red-400">12</div>
                         </div>
-                        <div class="flex-1 min-w-0">
-                            <div class="flex items-center justify-between mb-1">
-                                <h3 class="text-sm font-semibold text-white">機台離線告警</h3>
-                                <span class="text-xs text-gray-500">5 分鐘前</span>
-                            </div>
-                            <p class="text-sm text-gray-300 mb-2">機台 A-003 (台北門市B) 已離線超過 10 分鐘，請檢查網路連線狀態。</p>
-                            <div class="flex items-center space-x-3">
-                                <span class="px-2 py-0.5 bg-red-500/20 text-red-400 text-xs rounded">系統告警</span>
-                                <span class="text-xs text-gray-500">機台 ID: A-003</span>
-                                <button class="text-xs text-cyber-400 hover:text-cyber-300">查看詳情 →</button>
-                            </div>
-                        </div>
-                        
-                        <div class="flex-shrink-0">
-                            <button onclick="markRead(this)" class="p-2 text-gray-500 hover:text-cyber-400 transition-colors" title="標記已讀">
-                                <i data-lucide="circle" class="w-4 h-4"></i>
-                            </button>
+                        <div class="w-10 h-10 rounded-lg bg-red-500/20 flex items-center justify-center">
+                            <i data-lucide="bell" class="w-5 h-5 text-red-400"></i>
                         </div>
                     </div>
                 </div>
-
-                <!-- Notification 2 - Unread Transaction -->
-                <div class="glass-card rounded-xl p-4 notification-item notification-unread cursor-pointer">
-                    <div class="flex items-start space-x-4">
-                        <div class="flex-shrink-0">
-                            <div class="w-10 h-10 rounded-lg bg-emerald-500/20 flex items-center justify-center">
-                                <i data-lucide="dollar-sign" class="w-5 h-5 text-emerald-400"></i>
-                            </div>
+                <div class="glass-card rounded-xl p-4">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <div class="text-gray-400 text-sm">緊急告警</div>
+                            <div class="text-2xl font-bold text-red-500">3</div>
                         </div>
-                        <div class="flex-1 min-w-0">
-                            <div class="flex items-center justify-between mb-1">
-                                <h3 class="text-sm font-semibold text-white">大額交易提醒</h3>
-                                <span class="text-xs text-gray-500">15 分鐘前</span>
-                            </div>
-                            <p class="text-sm text-gray-300 mb-2">機台 A-001 發生大額洗分交易，金額 $50,000，超過預設閾值 $30,000。</p>
-                            <div class="flex items-center space-x-3">
-                                <span class="px-2 py-0.5 bg-emerald-500/20 text-emerald-400 text-xs rounded">交易通知</span>
-                                <span class="text-xs text-gray-500">交易 ID: TXN-20240306-001</span>
-                            </div>
-                        </div>
-                        
-                        <div class="flex-shrink-0">
-                            <button onclick="markRead(this)" class="p-2 text-gray-500 hover:text-cyber-400 transition-colors">
-                                <i data-lucide="circle" class="w-4 h-4"></i>
-                            </button>
+                        <div class="w-10 h-10 rounded-lg bg-red-500/20 flex items-center justify-center">
+                            <i data-lucide="alert-triangle" class="w-5 h-5 text-red-500"></i>
                         </div>
                     </div>
                 </div>
-
-                <!-- Notification 3 - Unread Maintenance -->
-                <div class="glass-card rounded-xl p-4 notification-item notification-unread cursor-pointer">
-                    <div class="flex items-start space-x-4">
-                        <div class="flex-shrink-0">
-                            <div class="w-10 h-10 rounded-lg bg-amber-500/20 flex items-center justify-center">
-                                <i data-lucide="wrench" class="w-5 h-5 text-amber-400"></i>
-                            </div>
+                <div class="glass-card rounded-xl p-4">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <div class="text-gray-400 text-sm">警告</div>
+                            <div class="text-2xl font-bold text-yellow-400">5</div>
                         </div>
-                        <div class="flex-1 min-w-0">
-                            <div class="flex items-center justify-between mb-1">
-                                <h3 class="text-sm font-semibold text-white">系統維護提醒</h3>
-                                <span class="text-xs text-gray-500">1 小時前</span>
-                            </div>
-                            <p class="text-sm text-gray-300 mb-2">預計今晚 23:00-01:00 進行系統維護，期間部分服務可能無法使用。</p>
-                            <div class="flex items-center space-x-3">
-                                <span class="px-2 py-0.5 bg-amber-500/20 text-amber-400 text-xs rounded">維護提醒</span>
-                            </div>
-                        </div>
-                        
-                        <div class="flex-shrink-0">
-                            <button onclick="markRead(this)" class="p-2 text-gray-500 hover:text-cyber-400 transition-colors">
-                                <i data-lucide="circle" class="w-4 h-4"></i>
-                            </button>
+                        <div class="w-10 h-10 rounded-lg bg-yellow-500/20 flex items-center justify-center">
+                            <i data-lucide="alert-circle" class="w-5 h-5 text-yellow-400"></i>
                         </div>
                     </div>
                 </div>
-
-                <!-- Notification 4 - Read Version Update -->
-                <div class="glass-card rounded-xl p-4 notification-item notification-read cursor-pointer">
-                    <div class="flex items-start space-x-4">
-                        <div class="flex-shrink-0">
-                            <div class="w-10 h-10 rounded-lg bg-cyber-500/20 flex items-center justify-center">
-                                <i data-lucide="download" class="w-5 h-5 text-cyber-400"></i>
-                            </div>
+                <div class="glass-card rounded-xl p-4">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <div class="text-gray-400 text-sm">一般通知</div>
+                            <div class="text-2xl font-bold text-blue-400">4</div>
                         </div>
-                        <div class="flex-1 min-w-0">
-                            <div class="flex items-center justify-between mb-1">
-                                <h3 class="text-sm font-semibold text-white">版本更新完成</h3>
-                                <span class="text-xs text-gray-500">昨天</span>
-                            </div>
-                            <p class="text-sm text-gray-300 mb-2">系統已自動更新至 v2.5.1，新功能包括：優化交易同步機制、修復已知問題。</p>
-                            <div class="flex items-center space-x-3">
-                                <span class="px-2 py-0.5 bg-cyber-500/20 text-cyber-400 text-xs rounded">版本更新</span>
-                            </div>
-                        </div>
-                        
-                        <div class="flex-shrink-0">
-                            <button onclick="deleteNotification(this)" class="p-2 text-gray-500 hover:text-red-400 transition-colors">
-                                <i data-lucide="x" class="w-4 h-4"></i>
-                            </button>
+                        <div class="w-10 h-10 rounded-lg bg-blue-500/20 flex items-center justify-center">
+                            <i data-lucide="info" class="w-5 h-5 text-blue-400"></i>
                         </div>
                     </div>
                 </div>
-
-                <!-- Notification 5 - Read Security -->
-                <div class="glass-card rounded-xl p-4 notification-item notification-read cursor-pointer">
-                    <div class="flex items-start space-x-4">
-                        <div class="flex-shrink-0">
-                            <div class="w-10 h-10 rounded-lg bg-blue-500/20 flex items-center justify-center">
-                                <i data-lucide="shield-check" class="w-5 h-5 text-blue-400"></i>
-                            </div>
-                        </div>
-                        <div class="flex-1 min-w-0">
-                            <div class="flex items-center justify-between mb-1">
-                                <h3 class="text-sm font-semibold text-white">安全登入提醒</h3>
-                                <span class="text-xs text-gray-500">2 天前</span>
-                            </div>
-                            <p class="text-sm text-gray-300 mb-2">偵測到新的登入裝置 (IP: 203.145.12.45)，如非本人操作請立即修改密碼。</p>
-                            <div class="flex items-center space-x-3">
-                                <span class="px-2 py-0.5 bg-blue-500/20 text-blue-400 text-xs rounded">安全提醒</span>
-                            </div>
-                        </div>
-                        
-                        <div class="flex-shrink-0">
-                            <button onclick="deleteNotification(this)" class="p-2 text-gray-500 hover:text-red-400 transition-colors">
-                                <i data-lucide="x" class="w-4 h-4"></i>
-                            </button>
-                        </div>
-                    </div>
-                </div>
-
             </div>
 
-            <!-- Load More -->
-            <div class="text-center mt-6">
-                <button class="px-6 py-3 glass border border-dark-border rounded-lg text-gray-400 hover:text-white transition-colors">
-                    載入更多通知
-                </button>
+            <!-- 通知列表 -->
+            <div class="glass-card rounded-2xl overflow-hidden">
+                <div class="p-4 border-b border-dark-border flex items-center space-x-4">
+                    <select class="bg-dark-bg border border-dark-border rounded-lg px-3 py-2 text-white text-sm">
+                        <option>全部類型</option>
+                        <option>緊急告警</option>
+                        <option>警告</option>
+                        <option>一般通知</option>
+                    </select>
+                    <select class="bg-dark-bg border border-dark-border rounded-lg px-3 py-2 text-white text-sm">
+                        <option>全部狀態</option>
+                        <option>未讀</option>
+                        <option>已讀</option>
+                    </select>
+                </div>
+                <div class="divide-y divide-dark-border">
+                    <!-- 緊急告警 -->
+                    <div class="p-4 hover:bg-dark-hover/50 bg-red-500/5">
+                        <div class="flex items-start">
+                            <div class="w-10 h-10 rounded-lg bg-red-500/20 flex items-center justify-center mr-4 flex-shrink-0">
+                                <i data-lucide="alert-triangle" class="w-5 h-5 text-red-500"></i>
+                            </div>
+                            <div class="flex-1">
+                                <div class="flex items-center justify-between">
+                                    <div class="flex items-center">
+                                        <span class="px-2 py-0.5 bg-red-500/20 text-red-400 text-xs rounded mr-2">緊急</span>
+                                        <span class="text-white font-medium">機台 A-003 離線超過 10 分鐘</span>
+                                    </div>
+                                    <span class="text-gray-500 text-sm">2 分鐘前</span>
+                                </div>
+                                <p class="text-gray-400 text-sm mt-1">機台 A-003 (台北門市B) 已離線 12 分鐘，請立即處理。</p>
+                                <div class="flex items-center space-x-3 mt-2">
+                                    <button class="text-cyan-400 hover:text-cyan-300 text-sm">查看詳情</button>
+                                    <button class="text-gray-400 hover:text-gray-300 text-sm">標記已讀</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- 警告 -->
+                    <div class="p-4 hover:bg-dark-hover/50 bg-yellow-500/5">
+                        <div class="flex items-start">
+                            <div class="w-10 h-10 rounded-lg bg-yellow-500/20 flex items-center justify-center mr-4 flex-shrink-0">
+                                <i data-lucide="alert-circle" class="w-5 h-5 text-yellow-400"></i>
+                            </div>
+                            <div class="flex-1">
+                                <div class="flex items-center justify-between">
+                                    <div class="flex items-center">
+                                        <span class="px-2 py-0.5 bg-yellow-500/20 text-yellow-400 text-xs rounded mr-2">警告</span>
+                                        <span class="text-white font-medium">API 連線延遲過高</span>
+                                    </div>
+                                    <span class="text-gray-500 text-sm">15 分鐘前</span>
+                                </div>
+                                <p class="text-gray-400 text-sm mt-1">遊戲商 SA Gaming API 平均延遲達 850ms，已超過閾值 500ms。</p>
+                                <div class="flex items-center space-x-3 mt-2">
+                                    <button class="text-cyan-400 hover:text-cyan-300 text-sm">查看詳情</button>
+                                    <button class="text-gray-400 hover:text-gray-300 text-sm">標記已讀</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- 一般通知 -->
+                    <div class="p-4 hover:bg-dark-hover/50">
+                        <div class="flex items-start">
+                            <div class="w-10 h-10 rounded-lg bg-blue-500/20 flex items-center justify-center mr-4 flex-shrink-0">
+                                <i data-lucide="info" class="w-5 h-5 text-blue-400"></i>
+                            </div>
+                            <div class="flex-1">
+                                <div class="flex items-center justify-between">
+                                    <div class="flex items-center">
+                                        <span class="px-2 py-0.5 bg-blue-500/20 text-blue-400 text-xs rounded mr-2">通知</span>
+                                        <span class="text-white font-medium">版本 v2.1.0 發佈成功</span>
+                                    </div>
+                                    <span class="text-gray-500 text-sm">1 小時前</span>
+                                </div>
+                                <p class="text-gray-400 text-sm mt-1">版本 v2.1.0 已成功發佈至 45 台機台，覆蓋率 90%。</p>
+                                <div class="flex items-center space-x-3 mt-2">
+                                    <button class="text-cyan-400 hover:text-cyan-300 text-sm">查看詳情</button>
+                                    <button class="text-gray-400 hover:text-gray-300 text-sm">標記已讀</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- 已讀通知 -->
+                    <div class="p-4 hover:bg-dark-hover/50 opacity-60">
+                        <div class="flex items-start">
+                            <div class="w-10 h-10 rounded-lg bg-emerald-500/20 flex items-center justify-center mr-4 flex-shrink-0">
+                                <i data-lucide="check-circle" class="w-5 h-5 text-emerald-400"></i>
+                            </div>
+                            <div class="flex-1">
+                                <div class="flex items-center justify-between">
+                                    <div class="flex items-center">
+                                        <span class="px-2 py-0.5 bg-emerald-500/20 text-emerald-400 text-xs rounded mr-2">完成</span>
+                                        <span class="text-gray-300 font-medium">機台 B-002 恢復連線</span>
+                                    </div>
+                                    <span class="text-gray-500 text-sm">2 小時前</span>
+                                </div>
+                                <p class="text-gray-500 text-sm mt-1">機台 B-002 已恢復連線，目前運作正常。</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </main>
-
     <script src="../js/sidebar.js"></script>
-    <script>
-        MockupSidebar.render('mockup_notification.html');
-        lucide.createIcons();
-
-        function markRead(btn) {
-            const item = btn.closest('.notification-item');
-            item.classList.remove('notification-unread');
-            item.classList.add('notification-read');
-            btn.style.display = 'none';
-        }
-
-        function markAllRead() {
-            document.querySelectorAll('.notification-unread').forEach(item => {
-                item.classList.remove('notification-unread');
-                item.classList.add('notification-read');
-            });
-        }
-
-        function deleteNotification(btn) {
-            const item = btn.closest('.notification-item');
-            item.style.opacity = '0';
-            item.style.transform = 'translateX(-20px)';
-            setTimeout(() => item.remove(), 200);
-        }
-
-        function clearAll() {
-            if (confirm('確定要清空所有通知嗎？')) {
-                document.querySelectorAll('.notification-item').forEach(item => {
-                    item.style.opacity = '0';
-                    setTimeout(() => item.remove(), 200);
-                });
-            }
-        }
-    </script>
+    <script>lucide.createIcons();</script>
 </body>
 </html>
