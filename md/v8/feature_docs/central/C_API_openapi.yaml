@@ -64,6 +64,7 @@ info:
     |--------|---------|------|
     | [C01] | KPI 監控 | 前端計算，資料來自 /machines, /transactions, /reports |
     | [C05] | 系統通知 | WebSocket 推播 (SignalR)，無 REST API |
+    | [C28] | 遊戲測試 | 共用 [L43] 虛擬下注 API，見 L_API_openapi.yaml /games/{id}/test/* |
     | [C25] | 遊戲配置 | 合併至 [C16] 遊戲新增/編輯 (config 屬性) |
     | [C61] | 遊戲類型篩選 | 前端篩選，使用 GET /games?type= 參數 |
     | [C76] | 公告管理 | 合併至 [C81] 前端版面廣播模組 |
