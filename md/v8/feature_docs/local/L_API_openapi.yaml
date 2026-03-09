@@ -10,52 +10,6 @@ info:
 
     本 API 文檔中的每個端點都標註了對應的功能代碼，方便追蹤與文件對照。
 
-    ### 集中式後台功能碼 (Cxx)
-
-    | 功能碼 | 功能名稱 | 主要端點 |
-    |--------|---------|---------|
-    | [C02] | 硬體/網路狀態 | GET /machines/{id}/status |
-    | [C11] | 開分/洗分 | POST /machines/{id}/cash-in, /cash-out |
-    | [C12] | 遠端指令 | POST /machines/{id}/command |
-    | [C14] | 機台設定 | PUT /machines/{id}/config |
-    | [C15] | 測試模式 | POST /machines/{id}/test-mode |
-    | [C16] | 遊戲新增/編輯/刪除 | POST/PUT/DELETE /games |
-    | [C44] | 交易統計 | GET /transactions/stats |
-    | [C45] | 交易對帳 | GET /discrepancies, POST /discrepancies/{id}/resolve |
-    | [C47] | 營收報表 | GET /reports/revenue |
-    | [C48] | 遊戲排行 | GET /games/ranking |
-    | [C51] | 交易導出 | GET /transactions/export |
-    | [C53] | 遊戲商列表檢視 | GET /providers |
-    | [C54] | API 連線狀態監控 | GET /providers/{id}/status |
-    | [C55] | 遊戲同步管理 | POST /providers/{id}/sync |
-    | [C56] | API 日誌查詢 | GET /providers/{id}/logs |
-    | [C57] | 牌桌列表檢視 | GET /multiplayer/rooms |
-    | [C58] | 牌桌狀態監控 | GET /multiplayer/tables/{id}/status |
-    | [C59] | 牌桌配置管理 | POST /multiplayer/rooms |
-    | [C60] | 牌局歷史查詢 | GET /multiplayer/games |
-    | [C62] | 牌靴管理 | GET/PUT /multiplayer/tables/{id}/shoe |
-    | [C63] | 投注額設定 | GET/PUT /multiplayer/tables/{id}/bet-limits |
-    | [C64] | 莊家抽水設定 | GET/PUT /multiplayer/tables/{id}/commission |
-    | [C65] | 異常狀態告警 | GET /multiplayer/alerts |
-    | [C66] | 荷官操作紀錄 | GET /multiplayer/dealers, /multiplayer/dealers/{id}/actions |
-    | [C67] | 牌局歷史匯出 | GET /multiplayer/games/export |
-    | [C70] | 帳號新增/編輯/刪除 | POST/PUT/DELETE /users, /users/{id}/pin |
-    | [C71] | 角色權限設定 | POST/PUT/DELETE /roles, /permissions |
-    | [C72] | 操作日誌審計 | GET /audit-logs, /audit-logs/export |
-    | [C73] | 版本列表管理 | GET /ota/versions |
-    | [C74] | 更新任務下發 | POST /ota/tasks |
-    | [C75] | 更新進度監控 | GET /ota/tasks/{id}/status |
-    | [C82] | 告警通知 | GET /monitor/alerts |
-    | [C83] | 告警閾值設定 | GET/PUT /monitor/alerts/thresholds |
-    | [C90] | 系統參數設定 | GET/PUT /system/config |
-    | [C101] | 機台新增/編輯/刪除 | POST/PUT/DELETE /machines |
-    | [C103] | 遊戲商新增/編輯/刪除 | POST/PUT/DELETE /providers |
-    | [C104] | 遊戲商餘額歸集與轉帳 | GET /wallet/balances, POST /wallet/transfer |
-    | [C105] | 版本包上傳/控制 | POST /ota/versions |
-    | [C106] | 代理錢包管理 | GET/PUT /wallet/auto-collect, /wallet/limits, GET /wallet/transactions |
-    | [C107] | 機台標籤管理 | PUT /machines/{id} (tags 屬性) |
-    | [C108] | 遊戲機台註冊 | POST /machines/register |
-
     ### 本地後台功能碼 (Lxx)
 
     | 功能碼 | 功能名稱 | 主要端點 |

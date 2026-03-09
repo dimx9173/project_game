@@ -17,7 +17,7 @@ const FUNCTION_MATRIX = {
 
   // 機台管理
   L05: { name: '機台列表檢視', module: '機台管理', type: 'both' },
-  C101: { name: '機台新增/編輯/刪除', module: '機台管理', type: 'central' },
+  C101: { name: '機台編輯/刪除', module: '機台管理', type: 'central' },
   C107: { name: '機台標籤管理', module: '機台管理', type: 'central' },
   L06: { name: '機台狀態監控', module: '機台管理', type: 'both' },
   C11: { name: '開分/洗分', module: '機台管理', type: 'central' },

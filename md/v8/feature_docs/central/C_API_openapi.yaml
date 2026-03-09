@@ -48,40 +48,13 @@ info:
     | [C82] | 告警通知 | GET /monitor/alerts |
     | [C83] | 告警閾值設定 | GET/PUT /monitor/alerts/thresholds |
     | [C90] | 系統參數設定 | GET/PUT /system/config |
-    | [C101] | 機台新增/編輯/刪除 | POST/PUT/DELETE /machines |
+    | [C101] | 機台編輯/刪除 | PUT/DELETE /machines |
     | [C103] | 遊戲商新增/編輯/刪除 | POST/PUT/DELETE /providers |
     | [C104] | 遊戲商餘額歸集與轉帳 | GET /wallet/balances, POST /wallet/transfer |
     | [C105] | 版本包上傳/控制 | POST /ota/versions |
     | [C106] | 代理錢包管理 | GET/PUT /wallet/auto-collect, /wallet/limits, GET /wallet/transactions |
     | [C107] | 機台標籤管理 | PUT /machines/{id} (tags 屬性) |
     | [C108] | 遊戲機台註冊 | POST /machines/register |
-
-    ### 本地後台功能碼 (Lxx)
-
-    | 功能碼 | 功能名稱 | 主要端點 |
-    |--------|---------|---------|
-    | [L05] | 機台列表檢視 | GET /machines |
-    | [L06] | 本機狀態 | GET /machines/{id}/status |
-    | [L07] | 機台配置接收 | POST /machines/{id}/config/status |
-    | [L09] | 遊戲啟用/停用 | PUT /games/{id}/status |
-    | [L10] | 遊戲版本管理 | GET /games/{id}/versions |
-    | [L11] | 遊戲列表檢視 | GET /games |
-    | [L14] | 遊戲詳情 | GET /games/{id} |
-    | [L15] | 交易紀錄 | GET /transactions |
-    | [L20] | 爭議對帳處理專區 | GET/POST /disputes |
-    | [L31] | 遊戲參數設定 | PUT /games/{id}/config |
-    | [L32] | 遊戲顯示順序 | PUT /games/{id}/display-order |
-    | [L33] | 遊戲狀態查詢 | GET /games/{id}/status |
-    | [L34] | 同步狀態檢視 | GET /machines/{id}/config/status |
-    | [L35] | 雙向佇列與交易補償 | POST /sync/upload, GET /sync/download |
-    | [L38] | 心跳檢測與離線告警 | POST /machines/{id}/heartbeat |
-    | [L39] | 設備健康度儀表板 | GET /machines/{id}/health |
-    | [L40] | 網路延遲監控 | GET /machines/{id}/network |
-    | [L41] | 硬體/軟體監控 | GET /machines/{id}/hardware |
-    | [L43] | 虛擬下注 | POST /games/{id}/test/* |
-    | [L44] | 遊戲餘額查詢 | GET /games/{id}/balance |
-    | [L45] | 遊戲開分/洗分 | POST /machines/{id}/cash-in, /cash-out |
-    | [L47] | 基本設定 | GET/PUT /machines/{id}/config |
 
     ### 不適用 API 端點的功能
 
@@ -263,7 +236,7 @@ paths:
         "200": { description: 成功 }
     post:
       tags: [機台管理 (Machines)]
-      summary: "[C101] 新增機台"
+      summary: "[C108] 新增機台 (由註冊流程觸發)"
       security: [{ BearerAuth: [] }]
       requestBody:
         required: true
@@ -308,7 +281,7 @@ paths:
         "404": { description: 不存在 }
     put:
       tags: [機台管理 (Machines)]
-      summary: "[C101] 更新機台"
+      summary: "[C101] 編輯機台"
       security: [{ BearerAuth: [] }]
       requestBody:
         required: true
