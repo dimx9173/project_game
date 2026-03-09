@@ -5,13 +5,13 @@ info:
     遊戲平台管理系統 V8.1 API 文檔
     - 支援 MVP / 標準版 / 旗艦版
     - Version: 1.3.0
-    
+
     ## 功能代碼索引
-    
+
     本 API 文檔中的每個端點都標註了對應的功能代碼，方便追蹤與文件對照。
-    
+
     ### 集中式後台功能碼 (Cxx)
-    
+
     | 功能碼 | 功能名稱 | 主要端點 |
     |--------|---------|---------|
     | [C02] | 硬體/網路狀態 | GET /machines/{id}/status |
@@ -55,9 +55,9 @@ info:
     | [C106] | 代理錢包管理 | GET/PUT /wallet/auto-collect, /wallet/limits, GET /wallet/transactions |
     | [C107] | 機台標籤管理 | PUT /machines/{id} (tags 屬性) |
     | [C108] | 遊戲機台註冊 | POST /machines/register |
-    
+
     ### 本地後台功能碼 (Lxx)
-    
+
     | 功能碼 | 功能名稱 | 主要端點 |
     |--------|---------|---------|
     | [L05] | 機台列表檢視 | GET /machines |
@@ -68,7 +68,6 @@ info:
     | [L11] | 遊戲列表檢視 | GET /games |
     | [L14] | 遊戲詳情 | GET /games/{id} |
     | [L15] | 交易紀錄 | GET /transactions |
-    | [L17] | 日/週/月/年報表 | GET /reports/revenue |
     | [L20] | 爭議對帳處理專區 | GET/POST /disputes |
     | [L31] | 遊戲參數設定 | PUT /games/{id}/config |
     | [L32] | 遊戲顯示順序 | PUT /games/{id}/display-order |
@@ -83,11 +82,11 @@ info:
     | [L44] | 遊戲餘額查詢 | GET /games/{id}/balance |
     | [L45] | 遊戲開分/洗分 | POST /machines/{id}/cash-in, /cash-out |
     | [L47] | 基本設定 | GET/PUT /machines/{id}/config |
-    
+
     ### 不適用 API 端點的功能
-    
+
     以下功能為前端計算、UI 元件或 WebSocket 推播，無對應 REST API：
-    
+
     | 功能碼 | 功能名稱 | 說明 |
     |--------|---------|------|
     | [C01] | KPI 監控 | 前端計算，資料來自多個 API |
@@ -96,7 +95,7 @@ info:
     | [L01-L04] | 儀表板相關 | 前端視覺化，資料來自多個 API |
     | [L36] | 指數退避重試機制 | 客戶端邏輯 |
     | [L42] | 底層通訊與金鑰加密 | 基礎設施層 |
-    
+
   version: 1.2.0
 
 servers:
@@ -194,8 +193,10 @@ paths:
                 properties:
                   cpuModel: { type: string }
                   cpuCores: { type: integer }
-                  totalMemory: { type: integer, description: "總記憶體 (bytes)" }
-                  diskTotal: { type: integer, description: "總磁碟空間 (bytes)" }
+                  totalMemory:
+                    { type: integer, description: "總記憶體 (bytes)" }
+                  diskTotal:
+                    { type: integer, description: "總磁碟空間 (bytes)" }
                   osVersion: { type: string }
                   softwareVersion: { type: string }
                   uptime: { type: integer, description: "運行時間 (秒)" }
@@ -223,9 +224,11 @@ paths:
                 properties:
                   healthScore: { type: number, description: "健康評分 (0-100)" }
                   cpuHealth: { type: string, enum: [good, warning, critical] }
-                  memoryHealth: { type: string, enum: [good, warning, critical] }
+                  memoryHealth:
+                    { type: string, enum: [good, warning, critical] }
                   diskHealth: { type: string, enum: [good, warning, critical] }
-                  networkHealth: { type: string, enum: [good, warning, critical] }
+                  networkHealth:
+                    { type: string, enum: [good, warning, critical] }
                   lastCheck: { type: string, format: date-time }
 
   /machines/{id}/network:
@@ -252,7 +255,8 @@ paths:
                   latency: { type: number, description: "當前延遲 (ms)" }
                   avgLatency: { type: number, description: "平均延遲 (ms)" }
                   packetLoss: { type: number, description: "封包遺失率 (%)" }
-                  connectionQuality: { type: string, enum: [excellent, good, fair, poor] }
+                  connectionQuality:
+                    { type: string, enum: [excellent, good, fair, poor] }
                   lastPingTime: { type: string, format: date-time }
 
   /machines/{id}/cash-in:
@@ -335,7 +339,8 @@ paths:
                 type: object
                 properties:
                   gameId: { type: string }
-                  status: { type: string, enum: [active, maintenance, inactive] }
+                  status:
+                    { type: string, enum: [active, maintenance, inactive] }
                   lastStatusChange: { type: string, format: date-time }
                   maintenanceMessage: { type: string }
     put:
@@ -768,5 +773,3 @@ paths:
       security: [{ BearerAuth: [] }]
       responses:
         "200": { description: 成功 }
-
-  # Reports (旗艦版)

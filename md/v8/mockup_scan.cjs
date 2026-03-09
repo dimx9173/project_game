@@ -45,7 +45,6 @@ const FUNCTION_MATRIX = {
   C44: { name: '交易統計', module: '交易紀錄管理', type: 'both' },
   C45: { name: '交易對帳', module: '交易紀錄管理', type: 'central' },
   L19: { name: '異常交易處理', module: '交易紀錄管理', type: 'central' },
-  L17: { name: '日/週/月/年報表', module: '交易紀錄管理', type: 'both' },
   C47: { name: '營收報表', module: '交易紀錄管理', type: 'central' },
   C48: { name: '遊戲排行', module: '交易紀錄管理', type: 'central' },
   L18: { name: '交易操作（回滾/確認）', module: '交易紀錄管理', type: 'central' },
@@ -144,7 +143,7 @@ const MOCKUP_MAPPING = {
   'mockup_game_category_management.html': ['C77'],
 
   // 交易紀錄管理
-  'mockup_revenue_report.html': ['C47', 'L17'],
+  'mockup_revenue_report.html': ['C47'],
   'mockup_transaction_stats.html': ['C44'],
   'mockup_transaction_exception.html': ['L19'],
   'mockup_transaction_export.html': ['C51'],
@@ -221,19 +220,23 @@ const MOCKUP_MAPPING = {
   'mockup_flg_reconciliation.html': ['FLG_RECONCILIATION', 'C45', 'C94'],
 
   // 報表
-  'mockup_std_reports.html': ['L17', 'C47'],
-  'mockup_local_system_settings.html': ['L47'],
+  'mockup_std_reports.html': ['C47'],
+
   'mockup_std_category_add.html': ['C77'],
 
   // 本地端
-  'mockup_local_dashboard.html': ['C01', 'L01', 'L02'],
-  'mockup_local_machine.html': ['L05', 'L06'],
-  'mockup_local_cash.html': ['L45', 'L46'],
-  'mockup_local_sync.html': ['L34'],
+  'mockup_local_dashboard.html': ['L01', 'L02', 'L03', 'L04', 'L08', 'L34'],
+  'mockup_local_machine.html': ['L05', 'L06', 'L07', 'L09', 'L10', 'L11', 'L12', 'L13', 'L14', 'L38', 'L40', 'L41', 'L42', 'L43', 'L44', 'L45', 'L46'],
+  'mockup_local_game.html': ['L09', 'L10', 'L11', 'L12', 'L13', 'L14', 'L43', 'L44', 'L45', 'L46'],
+  'mockup_local_cash.html': ['L13', 'L14', 'L43', 'L44', 'L45', 'L46'],
+  'mockup_local_sync.html': ['L28', 'L34', 'L35', 'L36', 'L37', 'L38', 'L39', 'L40', 'L41', 'L42', 'L51', 'L52'],
+  'mockup_local_system_settings.html': ['L47', 'L48'],
   'mockup_mvp_local_setup.html': ['L47'],
+  'mockup_local_login.html': ['L51', 'L52'],
+  'mockup_local_register.html': ['L51'],
 
   // 數據管理
-  'mockup_mvp_data_list.html': ['L11'],
+  'mockup_mvp_data_list.html': [],
 };
 
 // 掃描結果

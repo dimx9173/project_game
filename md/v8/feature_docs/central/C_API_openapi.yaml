@@ -5,13 +5,13 @@ info:
     遊戲平台管理系統 V8.1 API 文檔
     - 支援 MVP / 標準版 / 旗艦版
     - Version: 1.3.0
-    
+
     ## 功能代碼索引
-    
+
     本 API 文檔中的每個端點都標註了對應的功能代碼，方便追蹤與文件對照。
-    
+
     ### 集中式後台功能碼 (Cxx)
-    
+
     | 功能碼 | 功能名稱 | 主要端點 |
     |--------|---------|---------|
     | [C02] | 硬體/網路狀態 | GET /machines/{id}/status |
@@ -55,9 +55,9 @@ info:
     | [C106] | 代理錢包管理 | GET/PUT /wallet/auto-collect, /wallet/limits, GET /wallet/transactions |
     | [C107] | 機台標籤管理 | PUT /machines/{id} (tags 屬性) |
     | [C108] | 遊戲機台註冊 | POST /machines/register |
-    
+
     ### 本地後台功能碼 (Lxx)
-    
+
     | 功能碼 | 功能名稱 | 主要端點 |
     |--------|---------|---------|
     | [L05] | 機台列表檢視 | GET /machines |
@@ -68,7 +68,6 @@ info:
     | [L11] | 遊戲列表檢視 | GET /games |
     | [L14] | 遊戲詳情 | GET /games/{id} |
     | [L15] | 交易紀錄 | GET /transactions |
-    | [L17] | 日/週/月/年報表 | GET /reports/revenue |
     | [L20] | 爭議對帳處理專區 | GET/POST /disputes |
     | [L31] | 遊戲參數設定 | PUT /games/{id}/config |
     | [L32] | 遊戲顯示順序 | PUT /games/{id}/display-order |
@@ -83,11 +82,11 @@ info:
     | [L44] | 遊戲餘額查詢 | GET /games/{id}/balance |
     | [L45] | 遊戲開分/洗分 | POST /machines/{id}/cash-in, /cash-out |
     | [L47] | 基本設定 | GET/PUT /machines/{id}/config |
-    
+
     ### 不適用 API 端點的功能
-    
+
     以下功能為前端計算、UI 元件或 WebSocket 推播，無對應 REST API：
-    
+
     | 功能碼 | 功能名稱 | 說明 |
     |--------|---------|------|
     | [C01] | KPI 監控 | 前端計算，資料來自多個 API |
@@ -96,7 +95,7 @@ info:
     | [L01-L04] | 儀表板相關 | 前端視覺化，資料來自多個 API |
     | [L36] | 指數退避重試機制 | 客戶端邏輯 |
     | [L42] | 底層通訊與金鑰加密 | 基礎設施層 |
-    
+
   version: 1.2.0
 
 servers:
@@ -485,7 +484,11 @@ paths:
       description: 取得今日/本週/本月的交易統計數據
       security: [{ BearerAuth: [] }]
       parameters:
-        - { name: period, in: query, schema: { type: string, enum: [today, week, month] } }
+        - {
+            name: period,
+            in: query,
+            schema: { type: string, enum: [today, week, month] },
+          }
         - { name: machineId, in: query, schema: { type: string, format: uuid } }
       responses:
         "200":
@@ -512,7 +515,11 @@ paths:
         - { name: endDate, in: query, schema: { type: string, format: date } }
         - { name: machineId, in: query, schema: { type: string, format: uuid } }
         - { name: type, in: query, schema: { type: string } }
-        - { name: format, in: query, schema: { type: string, enum: [csv, excel], default: csv } }
+        - {
+            name: format,
+            in: query,
+            schema: { type: string, enum: [csv, excel], default: csv },
+          }
       responses:
         "200":
           description: 成功匯出
@@ -660,7 +667,11 @@ paths:
       parameters:
         - { name: startDate, in: query, schema: { type: string, format: date } }
         - { name: endDate, in: query, schema: { type: string, format: date } }
-        - { name: type, in: query, schema: { type: string, enum: [all, success, error] } }
+        - {
+            name: type,
+            in: query,
+            schema: { type: string, enum: [all, success, error] },
+          }
         - { name: page, in: query, schema: { type: integer } }
         - { name: pageSize, in: query, schema: { type: integer } }
       responses:
@@ -691,8 +702,16 @@ paths:
       description: 取得熱門遊戲排行榜，依下注量或營收排序
       security: [{ BearerAuth: [] }]
       parameters:
-        - { name: period, in: query, schema: { type: string, enum: [today, week, month] } }
-        - { name: sortBy, in: query, schema: { type: string, enum: [bets, revenue, players] } }
+        - {
+            name: period,
+            in: query,
+            schema: { type: string, enum: [today, week, month] },
+          }
+        - {
+            name: sortBy,
+            in: query,
+            schema: { type: string, enum: [bets, revenue, players] },
+          }
         - { name: limit, in: query, schema: { type: integer, default: 10 } }
       responses:
         "200":
@@ -825,7 +844,11 @@ paths:
       security: [{ BearerAuth: [] }]
       parameters:
         - { name: providerId, in: query, schema: { type: string } }
-        - { name: type, in: query, schema: { type: string, enum: [transfer_in, transfer_out] } }
+        - {
+            name: type,
+            in: query,
+            schema: { type: string, enum: [transfer_in, transfer_out] },
+          }
         - { name: startDate, in: query, schema: { type: string, format: date } }
         - { name: endDate, in: query, schema: { type: string, format: date } }
       responses:
@@ -988,7 +1011,8 @@ paths:
                 type: object
                 properties:
                   tableId: { type: string }
-                  status: { type: string, enum: [idle, playing, closed, maintenance] }
+                  status:
+                    { type: string, enum: [idle, playing, closed, maintenance] }
                   currentGameId: { type: string }
                   connectedMachines: { type: integer }
                   dealerId: { type: string }
@@ -1093,8 +1117,16 @@ paths:
       description: 取得多人遊戲的異常告警紀錄
       security: [{ BearerAuth: [] }]
       parameters:
-        - { name: status, in: query, schema: { type: string, enum: [active, resolved, all] } }
-        - { name: severity, in: query, schema: { type: string, enum: [low, medium, high, critical] } }
+        - {
+            name: status,
+            in: query,
+            schema: { type: string, enum: [active, resolved, all] },
+          }
+        - {
+            name: severity,
+            in: query,
+            schema: { type: string, enum: [low, medium, high, critical] },
+          }
       responses:
         "200": { description: 成功 }
 
@@ -1147,7 +1179,11 @@ paths:
         - { name: tableId, in: query, schema: { type: string, format: uuid } }
         - { name: startDate, in: query, schema: { type: string, format: date } }
         - { name: endDate, in: query, schema: { type: string, format: date } }
-        - { name: format, in: query, schema: { type: string, enum: [csv, excel], default: csv } }
+        - {
+            name: format,
+            in: query,
+            schema: { type: string, enum: [csv, excel], default: csv },
+          }
       responses:
         "200":
           description: 成功匯出
@@ -1224,8 +1260,16 @@ paths:
       summary: "[C82] 取得告警通知列表"
       security: [{ BearerAuth: [] }]
       parameters:
-        - { name: status, in: query, schema: { type: string, enum: [active, resolved, all] } }
-        - { name: severity, in: query, schema: { type: string, enum: [low, medium, high, critical] } }
+        - {
+            name: status,
+            in: query,
+            schema: { type: string, enum: [active, resolved, all] },
+          }
+        - {
+            name: severity,
+            in: query,
+            schema: { type: string, enum: [low, medium, high, critical] },
+          }
       responses:
         "200": { description: 成功 }
 
@@ -1247,10 +1291,14 @@ paths:
             schema:
               type: object
               properties:
-                cpuThreshold: { type: number, description: "CPU 使用率閾值 (%)" }
-                memoryThreshold: { type: number, description: "記憶體使用率閾值 (%)" }
-                diskThreshold: { type: number, description: "磁碟使用率閾值 (%)" }
-                latencyThreshold: { type: number, description: "網路延遲閾值 (ms)" }
+                cpuThreshold:
+                  { type: number, description: "CPU 使用率閾值 (%)" }
+                memoryThreshold:
+                  { type: number, description: "記憶體使用率閾值 (%)" }
+                diskThreshold:
+                  { type: number, description: "磁碟使用率閾值 (%)" }
+                latencyThreshold:
+                  { type: number, description: "網路延遲閾值 (ms)" }
       responses:
         "200": { description: 更新成功 }
 
@@ -1300,7 +1348,11 @@ paths:
       parameters:
         - { name: startDate, in: query, schema: { type: string, format: date } }
         - { name: endDate, in: query, schema: { type: string, format: date } }
-        - { name: format, in: query, schema: { type: string, enum: [csv, excel], default: csv } }
+        - {
+            name: format,
+            in: query,
+            schema: { type: string, enum: [csv, excel], default: csv },
+          }
       responses:
         "200":
           description: 成功匯出
