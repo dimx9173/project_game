@@ -1,9 +1,9 @@
 {
-  "timestamp": "2026-03-10T11:53:35.364Z",
+  "timestamp": "2026-03-10T11:57:46.514Z",
   "summary": {
-    "totalFiles": 106,
-    "validFiles": 92,
-    "invalidFiles": 14,
+    "totalFiles": 97,
+    "validFiles": 90,
+    "invalidFiles": 7,
     "missingFunctions": [
       {
         "id": "C05",
@@ -126,8 +126,7 @@
         "functionId": "L02",
         "files": [
           "mockup_dashboard.html",
-          "mockup_local_dashboard.html",
-          "mockup_local_dashboard_machine_status.html"
+          "mockup_local_dashboard.html"
         ]
       },
       {
@@ -194,8 +193,7 @@
         "functionId": "L06",
         "files": [
           "mockup_mvp_machine_list.html",
-          "mockup_local_machine.html",
-          "mockup_local_machine_status_monitor.html"
+          "mockup_local_machine.html"
         ]
       },
       {
@@ -240,8 +238,7 @@
         "files": [
           "mockup_sync_status.html",
           "mockup_local_dashboard.html",
-          "mockup_local_sync.html",
-          "mockup_local_sync_status_view.html"
+          "mockup_local_sync.html"
         ]
       },
       {
@@ -272,7 +269,6 @@
         "functionId": "L45",
         "files": [
           "mockup_local_cash.html",
-          "mockup_local_cash_ops.html",
           "mockup_local_game.html",
           "mockup_local_machine.html"
         ]
@@ -303,7 +299,6 @@
         "functionId": "L11",
         "files": [
           "mockup_local_game.html",
-          "mockup_local_game_list_view.html",
           "mockup_local_machine.html"
         ]
       },
@@ -318,8 +313,6 @@
         "functionId": "L51",
         "files": [
           "mockup_local_login.html",
-          "mockup_local_login_alt.html",
-          "mockup_local_machine_initial_setup.html",
           "mockup_local_register.html",
           "mockup_local_sync.html"
         ]
@@ -328,7 +321,6 @@
         "functionId": "L52",
         "files": [
           "mockup_local_login.html",
-          "mockup_local_login_alt.html",
           "mockup_local_sync.html"
         ]
       },
@@ -343,8 +335,6 @@
         "functionId": "L47",
         "files": [
           "mockup_local_system_settings.html",
-          "mockup_local_system_settings_alt.html",
-          "mockup_local_system_settings_basic.html",
           "mockup_mvp_local_setup.html"
         ]
       }
@@ -1556,22 +1546,6 @@
       "isValid": false
     },
     {
-      "path": "md/v8/mockup/local/mockup_local_cash_ops.html",
-      "fileName": "mockup_local_cash_ops.html",
-      "directory": "local",
-      "type": "local",
-      "size": 42397,
-      "structureIssues": [
-        "未引用 sidebar.js"
-      ],
-      "namingIssues": [],
-      "mappedFunctions": [
-        "L45"
-      ],
-      "isMapped": true,
-      "isValid": false
-    },
-    {
       "path": "md/v8/mockup/local/mockup_local_dashboard.html",
       "fileName": "mockup_local_dashboard.html",
       "directory": "local",
@@ -1588,22 +1562,6 @@
         "L04",
         "L08",
         "L34"
-      ],
-      "isMapped": true,
-      "isValid": false
-    },
-    {
-      "path": "md/v8/mockup/local/mockup_local_dashboard_machine_status.html",
-      "fileName": "mockup_local_dashboard_machine_status.html",
-      "directory": "local",
-      "type": "local",
-      "size": 18740,
-      "structureIssues": [
-        "未引用 sidebar.js"
-      ],
-      "namingIssues": [],
-      "mappedFunctions": [
-        "L02"
       ],
       "isMapped": true,
       "isValid": false
@@ -1635,40 +1593,8 @@
       "isValid": false
     },
     {
-      "path": "md/v8/mockup/local/mockup_local_game_list_view.html",
-      "fileName": "mockup_local_game_list_view.html",
-      "directory": "local",
-      "type": "local",
-      "size": 20651,
-      "structureIssues": [
-        "缺少 <body> 標籤",
-        "未引用 sidebar.js"
-      ],
-      "namingIssues": [],
-      "mappedFunctions": [
-        "L11"
-      ],
-      "isMapped": true,
-      "isValid": false
-    },
-    {
       "path": "md/v8/mockup/local/mockup_local_login.html",
       "fileName": "mockup_local_login.html",
-      "directory": "local",
-      "type": "local",
-      "size": 13803,
-      "structureIssues": [],
-      "namingIssues": [],
-      "mappedFunctions": [
-        "L51",
-        "L52"
-      ],
-      "isMapped": true,
-      "isValid": true
-    },
-    {
-      "path": "md/v8/mockup/local/mockup_local_login_alt.html",
-      "fileName": "mockup_local_login_alt.html",
       "directory": "local",
       "type": "local",
       "size": 13803,
@@ -1709,38 +1635,6 @@
         "L44",
         "L45",
         "L46"
-      ],
-      "isMapped": true,
-      "isValid": false
-    },
-    {
-      "path": "md/v8/mockup/local/mockup_local_machine_initial_setup.html",
-      "fileName": "mockup_local_machine_initial_setup.html",
-      "directory": "local",
-      "type": "local",
-      "size": 15004,
-      "structureIssues": [
-        "未引用 sidebar.js"
-      ],
-      "namingIssues": [],
-      "mappedFunctions": [
-        "L51"
-      ],
-      "isMapped": true,
-      "isValid": false
-    },
-    {
-      "path": "md/v8/mockup/local/mockup_local_machine_status_monitor.html",
-      "fileName": "mockup_local_machine_status_monitor.html",
-      "directory": "local",
-      "type": "local",
-      "size": 31063,
-      "structureIssues": [
-        "未引用 sidebar.js"
-      ],
-      "namingIssues": [],
-      "mappedFunctions": [
-        "L06"
       ],
       "isMapped": true,
       "isValid": false
@@ -1789,22 +1683,6 @@
       "isValid": false
     },
     {
-      "path": "md/v8/mockup/local/mockup_local_sync_status_view.html",
-      "fileName": "mockup_local_sync_status_view.html",
-      "directory": "local",
-      "type": "local",
-      "size": 18227,
-      "structureIssues": [
-        "未引用 sidebar.js"
-      ],
-      "namingIssues": [],
-      "mappedFunctions": [
-        "L34"
-      ],
-      "isMapped": true,
-      "isValid": false
-    },
-    {
       "path": "md/v8/mockup/local/mockup_local_system_settings.html",
       "fileName": "mockup_local_system_settings.html",
       "directory": "local",
@@ -1817,36 +1695,6 @@
       "mappedFunctions": [
         "L47",
         "L48"
-      ],
-      "isMapped": true,
-      "isValid": false
-    },
-    {
-      "path": "md/v8/mockup/local/mockup_local_system_settings_alt.html",
-      "fileName": "mockup_local_system_settings_alt.html",
-      "directory": "local",
-      "type": "local",
-      "size": 15519,
-      "structureIssues": [],
-      "namingIssues": [],
-      "mappedFunctions": [
-        "L47"
-      ],
-      "isMapped": true,
-      "isValid": true
-    },
-    {
-      "path": "md/v8/mockup/local/mockup_local_system_settings_basic.html",
-      "fileName": "mockup_local_system_settings_basic.html",
-      "directory": "local",
-      "type": "local",
-      "size": 12622,
-      "structureIssues": [
-        "未引用 sidebar.js"
-      ],
-      "namingIssues": [],
-      "mappedFunctions": [
-        "L47"
       ],
       "isMapped": true,
       "isValid": false
@@ -1897,8 +1745,7 @@
     ],
     "L02": [
       "mockup_dashboard.html",
-      "mockup_local_dashboard.html",
-      "mockup_local_dashboard_machine_status.html"
+      "mockup_local_dashboard.html"
     ],
     "L03": [
       "mockup_dashboard.html",
@@ -2016,8 +1863,7 @@
     ],
     "L06": [
       "mockup_mvp_machine_list.html",
-      "mockup_local_machine.html",
-      "mockup_local_machine_status_monitor.html"
+      "mockup_local_machine.html"
     ],
     "L40": [
       "mockup_network_monitor.html",
@@ -2077,8 +1923,7 @@
     "L34": [
       "mockup_sync_status.html",
       "mockup_local_dashboard.html",
-      "mockup_local_sync.html",
-      "mockup_local_sync_status_view.html"
+      "mockup_local_sync.html"
     ],
     "L19": [
       "mockup_transaction_exception.html"
@@ -2109,7 +1954,6 @@
     ],
     "L45": [
       "mockup_local_cash.html",
-      "mockup_local_cash_ops.html",
       "mockup_local_game.html",
       "mockup_local_machine.html"
     ],
@@ -2131,7 +1975,6 @@
     ],
     "L11": [
       "mockup_local_game.html",
-      "mockup_local_game_list_view.html",
       "mockup_local_machine.html"
     ],
     "L12": [
@@ -2140,14 +1983,11 @@
     ],
     "L51": [
       "mockup_local_login.html",
-      "mockup_local_login_alt.html",
-      "mockup_local_machine_initial_setup.html",
       "mockup_local_register.html",
       "mockup_local_sync.html"
     ],
     "L52": [
       "mockup_local_login.html",
-      "mockup_local_login_alt.html",
       "mockup_local_sync.html"
     ],
     "L07": [
@@ -2165,8 +2005,6 @@
     ],
     "L47": [
       "mockup_local_system_settings.html",
-      "mockup_local_system_settings_alt.html",
-      "mockup_local_system_settings_basic.html",
       "mockup_mvp_local_setup.html"
     ],
     "L48": [
@@ -2182,21 +2020,7 @@
       ]
     },
     {
-      "file": "mockup_local_cash_ops.html",
-      "type": "structure",
-      "issues": [
-        "未引用 sidebar.js"
-      ]
-    },
-    {
       "file": "mockup_local_dashboard.html",
-      "type": "structure",
-      "issues": [
-        "未引用 sidebar.js"
-      ]
-    },
-    {
-      "file": "mockup_local_dashboard_machine_status.html",
       "type": "structure",
       "issues": [
         "未引用 sidebar.js"
@@ -2211,29 +2035,7 @@
       ]
     },
     {
-      "file": "mockup_local_game_list_view.html",
-      "type": "structure",
-      "issues": [
-        "缺少 <body> 標籤",
-        "未引用 sidebar.js"
-      ]
-    },
-    {
       "file": "mockup_local_machine.html",
-      "type": "structure",
-      "issues": [
-        "未引用 sidebar.js"
-      ]
-    },
-    {
-      "file": "mockup_local_machine_initial_setup.html",
-      "type": "structure",
-      "issues": [
-        "未引用 sidebar.js"
-      ]
-    },
-    {
-      "file": "mockup_local_machine_status_monitor.html",
       "type": "structure",
       "issues": [
         "未引用 sidebar.js"
@@ -2254,21 +2056,7 @@
       ]
     },
     {
-      "file": "mockup_local_sync_status_view.html",
-      "type": "structure",
-      "issues": [
-        "未引用 sidebar.js"
-      ]
-    },
-    {
       "file": "mockup_local_system_settings.html",
-      "type": "structure",
-      "issues": [
-        "未引用 sidebar.js"
-      ]
-    },
-    {
-      "file": "mockup_local_system_settings_basic.html",
       "type": "structure",
       "issues": [
         "未引用 sidebar.js"
