@@ -1,0 +1,2278 @@
+{
+  "timestamp": "2026-03-10T11:53:35.364Z",
+  "summary": {
+    "totalFiles": 106,
+    "validFiles": 92,
+    "invalidFiles": 14,
+    "missingFunctions": [
+      {
+        "id": "C05",
+        "name": "系統通知",
+        "module": "儀表板"
+      },
+      {
+        "id": "C02",
+        "name": "硬體/網路狀態",
+        "module": "儀表板"
+      },
+      {
+        "id": "C107",
+        "name": "機台標籤管理",
+        "module": "機台管理"
+      },
+      {
+        "id": "C15",
+        "name": "測試模式",
+        "module": "機台管理"
+      },
+      {
+        "id": "L29",
+        "name": "遊戲供應商管理",
+        "module": "遊戲管理"
+      },
+      {
+        "id": "L30",
+        "name": "遊戲大廳設定",
+        "module": "遊戲管理"
+      },
+      {
+        "id": "C25",
+        "name": "遊戲配置",
+        "module": "遊戲管理"
+      },
+      {
+        "id": "L18",
+        "name": "交易操作（回滾/確認）",
+        "module": "交易紀錄管理"
+      },
+      {
+        "id": "C58",
+        "name": "牌桌狀態監控",
+        "module": "多人遊戲"
+      },
+      {
+        "id": "C79",
+        "name": "系統監控",
+        "module": "監控中心"
+      },
+      {
+        "id": "C93",
+        "name": "手動同步",
+        "module": "同步與對帳"
+      },
+      {
+        "id": "C95",
+        "name": "同步日誌",
+        "module": "同步與對帳"
+      },
+      {
+        "id": "C102",
+        "name": "玩家新增/編輯/刪除",
+        "module": "玩家管理"
+      },
+      {
+        "id": "C40",
+        "name": "玩家密碼重設",
+        "module": "玩家管理"
+      },
+      {
+        "id": "FLG_OTA",
+        "name": "OTA 更新",
+        "module": "旗艦功能"
+      }
+    ],
+    "extraFiles": [
+      "mockup_central_cash.html",
+      "mockup_commission.html",
+      "mockup_game_config.html",
+      "mockup_game_supplier.html",
+      "mockup_game_toggle.html",
+      "mockup_game_type_filter.html",
+      "mockup_game_version.html",
+      "mockup_hardware_status.html",
+      "mockup_history_export.html",
+      "mockup_lobby_config.html",
+      "mockup_machine_approval.html",
+      "mockup_machine_config_transfer.html",
+      "mockup_machine_deploy.html",
+      "mockup_machine_key_generate.html",
+      "mockup_machine_registration.html",
+      "mockup_machine_tag_list.html",
+      "mockup_machine_test.html",
+      "mockup_manual_sync.html",
+      "mockup_multiplayer_status.html",
+      "mockup_ota_task_deploy.html",
+      "mockup_provider_balance.html",
+      "mockup_quick_actions.html",
+      "mockup_reconciliation_check.html",
+      "mockup_std_game_category.html",
+      "mockup_sync_logs.html",
+      "mockup_system_monitor.html",
+      "mockup_system_notifications.html",
+      "mockup_test_mode.html",
+      "mockup_update_progress.html",
+      "mockup_version_list.html",
+      "mockup_version_upload.html"
+    ],
+    "duplicateMappings": [
+      {
+        "functionId": "L01",
+        "files": [
+          "mockup_dashboard.html",
+          "mockup_local_dashboard.html"
+        ]
+      },
+      {
+        "functionId": "L02",
+        "files": [
+          "mockup_dashboard.html",
+          "mockup_local_dashboard.html",
+          "mockup_local_dashboard_machine_status.html"
+        ]
+      },
+      {
+        "functionId": "L03",
+        "files": [
+          "mockup_dashboard.html",
+          "mockup_local_dashboard.html"
+        ]
+      },
+      {
+        "functionId": "L04",
+        "files": [
+          "mockup_dashboard.html",
+          "mockup_local_dashboard.html"
+        ]
+      },
+      {
+        "functionId": "L39",
+        "files": [
+          "mockup_device_health.html",
+          "mockup_local_sync.html"
+        ]
+      },
+      {
+        "functionId": "L14",
+        "files": [
+          "mockup_game_detail.html",
+          "mockup_local_cash.html",
+          "mockup_local_game.html",
+          "mockup_local_machine.html"
+        ]
+      },
+      {
+        "functionId": "L41",
+        "files": [
+          "mockup_hardware_monitor.html",
+          "mockup_local_machine.html",
+          "mockup_local_sync.html"
+        ]
+      },
+      {
+        "functionId": "L38",
+        "files": [
+          "mockup_heartbeat_monitor.html",
+          "mockup_local_machine.html",
+          "mockup_local_sync.html"
+        ]
+      },
+      {
+        "functionId": "C59",
+        "files": [
+          "mockup_multiplayer_config.html",
+          "mockup_std_multiplayer_add.html"
+        ]
+      },
+      {
+        "functionId": "L05",
+        "files": [
+          "mockup_mvp_machine_list.html",
+          "mockup_local_machine.html"
+        ]
+      },
+      {
+        "functionId": "L06",
+        "files": [
+          "mockup_mvp_machine_list.html",
+          "mockup_local_machine.html",
+          "mockup_local_machine_status_monitor.html"
+        ]
+      },
+      {
+        "functionId": "L40",
+        "files": [
+          "mockup_network_monitor.html",
+          "mockup_local_machine.html",
+          "mockup_local_sync.html"
+        ]
+      },
+      {
+        "functionId": "C71",
+        "files": [
+          "mockup_permission_matrix.html",
+          "mockup_role_management.html",
+          "mockup_user_permission.html"
+        ]
+      },
+      {
+        "functionId": "C90",
+        "files": [
+          "mockup_security_settings.html",
+          "mockup_std_system_settings.html"
+        ]
+      },
+      {
+        "functionId": "L28",
+        "files": [
+          "mockup_std_backup.html",
+          "mockup_local_sync.html"
+        ]
+      },
+      {
+        "functionId": "L37",
+        "files": [
+          "mockup_sync_conflict.html",
+          "mockup_local_sync.html"
+        ]
+      },
+      {
+        "functionId": "L34",
+        "files": [
+          "mockup_sync_status.html",
+          "mockup_local_dashboard.html",
+          "mockup_local_sync.html",
+          "mockup_local_sync_status_view.html"
+        ]
+      },
+      {
+        "functionId": "L13",
+        "files": [
+          "mockup_local_cash.html",
+          "mockup_local_game.html",
+          "mockup_local_machine.html"
+        ]
+      },
+      {
+        "functionId": "L43",
+        "files": [
+          "mockup_local_cash.html",
+          "mockup_local_game.html",
+          "mockup_local_machine.html"
+        ]
+      },
+      {
+        "functionId": "L44",
+        "files": [
+          "mockup_local_cash.html",
+          "mockup_local_game.html",
+          "mockup_local_machine.html"
+        ]
+      },
+      {
+        "functionId": "L45",
+        "files": [
+          "mockup_local_cash.html",
+          "mockup_local_cash_ops.html",
+          "mockup_local_game.html",
+          "mockup_local_machine.html"
+        ]
+      },
+      {
+        "functionId": "L46",
+        "files": [
+          "mockup_local_cash.html",
+          "mockup_local_game.html",
+          "mockup_local_machine.html"
+        ]
+      },
+      {
+        "functionId": "L09",
+        "files": [
+          "mockup_local_game.html",
+          "mockup_local_machine.html"
+        ]
+      },
+      {
+        "functionId": "L10",
+        "files": [
+          "mockup_local_game.html",
+          "mockup_local_machine.html"
+        ]
+      },
+      {
+        "functionId": "L11",
+        "files": [
+          "mockup_local_game.html",
+          "mockup_local_game_list_view.html",
+          "mockup_local_machine.html"
+        ]
+      },
+      {
+        "functionId": "L12",
+        "files": [
+          "mockup_local_game.html",
+          "mockup_local_machine.html"
+        ]
+      },
+      {
+        "functionId": "L51",
+        "files": [
+          "mockup_local_login.html",
+          "mockup_local_login_alt.html",
+          "mockup_local_machine_initial_setup.html",
+          "mockup_local_register.html",
+          "mockup_local_sync.html"
+        ]
+      },
+      {
+        "functionId": "L52",
+        "files": [
+          "mockup_local_login.html",
+          "mockup_local_login_alt.html",
+          "mockup_local_sync.html"
+        ]
+      },
+      {
+        "functionId": "L42",
+        "files": [
+          "mockup_local_machine.html",
+          "mockup_local_sync.html"
+        ]
+      },
+      {
+        "functionId": "L47",
+        "files": [
+          "mockup_local_system_settings.html",
+          "mockup_local_system_settings_alt.html",
+          "mockup_local_system_settings_basic.html",
+          "mockup_mvp_local_setup.html"
+        ]
+      }
+    ]
+  },
+  "files": [
+    {
+      "path": "md/v8/mockup/central/mockup_alert_notifications.html",
+      "fileName": "mockup_alert_notifications.html",
+      "directory": "central",
+      "type": "central",
+      "size": 13109,
+      "structureIssues": [],
+      "namingIssues": [],
+      "mappedFunctions": [
+        "C82"
+      ],
+      "isMapped": true,
+      "isValid": true
+    },
+    {
+      "path": "md/v8/mockup/central/mockup_alert_threshold.html",
+      "fileName": "mockup_alert_threshold.html",
+      "directory": "central",
+      "type": "central",
+      "size": 12916,
+      "structureIssues": [],
+      "namingIssues": [],
+      "mappedFunctions": [
+        "C83"
+      ],
+      "isMapped": true,
+      "isValid": true
+    },
+    {
+      "path": "md/v8/mockup/central/mockup_announcement.html",
+      "fileName": "mockup_announcement.html",
+      "directory": "central",
+      "type": "central",
+      "size": 15158,
+      "structureIssues": [],
+      "namingIssues": [],
+      "mappedFunctions": [
+        "C76"
+      ],
+      "isMapped": true,
+      "isValid": true
+    },
+    {
+      "path": "md/v8/mockup/central/mockup_api_log.html",
+      "fileName": "mockup_api_log.html",
+      "directory": "central",
+      "type": "central",
+      "size": 15049,
+      "structureIssues": [],
+      "namingIssues": [],
+      "mappedFunctions": [
+        "C56"
+      ],
+      "isMapped": true,
+      "isValid": true
+    },
+    {
+      "path": "md/v8/mockup/central/mockup_api_status_monitor.html",
+      "fileName": "mockup_api_status_monitor.html",
+      "directory": "central",
+      "type": "central",
+      "size": 16236,
+      "structureIssues": [],
+      "namingIssues": [],
+      "mappedFunctions": [
+        "C54"
+      ],
+      "isMapped": true,
+      "isValid": true
+    },
+    {
+      "path": "md/v8/mockup/central/mockup_audit_log.html",
+      "fileName": "mockup_audit_log.html",
+      "directory": "central",
+      "type": "central",
+      "size": 10925,
+      "structureIssues": [],
+      "namingIssues": [],
+      "mappedFunctions": [
+        "C72"
+      ],
+      "isMapped": true,
+      "isValid": true
+    },
+    {
+      "path": "md/v8/mockup/central/mockup_broadcast_management.html",
+      "fileName": "mockup_broadcast_management.html",
+      "directory": "central",
+      "type": "central",
+      "size": 14076,
+      "structureIssues": [],
+      "namingIssues": [],
+      "mappedFunctions": [
+        "C81"
+      ],
+      "isMapped": true,
+      "isValid": true
+    },
+    {
+      "path": "md/v8/mockup/central/mockup_central_cash.html",
+      "fileName": "mockup_central_cash.html",
+      "directory": "central",
+      "type": "central",
+      "size": 22554,
+      "structureIssues": [],
+      "namingIssues": [],
+      "mappedFunctions": [],
+      "isMapped": false,
+      "isValid": true
+    },
+    {
+      "path": "md/v8/mockup/central/mockup_commission.html",
+      "fileName": "mockup_commission.html",
+      "directory": "central",
+      "type": "central",
+      "size": 19405,
+      "structureIssues": [],
+      "namingIssues": [],
+      "mappedFunctions": [],
+      "isMapped": false,
+      "isValid": true
+    },
+    {
+      "path": "md/v8/mockup/central/mockup_dashboard.html",
+      "fileName": "mockup_dashboard.html",
+      "directory": "central",
+      "type": "central",
+      "size": 15149,
+      "structureIssues": [],
+      "namingIssues": [],
+      "mappedFunctions": [
+        "C01",
+        "L01",
+        "L02",
+        "L03",
+        "L04"
+      ],
+      "isMapped": true,
+      "isValid": true
+    },
+    {
+      "path": "md/v8/mockup/central/mockup_device_health.html",
+      "fileName": "mockup_device_health.html",
+      "directory": "central",
+      "type": "central",
+      "size": 11211,
+      "structureIssues": [],
+      "namingIssues": [],
+      "mappedFunctions": [
+        "L39"
+      ],
+      "isMapped": true,
+      "isValid": true
+    },
+    {
+      "path": "md/v8/mockup/central/mockup_flg_dispute.html",
+      "fileName": "mockup_flg_dispute.html",
+      "directory": "central",
+      "type": "central",
+      "size": 15386,
+      "structureIssues": [],
+      "namingIssues": [],
+      "mappedFunctions": [
+        "FLG_DISPUTE",
+        "L20"
+      ],
+      "isMapped": true,
+      "isValid": true
+    },
+    {
+      "path": "md/v8/mockup/central/mockup_flg_monitor.html",
+      "fileName": "mockup_flg_monitor.html",
+      "directory": "central",
+      "type": "central",
+      "size": 14110,
+      "structureIssues": [],
+      "namingIssues": [],
+      "mappedFunctions": [
+        "FLG_MONITOR"
+      ],
+      "isMapped": true,
+      "isValid": true
+    },
+    {
+      "path": "md/v8/mockup/central/mockup_flg_ota.html",
+      "fileName": "mockup_flg_ota.html",
+      "directory": "central",
+      "type": "central",
+      "size": 8876,
+      "structureIssues": [],
+      "namingIssues": [],
+      "mappedFunctions": [
+        "C73",
+        "C105"
+      ],
+      "isMapped": true,
+      "isValid": true
+    },
+    {
+      "path": "md/v8/mockup/central/mockup_flg_reconciliation.html",
+      "fileName": "mockup_flg_reconciliation.html",
+      "directory": "central",
+      "type": "central",
+      "size": 8460,
+      "structureIssues": [],
+      "namingIssues": [],
+      "mappedFunctions": [
+        "FLG_RECONCILIATION",
+        "C45",
+        "C94"
+      ],
+      "isMapped": true,
+      "isValid": true
+    },
+    {
+      "path": "md/v8/mockup/central/mockup_game_config.html",
+      "fileName": "mockup_game_config.html",
+      "directory": "central",
+      "type": "central",
+      "size": 9920,
+      "structureIssues": [],
+      "namingIssues": [],
+      "mappedFunctions": [],
+      "isMapped": false,
+      "isValid": true
+    },
+    {
+      "path": "md/v8/mockup/central/mockup_game_detail.html",
+      "fileName": "mockup_game_detail.html",
+      "directory": "central",
+      "type": "central",
+      "size": 8407,
+      "structureIssues": [],
+      "namingIssues": [],
+      "mappedFunctions": [
+        "L14"
+      ],
+      "isMapped": true,
+      "isValid": true
+    },
+    {
+      "path": "md/v8/mockup/central/mockup_game_ranking.html",
+      "fileName": "mockup_game_ranking.html",
+      "directory": "central",
+      "type": "central",
+      "size": 14521,
+      "structureIssues": [],
+      "namingIssues": [],
+      "mappedFunctions": [
+        "C48"
+      ],
+      "isMapped": true,
+      "isValid": true
+    },
+    {
+      "path": "md/v8/mockup/central/mockup_game_supplier.html",
+      "fileName": "mockup_game_supplier.html",
+      "directory": "central",
+      "type": "central",
+      "size": 12707,
+      "structureIssues": [],
+      "namingIssues": [],
+      "mappedFunctions": [],
+      "isMapped": false,
+      "isValid": true
+    },
+    {
+      "path": "md/v8/mockup/central/mockup_game_sync.html",
+      "fileName": "mockup_game_sync.html",
+      "directory": "central",
+      "type": "central",
+      "size": 12198,
+      "structureIssues": [],
+      "namingIssues": [],
+      "mappedFunctions": [
+        "C55"
+      ],
+      "isMapped": true,
+      "isValid": true
+    },
+    {
+      "path": "md/v8/mockup/central/mockup_game_test.html",
+      "fileName": "mockup_game_test.html",
+      "directory": "central",
+      "type": "central",
+      "size": 12989,
+      "structureIssues": [],
+      "namingIssues": [],
+      "mappedFunctions": [
+        "C28"
+      ],
+      "isMapped": true,
+      "isValid": true
+    },
+    {
+      "path": "md/v8/mockup/central/mockup_game_toggle.html",
+      "fileName": "mockup_game_toggle.html",
+      "directory": "central",
+      "type": "central",
+      "size": 14178,
+      "structureIssues": [],
+      "namingIssues": [],
+      "mappedFunctions": [],
+      "isMapped": false,
+      "isValid": true
+    },
+    {
+      "path": "md/v8/mockup/central/mockup_game_type_filter.html",
+      "fileName": "mockup_game_type_filter.html",
+      "directory": "central",
+      "type": "central",
+      "size": 11547,
+      "structureIssues": [],
+      "namingIssues": [],
+      "mappedFunctions": [],
+      "isMapped": false,
+      "isValid": true
+    },
+    {
+      "path": "md/v8/mockup/central/mockup_game_version.html",
+      "fileName": "mockup_game_version.html",
+      "directory": "central",
+      "type": "central",
+      "size": 12425,
+      "structureIssues": [],
+      "namingIssues": [],
+      "mappedFunctions": [],
+      "isMapped": false,
+      "isValid": true
+    },
+    {
+      "path": "md/v8/mockup/central/mockup_hardware_monitor.html",
+      "fileName": "mockup_hardware_monitor.html",
+      "directory": "central",
+      "type": "central",
+      "size": 11393,
+      "structureIssues": [],
+      "namingIssues": [],
+      "mappedFunctions": [
+        "L41"
+      ],
+      "isMapped": true,
+      "isValid": true
+    },
+    {
+      "path": "md/v8/mockup/central/mockup_hardware_status.html",
+      "fileName": "mockup_hardware_status.html",
+      "directory": "central",
+      "type": "central",
+      "size": 19240,
+      "structureIssues": [],
+      "namingIssues": [],
+      "mappedFunctions": [],
+      "isMapped": false,
+      "isValid": true
+    },
+    {
+      "path": "md/v8/mockup/central/mockup_heartbeat_monitor.html",
+      "fileName": "mockup_heartbeat_monitor.html",
+      "directory": "central",
+      "type": "central",
+      "size": 11501,
+      "structureIssues": [],
+      "namingIssues": [],
+      "mappedFunctions": [
+        "L38"
+      ],
+      "isMapped": true,
+      "isValid": true
+    },
+    {
+      "path": "md/v8/mockup/central/mockup_history_export.html",
+      "fileName": "mockup_history_export.html",
+      "directory": "central",
+      "type": "central",
+      "size": 16184,
+      "structureIssues": [],
+      "namingIssues": [],
+      "mappedFunctions": [],
+      "isMapped": false,
+      "isValid": true
+    },
+    {
+      "path": "md/v8/mockup/central/mockup_lobby_config.html",
+      "fileName": "mockup_lobby_config.html",
+      "directory": "central",
+      "type": "central",
+      "size": 12262,
+      "structureIssues": [],
+      "namingIssues": [],
+      "mappedFunctions": [],
+      "isMapped": false,
+      "isValid": true
+    },
+    {
+      "path": "md/v8/mockup/central/mockup_lobby_settings.html",
+      "fileName": "mockup_lobby_settings.html",
+      "directory": "central",
+      "type": "central",
+      "size": 14505,
+      "structureIssues": [],
+      "namingIssues": [],
+      "mappedFunctions": [
+        "C78"
+      ],
+      "isMapped": true,
+      "isValid": true
+    },
+    {
+      "path": "md/v8/mockup/central/mockup_log_query.html",
+      "fileName": "mockup_log_query.html",
+      "directory": "central",
+      "type": "central",
+      "size": 11011,
+      "structureIssues": [],
+      "namingIssues": [],
+      "mappedFunctions": [
+        "C86"
+      ],
+      "isMapped": true,
+      "isValid": true
+    },
+    {
+      "path": "md/v8/mockup/central/mockup_login.html",
+      "fileName": "mockup_login.html",
+      "directory": "central",
+      "type": "central",
+      "size": 6381,
+      "structureIssues": [],
+      "namingIssues": [],
+      "mappedFunctions": [
+        "LOGIN"
+      ],
+      "isMapped": true,
+      "isValid": true
+    },
+    {
+      "path": "md/v8/mockup/central/mockup_machine_approval.html",
+      "fileName": "mockup_machine_approval.html",
+      "directory": "central",
+      "type": "central",
+      "size": 14814,
+      "structureIssues": [],
+      "namingIssues": [],
+      "mappedFunctions": [],
+      "isMapped": false,
+      "isValid": true
+    },
+    {
+      "path": "md/v8/mockup/central/mockup_machine_config_transfer.html",
+      "fileName": "mockup_machine_config_transfer.html",
+      "directory": "central",
+      "type": "central",
+      "size": 14220,
+      "structureIssues": [],
+      "namingIssues": [],
+      "mappedFunctions": [],
+      "isMapped": false,
+      "isValid": true
+    },
+    {
+      "path": "md/v8/mockup/central/mockup_machine_deploy.html",
+      "fileName": "mockup_machine_deploy.html",
+      "directory": "central",
+      "type": "central",
+      "size": 16963,
+      "structureIssues": [],
+      "namingIssues": [],
+      "mappedFunctions": [],
+      "isMapped": false,
+      "isValid": true
+    },
+    {
+      "path": "md/v8/mockup/central/mockup_machine_key_generate.html",
+      "fileName": "mockup_machine_key_generate.html",
+      "directory": "central",
+      "type": "central",
+      "size": 15468,
+      "structureIssues": [],
+      "namingIssues": [],
+      "mappedFunctions": [],
+      "isMapped": false,
+      "isValid": true
+    },
+    {
+      "path": "md/v8/mockup/central/mockup_machine_registration.html",
+      "fileName": "mockup_machine_registration.html",
+      "directory": "central",
+      "type": "central",
+      "size": 5210,
+      "structureIssues": [],
+      "namingIssues": [],
+      "mappedFunctions": [],
+      "isMapped": false,
+      "isValid": true
+    },
+    {
+      "path": "md/v8/mockup/central/mockup_machine_remote_control.html",
+      "fileName": "mockup_machine_remote_control.html",
+      "directory": "central",
+      "type": "central",
+      "size": 14096,
+      "structureIssues": [],
+      "namingIssues": [],
+      "mappedFunctions": [
+        "C11",
+        "C12"
+      ],
+      "isMapped": true,
+      "isValid": true
+    },
+    {
+      "path": "md/v8/mockup/central/mockup_machine_settings.html",
+      "fileName": "mockup_machine_settings.html",
+      "directory": "central",
+      "type": "central",
+      "size": 10718,
+      "structureIssues": [],
+      "namingIssues": [],
+      "mappedFunctions": [
+        "C14"
+      ],
+      "isMapped": true,
+      "isValid": true
+    },
+    {
+      "path": "md/v8/mockup/central/mockup_machine_tag_list.html",
+      "fileName": "mockup_machine_tag_list.html",
+      "directory": "central",
+      "type": "central",
+      "size": 25634,
+      "structureIssues": [],
+      "namingIssues": [],
+      "mappedFunctions": [],
+      "isMapped": false,
+      "isValid": true
+    },
+    {
+      "path": "md/v8/mockup/central/mockup_machine_test.html",
+      "fileName": "mockup_machine_test.html",
+      "directory": "central",
+      "type": "central",
+      "size": 16066,
+      "structureIssues": [],
+      "namingIssues": [],
+      "mappedFunctions": [],
+      "isMapped": false,
+      "isValid": true
+    },
+    {
+      "path": "md/v8/mockup/central/mockup_manual_sync.html",
+      "fileName": "mockup_manual_sync.html",
+      "directory": "central",
+      "type": "central",
+      "size": 13246,
+      "structureIssues": [],
+      "namingIssues": [],
+      "mappedFunctions": [],
+      "isMapped": false,
+      "isValid": true
+    },
+    {
+      "path": "md/v8/mockup/central/mockup_multiplayer_alerts.html",
+      "fileName": "mockup_multiplayer_alerts.html",
+      "directory": "central",
+      "type": "central",
+      "size": 9107,
+      "structureIssues": [],
+      "namingIssues": [],
+      "mappedFunctions": [
+        "C65"
+      ],
+      "isMapped": true,
+      "isValid": true
+    },
+    {
+      "path": "md/v8/mockup/central/mockup_multiplayer_bet.html",
+      "fileName": "mockup_multiplayer_bet.html",
+      "directory": "central",
+      "type": "central",
+      "size": 10532,
+      "structureIssues": [],
+      "namingIssues": [],
+      "mappedFunctions": [
+        "C63",
+        "C64"
+      ],
+      "isMapped": true,
+      "isValid": true
+    },
+    {
+      "path": "md/v8/mockup/central/mockup_multiplayer_config.html",
+      "fileName": "mockup_multiplayer_config.html",
+      "directory": "central",
+      "type": "central",
+      "size": 15771,
+      "structureIssues": [],
+      "namingIssues": [],
+      "mappedFunctions": [
+        "C59"
+      ],
+      "isMapped": true,
+      "isValid": true
+    },
+    {
+      "path": "md/v8/mockup/central/mockup_multiplayer_dealer.html",
+      "fileName": "mockup_multiplayer_dealer.html",
+      "directory": "central",
+      "type": "central",
+      "size": 10667,
+      "structureIssues": [],
+      "namingIssues": [],
+      "mappedFunctions": [
+        "C66"
+      ],
+      "isMapped": true,
+      "isValid": true
+    },
+    {
+      "path": "md/v8/mockup/central/mockup_multiplayer_history.html",
+      "fileName": "mockup_multiplayer_history.html",
+      "directory": "central",
+      "type": "central",
+      "size": 14746,
+      "structureIssues": [],
+      "namingIssues": [],
+      "mappedFunctions": [
+        "C60",
+        "C67"
+      ],
+      "isMapped": true,
+      "isValid": true
+    },
+    {
+      "path": "md/v8/mockup/central/mockup_multiplayer_shoe.html",
+      "fileName": "mockup_multiplayer_shoe.html",
+      "directory": "central",
+      "type": "central",
+      "size": 10455,
+      "structureIssues": [],
+      "namingIssues": [],
+      "mappedFunctions": [
+        "C62"
+      ],
+      "isMapped": true,
+      "isValid": true
+    },
+    {
+      "path": "md/v8/mockup/central/mockup_multiplayer_status.html",
+      "fileName": "mockup_multiplayer_status.html",
+      "directory": "central",
+      "type": "central",
+      "size": 10632,
+      "structureIssues": [],
+      "namingIssues": [],
+      "mappedFunctions": [],
+      "isMapped": false,
+      "isValid": true
+    },
+    {
+      "path": "md/v8/mockup/central/mockup_mvp_game_add.html",
+      "fileName": "mockup_mvp_game_add.html",
+      "directory": "central",
+      "type": "central",
+      "size": 9920,
+      "structureIssues": [],
+      "namingIssues": [],
+      "mappedFunctions": [
+        "C16"
+      ],
+      "isMapped": true,
+      "isValid": true
+    },
+    {
+      "path": "md/v8/mockup/central/mockup_mvp_machine_add.html",
+      "fileName": "mockup_mvp_machine_add.html",
+      "directory": "central",
+      "type": "central",
+      "size": 9318,
+      "structureIssues": [],
+      "namingIssues": [],
+      "mappedFunctions": [
+        "C101"
+      ],
+      "isMapped": true,
+      "isValid": true
+    },
+    {
+      "path": "md/v8/mockup/central/mockup_mvp_machine_list.html",
+      "fileName": "mockup_mvp_machine_list.html",
+      "directory": "central",
+      "type": "central",
+      "size": 8825,
+      "structureIssues": [],
+      "namingIssues": [],
+      "mappedFunctions": [
+        "L05",
+        "L06"
+      ],
+      "isMapped": true,
+      "isValid": true
+    },
+    {
+      "path": "md/v8/mockup/central/mockup_network_monitor.html",
+      "fileName": "mockup_network_monitor.html",
+      "directory": "central",
+      "type": "central",
+      "size": 9443,
+      "structureIssues": [],
+      "namingIssues": [],
+      "mappedFunctions": [
+        "L40"
+      ],
+      "isMapped": true,
+      "isValid": true
+    },
+    {
+      "path": "md/v8/mockup/central/mockup_network_settings.html",
+      "fileName": "mockup_network_settings.html",
+      "directory": "central",
+      "type": "central",
+      "size": 11990,
+      "structureIssues": [],
+      "namingIssues": [],
+      "mappedFunctions": [
+        "C88"
+      ],
+      "isMapped": true,
+      "isValid": true
+    },
+    {
+      "path": "md/v8/mockup/central/mockup_ota_task_deploy.html",
+      "fileName": "mockup_ota_task_deploy.html",
+      "directory": "central",
+      "type": "central",
+      "size": 18837,
+      "structureIssues": [],
+      "namingIssues": [],
+      "mappedFunctions": [],
+      "isMapped": false,
+      "isValid": true
+    },
+    {
+      "path": "md/v8/mockup/central/mockup_password_reset.html",
+      "fileName": "mockup_password_reset.html",
+      "directory": "central",
+      "type": "central",
+      "size": 5452,
+      "structureIssues": [],
+      "namingIssues": [],
+      "mappedFunctions": [
+        "PWD_RESET"
+      ],
+      "isMapped": true,
+      "isValid": true
+    },
+    {
+      "path": "md/v8/mockup/central/mockup_permission_matrix.html",
+      "fileName": "mockup_permission_matrix.html",
+      "directory": "central",
+      "type": "central",
+      "size": 13355,
+      "structureIssues": [],
+      "namingIssues": [],
+      "mappedFunctions": [
+        "C71"
+      ],
+      "isMapped": true,
+      "isValid": true
+    },
+    {
+      "path": "md/v8/mockup/central/mockup_provider_balance.html",
+      "fileName": "mockup_provider_balance.html",
+      "directory": "central",
+      "type": "central",
+      "size": 9317,
+      "structureIssues": [],
+      "namingIssues": [],
+      "mappedFunctions": [],
+      "isMapped": false,
+      "isValid": true
+    },
+    {
+      "path": "md/v8/mockup/central/mockup_quick_actions.html",
+      "fileName": "mockup_quick_actions.html",
+      "directory": "central",
+      "type": "central",
+      "size": 15081,
+      "structureIssues": [],
+      "namingIssues": [],
+      "mappedFunctions": [],
+      "isMapped": false,
+      "isValid": true
+    },
+    {
+      "path": "md/v8/mockup/central/mockup_recommended_games.html",
+      "fileName": "mockup_recommended_games.html",
+      "directory": "central",
+      "type": "central",
+      "size": 17655,
+      "structureIssues": [],
+      "namingIssues": [],
+      "mappedFunctions": [
+        "C80"
+      ],
+      "isMapped": true,
+      "isValid": true
+    },
+    {
+      "path": "md/v8/mockup/central/mockup_reconciliation_check.html",
+      "fileName": "mockup_reconciliation_check.html",
+      "directory": "central",
+      "type": "central",
+      "size": 8460,
+      "structureIssues": [],
+      "namingIssues": [],
+      "mappedFunctions": [],
+      "isMapped": false,
+      "isValid": true
+    },
+    {
+      "path": "md/v8/mockup/central/mockup_revenue_report.html",
+      "fileName": "mockup_revenue_report.html",
+      "directory": "central",
+      "type": "central",
+      "size": 11206,
+      "structureIssues": [],
+      "namingIssues": [],
+      "mappedFunctions": [
+        "C47"
+      ],
+      "isMapped": true,
+      "isValid": true
+    },
+    {
+      "path": "md/v8/mockup/central/mockup_role_management.html",
+      "fileName": "mockup_role_management.html",
+      "directory": "central",
+      "type": "central",
+      "size": 14705,
+      "structureIssues": [],
+      "namingIssues": [],
+      "mappedFunctions": [
+        "C71"
+      ],
+      "isMapped": true,
+      "isValid": true
+    },
+    {
+      "path": "md/v8/mockup/central/mockup_security_settings.html",
+      "fileName": "mockup_security_settings.html",
+      "directory": "central",
+      "type": "central",
+      "size": 14711,
+      "structureIssues": [],
+      "namingIssues": [],
+      "mappedFunctions": [
+        "C90"
+      ],
+      "isMapped": true,
+      "isValid": true
+    },
+    {
+      "path": "md/v8/mockup/central/mockup_std_backup.html",
+      "fileName": "mockup_std_backup.html",
+      "directory": "central",
+      "type": "central",
+      "size": 10236,
+      "structureIssues": [],
+      "namingIssues": [],
+      "mappedFunctions": [
+        "L28"
+      ],
+      "isMapped": true,
+      "isValid": true
+    },
+    {
+      "path": "md/v8/mockup/central/mockup_std_category_add.html",
+      "fileName": "mockup_std_category_add.html",
+      "directory": "central",
+      "type": "central",
+      "size": 7749,
+      "structureIssues": [],
+      "namingIssues": [],
+      "mappedFunctions": [
+        "C77"
+      ],
+      "isMapped": true,
+      "isValid": true
+    },
+    {
+      "path": "md/v8/mockup/central/mockup_std_game_category.html",
+      "fileName": "mockup_std_game_category.html",
+      "directory": "central",
+      "type": "central",
+      "size": 12236,
+      "structureIssues": [],
+      "namingIssues": [],
+      "mappedFunctions": [],
+      "isMapped": false,
+      "isValid": true
+    },
+    {
+      "path": "md/v8/mockup/central/mockup_std_multiplayer.html",
+      "fileName": "mockup_std_multiplayer.html",
+      "directory": "central",
+      "type": "central",
+      "size": 10632,
+      "structureIssues": [],
+      "namingIssues": [],
+      "mappedFunctions": [
+        "C57"
+      ],
+      "isMapped": true,
+      "isValid": true
+    },
+    {
+      "path": "md/v8/mockup/central/mockup_std_multiplayer_add.html",
+      "fileName": "mockup_std_multiplayer_add.html",
+      "directory": "central",
+      "type": "central",
+      "size": 10575,
+      "structureIssues": [],
+      "namingIssues": [],
+      "mappedFunctions": [
+        "C59"
+      ],
+      "isMapped": true,
+      "isValid": true
+    },
+    {
+      "path": "md/v8/mockup/central/mockup_std_provider_add.html",
+      "fileName": "mockup_std_provider_add.html",
+      "directory": "central",
+      "type": "central",
+      "size": 9326,
+      "structureIssues": [],
+      "namingIssues": [],
+      "mappedFunctions": [
+        "C103",
+        "C104"
+      ],
+      "isMapped": true,
+      "isValid": true
+    },
+    {
+      "path": "md/v8/mockup/central/mockup_std_provider_list.html",
+      "fileName": "mockup_std_provider_list.html",
+      "directory": "central",
+      "type": "central",
+      "size": 7234,
+      "structureIssues": [],
+      "namingIssues": [],
+      "mappedFunctions": [
+        "C53"
+      ],
+      "isMapped": true,
+      "isValid": true
+    },
+    {
+      "path": "md/v8/mockup/central/mockup_std_system_settings.html",
+      "fileName": "mockup_std_system_settings.html",
+      "directory": "central",
+      "type": "central",
+      "size": 20515,
+      "structureIssues": [],
+      "namingIssues": [],
+      "mappedFunctions": [
+        "C90"
+      ],
+      "isMapped": true,
+      "isValid": true
+    },
+    {
+      "path": "md/v8/mockup/central/mockup_std_transaction_detail.html",
+      "fileName": "mockup_std_transaction_detail.html",
+      "directory": "central",
+      "type": "central",
+      "size": 8252,
+      "structureIssues": [],
+      "namingIssues": [],
+      "mappedFunctions": [
+        "L16"
+      ],
+      "isMapped": true,
+      "isValid": true
+    },
+    {
+      "path": "md/v8/mockup/central/mockup_std_wallet.html",
+      "fileName": "mockup_std_wallet.html",
+      "directory": "central",
+      "type": "central",
+      "size": 16344,
+      "structureIssues": [],
+      "namingIssues": [],
+      "mappedFunctions": [
+        "C106"
+      ],
+      "isMapped": true,
+      "isValid": true
+    },
+    {
+      "path": "md/v8/mockup/central/mockup_sync_conflict.html",
+      "fileName": "mockup_sync_conflict.html",
+      "directory": "central",
+      "type": "central",
+      "size": 10036,
+      "structureIssues": [],
+      "namingIssues": [],
+      "mappedFunctions": [
+        "L37"
+      ],
+      "isMapped": true,
+      "isValid": true
+    },
+    {
+      "path": "md/v8/mockup/central/mockup_sync_logs.html",
+      "fileName": "mockup_sync_logs.html",
+      "directory": "central",
+      "type": "central",
+      "size": 18133,
+      "structureIssues": [],
+      "namingIssues": [],
+      "mappedFunctions": [],
+      "isMapped": false,
+      "isValid": true
+    },
+    {
+      "path": "md/v8/mockup/central/mockup_sync_status.html",
+      "fileName": "mockup_sync_status.html",
+      "directory": "central",
+      "type": "central",
+      "size": 7710,
+      "structureIssues": [],
+      "namingIssues": [],
+      "mappedFunctions": [
+        "L34"
+      ],
+      "isMapped": true,
+      "isValid": true
+    },
+    {
+      "path": "md/v8/mockup/central/mockup_system_monitor.html",
+      "fileName": "mockup_system_monitor.html",
+      "directory": "central",
+      "type": "central",
+      "size": 4516,
+      "structureIssues": [],
+      "namingIssues": [],
+      "mappedFunctions": [],
+      "isMapped": false,
+      "isValid": true
+    },
+    {
+      "path": "md/v8/mockup/central/mockup_system_notifications.html",
+      "fileName": "mockup_system_notifications.html",
+      "directory": "central",
+      "type": "central",
+      "size": 15435,
+      "structureIssues": [],
+      "namingIssues": [],
+      "mappedFunctions": [],
+      "isMapped": false,
+      "isValid": true
+    },
+    {
+      "path": "md/v8/mockup/central/mockup_test_mode.html",
+      "fileName": "mockup_test_mode.html",
+      "directory": "central",
+      "type": "central",
+      "size": 16063,
+      "structureIssues": [],
+      "namingIssues": [],
+      "mappedFunctions": [],
+      "isMapped": false,
+      "isValid": true
+    },
+    {
+      "path": "md/v8/mockup/central/mockup_transaction_exception.html",
+      "fileName": "mockup_transaction_exception.html",
+      "directory": "central",
+      "type": "central",
+      "size": 15655,
+      "structureIssues": [],
+      "namingIssues": [],
+      "mappedFunctions": [
+        "L19"
+      ],
+      "isMapped": true,
+      "isValid": true
+    },
+    {
+      "path": "md/v8/mockup/central/mockup_transaction_export.html",
+      "fileName": "mockup_transaction_export.html",
+      "directory": "central",
+      "type": "central",
+      "size": 18152,
+      "structureIssues": [],
+      "namingIssues": [],
+      "mappedFunctions": [
+        "C51"
+      ],
+      "isMapped": true,
+      "isValid": true
+    },
+    {
+      "path": "md/v8/mockup/central/mockup_transaction_stats.html",
+      "fileName": "mockup_transaction_stats.html",
+      "directory": "central",
+      "type": "central",
+      "size": 10278,
+      "structureIssues": [],
+      "namingIssues": [],
+      "mappedFunctions": [
+        "C44"
+      ],
+      "isMapped": true,
+      "isValid": true
+    },
+    {
+      "path": "md/v8/mockup/central/mockup_update_progress.html",
+      "fileName": "mockup_update_progress.html",
+      "directory": "central",
+      "type": "central",
+      "size": 11867,
+      "structureIssues": [],
+      "namingIssues": [],
+      "mappedFunctions": [],
+      "isMapped": false,
+      "isValid": true
+    },
+    {
+      "path": "md/v8/mockup/central/mockup_user_edit.html",
+      "fileName": "mockup_user_edit.html",
+      "directory": "central",
+      "type": "central",
+      "size": 12871,
+      "structureIssues": [],
+      "namingIssues": [],
+      "mappedFunctions": [
+        "C70"
+      ],
+      "isMapped": true,
+      "isValid": true
+    },
+    {
+      "path": "md/v8/mockup/central/mockup_user_permission.html",
+      "fileName": "mockup_user_permission.html",
+      "directory": "central",
+      "type": "central",
+      "size": 25497,
+      "structureIssues": [],
+      "namingIssues": [],
+      "mappedFunctions": [
+        "C71"
+      ],
+      "isMapped": true,
+      "isValid": true
+    },
+    {
+      "path": "md/v8/mockup/central/mockup_version_list.html",
+      "fileName": "mockup_version_list.html",
+      "directory": "central",
+      "type": "central",
+      "size": 14558,
+      "structureIssues": [],
+      "namingIssues": [],
+      "mappedFunctions": [],
+      "isMapped": false,
+      "isValid": true
+    },
+    {
+      "path": "md/v8/mockup/central/mockup_version_upload.html",
+      "fileName": "mockup_version_upload.html",
+      "directory": "central",
+      "type": "central",
+      "size": 8876,
+      "structureIssues": [],
+      "namingIssues": [],
+      "mappedFunctions": [],
+      "isMapped": false,
+      "isValid": true
+    },
+    {
+      "path": "md/v8/mockup/local/mockup_local_cash.html",
+      "fileName": "mockup_local_cash.html",
+      "directory": "local",
+      "type": "local",
+      "size": 42397,
+      "structureIssues": [
+        "未引用 sidebar.js"
+      ],
+      "namingIssues": [],
+      "mappedFunctions": [
+        "L13",
+        "L14",
+        "L43",
+        "L44",
+        "L45",
+        "L46"
+      ],
+      "isMapped": true,
+      "isValid": false
+    },
+    {
+      "path": "md/v8/mockup/local/mockup_local_cash_ops.html",
+      "fileName": "mockup_local_cash_ops.html",
+      "directory": "local",
+      "type": "local",
+      "size": 42397,
+      "structureIssues": [
+        "未引用 sidebar.js"
+      ],
+      "namingIssues": [],
+      "mappedFunctions": [
+        "L45"
+      ],
+      "isMapped": true,
+      "isValid": false
+    },
+    {
+      "path": "md/v8/mockup/local/mockup_local_dashboard.html",
+      "fileName": "mockup_local_dashboard.html",
+      "directory": "local",
+      "type": "local",
+      "size": 18740,
+      "structureIssues": [
+        "未引用 sidebar.js"
+      ],
+      "namingIssues": [],
+      "mappedFunctions": [
+        "L01",
+        "L02",
+        "L03",
+        "L04",
+        "L08",
+        "L34"
+      ],
+      "isMapped": true,
+      "isValid": false
+    },
+    {
+      "path": "md/v8/mockup/local/mockup_local_dashboard_machine_status.html",
+      "fileName": "mockup_local_dashboard_machine_status.html",
+      "directory": "local",
+      "type": "local",
+      "size": 18740,
+      "structureIssues": [
+        "未引用 sidebar.js"
+      ],
+      "namingIssues": [],
+      "mappedFunctions": [
+        "L02"
+      ],
+      "isMapped": true,
+      "isValid": false
+    },
+    {
+      "path": "md/v8/mockup/local/mockup_local_game.html",
+      "fileName": "mockup_local_game.html",
+      "directory": "local",
+      "type": "local",
+      "size": 20651,
+      "structureIssues": [
+        "缺少 <body> 標籤",
+        "未引用 sidebar.js"
+      ],
+      "namingIssues": [],
+      "mappedFunctions": [
+        "L09",
+        "L10",
+        "L11",
+        "L12",
+        "L13",
+        "L14",
+        "L43",
+        "L44",
+        "L45",
+        "L46"
+      ],
+      "isMapped": true,
+      "isValid": false
+    },
+    {
+      "path": "md/v8/mockup/local/mockup_local_game_list_view.html",
+      "fileName": "mockup_local_game_list_view.html",
+      "directory": "local",
+      "type": "local",
+      "size": 20651,
+      "structureIssues": [
+        "缺少 <body> 標籤",
+        "未引用 sidebar.js"
+      ],
+      "namingIssues": [],
+      "mappedFunctions": [
+        "L11"
+      ],
+      "isMapped": true,
+      "isValid": false
+    },
+    {
+      "path": "md/v8/mockup/local/mockup_local_login.html",
+      "fileName": "mockup_local_login.html",
+      "directory": "local",
+      "type": "local",
+      "size": 13803,
+      "structureIssues": [],
+      "namingIssues": [],
+      "mappedFunctions": [
+        "L51",
+        "L52"
+      ],
+      "isMapped": true,
+      "isValid": true
+    },
+    {
+      "path": "md/v8/mockup/local/mockup_local_login_alt.html",
+      "fileName": "mockup_local_login_alt.html",
+      "directory": "local",
+      "type": "local",
+      "size": 13803,
+      "structureIssues": [],
+      "namingIssues": [],
+      "mappedFunctions": [
+        "L51",
+        "L52"
+      ],
+      "isMapped": true,
+      "isValid": true
+    },
+    {
+      "path": "md/v8/mockup/local/mockup_local_machine.html",
+      "fileName": "mockup_local_machine.html",
+      "directory": "local",
+      "type": "local",
+      "size": 31702,
+      "structureIssues": [
+        "未引用 sidebar.js"
+      ],
+      "namingIssues": [],
+      "mappedFunctions": [
+        "L05",
+        "L06",
+        "L07",
+        "L09",
+        "L10",
+        "L11",
+        "L12",
+        "L13",
+        "L14",
+        "L38",
+        "L40",
+        "L41",
+        "L42",
+        "L43",
+        "L44",
+        "L45",
+        "L46"
+      ],
+      "isMapped": true,
+      "isValid": false
+    },
+    {
+      "path": "md/v8/mockup/local/mockup_local_machine_initial_setup.html",
+      "fileName": "mockup_local_machine_initial_setup.html",
+      "directory": "local",
+      "type": "local",
+      "size": 15004,
+      "structureIssues": [
+        "未引用 sidebar.js"
+      ],
+      "namingIssues": [],
+      "mappedFunctions": [
+        "L51"
+      ],
+      "isMapped": true,
+      "isValid": false
+    },
+    {
+      "path": "md/v8/mockup/local/mockup_local_machine_status_monitor.html",
+      "fileName": "mockup_local_machine_status_monitor.html",
+      "directory": "local",
+      "type": "local",
+      "size": 31063,
+      "structureIssues": [
+        "未引用 sidebar.js"
+      ],
+      "namingIssues": [],
+      "mappedFunctions": [
+        "L06"
+      ],
+      "isMapped": true,
+      "isValid": false
+    },
+    {
+      "path": "md/v8/mockup/local/mockup_local_register.html",
+      "fileName": "mockup_local_register.html",
+      "directory": "local",
+      "type": "local",
+      "size": 15004,
+      "structureIssues": [
+        "未引用 sidebar.js"
+      ],
+      "namingIssues": [],
+      "mappedFunctions": [
+        "L51"
+      ],
+      "isMapped": true,
+      "isValid": false
+    },
+    {
+      "path": "md/v8/mockup/local/mockup_local_sync.html",
+      "fileName": "mockup_local_sync.html",
+      "directory": "local",
+      "type": "local",
+      "size": 18227,
+      "structureIssues": [
+        "未引用 sidebar.js"
+      ],
+      "namingIssues": [],
+      "mappedFunctions": [
+        "L28",
+        "L34",
+        "L35",
+        "L36",
+        "L37",
+        "L38",
+        "L39",
+        "L40",
+        "L41",
+        "L42",
+        "L51",
+        "L52"
+      ],
+      "isMapped": true,
+      "isValid": false
+    },
+    {
+      "path": "md/v8/mockup/local/mockup_local_sync_status_view.html",
+      "fileName": "mockup_local_sync_status_view.html",
+      "directory": "local",
+      "type": "local",
+      "size": 18227,
+      "structureIssues": [
+        "未引用 sidebar.js"
+      ],
+      "namingIssues": [],
+      "mappedFunctions": [
+        "L34"
+      ],
+      "isMapped": true,
+      "isValid": false
+    },
+    {
+      "path": "md/v8/mockup/local/mockup_local_system_settings.html",
+      "fileName": "mockup_local_system_settings.html",
+      "directory": "local",
+      "type": "local",
+      "size": 12622,
+      "structureIssues": [
+        "未引用 sidebar.js"
+      ],
+      "namingIssues": [],
+      "mappedFunctions": [
+        "L47",
+        "L48"
+      ],
+      "isMapped": true,
+      "isValid": false
+    },
+    {
+      "path": "md/v8/mockup/local/mockup_local_system_settings_alt.html",
+      "fileName": "mockup_local_system_settings_alt.html",
+      "directory": "local",
+      "type": "local",
+      "size": 15519,
+      "structureIssues": [],
+      "namingIssues": [],
+      "mappedFunctions": [
+        "L47"
+      ],
+      "isMapped": true,
+      "isValid": true
+    },
+    {
+      "path": "md/v8/mockup/local/mockup_local_system_settings_basic.html",
+      "fileName": "mockup_local_system_settings_basic.html",
+      "directory": "local",
+      "type": "local",
+      "size": 12622,
+      "structureIssues": [
+        "未引用 sidebar.js"
+      ],
+      "namingIssues": [],
+      "mappedFunctions": [
+        "L47"
+      ],
+      "isMapped": true,
+      "isValid": false
+    },
+    {
+      "path": "md/v8/mockup/local/mockup_mvp_local_setup.html",
+      "fileName": "mockup_mvp_local_setup.html",
+      "directory": "local",
+      "type": "local",
+      "size": 15519,
+      "structureIssues": [],
+      "namingIssues": [],
+      "mappedFunctions": [
+        "L47"
+      ],
+      "isMapped": true,
+      "isValid": true
+    }
+  ],
+  "functionCoverage": {
+    "C82": [
+      "mockup_alert_notifications.html"
+    ],
+    "C83": [
+      "mockup_alert_threshold.html"
+    ],
+    "C76": [
+      "mockup_announcement.html"
+    ],
+    "C56": [
+      "mockup_api_log.html"
+    ],
+    "C54": [
+      "mockup_api_status_monitor.html"
+    ],
+    "C72": [
+      "mockup_audit_log.html"
+    ],
+    "C81": [
+      "mockup_broadcast_management.html"
+    ],
+    "C01": [
+      "mockup_dashboard.html"
+    ],
+    "L01": [
+      "mockup_dashboard.html",
+      "mockup_local_dashboard.html"
+    ],
+    "L02": [
+      "mockup_dashboard.html",
+      "mockup_local_dashboard.html",
+      "mockup_local_dashboard_machine_status.html"
+    ],
+    "L03": [
+      "mockup_dashboard.html",
+      "mockup_local_dashboard.html"
+    ],
+    "L04": [
+      "mockup_dashboard.html",
+      "mockup_local_dashboard.html"
+    ],
+    "L39": [
+      "mockup_device_health.html",
+      "mockup_local_sync.html"
+    ],
+    "FLG_DISPUTE": [
+      "mockup_flg_dispute.html"
+    ],
+    "L20": [
+      "mockup_flg_dispute.html"
+    ],
+    "FLG_MONITOR": [
+      "mockup_flg_monitor.html"
+    ],
+    "C73": [
+      "mockup_flg_ota.html"
+    ],
+    "C105": [
+      "mockup_flg_ota.html"
+    ],
+    "FLG_RECONCILIATION": [
+      "mockup_flg_reconciliation.html"
+    ],
+    "C45": [
+      "mockup_flg_reconciliation.html"
+    ],
+    "C94": [
+      "mockup_flg_reconciliation.html"
+    ],
+    "L14": [
+      "mockup_game_detail.html",
+      "mockup_local_cash.html",
+      "mockup_local_game.html",
+      "mockup_local_machine.html"
+    ],
+    "C48": [
+      "mockup_game_ranking.html"
+    ],
+    "C55": [
+      "mockup_game_sync.html"
+    ],
+    "C28": [
+      "mockup_game_test.html"
+    ],
+    "L41": [
+      "mockup_hardware_monitor.html",
+      "mockup_local_machine.html",
+      "mockup_local_sync.html"
+    ],
+    "L38": [
+      "mockup_heartbeat_monitor.html",
+      "mockup_local_machine.html",
+      "mockup_local_sync.html"
+    ],
+    "C78": [
+      "mockup_lobby_settings.html"
+    ],
+    "C86": [
+      "mockup_log_query.html"
+    ],
+    "LOGIN": [
+      "mockup_login.html"
+    ],
+    "C11": [
+      "mockup_machine_remote_control.html"
+    ],
+    "C12": [
+      "mockup_machine_remote_control.html"
+    ],
+    "C14": [
+      "mockup_machine_settings.html"
+    ],
+    "C65": [
+      "mockup_multiplayer_alerts.html"
+    ],
+    "C63": [
+      "mockup_multiplayer_bet.html"
+    ],
+    "C64": [
+      "mockup_multiplayer_bet.html"
+    ],
+    "C59": [
+      "mockup_multiplayer_config.html",
+      "mockup_std_multiplayer_add.html"
+    ],
+    "C66": [
+      "mockup_multiplayer_dealer.html"
+    ],
+    "C60": [
+      "mockup_multiplayer_history.html"
+    ],
+    "C67": [
+      "mockup_multiplayer_history.html"
+    ],
+    "C62": [
+      "mockup_multiplayer_shoe.html"
+    ],
+    "C16": [
+      "mockup_mvp_game_add.html"
+    ],
+    "C101": [
+      "mockup_mvp_machine_add.html"
+    ],
+    "L05": [
+      "mockup_mvp_machine_list.html",
+      "mockup_local_machine.html"
+    ],
+    "L06": [
+      "mockup_mvp_machine_list.html",
+      "mockup_local_machine.html",
+      "mockup_local_machine_status_monitor.html"
+    ],
+    "L40": [
+      "mockup_network_monitor.html",
+      "mockup_local_machine.html",
+      "mockup_local_sync.html"
+    ],
+    "C88": [
+      "mockup_network_settings.html"
+    ],
+    "PWD_RESET": [
+      "mockup_password_reset.html"
+    ],
+    "C71": [
+      "mockup_permission_matrix.html",
+      "mockup_role_management.html",
+      "mockup_user_permission.html"
+    ],
+    "C80": [
+      "mockup_recommended_games.html"
+    ],
+    "C47": [
+      "mockup_revenue_report.html"
+    ],
+    "C90": [
+      "mockup_security_settings.html",
+      "mockup_std_system_settings.html"
+    ],
+    "L28": [
+      "mockup_std_backup.html",
+      "mockup_local_sync.html"
+    ],
+    "C77": [
+      "mockup_std_category_add.html"
+    ],
+    "C57": [
+      "mockup_std_multiplayer.html"
+    ],
+    "C103": [
+      "mockup_std_provider_add.html"
+    ],
+    "C104": [
+      "mockup_std_provider_add.html"
+    ],
+    "C53": [
+      "mockup_std_provider_list.html"
+    ],
+    "L16": [
+      "mockup_std_transaction_detail.html"
+    ],
+    "C106": [
+      "mockup_std_wallet.html"
+    ],
+    "L37": [
+      "mockup_sync_conflict.html",
+      "mockup_local_sync.html"
+    ],
+    "L34": [
+      "mockup_sync_status.html",
+      "mockup_local_dashboard.html",
+      "mockup_local_sync.html",
+      "mockup_local_sync_status_view.html"
+    ],
+    "L19": [
+      "mockup_transaction_exception.html"
+    ],
+    "C51": [
+      "mockup_transaction_export.html"
+    ],
+    "C44": [
+      "mockup_transaction_stats.html"
+    ],
+    "C70": [
+      "mockup_user_edit.html"
+    ],
+    "L13": [
+      "mockup_local_cash.html",
+      "mockup_local_game.html",
+      "mockup_local_machine.html"
+    ],
+    "L43": [
+      "mockup_local_cash.html",
+      "mockup_local_game.html",
+      "mockup_local_machine.html"
+    ],
+    "L44": [
+      "mockup_local_cash.html",
+      "mockup_local_game.html",
+      "mockup_local_machine.html"
+    ],
+    "L45": [
+      "mockup_local_cash.html",
+      "mockup_local_cash_ops.html",
+      "mockup_local_game.html",
+      "mockup_local_machine.html"
+    ],
+    "L46": [
+      "mockup_local_cash.html",
+      "mockup_local_game.html",
+      "mockup_local_machine.html"
+    ],
+    "L08": [
+      "mockup_local_dashboard.html"
+    ],
+    "L09": [
+      "mockup_local_game.html",
+      "mockup_local_machine.html"
+    ],
+    "L10": [
+      "mockup_local_game.html",
+      "mockup_local_machine.html"
+    ],
+    "L11": [
+      "mockup_local_game.html",
+      "mockup_local_game_list_view.html",
+      "mockup_local_machine.html"
+    ],
+    "L12": [
+      "mockup_local_game.html",
+      "mockup_local_machine.html"
+    ],
+    "L51": [
+      "mockup_local_login.html",
+      "mockup_local_login_alt.html",
+      "mockup_local_machine_initial_setup.html",
+      "mockup_local_register.html",
+      "mockup_local_sync.html"
+    ],
+    "L52": [
+      "mockup_local_login.html",
+      "mockup_local_login_alt.html",
+      "mockup_local_sync.html"
+    ],
+    "L07": [
+      "mockup_local_machine.html"
+    ],
+    "L42": [
+      "mockup_local_machine.html",
+      "mockup_local_sync.html"
+    ],
+    "L35": [
+      "mockup_local_sync.html"
+    ],
+    "L36": [
+      "mockup_local_sync.html"
+    ],
+    "L47": [
+      "mockup_local_system_settings.html",
+      "mockup_local_system_settings_alt.html",
+      "mockup_local_system_settings_basic.html",
+      "mockup_mvp_local_setup.html"
+    ],
+    "L48": [
+      "mockup_local_system_settings.html"
+    ]
+  },
+  "issues": [
+    {
+      "file": "mockup_local_cash.html",
+      "type": "structure",
+      "issues": [
+        "未引用 sidebar.js"
+      ]
+    },
+    {
+      "file": "mockup_local_cash_ops.html",
+      "type": "structure",
+      "issues": [
+        "未引用 sidebar.js"
+      ]
+    },
+    {
+      "file": "mockup_local_dashboard.html",
+      "type": "structure",
+      "issues": [
+        "未引用 sidebar.js"
+      ]
+    },
+    {
+      "file": "mockup_local_dashboard_machine_status.html",
+      "type": "structure",
+      "issues": [
+        "未引用 sidebar.js"
+      ]
+    },
+    {
+      "file": "mockup_local_game.html",
+      "type": "structure",
+      "issues": [
+        "缺少 <body> 標籤",
+        "未引用 sidebar.js"
+      ]
+    },
+    {
+      "file": "mockup_local_game_list_view.html",
+      "type": "structure",
+      "issues": [
+        "缺少 <body> 標籤",
+        "未引用 sidebar.js"
+      ]
+    },
+    {
+      "file": "mockup_local_machine.html",
+      "type": "structure",
+      "issues": [
+        "未引用 sidebar.js"
+      ]
+    },
+    {
+      "file": "mockup_local_machine_initial_setup.html",
+      "type": "structure",
+      "issues": [
+        "未引用 sidebar.js"
+      ]
+    },
+    {
+      "file": "mockup_local_machine_status_monitor.html",
+      "type": "structure",
+      "issues": [
+        "未引用 sidebar.js"
+      ]
+    },
+    {
+      "file": "mockup_local_register.html",
+      "type": "structure",
+      "issues": [
+        "未引用 sidebar.js"
+      ]
+    },
+    {
+      "file": "mockup_local_sync.html",
+      "type": "structure",
+      "issues": [
+        "未引用 sidebar.js"
+      ]
+    },
+    {
+      "file": "mockup_local_sync_status_view.html",
+      "type": "structure",
+      "issues": [
+        "未引用 sidebar.js"
+      ]
+    },
+    {
+      "file": "mockup_local_system_settings.html",
+      "type": "structure",
+      "issues": [
+        "未引用 sidebar.js"
+      ]
+    },
+    {
+      "file": "mockup_local_system_settings_basic.html",
+      "type": "structure",
+      "issues": [
+        "未引用 sidebar.js"
+      ]
+    }
+  ]
+}

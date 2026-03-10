@@ -234,6 +234,16 @@ const MOCKUP_MAPPING = {
   'mockup_mvp_local_setup.html': ['L47'],
   'mockup_local_login.html': ['L51', 'L52'],
   'mockup_local_register.html': ['L51'],
+  'mockup_local_cash_ops.html': ['L45'],
+  'mockup_local_login_alt.html': ['L51', 'L52'],
+  'mockup_local_system_settings_basic.html': ['L47'],
+  'mockup_local_system_settings_alt.html': ['L47'],
+  'mockup_local_machine_initial_setup.html': ['L51'],
+  'mockup_local_dashboard_machine_status.html': ['L02'],
+  'mockup_local_machine_status_monitor.html': ['L06'],
+  'mockup_local_game_list_view.html': ['L11'],
+  'mockup_local_sync_status_view.html': ['L34'],
+
 
   // 數據管理
   'mockup_mvp_data_list.html': [],
@@ -376,7 +386,7 @@ function scanFile(filePath) {
 
 // 主掃描函數
 function scanMockups() {
-  const mockupDir = path.join(process.cwd(), 'mockup');
+  const mockupDir = path.join(process.cwd(), 'md', 'v8', 'mockup');
 
   // 遞歸掃描所有 HTML 檔案
   function scanDir(dir) {
