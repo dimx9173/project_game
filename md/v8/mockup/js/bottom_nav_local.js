@@ -17,7 +17,7 @@
             { id: 'LM02', text: '機台', icon: 'monitor', href: 'mockup_local_machine.html' },
             { id: 'LM03', text: '遊戲', icon: 'gamepad-2', href: 'mockup_local_game.html' },
             { id: 'LM04', text: '交易', icon: 'plus-circle', href: 'mockup_local_cash.html' },
-            { id: 'LM05', text: '設定', icon: 'settings', href: 'mockup_local_system_settings.html' }
+            { id: 'LM05', text: '設定', icon: 'settings', href: 'mockup_local_settings_integrated.html' }
         ];
 
         var nav = document.createElement('nav');
