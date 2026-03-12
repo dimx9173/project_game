@@ -44,6 +44,3 @@
 
 - 支援匯出儀表板數據為 CSV 或 Excel 格式
 - 可選擇匯出特定時間範圍的數據
-
-**畫面 Mockup**：
-![儀表板](./mockup/central/mockup_dashboard.png)
