@@ -1,6 +1,6 @@
 # Mockup 功能代碼對應說明
 
-**更新日期**: 2026-03-08  
+**更新日期**: 2026-03-13  
 **更新人**: Front-End Architect Agent
 
 ---
@@ -297,10 +297,10 @@
 ## 🔗 Git Commit
 
 ```
-[待提交] refactor: 統一 mockup 檔名與功能代碼對應
+[0b29f858] refactor: consolidate local settings pages into integrated settings page
 
-- 更名 83 個 HTML mockup 檔案，加上功能代碼前緩
-- 確認 45 個 PNG 檔案已有功能代碼前緩
-- 補齊缺口代碼：C108、L01、L11、L28、L34
-- 建立功能代碼對應說明文件
+- Merge mockup_local_sync.html, mockup_local_system_settings.html, and mockup_mvp_local_setup.html into single mockup_local_settings_integrated.html
+- New integrated page includes tabs for sync/monitoring (L34-L37), basic settings (L47), security (L51-L52), and maintenance (L28, L38-L42)
+- Update bottom navigation to reference new integrated settings page
+- Update code mapping documentation to reflect consolidated structure
 ```
