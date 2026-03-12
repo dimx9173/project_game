@@ -144,11 +144,11 @@
 | [C88] | 網路設定 | `[C88]網路設定.html` | - |
 | [C90] | 系統參數設定 | `[C90]系統參數設定.html` | - |
 | [C93] | 手動同步 | `[C93]手動同步.html` | - |
-| [C101] | 機台編輯/刪除 | `mockup_mvp_machine_add.html` | 機台列表編輯彈窗 |
+| [C101] | 機台編輯/刪除 | `mockup_machine_settings.html` | 機台列表的設定齒輪圖示，刪除在列表旁 |
 | [C103] | 遊戲商新增 | `[C103]遊戲商新增.html` | - |
 | [C106] | 代理錢包管理 | `[C106]代理錢包管理.html`, `[C106]代理錢包新增.html` | - |
 | [C107] | 機台標籤管理 | `[C107]機台標籤管理.html` | - |
-| [C108] | 機台註冊流程 | `[C108]機台註冊審核.html`, `[C108]註冊金鑰產生.html` | - |
+| [C108] | 機台註冊流程 | `mockup_machine_registration.html`, `mockup_machine_key_generate.html`, `mockup_machine_approval.html` | 包含註冊流程、金鑰產生、審核三個入口 |
 | [L05] | 機台列表檢視 | `[L05]機台列表檢視.html` | - |
 | [L07] | 機台配置下發 | `[L07]機台配置下發.html` | - |
 | [L08] | 快速操作按 | `[L08]快速操作按鈕.html` | - |

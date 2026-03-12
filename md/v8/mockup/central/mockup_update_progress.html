@@ -38,12 +38,17 @@
     <div id="sidebar-container"></div>
     <main class="flex-1 flex flex-col overflow-hidden">
         <header class="h-16 glass border-b border-dark-border flex items-center justify-between px-6">
-            <h2 class="text-lg font-semibold text-white">更新進度監控</h2>
+            <div class="flex items-center">
+                <a href="mockup_flg_ota.html" class="mr-4 p-2 hover:bg-dark-hover rounded-lg transition-colors">
+                    <i data-lucide="arrow-left" class="w-5 h-5 text-gray-400"></i>
+                </a>
+                <h2 class="text-lg font-semibold text-white">更新進度監控</h2>
+            </div>
             <div class="flex items-center space-x-3">
-                <span class="text-gray-400 text-sm">任務: v2.1.0 全量更新</span>
-                <button class="px-4 py-2 bg-red-500/20 text-red-400 rounded-lg hover:bg-red-500/30 flex items-center">
-                    <i data-lucide="square" class="w-4 h-4 mr-2"></i>停止任務
-                </button>
+                <span class="text-gray-400 text-sm">任務: v2.6.0 全量更新</span>
+                <a href="mockup_flg_ota.html" class="px-4 py-2 gradient-purple rounded-lg text-white text-sm font-medium">
+                    <i data-lucide="plus" class="w-4 h-4 inline mr-1"></i>新任務
+                </a>
             </div>
         </header>
         <div class="flex-1 overflow-y-auto p-6">
@@ -175,6 +180,9 @@
         </div>
     </main>
     <script src="../js/sidebar.js"></script>
-    <script>lucide.createIcons();</script>
+    <script>
+        MockupSidebar.render('mockup_update_progress.html');
+        lucide.createIcons();
+    </script>
 </body>
 </html>

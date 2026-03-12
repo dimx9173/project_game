@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>版本更新 OTA - 遊戲平台管理中心</title>
+    <title>版本管理 - 遊戲平台管理中心</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="../css/mockup-common.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
@@ -35,86 +35,286 @@
         .gradient-purple { background: linear-gradient(135deg, #7c3aed 0%, #a855f7 50%, #c084fc 100%); }
         .table-row-hover:hover { background: linear-gradient(90deg, rgba(124, 58, 237, 0.1), transparent); }
         .input-focus:focus { box-shadow: 0 0 0 3px rgba(168, 85, 247, 0.3), 0 0 20px rgba(168, 85, 247, 0.2); }
-        .badge-local { background: #10b981; color: white; font-size: 10px; padding: 2px 6px; border-radius: 4px; }
-        .badge-central { background: #8b5cf6; color: white; font-size: 10px; padding: 2px 6px; border-radius: 4px; }
+        .tab-active { border-bottom: 2px solid #a855f7; color: #a855f7; }
+        .progress-ring { transform: rotate(-90deg); }
     </style>
 </head>
 <body class="gradient-bg min-h-screen flex">
     <div id="sidebar-container"></div>
     <main class="flex-1 flex flex-col overflow-hidden">
         <header class="h-16 glass border-b border-dark-border flex items-center justify-between px-6">
-            <h2 class="text-lg font-semibold text-white">版本更新 OTA <span class="badge-local ml-2">本地</span> <span class="badge-central ml-1">集中</span></h2>
-            <button class="px-4 py-2 gradient-purple rounded-lg text-white font-medium shadow-glow-sm flex items-center">
-                <i data-lucide="upload" class="w-4 h-4 mr-2"></i>上傳新版本
-            </button>
+            <div class="flex items-center">
+                <h2 class="text-lg font-semibold text-white">版本管理</h2>
+                <div class="ml-6 flex space-x-1">
+                    <button onclick="switchTab('overview')" id="tab-overview" class="px-4 py-2 text-sm text-purple-400 border-b-2 border-purple-500 tab-active">
+                        <i data-lucide="layout-dashboard" class="w-4 h-4 inline mr-1"></i>總覽
+                    </button>
+                    <button onclick="switchTab('versions')" id="tab-versions" class="px-4 py-2 text-sm text-gray-400 hover:text-white">
+                        <i data-lucide="list" class="w-4 h-4 inline mr-1"></i>版本列表
+                    </button>
+                    <button onclick="switchTab('upload')" id="tab-upload" class="px-4 py-2 text-sm text-gray-400 hover:text-white">
+                        <i data-lucide="upload" class="w-4 h-4 inline mr-1"></i>上傳版本
+                    </button>
+                </div>
+            </div>
+            <a href="mockup_ota_task_deploy.html" class="px-4 py-2 gradient-purple rounded-lg text-white font-medium shadow-glow-sm flex items-center">
+                <i data-lucide="rocket" class="w-4 h-4 mr-2"></i>下發任務
+            </a>
         </header>
+
         <div class="flex-1 overflow-y-auto p-6">
-            <div class="glass-card rounded-2xl overflow-hidden">
-                <table class="min-w-full">
-                    <thead class="bg-dark-bg">
-                        <tr>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">版本號</th>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">上傳時間</th>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">MD5校驗碼</th>
-                            <th class="px-6 py-3 text-center text-xs font-medium text-gray-400 uppercase">狀態</th>
-                            <th class="px-6 py-3 text-center text-xs font-medium text-gray-400 uppercase">機台覆蓋率</th>
-                            <th class="px-6 py-3 text-right text-xs font-medium text-gray-400 uppercase">操作</th>
-                        </tr>
-                    </thead>
-                    <tbody class="divide-y divide-dark-border">
-                        <tr class="table-row-hover">
-                            <td class="px-6 py-4 whitespace-nowrap text-white font-mono font-bold">v2.1.0</td>
-                            <td class="px-6 py-4 whitespace-nowrap text-gray-400">2026/02/20 14:00</td>
-                            <td class="px-6 py-4 whitespace-nowrap text-gray-500 font-mono text-xs">d41d8cd98f00b204e98...</td>
-                            <td class="px-6 py-4 whitespace-nowrap text-center"><span class="px-2 py-1 rounded-full text-xs bg-emerald-500/20 text-emerald-400">已發佈</span></td>
-                            <td class="px-6 py-4 whitespace-nowrap">
-                                <div class="flex items-center justify-center">
-                                    <div class="w-24 bg-dark-bg rounded-full h-2.5 mr-2">
-                                        <div class="gradient-purple h-2.5 rounded-full" style="width: 90%"></div>
+            <!-- 總覽區塊 -->
+            <div id="content-overview">
+                <!-- 統計卡片 -->
+                <div class="grid grid-cols-4 gap-4 mb-6">
+                    <div class="glass-card rounded-xl p-4">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <p class="text-gray-400 text-sm">最新版本</p>
+                                <p class="text-2xl font-bold text-white mt-1">v2.6.0</p>
+                            </div>
+                            <div class="w-12 h-12 rounded-xl bg-purple-500/20 flex items-center justify-center">
+                                <i data-lucide="tag" class="w-6 h-6 text-purple-400"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="glass-card rounded-xl p-4">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <p class="text-gray-400 text-sm">待更新機台</p>
+                                <p class="text-2xl font-bold text-amber-400 mt-1">5</p>
+                            </div>
+                            <div class="w-12 h-12 rounded-xl bg-amber-500/20 flex items-center justify-center">
+                                <i data-lucide="alert-circle" class="w-6 h-6 text-amber-400"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="glass-card rounded-xl p-4">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <p class="text-gray-400 text-sm">進行中任務</p>
+                                <p class="text-2xl font-bold text-blue-400 mt-1">2</p>
+                            </div>
+                            <div class="w-12 h-12 rounded-xl bg-blue-500/20 flex items-center justify-center">
+                                <i data-lucide="loader" class="w-6 h-6 text-blue-400 animate-spin"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="glass-card rounded-xl p-4">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <p class="text-gray-400 text-sm">本週更新</p>
+                                <p class="text-2xl font-bold text-emerald-400 mt-1">12</p>
+                            </div>
+                            <div class="w-12 h-12 rounded-xl bg-emerald-500/20 flex items-center justify-center">
+                                <i data-lucide="check-circle" class="w-6 h-6 text-emerald-400"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-2 gap-6">
+                    <!-- 最近任務 -->
+                    <div class="glass-card rounded-xl p-5">
+                        <h3 class="text-lg font-semibold text-white mb-4">最近更新任務</h3>
+                        <div class="space-y-3">
+                            <div class="flex items-center justify-between p-3 bg-dark-bg/50 rounded-lg">
+                                <div class="flex items-center">
+                                    <div class="w-10 h-10 rounded-lg bg-emerald-500/20 flex items-center justify-center mr-3">
+                                        <i data-lucide="check" class="w-5 h-5 text-emerald-400"></i>
                                     </div>
-                                    <span class="text-base font-medium text-white">45/50</span>
-                                </div>
-                            </td>
-                            <td class="px-6 py-4 whitespace-nowrap text-right">
-                                <button class="text-purple-400 hover:text-purple-300 mx-1"><i data-lucide="send" class="w-4 h-4"></i></button>
-                                <button class="text-cyan-400 hover:text-cyan-300 mx-1"><i data-lucide="eye" class="w-4 h-4"></i></button>
-                            </td>
-                        </tr>
-                        <tr class="table-row-hover">
-                            <td class="px-6 py-4 whitespace-nowrap text-white font-mono font-bold">v2.0.5</td>
-                            <td class="px-6 py-4 whitespace-nowrap text-gray-400">2026/02/15 09:30</td>
-                            <td class="px-6 py-4 whitespace-nowrap text-gray-500 font-mono text-xs">e0d123e5f316bef78...</td>
-                            <td class="px-6 py-4 whitespace-nowrap text-center"><span class="px-2 py-1 rounded-full text-xs bg-emerald-500/20 text-emerald-400">已發佈</span></td>
-                            <td class="px-6 py-4 whitespace-nowrap">
-                                <div class="flex items-center justify-center">
-                                    <div class="w-24 bg-dark-bg rounded-full h-2.5 mr-2">
-                                        <div class="bg-emerald-500 h-2.5 rounded-full" style="width: 100%"></div>
+                                    <div>
+                                        <p class="text-white font-medium">v2.5.1 更新</p>
+                                        <p class="text-gray-500 text-sm">完成 45/45 機台</p>
                                     </div>
-                                    <span class="text-base font-medium text-white">50/50</span>
                                 </div>
-                            </td>
-                            <td class="px-6 py-4 whitespace-nowrap text-right">
-                                <button class="text-cyan-400 hover:text-cyan-300 mx-1"><i data-lucide="eye" class="w-4 h-4"></i></button>
-                            </td>
-                        </tr>
-                        <tr class="table-row-hover">
-                            <td class="px-6 py-4 whitespace-nowrap text-gray-500 font-mono font-bold line-through">v2.0.4</td>
-                            <td class="px-6 py-4 whitespace-nowrap text-gray-500">2026/02/10 11:20</td>
-                            <td class="px-6 py-4 whitespace-nowrap text-gray-400 font-mono text-xs">b89d5f78c4331...</td>
-                            <td class="px-6 py-4 whitespace-nowrap text-center"><span class="px-2 py-1 rounded-full text-xs bg-red-500/20 text-red-400">已撤回</span></td>
-                            <td class="px-6 py-4 whitespace-nowrap text-gray-500 text-center">-</td>
-                            <td class="px-6 py-4 whitespace-nowrap text-right">
-                                <button class="text-purple-400 hover:text-purple-300 text-base">重新發布</button>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
+                                <span class="text-emerald-400 text-sm">已完成</span>
+                            </div>
+                            <div class="flex items-center justify-between p-3 bg-dark-bg/50 rounded-lg">
+                                <div class="flex items-center">
+                                    <div class="w-10 h-10 rounded-lg bg-blue-500/20 flex items-center justify-center mr-3">
+                                        <i data-lucide="loader" class="w-5 h-5 text-blue-400 animate-spin"></i>
+                                    </div>
+                                    <div>
+                                        <p class="text-white font-medium">v2.6.0 推廣</p>
+                                        <p class="text-gray-500 text-sm">進行中 12/50 機台</p>
+                                    </div>
+                                </div>
+                                <span class="text-blue-400 text-sm">進行中</span>
+                            </div>
+                            <div class="flex items-center justify-between p-3 bg-dark-bg/50 rounded-lg">
+                                <div class="flex items-center">
+                                    <div class="w-10 h-10 rounded-lg bg-amber-500/20 flex items-center justify-center mr-3">
+                                        <i data-lucide="clock" class="w-5 h-5 text-amber-400"></i>
+                                    </div>
+                                    <div>
+                                        <p class="text-white font-medium">v2.6.0 旗艦店</p>
+                                        <p class="text-gray-500 text-sm">排程 2026/03/14 02:00</p>
+                                    </div>
+                                </div>
+                                <span class="text-amber-400 text-sm">待執行</span>
+                            </div>
+                        </div>
+                        <a href="mockup_update_progress.html" class="block text-center text-purple-400 text-sm mt-4 hover:text-purple-300">查看全部任務 →</a>
+                    </div>
+
+                    <!-- 快速操作 -->
+                    <div class="glass-card rounded-xl p-5">
+                        <h3 class="text-lg font-semibold text-white mb-4">快速操作</h3>
+                        <div class="grid grid-cols-2 gap-3">
+                            <a href="mockup_version_upload.html" class="flex flex-col items-center justify-center p-4 bg-dark-bg/50 rounded-lg hover:bg-dark-hover transition-colors">
+                                <i data-lucide="upload-cloud" class="w-8 h-8 text-purple-400 mb-2"></i>
+                                <span class="text-white text-sm">上傳新版本</span>
+                            </a>
+                            <a href="mockup_ota_task_deploy.html" class="flex flex-col items-center justify-center p-4 bg-dark-bg/50 rounded-lg hover:bg-dark-hover transition-colors">
+                                <i data-lucide="send" class="w-8 h-8 text-purple-400 mb-2"></i>
+                                <span class="text-white text-sm">下發更新</span>
+                            </a>
+                            <a href="mockup_update_progress.html" class="flex flex-col items-center justify-center p-4 bg-dark-bg/50 rounded-lg hover:bg-dark-hover transition-colors">
+                                <i data-lucide="activity" class="w-8 h-8 text-purple-400 mb-2"></i>
+                                <span class="text-white text-sm">監控進度</span>
+                            </a>
+                            <a href="mockup_version_list.html" class="flex flex-col items-center justify-center p-4 bg-dark-bg/50 rounded-lg hover:bg-dark-hover transition-colors">
+                                <i data-lucide="list" class="w-8 h-8 text-purple-400 mb-2"></i>
+                                <span class="text-white text-sm">版本歷史</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 版本列表區塊 -->
+            <div id="content-versions" class="hidden">
+                <div class="glass-card rounded-2xl overflow-hidden">
+                    <table class="min-w-full">
+                        <thead class="bg-dark-bg">
+                            <tr>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">版本號</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">類型</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">發布時間</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">大小</th>
+                                <th class="px-6 py-3 text-center text-xs font-medium text-gray-400 uppercase">狀態</th>
+                                <th class="px-6 py-3 text-center text-xs font-medium text-gray-400 uppercase">覆蓋率</th>
+                                <th class="px-6 py-3 text-right text-xs font-medium text-gray-400 uppercase">操作</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-dark-border">
+                            <tr class="table-row-hover">
+                                <td class="px-6 py-4 whitespace-nowrap"><span class="text-white font-mono font-bold">v2.6.0</span> <span class="ml-2 text-xs text-purple-400">最新</span></td>
+                                <td class="px-6 py-4 whitespace-nowrap"><span class="px-2 py-1 rounded-full text-xs bg-blue-500/20 text-blue-400">正式版</span></td>
+                                <td class="px-6 py-4 whitespace-nowrap text-gray-400">2026/03/10 14:00</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-gray-400">248 MB</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-center"><span class="px-2 py-1 rounded-full text-xs bg-emerald-500/20 text-emerald-400">已發布</span></td>
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    <div class="flex items-center justify-center">
+                                        <div class="w-20 bg-dark-bg rounded-full h-2 mr-2"><div class="bg-purple-500 h-2 rounded-full" style="width: 10%"></div></div>
+                                        <span class="text-white text-sm">5/50</span>
+                                    </div>
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap text-right">
+                                    <a href="mockup_ota_task_deploy.html" class="text-purple-400 hover:text-purple-300 mx-1"><i data-lucide="send" class="w-4 h-4"></i></a>
+                                    <button class="text-cyan-400 hover:text-cyan-300 mx-1"><i data-lucide="eye" class="w-4 h-4"></i></button>
+                                </td>
+                            </tr>
+                            <tr class="table-row-hover">
+                                <td class="px-6 py-4 whitespace-nowrap text-white font-mono font-bold">v2.5.1</td>
+                                <td class="px-6 py-4 whitespace-nowrap"><span class="px-2 py-1 rounded-full text-xs bg-blue-500/20 text-blue-400">正式版</span></td>
+                                <td class="px-6 py-4 whitespace-nowrap text-gray-400">2026/02/20 10:30</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-gray-400">242 MB</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-center"><span class="px-2 py-1 rounded-full text-xs bg-emerald-500/20 text-emerald-400">已發布</span></td>
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    <div class="flex items-center justify-center">
+                                        <div class="w-20 bg-dark-bg rounded-full h-2 mr-2"><div class="bg-emerald-500 h-2 rounded-full" style="width: 90%"></div></div>
+                                        <span class="text-white text-sm">45/50</span>
+                                    </div>
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap text-right">
+                                    <a href="mockup_ota_task_deploy.html" class="text-purple-400 hover:text-purple-300 mx-1"><i data-lucide="send" class="w-4 h-4"></i></a>
+                                    <button class="text-cyan-400 hover:text-cyan-300 mx-1"><i data-lucide="eye" class="w-4 h-4"></i></button>
+                                </td>
+                            </tr>
+                            <tr class="table-row-hover">
+                                <td class="px-6 py-4 whitespace-nowrap text-gray-500 font-mono font-bold line-through">v2.5.0</td>
+                                <td class="px-6 py-4 whitespace-nowrap"><span class="px-2 py-1 rounded-full text-xs bg-amber-500/20 text-amber-400">測試版</span></td>
+                                <td class="px-6 py-4 whitespace-nowrap text-gray-500">2026/02/15 09:00</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-gray-500">240 MB</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-center"><span class="px-2 py-1 rounded-full text-xs bg-red-500/20 text-red-400">已撤回</span></td>
+                                <td class="px-6 py-4 whitespace-nowrap text-gray-500 text-center">-</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-right">
+                                    <button class="text-purple-400 hover:text-purple-300 text-sm">重新發布</button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- 上傳版本區塊 -->
+            <div id="content-upload" class="hidden">
+                <div class="max-w-2xl mx-auto">
+                    <div class="glass-card rounded-2xl p-6">
+                        <h3 class="text-xl font-semibold text-white mb-6">上傳新版本</h3>
+                        <form class="space-y-5">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-300 mb-2">版本號 *</label>
+                                <input type="text" placeholder="例如: 2.6.1" class="w-full bg-dark-bg border border-dark-border rounded-lg px-4 py-3 text-white placeholder-gray-500 focus:outline-none input-focus font-mono">
+                                <p class="text-gray-500 text-xs mt-1">遵循 SemVer 格式 (Major.Minor.Patch)</p>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-300 mb-2">版本類型 *</label>
+                                <div class="flex space-x-4">
+                                    <label class="flex items-center">
+                                        <input type="radio" name="releaseType" checked class="w-4 h-4 text-purple-500 bg-dark-bg border-dark-border">
+                                        <span class="ml-2 text-white">正式版</span>
+                                    </label>
+                                    <label class="flex items-center">
+                                        <input type="radio" name="releaseType" class="w-4 h-4 text-purple-500 bg-dark-bg border-dark-border">
+                                        <span class="ml-2 text-white">測試版</span>
+                                    </label>
+                                </div>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-300 mb-2">版本包 *</label>
+                                <div class="border-2 border-dashed border-dark-border rounded-lg p-8 text-center hover:border-purple-500 transition-colors cursor-pointer">
+                                    <i data-lucide="cloud-upload" class="w-12 h-12 text-gray-500 mx-auto mb-3"></i>
+                                    <p class="text-gray-400 mb-1">點擊或拖曳檔案到這裡上傳</p>
+                                    <p class="text-gray-500 text-sm">支援 .zip, .tar.gz 格式，最大 500MB</p>
+                                </div>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-300 mb-2">版本說明</label>
+                                <textarea rows="4" placeholder="描述此版本的新增功能、修復問題..." class="w-full bg-dark-bg border border-dark-border rounded-lg px-4 py-3 text-white placeholder-gray-500 focus:outline-none input-focus"></textarea>
+                            </div>
+                            <div class="flex items-center">
+                                <input type="checkbox" id="forceUpdate" class="w-4 h-4 text-purple-500 bg-dark-bg border-dark-border rounded">
+                                <label for="forceUpdate" class="ml-2 text-white">強制更新（機台必須更新至此版本）</label>
+                            </div>
+                            <button type="button" class="w-full py-4 gradient-purple rounded-xl text-white font-bold shadow-glow">
+                                <i data-lucide="upload" class="w-5 h-5 inline mr-2"></i>上傳版本
+                            </button>
+                        </form>
+                    </div>
+                </div>
             </div>
         </div>
     </main>
     <script src="../js/sidebar.js"></script>
     <script>
         MockupSidebar.render('mockup_flg_ota.html');
+        
+        function switchTab(tab) {
+            document.querySelectorAll('[id^="tab-"]').forEach(el => {
+                el.classList.remove('tab-active', 'text-purple-400');
+                el.classList.add('text-gray-400');
+            });
+            document.getElementById('tab-' + tab).classList.add('tab-active');
+            document.getElementById('tab-' + tab).classList.remove('text-gray-400');
+            
+            document.querySelectorAll('[id^="content-"]').forEach(el => el.classList.add('hidden'));
+            document.getElementById('content-' + tab).classList.remove('hidden');
+            lucide.createIcons();
+        }
+        
         lucide.createIcons();
     </script>
 </body>

@@ -33,15 +33,11 @@
         <header class="h-16 glass border-b border-dark-border flex items-center justify-between px-6">
             <h2 class="text-lg font-semibold text-white">機台管理</h2>
             <div class="flex items-center space-x-4">
-                <div class="relative">
+                <div class="relative flex-1">
                     <input type="text" placeholder="搜尋機台..."
-                        class="bg-dark-bg border border-dark-border rounded-lg py-2 px-4 pl-10 text-sm text-white placeholder-gray-500 focus:outline-none input-focus">
+                        class="bg-dark-bg border border-dark-border rounded-lg py-2 px-4 pl-10 text-sm text-white placeholder-gray-500 focus:outline-none input-focus w-full">
                     <i data-lucide="search" class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500"></i>
                 </div>
-                <a href="mockup_mvp_machine_add.html"
-                    class="px-4 py-2 gradient-purple rounded-lg text-white font-medium shadow-glow-sm flex items-center">
-                    <i data-lucide="plus" class="w-4 h-4 mr-2"></i>新增機台
-                </a>
             </div>
         </header>
         <div class="flex-1 overflow-y-auto p-6">
@@ -124,6 +120,8 @@
                                         class="w-4 h-4"></i></a>
                                 <a href="mockup_machine_settings.html" class="text-cyan-400 hover:text-cyan-300 mx-1"><i
                                         data-lucide="settings" class="w-4 h-4"></i></a>
+                                <button class="text-red-400 hover:text-red-300 mx-1"><i data-lucide="trash-2"
+                                        class="w-4 h-4"></i></button>
                                 <button class="text-red-400 hover:text-red-300 mx-1"><i data-lucide="power"
                                         class="w-4 h-4"></i></button>
                             </td>

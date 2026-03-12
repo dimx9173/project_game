@@ -52,7 +52,27 @@
     var sub = document.createElement('div');
     sub.className = 'sidebar-submenu';
     items.forEach(function (item) {
-      sub.appendChild(subLink(item.href, item.text));
+      if (item.children) {
+        // Item has children - create a nested group
+        var nestedGroup = document.createElement('div');
+        nestedGroup.className = 'sidebar-submenu-item';
+        
+        var nestedHeader = document.createElement('div');
+        nestedHeader.className = 'sidebar-submenu-header flex items-center px-3 py-2 text-sm text-purple-400 font-medium';
+        nestedHeader.textContent = item.text;
+        nestedGroup.appendChild(nestedHeader);
+        
+        var nestedSub = document.createElement('div');
+        nestedSub.className = 'sidebar-nested-submenu ml-3 border-l border-dark-border pl-3 space-y-1';
+        item.children.forEach(function (child) {
+          nestedSub.appendChild(subLink(child.href, child.text));
+        });
+        nestedGroup.appendChild(nestedSub);
+        
+        sub.appendChild(nestedGroup);
+      } else {
+        sub.appendChild(subLink(item.href, item.text));
+      }
     });
     div.appendChild(header);
     div.appendChild(sub);
@@ -67,6 +87,11 @@
 
     nav.appendChild(group('monitor', '機台管理', [
       { href: 'mockup_mvp_machine_list.html', text: '機台列表' },
+      { href: 'mockup_machine_registration.html', text: '機台註冊', children: [
+        { href: 'mockup_machine_key_generate.html', text: '金鑰產生' },
+        { href: 'mockup_machine_approval.html', text: '機台審核' }
+      ]},
+      { href: 'mockup_machine_tag_list.html', text: 'Tag管理' },
       { href: 'mockup_machine_remote_control.html', text: '遠端控制' }
     ]));
 
@@ -78,15 +103,11 @@
     ]));
 
     nav.appendChild(group('wallet', '交易紀錄管理', [
-      { href: 'mockup_std_wallet.html', text: '交易列表' },
+      { href: 'mockup_transaction_stats.html', text: '交易列表' },
       { href: 'mockup_flg_reconciliation.html', text: '對帳中心' },
-      { href: 'mockup_transaction_export.html', text: '交易導出' }
-    ]));
-
-    nav.appendChild(group('bar-chart-2', '報表中心', [
       { href: 'mockup_revenue_report.html', text: '營收報表' },
-      { href: 'mockup_std_reports.html', text: '統計報表' },
-      { href: 'mockup_game_ranking.html', text: '遊戲排行榜' }
+      { href: 'mockup_game_ranking.html', text: '遊戲排行榜' },
+      { href: 'mockup_transaction_export.html', text: '交易導出' }
     ]));
 
     nav.appendChild(group('plug', '串接遊戲', [
@@ -106,7 +127,9 @@
     ]));
 
     nav.appendChild(group('download', '版本更新', [
-      { href: 'mockup_flg_ota.html', text: '版本管理' }
+      { href: 'mockup_flg_ota.html', text: '版本管理' },
+      { href: 'mockup_ota_task_deploy.html', text: '任務下發' },
+      { href: 'mockup_update_progress.html', text: '更新進度' }
     ]));
 
     nav.appendChild(group('layout', '介面設定', [

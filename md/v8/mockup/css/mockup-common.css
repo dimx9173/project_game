@@ -172,3 +172,15 @@ body {
   width: 72px;
   min-width: 72px;
 }
+.sidebar-submenu-item {
+  margin-bottom: 4px;
+}
+.sidebar-submenu-header {
+  padding: 6px 12px;
+  color: #a78bfa;
+  font-size: 12px;
+}
+.sidebar-nested-submenu {
+  margin-top: 4px;
+  margin-bottom: 8px;
+}
